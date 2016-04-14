@@ -1,0 +1,103 @@
+<div ng-controller="EventCtrl">
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-loading ng-hide="existingEvent"></rd-loading>
+            <rd-widget ng-show="existingEvent">
+                <rd-widget-header icon="fa-plane" title="{{name}}">
+                    <div>Start: {{formatDate(start)}}</div>
+                    <div>End: {{formatDate(end)}}</div>
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="text-box text-center">View <a href="{{eventLeaderUrl}}">Scores</a> for this event.</div>
+                </rd-widget-body>
+
+            </rd-widget>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-widget ng-show="existingEvent">
+                <rd-widget-body classes="medium no-padding">
+                    <div class="table-responsive">
+                        <div class="table-responsive">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Round</th>
+                                        <th>Course</th>
+                                        <th>Date</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tr ng-hide="rounds.length>0">
+                                    <td>[ No Rounds ]</td>
+                                </tr>
+                                <tr ng-repeat="round in rounds">
+                                    <td>{{$index+1}}
+                                    </td>
+                                    <td><a href="{{courseUrl}}/id/{{round.course._id}}">{{round.course.name}}</a>
+                                    </td>
+                                    <td>{{formatDate(round.date)}}</td>
+                                    <td >
+                                        <div ng-show="editable">
+                                            <a href="{{editRoundUrl}}/{{$index}}">Edit Scores</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </rd-widget-body>            </rd-widget>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-widget ng-show="existingEvent">
+                <rd-widget-body classes="large no-padding">
+                    <div id="map"></div>
+                </rd-widget-body>            </rd-widget>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-6" ng-show="existingEvent">
+            <rd-widget>
+                <rd-widget-header icon="fa-user" title="The Field">
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+
+                        <div class="table-responsive">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Players:</th>
+                                        <th>Rank</th>
+                                    </tr>
+                                </thead>
+                                <tr ng-hide="players.length>0">
+                                    <td>[ No Players ]</td>
+                                </tr>
+                                <tr ng-repeat="player in players">
+                                    <td>{{player.name}}</td>
+                                    <td>{{player.rank}}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </rd-widget-body>
+            </rd-widget>
+        </div>
+
+
+    </div>
+</div>

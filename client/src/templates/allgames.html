@@ -1,0 +1,33 @@
+<div ng-controller="AllGamesCtrl">
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-loading ng-hide="loaded"></rd-loading>
+            <rd-widget ng-show="games.length>0">
+                <rd-widget-header icon="fa-trophy" title="Games">
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Game</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="game in games">
+                                    <td>{{game.name}}</td>
+                                    <td><a ng-href="{{gameUrl}}/id/{{game._id}}">View Players</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+
+</div>

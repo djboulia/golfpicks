@@ -1,0 +1,64 @@
+<div ng-controller="PlayerCtrl">
+    <script type="text/ng-template" id="deletePlayer.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm delete</h3>
+        </div>
+        <div class="modal-body">
+            <div>Delete player {{player.name}}?  This will permanently remove the player.</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <div class="row">
+
+        <rd-loading ng-hide="loaded"></rd-loading>
+
+        <div ng-show="loaded" class="col-lg-6">
+            <rd-widget>
+                <rd-widget-header icon="fa-user" title="{{title}}">
+                    <a ng-show="existingPlayer" href="" ng-click="delete()">Delete</a>
+                </rd-widget-header>
+                <rd-widget-body classes="medium no-padding">
+                    <div class="table-responsive">
+                        <form>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        <td><span>Name:</span>
+                                        </td>
+                                        <td>
+                                            <input size="40" ng-model="name"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>Email:</span>
+                                        </td>
+                                        <td>
+                                            <input size="40" ng-model="email"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>Password:</span>
+                                        </td>
+                                        <td>
+                                            <input size="40" ng-model="password"></input>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td colspan="2">
+                                            <button ng-click="submit()">Save</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </form>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+</div>

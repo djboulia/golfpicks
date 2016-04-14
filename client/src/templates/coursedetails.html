@@ -1,0 +1,152 @@
+<div ng-controller="CourseDetailsCtrl">
+    <div class="row">
+        <rd-loading ng-hide="existingCourse"></rd-loading>
+
+        <div class="col-lg-6" ng-show="existingCourse">
+            <rd-widget>
+                <rd-widget-header icon="fa-flag" title="{{name}}">
+                    <div ng-show="editable"><a href="#/course/id/{{id}}">Edit</a>
+                    </div>
+                </rd-widget-header>
+                <rd-widget-body>
+                    <div style="display:inline-block; vertical-align:bottom; min-height:55px;" ng-show="hasHoleDetails">
+                        <div>Tee: {{tee}}</div>
+                        <div>Rating: {{rating}}</div>
+                        <div>Slope: {{slope}}</div>
+                    </div>
+                    <div style="display:inline-block; vertical-align:bottom; min-height:55px;" ng-show="!hasHoleDetails">
+                        <div>Par: {{par}}</div>
+                        <div>Yardage: {{yardage}}</div>
+                    </div>
+                    <div style="float: right;">
+                        <div style="display:inline-block; vertical-align:bottom; min-height:55px; padding-left: 40px;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Current Conditions:</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{weather.temp}}&deg; F/{{weather.metric.temp}}&deg; C</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{weather.wind}} MPH</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div style="display:inline-block; vertical-align:bottom; min-height:55px;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td ng-bind-html="weatherImg">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </rd-widget-body>
+            </rd-widget>
+            <rd-widget>
+                <rd-widget-body classes="no-padding">
+                    <div ng-show="hasHoleDetails">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr class="scorecard hole">
+                                        <th>Hole</th>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                        <th>4</th>
+                                        <th>5</th>
+                                        <th>6</th>
+                                        <th>7</th>
+                                        <th>8</th>
+                                        <th>9</th>
+                                        <th>OUT</th>
+                                        <th class="scorecard hole-hide">TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="scorecard yardage">
+                                        <td>Yardage</td>
+                                        <td ng-repeat="hole in front9.holes">{{hole.yardage}}</td>
+                                        <td>{{front9.yardage}}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="scorecard handicap">
+                                        <td>Handicap</td>
+                                        <td ng-repeat="hole in front9.holes">{{hole.handicap}}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="scorecard par">
+                                        <td>Par</td>
+                                        <td ng-repeat="hole in front9.holes">{{hole.par}}</td>
+                                        <td>{{front9.par}}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+
+                    <rd-widget>
+                        <rd-widget-body classes="no-padding">
+                            <div ng-show="hasHoleDetails">
+                                <div class="table-responsive">
+                                    <table class="table scorecard">
+                                        <thead>
+                                            <tr class="scorecard hole">
+                                                <th>Hole</th>
+                                                <th>10</th>
+                                                <th>11</th>
+                                                <th>12</th>
+                                                <th>13</th>
+                                                <th>14</th>
+                                                <th>15</th>
+                                                <th>16</th>
+                                                <th>17</th>
+                                                <th>18</th>
+                                                <th>IN</th>
+                                                <th class="text-center">TOTAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="scorecard yardage">
+                                                <td>Yardage</td>
+                                                <td ng-repeat="hole in back9.holes">
+                                                    {{hole.yardage}}
+                                                </td>
+                                                <td>{{back9.yardage}}</td>
+                                                <td class="text-center">{{yardage}}</td>
+                                            </tr>
+                                            <tr class="scorecard handicap">
+                                                <td>Handicap</td>
+                                                <td ng-repeat="hole in back9.holes">
+                                                    {{hole.handicap}}
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="scorecard par">
+                                                <td>Par</td>
+                                                <td ng-repeat="hole in back9.holes">
+                                                    {{hole.par}}
+                                                </td>
+                                                <td>{{back9.par}}</td>
+                                                <td class="text-center">{{par}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </rd-widget-body>
+                        <rd-widget>
+        </div>
+    </div>
+</div>

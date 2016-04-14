@@ -1,0 +1,44 @@
+<div ng-controller="EventsCtrl">
+<div class="row">
+
+	<div class="col-lg-6">
+        <rd-loading ng-hide="events"></rd-loading>
+		<rd-widget ng-show="events">
+			<rd-widget-header icon="fa-plane" title="Tournaments">
+			</rd-widget-header>
+			<rd-widget-body classes="no-padding">
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+                                <th>Event</th>
+                                <th class="text-center">Rounds</th>
+                                <th class="text-center">Start</th>
+                                <th class="text-center">End</th>
+                                <th class="text-center"></th>
+                            </tr>
+						</thead>
+						<tbody>
+                            
+                            <tr ng-repeat="event in events">
+                                <td>
+                                    <a href="{{detailsUrl}}/id/{{event._id}}">
+                                        {{event.name}}
+                                    </a>
+                                </td>
+                                <td class="text-center">{{event.rounds.length}}</td>
+                                <td class="text-center">{{formatDate(event.start)}}</td>
+                                <td class="text-center">{{formatDate(event.end)}}</td>
+                                <td></td>
+                            </tr>
+
+						</tbody>
+					</table>
+        		</div>
+			</rd-widget-body>
+		<rd-widget>
+	</div>
+</div>
+        
+</div>
+

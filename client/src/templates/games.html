@@ -1,0 +1,66 @@
+<div ng-controller="GamesCtrl">
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-loading ng-hide="loaded"></rd-loading>
+            <rd-widget ng-show="loaded">
+                <rd-widget-header icon="fa-trophy" title="Games for {{username}}">
+                </rd-widget-header>
+                <rd-widget-body classes="small no-padding">
+                    <h4 style="text-align:center">Next Tournament</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody id="nextevent">
+
+                                <tr ng-if="active.event">
+                                    <td class="text-center"><b>{{active.event}}</b>
+                                    </td>
+                                    <td class="text-center"><a ng-href="{{leaderboardUrl}}/id/{{active.eventid}}">Leaderboard</a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td  class="text-center" colspan="2">
+                                        <div class="status" ng-bind-html="statusMessage"></div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-widget ng-show="gameHistory.length>0">
+                <rd-widget-header icon="fa-trophy" title="Game History">
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Game</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="game in gameHistory">
+                                    <td>{{game.event}}</td>
+                                    <td><a ng-href="{{leaderboardUrl}}/id/{{game.eventid}}">View</a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+
+</div>

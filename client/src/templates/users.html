@@ -1,0 +1,34 @@
+<div ng-controller="PlayersCtrl">
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-loading ng-hide="loaded"></rd-loading>
+            <rd-widget ng-show="loaded">
+                <rd-widget-header icon="fa-user" title="Players">
+                    <a href="{{editUrl}}">Add Player</a>
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr><th>Name</th><th>Email</th><th></th></th></tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="player in players">
+                                    <td>
+                                        {{player.name}}
+                                    </td>
+                                    <td>
+                                        {{player.email}}
+                                    </td>
+                                    <td><a href="{{editUrl}}/id/{{player._id}}">Edit</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </rd-widget-body>
+            <rd-widget>
+        </div>
+    </div>
+</div>
+

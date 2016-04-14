@@ -1,0 +1,81 @@
+<div ng-controller="PicksCtrl">
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-widget ng-show="errorMessage">
+                <rd-widget-body classes="small no-padding">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="text-center" colspan="2">
+                                        <div class="status" ng-bind-html="errorMessage"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </rd-widget-body>
+            </rd-widget>
+
+            <rd-loading ng-hide="loaded"></rd-loading>
+            <rd-widget ng-show="loaded">
+                <rd-widget-header icon="fa-trophy" title="Picks for {{username}}">
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+
+                    <div class="instructions">
+                        <h3><div>{{name}}</div></h3>
+                        <b>Game Rules:</b>
+                        <ul>
+                            <li>Select {{NUM_SELECTIONS}} players from the list.</li>
+                            <li>Only {{NUM_TOP_ALLOWED}} players from the <span class="toppick">top {{NUM_TOP_RANK}} ranked players</span> are allowed.</li>
+                        </ul>
+                        <div>Press 'Save Picks' at the bottom when finished.</div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Player</th>
+                                    <th class="text-center">Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr ng-repeat="player in players">
+                                    <td class="text-center">
+                                        <input type="checkbox" ng-disabled="!player.selectable" ng-model="player.selected" ng-click="updatePlayer(player);">
+                                        </input>
+                                    </td>
+                                    <td>
+                                        <div ng-class="{'toppick': player.index<=NUM_TOP_RANK, 'disabled':!player.selectable}">{{player.name}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="text-center" ng-class="{'toppick': player.index<=NUM_TOP_RANK, 'disabled':!player.selectable}">{{player.rank}}</div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center" colspan="3">
+                                        <button class="button button-positive" ng-disabled="!canSubmit" ng-click="submit()">Save Picks</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" colspan="3">
+                                        <div class="status" ng-bind-html="picksMessage"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="modal">
+
+    <!-- Modal header bar -->
+    <header class="bar bar-header bar-secondary golf-bar">
+        <h1 class="title">Game Rules</h1>
+        <button class="button button-clear button-stable" ng-click="closeItem()">Cancel</button>
+    </header>
+
+    <!-- Modal content area -->
+    <ion-content class="has-header padding">
+
+        <div class="list card">
+
+            <div class="item item-avatar">
+                <h2>GolfPicks Rules</h2>
+            </div>
+
+            <div class="item item-body">
+
+				<p>Select 3 players from the list of golfers.  Tap a golfer's name to add or remove from your selections.</p>
+
+        <ion-list class="list">
+				
+            <ion-item class="item item-checkbox" style="padding-top: 2px; padding-bottom: 2px;">
+				<div class="row">
+				  <div class="col col-10"><b>11</b></div>
+				  <div class="col"><b>Jordan Spieth</b></div>
+				  
+					<label class="checkbox">
+						  <input type="checkbox">
+     				</label>
+				</div> 
+            </ion-item>
+				   
+            <ion-item class="item item-checkbox" style="padding-top: 2px; padding-bottom: 2px;">
+				<div class="row">
+				  <div class="col col-10"><b>12</b></div>
+				  <div class="col"><b>Martin Kaymer</b></div>
+				  
+					<label class="checkbox">
+						  <input type="checkbox" checked>
+     				</label>
+				</div> 
+            </ion-item>
+				
+            <ion-item class="item item-checkbox" style="padding-top: 2px; padding-bottom: 2px;">
+				<div class="row">
+				  <div class="col col-10"><b>13</b></div>
+				  <div class="col"><b>Phil Mickelson</b></div>
+				  
+					<label class="checkbox">
+						  <input type="checkbox">
+     				</label>
+				</div> 
+            </ion-item>
+        </ion-list>
+				
+				<p>A maximum of 1 player from the top 2 (based on handicap) are allowed.  Golfers are ordered by their handicap, and the top 2 players are indicated with a green checkbox like this:</p>
+
+        <ion-list class="list">
+				
+            <ion-item class="item item-checkbox" style="padding-top: 2px; padding-bottom: 2px;">
+				<div class="row">
+				  <div class="col col-10"><b>1</b></div>
+				  <div class="col"><b>Rory McIlroy</b></div>
+				  
+					<label class="checkbox checkbox-balanced">
+						  <input type="checkbox" checked>
+     				</label>
+				</div> 
+				   
+				            
+            </ion-item>
+        </ion-list>
+								
+				<br/><p>Press  <button class="button button-small button-positive">Save Picks</button> to save your picks to the cloud.</p>
+
+            </div>
+			
+        </div>
+
+    </ion-content>
+
+</div>

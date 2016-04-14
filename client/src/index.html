@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" ng-app="GolfPicks">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GolfPicks Bluemix App</title>
+    <!-- STYLES -->
+    <!-- build:css lib/css/main.min.css -->
+    <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/rdash.min.css">
+    <link rel="stylesheet" type="text/css" href="css/golfpicks.css">
+    <!-- endbuild -->
+    <!-- SCRIPTS -->
+    <!-- build:js lib/js/main.min.js -->
+    <script type="text/javascript" src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="components/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="components/angular-touch/angular-touch.min.js"></script>
+    <!-- endbuild -->
+    <!-- Custom Scripts -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbM_PdETX_jS5mKi6JmjXgD6GMSnQODxE"
+    async defer></script>
+    <script type="text/javascript" src="js/dashboard.min.js"></script>
+    <script type="text/javascript" src="js/lb-services.js"></script>
+    
+</head>
+
+<body ng-controller="MasterCtrl">
+    <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar">
+                <li class="sidebar-main">
+                    <a ng-click="toggleSidebar()">
+            GolfPicks Dashboard
+            <span class="menu-icon glyphicon glyphicon-transfer"></span>
+          </a>
+                </li>
+                <li class="sidebar-list" ng-show="loggedIn">
+                    <a href="#/">My Games <span class="menu-icon fa fa-trophy"></span></a>
+                </li>
+                <li ng-show="admin" class="sidebar-title"><span>Admin Tasks</span>
+                </li>
+                <li ng-show="admin" class="sidebar-list">
+                    <a href="#/allgames">Games <span class="menu-icon fa fa-trophy"></span></a>
+                </li>
+                <li ng-show="admin" class="sidebar-list">
+                    <a href="#/events">Tournaments <span class="menu-icon fa fa-plane"></span></a>
+                </li>
+                <li ng-show="admin" class="sidebar-list">
+                    <a href="#/courses">Courses<span class="menu-icon fa fa-flag"></span></a>
+                </li>
+                <li ng-show="admin" class="sidebar-list">
+                    <a href="#/users">Users<span class="menu-icon fa fa-user"></span></a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="col-xs-4">
+                    <a href="#/about" ng-show="loggedIn">
+            About
+          </a>
+                </div>
+                <div class="col-xs-4">
+                    <a href="#/support" ng-show="loggedIn">
+            Support
+          </a>
+                </div>
+            </div>
+        </div>
+        <!-- End Sidebar -->
+
+        <div id="content-wrapper">
+            <div class="page-content">
+
+                <!-- Header Bar -->
+                <div class="row header">
+                    <div class="col-xs-12">
+                        <div class="user pull-right" ng-show="loggedIn">
+
+                            <div class="item dropdown" uib-dropdown>
+                                <button class="header btn" type="button" uib-dropdown-toggle> {{username}}
+
+                                    <span class="caret"></span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li class="dropdown-header">
+                                        {{username}}
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li class="link">
+                                        <a href="#/profile">Profile</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li class="link">
+                                        <a href="" ng-click="logOut()"> Logout</a>
+                                    </li>                                </ul>
+                            </div>
+                            
+                        </div>
+                        <div class="meta">
+                            <div class="page">
+                                {{title}}
+                            </div>
+                            <div class="breadcrumb-links">
+                                {{crumbs}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Header Bar -->
+
+                <!-- Main Content -->
+                <div ui-view></div>
+
+            </div>
+            <!-- End Page Content -->
+        </div>
+        <!-- End Content Wrapper -->
+        <div align="right" style="font-size:80%; font-family:Arial; padding-right: 15px;
+padding-left: 15px;">
+            <table>
+                <tr>
+                    <td>
+                        <div>Powered by:</div>
+                    </td>
+                    <td align="center">
+                        <img src="img/bluemix.png" alt="Codename: Bluemix" height="50" width="50">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td align="center" colspan="2">
+                        Bluemix
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- End Page Wrapper -->
+</body>
+
+</html>

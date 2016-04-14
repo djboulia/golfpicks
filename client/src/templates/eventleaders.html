@@ -1,0 +1,58 @@
+<div ng-controller="EventLeadersCtrl">
+    <div class="row" ng-show="errorMessage">
+
+        <div class="col-lg-6">
+            <rd-widget>
+                <rd-widget-body classes="small no-padding">
+                    <h4 style="text-align:center">{{errorMessage}}</h4>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-loading ng-hide="loaded || errorMessage"></rd-loading>
+            <rd-widget ng-show="loaded">
+                <rd-widget-header icon="fa-user" title="{{name}}">
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+                        <div class="table-responsive">
+
+                            <table class="table">
+                                <thead>
+                                    <tr class="leaders header">
+                                        <td class="text-center">Pos</td>
+                                        <td>Name</td>
+                                        <td>Total</td>
+                                        <td ng-repeat="roundNumber in roundNumbers" class="text-center">R{{roundNumber}}</td>
+                                    </tr>
+                                </thead>
+                                <tr ng-repeat="golfer in golfers">
+                                    <td class="text-center">{{$index+1}}</td>
+                                    <td>{{golfer.name}}</td>
+                                    <td  class="text-center" style="border: 1px solid #cccccc;">{{golfer.total}}</td>
+                                    <td ng-repeat="roundNumber in roundNumbers" class="text-center" style="border: 1px solid #cccccc;">
+                                        <div ng-class="{'golf-round-leader': lowRounds[roundNumber] == golfer[roundNumber]}">{{golfer[roundNumber]}}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td class="text-center" colspan="{{roundNumbers.length}}"><span class="golf-round-leader">&diams; Round low score</span></td>
+                                </tr>
+                            </table>
+
+                        </div>
+
+                    </div>
+                    <div style="padding: 10px;">
+                        View Tournament <a href="{{eventOverviewUrl}}">overview</a>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+
+</div>

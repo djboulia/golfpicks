@@ -1,0 +1,40 @@
+<html ng-app="GolfPicksMobile">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>GolfPicks Mobile App</title>
+    <!-- STYLES -->
+    <!-- build:css lib/css/main.min.css -->
+    <link rel="stylesheet" type="text/css" href="../components/ionic/release/css/ionic.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!-- endbuild -->
+    <!-- SCRIPTS -->
+    <!-- build:js lib/js/main.min.js -->
+    <script type="text/javascript" src="../components/ionic/release/js/ionic.bundle.js"></script>
+    <!-- endbuild -->
+    <!-- Custom Scripts -->
+    <script type="text/javascript" src="js/golfpicks.min.js"></script>
+    <script type="text/javascript" src="js/golfpicks-services.min.js"></script>
+
+  </head>
+
+  <body ng-app="GolfPicksMobile">
+    <!-- 
+      The nav bar that will be updated as we navigate between views.
+    -->
+    <ion-nav-bar class="golf-bar">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+    <!-- 
+      The views will be rendered in the <ion-nav-view> directive below
+      Templates are in the /templates folder (but you could also
+      have templates inline in this html file if you'd like).
+    -->
+    <ion-nav-view></ion-nav-view>
+
+    
+  </body>
+
+</html>

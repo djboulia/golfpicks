@@ -1,0 +1,62 @@
+<div ng-controller="LoginCtrl">
+
+    <div class="row">
+        <div class="col-lg-6">
+            <rd-widget>
+                <rd-widget-header icon="fa-user" title="Login">
+                </rd-widget-header>
+                <rd-widget-body classes="medium no-padding">
+                    <form>
+                        <div>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                Email
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <input size="40" type="email" ng-model="username"></input>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                Password
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <input size="40" type="password" ng-model="password"></input>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <button ng-click="submit()">Submit</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </form>
+
+                    <div ng-show="errorMessage">
+                        <div style="text-align:center">{{errorMessage}}</div>
+                    </div>
+
+                </rd-widget-body>
+            </rd-widget>
+
+        </div>
+    </div>

@@ -1,0 +1,50 @@
+<div ng-controller="CoursesCtrl">
+    <div class="row">
+
+        <div class="col-lg-6">
+                <rd-loading ng-hide="courses"></rd-loading>
+            <rd-widget ng-show="courses">
+                <rd-widget-header icon="fa-flag" title="Courses">
+                    <a href="{{editUrl}}">Add Course</a>
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="text-center">Par</th>
+                                    <th class="text-center">Yardage</th>
+                                    <th class="text-center">Slope</th>
+                                    <th class="text-center">Rating</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="course in courses">
+                                    <td>
+                                        <a href="{{detailsUrl}}/id/{{course._id}}">{{course.name}}</a>
+                                    </td>
+                                    <td class="text-center">
+                                        {{course.par}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{course.yardage}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{course.slope}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{course.rating}}
+                                    </td>
+                                    <td><a href="{{editUrl}}/id/{{course._id}}">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+</div>

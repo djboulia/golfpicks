@@ -1,0 +1,48 @@
+<div ng-controller="RoundCtrl">
+    <div class="row">
+
+        <div class="col-md-6">
+            <rd-loading ng-hide="existingEvent"></rd-loading>
+            <rd-widget ng-show="existingEvent">
+                <rd-widget-header icon="fa-user" title="{{title}}">
+                    <div class="pull-right">{{formatDate(date)}}</div>
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <div class="table-responsive">
+                        <div class="table-responsive">
+                            <form>
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td>{{course}}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th>Net Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="score in scores">
+                                        <td>{{score.player.user.name}}</td>
+                                        <td>
+                                            <input ng-model="score.score" size="3"></input>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td colspan="2">
+                                            <button ng-click="submit()">Save</button>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+
+</div>

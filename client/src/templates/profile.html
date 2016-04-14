@@ -1,0 +1,54 @@
+<div ng-controller="ProfileCtrl">
+    <div class="row">
+
+        <div class="col-lg-6">
+            <rd-loading ng-hide="existingPlayer"></rd-loading>
+            <rd-widget ng-show="existingPlayer">
+                <rd-widget-header icon="fa-user" title="{{title}}">
+                </rd-widget-header>
+                <rd-widget-body classes="medium no-padding">
+                    <div class="table-responsive">
+                        <form>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        <td><span>Name:</span>
+                                        </td>
+                                        <td>
+                                            <input size="40" ng-model="name"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>Email:</span>
+                                        </td>
+                                        <td>
+                                            <input type="email" size="40" ng-model="email"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span>Password:</span>
+                                        </td>
+                                        <td>
+                                            <input type="password" size="40" ng-model="password"></input>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td colspan="2">
+                                            <button ng-click="submit()">Save</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" colspan="2">
+                                            <div class="status" ng-bind-html="statusMessage"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </form>
+                    </div>
+                </rd-widget-body>
+                <rd-widget>
+        </div>
+    </div>
+</div>

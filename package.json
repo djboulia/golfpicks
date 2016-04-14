@@ -1,0 +1,54 @@
+{
+  "name": "golfpicks",
+  "version": "2.0.0",
+  "author": "Don Boulia",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node .",
+    "pretest": "jshint .",
+    "posttest": "nsp check"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cheerio": "^0.20.0",
+    "cloudant": "^1.4.1",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "helmet": "^1.3.0",
+    "ionic": "^1.7.14",
+    "loopback": "^2.22.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^2.4.0",
+    "loopback-connector-cloudant": "^1.0.7",
+    "loopback-datasource-juggler": "^2.39.0",
+    "node.io": "^0.5.1",
+    "request": "^2.69.0",
+    "serve-favicon": "^2.0.1"
+  },
+  "devDependencies": {
+    "bower": "^1.3.9",
+    "gulp": "~3.9.0",
+    "gulp-concat": "^2.4.1",
+    "gulp-connect": "^2.0.6",
+    "gulp-cssnano": "^2.1.0",
+    "gulp-debug": "^2.1.2",
+    "gulp-htmlmin": "^1.3.0",
+    "gulp-less": "^3.0.5",
+    "gulp-loopback-sdk-angular": "^0.1.4",
+    "gulp-nodemon": "^2.0.6",
+    "gulp-rename": "^1.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.0.1",
+    "gulp-usemin": "^0.3.7",
+    "gulp-watch": "^4.3.5",
+    "gulp-wrap": "^0.11.0",
+    "jshint": "^2.5.6",
+    "nsp": "^2.1.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "GolfPicks"
+}
