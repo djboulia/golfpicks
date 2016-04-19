@@ -2,7 +2,7 @@ angular.module('GolfPicks')
     .controller('GamesCtrl', ['$scope', '$cookieStore', '$location', '$sanitize', 'cloudDataCurrentUser', 'gameData', GamesCtrl]);
 
 function GamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, gameData) {
-    
+
     var leaderboardUrl = "#/leaderboard";
     var picksUrl = "#/picks";
 
@@ -33,19 +33,15 @@ function GamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, game
                 }
             }
 
-            $scope.$apply(function () {
-                $scope.statusMessage = statusMessage;
-                $scope.leaderboardUrl = leaderboardUrl;
-                $scope.active = gameHistory.active;
-                $scope.gameHistory = gameHistory.history;
-                $scope.loaded = true;
-            });
+            $scope.statusMessage = statusMessage;
+            $scope.leaderboardUrl = leaderboardUrl;
+            $scope.active = gameHistory.active;
+            $scope.gameHistory = gameHistory.history;
+            $scope.loaded = true;
 
         },
         error: function (err) {
-            $scope.$apply(function () {
-                $scope.statusMessage = "Error loading game history!";
-            });
+            $scope.statusMessage = "Error loading game history!";
         }
     });
 };

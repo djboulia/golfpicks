@@ -1,69 +1,68 @@
 console.log("loading GolfPicks.cloud");
 
 angular.module('GolfPicks.cloud', [])
-    .value('cloudData', {
-        initialize: function () {
-            // setup our backend data store
-            CloudObjects.init({
-                applicationId: "f8d032f7-3aef-437f-ace5-5febedad2ed7-bluemix",
-                defaultEndpoint: ""
-            });
-        },
+    .factory('cloudData', ['$q', function ($q) {
+        return {
 
-        create: function (className, obj) {
-            return CloudObjects.Object.create(className, obj);
-        },
+            create: function (className, obj) {
+                return CloudObjects.Object.create(className, obj);
+            },
 
-        getObject: function (className, id, callbacks) {
-            var query = CloudObjects.Query.create(className);
+            getObject: function (className, id) {
 
-            query.isEqualTo("_id", id);
+                var deferred = $q.defer();
+                var query = CloudObjects.Query.create(className);
 
-            query.find({
-                success: function (result) {
-                    // result should be a single member, validate that
-                    if (!result || result.length != 1) {
-                        if (callbacks && callbacks.error) {                            
-//                            console.error("query.find for id " + id + ": " + JSON.stringify(result));
-                            
-                            callbacks.error("Couldn't find object with _id " + id + "!");
+                query.isEqualTo("_id", id);
+
+                query.find({
+                    success: function (result) {
+                        // result should be a single member, validate that
+                        if (result && result.length == 1) {
+                            var object = result[0];
+
+                            deferred.resolve(object);
+                        } else {
+                            //                            console.error("query.find for id " + id + ": " + JSON.stringify(result));
+                            var msg = "Couldn't find object with _id " + id + "!";
+
+                            deferred.reject(msg);
                         }
-
-                        return;
+                    },
+                    error: function (err) {
+                        console.error("error :" + err);
+                        deferred.reject(err);
                     }
+                });
 
-                    var object = result[0];
+                return deferred.promise;
+            },
 
-                    if (callbacks && callbacks.success) { callbacks.success(object); }
-                },
-                error: function (err) {
-                    console.error("error :" + err);
-                    if (callbacks && callbacks.error) { callbacks.error(err); }
+            getObjects: function (className, ids) {
+
+                var deferred = $q.defer();
+                var query = CloudObjects.Query.create(className);
+
+                // if a list of ids is given, then filter based on that
+                if (ids) {
+                    query.containedIn("_id", ids);
                 }
-            });
-        },
 
-        getObjects: function (className, opts) {
-            var query = CloudObjects.Query.create(className);
+                query.find({
+                    success: function (result) {
+                        deferred.resolve(result);
+                    },
+                    error: function (err) {
+                        console.error("error :" + JSON.stringify(err));
+                        deferred.reject(err);
+                    }
+                });
 
-            // if a list of ids is given, then filter based on that
-            if (opts.ids) {
-                query.containedIn("_id", opts.ids);
+                return deferred.promise;
             }
+        };
 
-            query.find({
-                success: function (result) {
-                    if (opts && opts.success) opts.success(result);
-                },
-                error: function (err) {
-                    console.error("error :" + JSON.stringify(err));
-                    if (opts && opts.error) opts.error(err);
-                }
-            });
-        },
-
-
-    })
+   }])
     .factory('cloudDataCurrentUser', [function () {
         // convenience functions for logging in, out current user
         return {
@@ -113,7 +112,7 @@ angular.module('GolfPicks.cloud', [])
         };
     }])
     .factory('cloudDataLog', ['cloudDataCurrentUser', function (currentUser) {
-        // convenience functions for logging in, out current user
+        // convenience functions for logging
         return {
             access: function (message, callbacks) {
                 CloudObjects.Log.write(currentUser.getDisplayName(), "access", message, callbacks);
@@ -149,7 +148,9 @@ angular.module('GolfPicks.cloud', [])
                             }
                         },
                         error: function (err) {
-                            if (callbacks && callbacks.error) { callbacks.error(err); }
+                            if (callbacks && callbacks.error) {
+                                callbacks.error(err);
+                            }
                         }
                     });
                 }
@@ -171,7 +172,9 @@ angular.module('GolfPicks.cloud', [])
                             }
                         },
                         error: function (err) {
-                            if (callbacks && callbacks.error) { callbacks.error(err); }
+                            if (callbacks && callbacks.error) {
+                                callbacks.error(err);
+                            }
                         }
                     });
                 }
@@ -198,7 +201,9 @@ angular.module('GolfPicks.cloud', [])
                             }
                         },
                         error: function (err) {
-                            if (callbacks && callbacks.error) { callbacks.error(err); }
+                            if (callbacks && callbacks.error) {
+                                callbacks.error(err);
+                            }
                         }
                     });
                 }
@@ -207,71 +212,70 @@ angular.module('GolfPicks.cloud', [])
             get: function (id, callbacks) {
                 var thisObj = this;
 
-                cloudData.getObject(_className, id, {
-                    success: function (obj) {
-                        console.log("found object!");
+                cloudData.getObject(_className, id)
+                    .then(function (obj) {
+                            console.log("found object!");
 
-                        var player = _assignPlayer(obj);
+                            var player = _assignPlayer(obj);
 
-                        if (callbacks && callbacks.success) { callbacks.success(player); }
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) { callbacks.error(err); }
-                    }
-                });
+                            if (callbacks && callbacks.success) {
+                                callbacks.success(player);
+                            }
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) {
+                                callbacks.error(err);
+                            }
+                        });
             },
 
             getList: function (ids, callbacks) {
                 var thisObj = this;
 
-                cloudData.getObjects(_className, {
-                    ids: ids,
+                cloudData.getObjects(_className, ids)
+                    .then(function (objects) {
 
-                    success: function (objects) {
+                            console.log("found objects!");
+                            var players = [];
+                            var i;
 
-                        console.log("found objects!");
-                        var players = [];
-                        var i;
+                            for (i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var player = _assignPlayer(obj);
 
-                        for (i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var player = _assignPlayer(obj);
+                                players.push(player);
+                            }
 
-                            players.push(player);
-                        }
+                            if (callbacks && callbacks.success) callbacks.success(players);
+                        },
 
-                        if (callbacks && callbacks.success) callbacks.success(players);
-                    },
-
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
             getAll: function (callbacks) {
                 var thisObj = this;
 
-                cloudData.getObjects(_className, {
-                    success: function (objects) {
+                cloudData.getObjects(_className)
+                    .then(function (objects) {
 
-                        console.log("found objects!");
-                        var players = [];
-                        var i;
+                            console.log("found objects!");
+                            var players = [];
+                            var i;
 
-                        for (i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var player = _assignPlayer(obj);
+                            for (i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var player = _assignPlayer(obj);
 
-                            players.push(player);
-                        }
+                                players.push(player);
+                            }
 
-                        if (callbacks && callbacks.success) callbacks.success(players);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            if (callbacks && callbacks.success) callbacks.success(players);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             }
 
         }
@@ -373,67 +377,62 @@ angular.module('GolfPicks.cloud', [])
 
             get: function (id, callbacks) {
 
-                cloudData.getObject(_className, id, {
-                    success: function (obj) {
-                        console.log("found course!");
+                cloudData.getObject(_className, id)
+                    .then(function (obj) {
+                            console.log("found course!");
 
-                        var course = _getObjectData(obj);
+                            var course = _getObjectData(obj);
 
-                        if (callbacks && callbacks.success) callbacks.success(course);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            if (callbacks && callbacks.success) callbacks.success(course);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
             getList: function (ids, callbacks) {
                 var thisObj = this;
 
-                cloudData.getObjects(_className, {
-                    ids: ids,
+                cloudData.getObjects(_className, ids)
+                    .then(function (objects) {
 
-                    success: function (objects) {
+                            console.log("found objects!");
+                            var localObjs = [];
 
-                        console.log("found objects!");
-                        var localObjs = [];
+                            for (var i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var localObj = _getObjectData(obj);
 
-                        for (var i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var localObj = _getObjectData(obj);
+                                localObjs.push(localObj);
+                            }
 
-                            localObjs.push(localObj);
-                        }
+                            if (callbacks && callbacks.success) callbacks.success(localObjs);
+                        },
 
-                        if (callbacks && callbacks.success) callbacks.success(localObjs);
-                    },
-
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
             getAll: function (callbacks) {
 
-                cloudData.getObjects(_className, {
-                    success: function (objects) {
+                cloudData.getObjects(_className)
+                    .then(function (objects) {
 
-                        var courses = [];
+                            var courses = [];
 
-                        for (var i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var course = _getObjectData(obj);
+                            for (var i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var course = _getObjectData(obj);
 
-                            courses.push(course);
-                        }
+                                courses.push(course);
+                            }
 
-                        if (callbacks && callbacks.success) callbacks.success(courses);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            if (callbacks && callbacks.success) callbacks.success(courses);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             }
         }
     }])
@@ -663,52 +662,50 @@ angular.module('GolfPicks.cloud', [])
             //
             get: function (id, callbacks) {
 
-                cloudData.getObject(_className, id, {
-                    success: function (obj) {
-                        console.log("found course!");
+                cloudData.getObject(_className, id)
+                    .then(function (obj) {
+                            console.log("found course!");
 
-                        var localObj = _getObjectData(obj);
+                            var localObj = _getObjectData(obj);
 
-                        // in a non-PGA round, the golfer ids and scores
-                        // will be contained directly in this object.  For PGA rounds
-                        // the scoring data is loaded separately from the official tour site
-                        console.log("Scoring format is : " + localObj.scoreType);
+                            // in a non-PGA round, the golfer ids and scores
+                            // will be contained directly in this object.  For PGA rounds
+                            // the scoring data is loaded separately from the official tour site
+                            console.log("Scoring format is : " + localObj.scoreType);
 
-                        if (localObj.scoreType != "pga-live-scoring") {
-                            console.log("non PGA round, loading golfer data");
-                            getPlayers(localObj, callbacks);
-                        } else {
-                            console.log("PGA round, not loading golfer data");
-                        }
+                            if (localObj.scoreType != "pga-live-scoring") {
+                                console.log("non PGA round, loading golfer data");
+                                getPlayers(localObj, callbacks);
+                            } else {
+                                console.log("PGA round, not loading golfer data");
+                            }
 
-                        getRounds(localObj, callbacks);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            getRounds(localObj, callbacks);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
             getAll: function (callbacks) {
 
-                cloudData.getObjects(_className, {
-                    success: function (objects) {
+                cloudData.getObjects(_className)
+                    .then(function (objects) {
 
-                        var localObjs = [];
+                            var localObjs = [];
 
-                        for (var i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var localObj = _getObjectData(obj);
+                            for (var i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var localObj = _getObjectData(obj);
 
-                            localObjs.push(localObj);
-                        }
+                                localObjs.push(localObj);
+                            }
 
-                        if (callbacks && callbacks.success) callbacks.success(localObjs);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            if (callbacks && callbacks.success) callbacks.success(localObjs);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
         }
@@ -764,41 +761,39 @@ angular.module('GolfPicks.cloud', [])
 
             get: function (id, callbacks) {
 
-                cloudData.getObject(_className, id, {
-                    success: function (obj) {
-                        console.log("found " + _className + " with id " + id);
+                cloudData.getObject(_className, id)
+                    .then(function (obj) {
+                            console.log("found " + _className + " with id " + id);
 
-                        var localObj = _getObjectData(obj);
+                            var localObj = _getObjectData(obj);
 
-                        if (callbacks && callbacks.success) callbacks.success(localObj);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            if (callbacks && callbacks.success) callbacks.success(localObj);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
 
             getAll: function (callbacks) {
 
-                cloudData.getObjects(_className, {
-                    success: function (objects) {
+                cloudData.getObjects(_className)
+                    .then(function (objects) {
 
-                        var courses = [];
+                            var courses = [];
 
-                        for (var i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var course = _getObjectData(obj);
+                            for (var i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var course = _getObjectData(obj);
 
-                            courses.push(course);
-                        }
+                                courses.push(course);
+                            }
 
-                        if (callbacks && callbacks.success) callbacks.success(courses);
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                            if (callbacks && callbacks.success) callbacks.success(courses);
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             },
 
             savePicks: function (game, currentUser, picks, callbacks) {
@@ -853,6 +848,13 @@ angular.module('GolfPicks.cloud', [])
         };
     }])
     .run(['cloudData', function (data) {
-        console.log('initializing cloudData');
-        data.initialize();
+        var appId = "f8d032f7-3aef-437f-ace5-5febedad2ed7-bluemix";
+        console.log('initializing cloudData with appId: ' + appId);
+
+        // setup our backend data store
+        CloudObjects.init({
+            applicationId: appId,
+            defaultEndpoint: ""
+        });
+
     }]);

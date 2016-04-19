@@ -19,13 +19,11 @@ function PlayerCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataPlay
             success: function (playerObject) {
                 existingPlayer = playerObject;
 
-                $scope.$apply(function () {
-                    $scope.name = existingPlayer.name;
-                    $scope.email = existingPlayer.email;
-                    $scope.password = existingPlayer.password;
-                    $scope.existingPlayer = true;
-                    $scope.loaded = true;
-                });
+                $scope.name = existingPlayer.name;
+                $scope.email = existingPlayer.email;
+                $scope.password = existingPlayer.password;
+                $scope.existingPlayer = true;
+                $scope.loaded = true;
             },
             error: function (err) {
                 console.log("error getting user " + err);

@@ -36,14 +36,12 @@ function GameCtrl($scope, $stateParams, gameData) {
                 console.log("picks: " + JSON.stringify(picks));
                 console.log("nopicks: " + JSON.stringify(nopicks));
 
-                $scope.$apply(function () {
-                    $scope.name = game.name;
-                    $scope.start = game.start;
-                    $scope.end = game.end;
-                    $scope.picks = picks;
-                    $scope.nopicks = nopicks;
-                    $scope.loaded = true;
-                });
+                $scope.name = game.name;
+                $scope.start = game.start;
+                $scope.end = game.end;
+                $scope.picks = picks;
+                $scope.nopicks = nopicks;
+                $scope.loaded = true;
 
             },
             error: function (err) {

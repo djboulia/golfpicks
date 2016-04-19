@@ -10,10 +10,8 @@ function PlayersCtrl($scope, $cookieStore, cloudDataPlayer) {
 
     cloudDataPlayer.getAll( {
         success: function (players) {
-            $scope.$apply(function () {
-                $scope.players = players;
-                $scope.loaded = true;
-            });
+            $scope.players = players;
+            $scope.loaded = true;
         },
         error: function (err) {
             console.log("error");

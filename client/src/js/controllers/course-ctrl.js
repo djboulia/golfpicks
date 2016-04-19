@@ -17,17 +17,15 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
             success: function (obj) {
                 existingCourse = obj;
 
-                $scope.$apply(function () {
-                    $scope.name = existingCourse.name;
-                    $scope.tee = existingCourse.tee;
-                    $scope.par = existingCourse.par;
-                    $scope.yardage = existingCourse.yardage;
-                    $scope.slope = existingCourse.slope;
-                    $scope.rating = existingCourse.rating;
-                    $scope.holes = existingCourse.holes;
-                    $scope.existingCourse = true;
-                    $scope.loaded = true;
-                });
+                $scope.name = existingCourse.name;
+                $scope.tee = existingCourse.tee;
+                $scope.par = existingCourse.par;
+                $scope.yardage = existingCourse.yardage;
+                $scope.slope = existingCourse.slope;
+                $scope.rating = existingCourse.rating;
+                $scope.holes = existingCourse.holes;
+                $scope.existingCourse = true;
+                $scope.loaded = true;
             },
             error: function (err) {
                 console.log("error getting course " + err);

@@ -11,11 +11,9 @@ function CoursesCtrl($scope, $cookieStore, cloudDataCourse) {
     $scope.editUrl = editUrl;
     $scope.detailsUrl = detailsUrl;
 
-    cloudDataCourse.getAll( {
+    cloudDataCourse.getAll({
         success: function (courses) {
-            $scope.$apply(function () {
-                $scope.courses = courses;
-            });
+            $scope.courses = courses;
         },
         error: function (err) {
             console.log("error");

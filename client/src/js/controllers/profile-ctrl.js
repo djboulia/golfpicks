@@ -17,12 +17,10 @@ function ProfileCtrl($scope, $stateParams, $cookieStore,
         success: function (playerObject) {
             existingPlayer = playerObject;
 
-            $scope.$apply(function () {
-                $scope.name = existingPlayer.name;
-                $scope.email = existingPlayer.email;
-                $scope.password = existingPlayer.password;
-                $scope.existingPlayer = true;
-            });
+            $scope.name = existingPlayer.name;
+            $scope.email = existingPlayer.email;
+            $scope.password = existingPlayer.password;
+            $scope.existingPlayer = true;
         },
         error: function (err) {
             console.log("error getting user " + err);

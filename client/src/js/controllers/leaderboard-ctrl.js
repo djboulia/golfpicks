@@ -75,7 +75,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
             gameData.loadNewsFeed(eventid, {
                 success: function (feedItems) {
                     console.log("got feed items : " + JSON.stringify(feedItems));
-                    
+
                     // load each feed item into our ticker
                     var feedString = undefined;
 
@@ -130,66 +130,61 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                             console.debug("getting news for event " + game.eventid);
                             getNewsFeed(game.eventid);
 
-                            $scope.$apply(function () {
+                            $scope.event = event;
+                            $scope.eventLeaderUrl = "#/eventleaders/id/" + game.eventid;
+                            $scope.eventOverviewUrl = "#/eventdetails/id/" + game.eventid;
 
-                                $scope.event = event;
-                                $scope.eventLeaderUrl = "#/eventleaders/id/" + game.eventid;
-                                $scope.eventOverviewUrl = "#/eventdetails/id/" + game.eventid;
+                            var currentRound = eventUtils.getCurrentRound(courseinfo);
+                            var currentCourse = courseinfo[currentRound - 1];
+                            var roundTitles = eventUtils.getRoundTitles(courseinfo, "Day");
 
-                                var currentRound = eventUtils.getCurrentRound(courseinfo);
-                                var currentCourse = courseinfo[currentRound - 1];
-                                var roundTitles = eventUtils.getRoundTitles(courseinfo, "Day");
+                            $scope.courseinfo = currentCourse;
+                            $scope.currentRound = currentRound;
+                            $scope.roundTitles = roundTitles;
 
-                                $scope.courseinfo = currentCourse;
-                                $scope.currentRound = currentRound;
-                                $scope.roundTitles = roundTitles;
+                            $scope.newsfeed = "Course: " + currentCourse.name +
+                                " &nbsp;&nbsp;~&nbsp;&nbsp; Par: " + currentCourse.par +
+                                " &nbsp;&nbsp;~&nbsp;&nbsp; Yardage: " +
+                                currentCourse.yardage;
 
-                                $scope.newsfeed = "Course: " + currentCourse.name +
-                                    " &nbsp;&nbsp;~&nbsp;&nbsp; Par: " + currentCourse.par +
-                                    " &nbsp;&nbsp;~&nbsp;&nbsp; Yardage: " +
-                                    currentCourse.yardage;
+                            $scope.gamers = gamers;
+                            $scope.loaded = true;
+                            $scope.statusMessage = "";
 
-                                $scope.gamers = gamers;
-                                $scope.loaded = true;
-                                $scope.statusMessage = "";
+                            if (currentCourse.location) {
+                                var location = currentCourse.location;
 
-                                if (currentCourse.location) {
-                                    var location = currentCourse.location;
+                                weatherData.forecast(
+                                    location.lat,
+                                    location.lng, {
+                                        success: function (data) {
+                                            console.log("Data from weather service: " + JSON.stringify(data));
 
-                                    weatherData.forecast(
-                                        location.lat,
-                                        location.lng, {
-                                            success: function (data) {
-                                                console.log("Data from weather service: " + JSON.stringify(data));
-                                                
-                                                data.temp = Math.round(data.temp);
-                                                data.wind = Math.round(data.wind);
-                                                data.metric.temp = Math.round(data.metric.temp);
+                                            data.temp = Math.round(data.temp);
+                                            data.wind = Math.round(data.wind);
+                                            data.metric.temp = Math.round(data.metric.temp);
 
-                                                $scope.weather = data;
-                                                $scope.weatherImg = '<img src="' + data.icon + '">';
-                                            },
-                                            error: function (err) {
-                                                console.log("Error from weather service: " + err);
-                                            }
-                                        });
-                                }
+                                            $scope.weather = data;
+                                            $scope.weatherImg = '<img src="' + data.icon + '">';
+                                        },
+                                        error: function (err) {
+                                            console.log("Error from weather service: " + err);
+                                        }
+                                    });
+                            }
 
-                                var now = Date.now();
+                            var now = Date.now();
 
-                                $scope.lastUpdate = "Last Update: " +
-                                    gameUtils.dayOfWeekString(now) + ", " +
-                                    gameUtils.timeString(now);
-                            });
+                            $scope.lastUpdate = "Last Update: " +
+                                gameUtils.dayOfWeekString(now) + ", " +
+                                gameUtils.timeString(now);
 
                             if (!newsTickerStarted) {
                                 startNewsTicker();
                             }
                         } else {
                             console.error("No players for the current game.");
-                            $scope.$apply(function () {
-                                $scope.statusMessage = "No players for the current game.";
-                            });
+                            $scope.statusMessage = "No players for the current game.";
                         }
 
                     },
@@ -213,7 +208,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
 
         if (gameid) {
             console.log("Loading game " + gameid);
-            
+
             gameData.loadGame(gameid, {
                 success: gameLoadedHandler,
                 error: gameLoadedErrHandler

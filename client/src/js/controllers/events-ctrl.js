@@ -28,9 +28,7 @@ function EventsCtrl($scope, $cookieStore, cloudDataEvent) {
                 }
             });
             
-            $scope.$apply(function () {
-                $scope.events = events;
-            });
+            $scope.events = events;
         },
         error: function (err) {
             console.log("error");
