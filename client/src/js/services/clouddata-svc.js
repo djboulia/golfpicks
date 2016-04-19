@@ -63,7 +63,7 @@ angular.module('GolfPicks.cloud', [])
         };
 
    }])
-    .factory('cloudDataCurrentUser', [function () {
+    .factory('cloudDataCurrentUser', ['$q', function ($q) {
         // convenience functions for logging in, out current user
         return {
             isLoggedIn: function () {
@@ -73,7 +73,23 @@ angular.module('GolfPicks.cloud', [])
             },
 
             logIn: function (user, pass, callbacks) {
-                CloudObjects.User.logIn(user, pass, callbacks);
+                var deferred = $q.defer();
+
+                CloudObjects.User.logIn(user, pass, {
+                    success: function (result) {
+                        deferred.resolve(result);
+                    },
+                    error: function (user, err) {
+                        console.error("error logging in user :" + user + " err: " + JSON.stringify(err));
+
+                        deferred.reject({
+                            "user": user,
+                            "err": err
+                        });
+                    }
+                });
+
+                return deferred.promise;
             },
 
             logOut: function () {

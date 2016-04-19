@@ -1,16 +1,16 @@
 angular.module('GolfPicks')
-    .controller('LoginCtrl', ['$scope', '$cookieStore', 
+    .controller('LoginCtrl', ['$scope', '$cookieStore',
                               'cloudDataCurrentUser', '$location', 'Alerts', LoginCtrl]);
 
 var mainUrl = "/index";
 
 function LoginCtrl($scope, $cookieStore, currentUser, $location, Alerts) {
-    
+
     $scope.username = "";
     $scope.password = "";
 
     console.log("defining submit function");
-    
+
     $scope.submit = function () {
 
         var user = this.username;
@@ -18,29 +18,21 @@ function LoginCtrl($scope, $cookieStore, currentUser, $location, Alerts) {
 
         $scope.errorMessage = "Logging in user " + user;
 
-        currentUser.logIn(user, pass, {
-            success: function (user) {
-                $scope.$apply(function () {
+        currentUser.logIn(user, pass)
+            .then(function (user) {
                     $scope.errorMessage = "";
-                });
 
-                // switch to picks page
-                console.log("Logged in, switching to " + mainUrl);
-//                $location.path(mainUrl);
-                window.location.href = "index.html";
-                return true;
-            },
-            error: function (user, error) {
-                
-                console.log("user " + user + ", error " + error);
+                    // switch to picks page
+                    console.log("Logged in, switching to " + mainUrl);
+                    //                $location.path(mainUrl);
+                    window.location.href = "index.html";
+                    return true;
+                },
+                function (reason) {
 
-                // The login failed. Check error to see why.
-                $scope.$apply(function () {
+                    // The login failed. Check error to see why.
                     $scope.errorMessage = "Login failed.  Try a different userid or password.";
                 });
-            }
-        });
-
     }
 
     /**
@@ -48,20 +40,20 @@ function LoginCtrl($scope, $cookieStore, currentUser, $location, Alerts) {
      */
     var mobileView = 992;
 
-    $scope.getWidth = function() {
+    $scope.getWidth = function () {
         return window.innerWidth;
     };
 
-    $scope.$watch($scope.getWidth, function(newValue, oldValue) {
+    $scope.$watch($scope.getWidth, function (newValue, oldValue) {
         if (angular.isDefined($cookieStore.get('toggle'))) {
-            $scope.toggle = ! $cookieStore.get('toggle') ? false : true;
+            $scope.toggle = !$cookieStore.get('toggle') ? false : true;
         } else {
             $scope.toggle = true;
         }
     });
 
-    window.onresize = function() {
+    window.onresize = function () {
         $scope.$apply();
     };
-    
+
 }
