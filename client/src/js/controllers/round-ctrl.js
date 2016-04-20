@@ -113,17 +113,16 @@ function RoundCtrl($scope, $stateParams, $cookieStore, cloudDataEvent) {
 
             event.rounds[roundid].scores = scores;
 
-            cloudDataEvent.save(event, {
-                success: function (obj) {
-                    console.log("saved event " + obj.name);
+            cloudDataEvent.save(event)
+                .then(function (obj) {
+                        console.log("saved event " + obj.name);
 
-                    // switch to players page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error adding event: " + err);
-                }
-            });
+                        // switch to players page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding event: " + err);
+                    });
         }
 
     };
