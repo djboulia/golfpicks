@@ -154,10 +154,8 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                             if (currentCourse.location) {
                                 var location = currentCourse.location;
 
-                                weatherData.forecast(
-                                    location.lat,
-                                    location.lng, {
-                                        success: function (data) {
+                                weatherData.forecast(location.lat, location.lng)
+                                    .then(function (data) {
                                             console.log("Data from weather service: " + JSON.stringify(data));
 
                                             data.temp = Math.round(data.temp);
@@ -167,10 +165,9 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                                             $scope.weather = data;
                                             $scope.weatherImg = '<img src="' + data.icon + '">';
                                         },
-                                        error: function (err) {
+                                        function (err) {
                                             console.log("Error from weather service: " + err);
-                                        }
-                                    });
+                                        });
                             }
 
                             var now = Date.now();

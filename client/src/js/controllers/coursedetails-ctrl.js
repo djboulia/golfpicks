@@ -67,10 +67,8 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
                     if (existingCourse.location) {
                         var location = existingCourse.location;
 
-                        weatherData.forecast(
-                            location.lat,
-                            location.lng, {
-                                success: function (data) {
+                        weatherData.forecast(location.lat, location.lng)
+                            .then(function (data) {
                                     console.log("Data from weather service: " + JSON.stringify(data));
 
                                     data.temp = Math.round(data.temp);
@@ -80,10 +78,9 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
                                     $scope.weather = data;
                                     $scope.weatherImg = '<img src="' + data.icon + '">';
                                 },
-                                error: function (err) {
+                                function (err) {
                                     console.log("Error from weather service: " + err);
-                                }
-                            });
+                                });
                     }
 
                     $scope.existingCourse = true;

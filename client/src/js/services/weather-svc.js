@@ -1,5 +1,5 @@
 angular.module('GolfPicks.weatherData', [])
-    .factory('weatherData', ['$http', function ($http) {
+    .factory('weatherData', ['$http', '$q', function ($http, $q) {
 
         var key = "edace3c3e40fa98d";
         var weatherUrl = "https://api.wunderground.com/api/" + key + "/conditions/q/";
@@ -18,38 +18,40 @@ angular.module('GolfPicks.weatherData', [])
 
         return {
 
-            forecast: function (lat, lng, callbacks) {
+            forecast: function (lat, lng) {
+                var deferred = $q.defer();
+
                 var url = weatherUrl + lat + "," + lng + ".json";
 
                 $http.get(url)
                     .then(
                         function (data) {
-                            if (callbacks && callbacks.success) {
-                                var current = data.data.current_observation;
-                                
-//                                console.log("weather conditions: " + JSON.stringify(data));
+                            var current = data.data.current_observation;
 
-                                var tempf = current.temp_f;
-                                var tempc = current.temp_c;
-                                var windmph = current.wind_mph;
-                                var windkph = current.wind_kph;
-                                var icon = current.icon_url;
+                            //                                console.log("weather conditions: " + JSON.stringify(data));
 
-                                callbacks.success({
-                                    temp: tempf,
-                                    wind: windmph,
-                                    icon: icon,
-                                    metric: {
-                                        temp: tempc,
-                                        wind: windkph
-                                    }
-                                });
-                            }
+                            var tempf = current.temp_f;
+                            var tempc = current.temp_c;
+                            var windmph = current.wind_mph;
+                            var windkph = current.wind_kph;
+                            var icon = current.icon_url;
+
+                            deferred.resolve({
+                                temp: tempf,
+                                wind: windmph,
+                                icon: icon,
+                                metric: {
+                                    temp: tempc,
+                                    wind: windkph
+                                }
+                            });
                         },
                         function (response) { // error
                             console.log("weather data error: " + response);
-                            if (callbacks && callbacks.error) callbacks.error(response);
+                            deferred.reject(response);
                         });
+
+                return deferred.promise;
 
             }
         }
