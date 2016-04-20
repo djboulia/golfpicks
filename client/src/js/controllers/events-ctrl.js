@@ -17,22 +17,21 @@ function EventsCtrl($scope, $cookieStore, cloudDataEvent) {
         return (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear()
     };
 
-    cloudDataEvent.getAll({
-        success: function (events) {
+    cloudDataEvent.getAll()
+        .then(function (events) {
 
-            events.sort(function (a, b) {
-                if (a.start == b.start) {
-                    return 0;
-                } else {
-                    return (a.start > b.start) ? -1 : 1;
-                }
+                events.sort(function (a, b) {
+                    if (a.start == b.start) {
+                        return 0;
+                    } else {
+                        return (a.start > b.start) ? -1 : 1;
+                    }
+                });
+
+                $scope.events = events;
+            },
+            function (err) {
+                console.log("error");
             });
-            
-            $scope.events = events;
-        },
-        error: function (err) {
-            console.log("error");
-        }
-    });
 
 };

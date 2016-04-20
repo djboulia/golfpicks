@@ -3,12 +3,44 @@ console.log("loading GolfPicks.cloud");
 angular.module('GolfPicks.cloud', [])
     .factory('cloudData', ['$q', function ($q) {
 
-        var _setProperties = function (cloudObj, attrs, fieldMap) {
+        //
+        // cloudData is a wrapper for the underlying (non Angular) cloud-objects library
+        //
+        // To insulate us from the details of that library, this class performs actions to
+        // synchronize the cloud object with a local object representation
+        //
+        // Each cloud object consists of a className which represents the type of the object, a unique
+        // identifier named "_id" and a set of fields representing the data elements of the object
+        //
+        // In golfpicks, examples of valid classes are:
+        //      User, Game, Event, Course
+        //
+        // to insulate us from the representation in the cloud-objects library, we also
+        // define a list of field names which are the ONLY things that will be synced
+        // with the back end.  the field names is an object where the keys are the name
+        // in the cloud-object, and the values represent the name that will be used in the
+        // local object.
+        //
+        // So, for instance, if you wanted to map the "username" field in
+        // the cloud object to a field named "email" in the local object, it would look like this:
+        //
+        // var fieldNames = {
+        //      username : "email"
+        // }
+        //
+        // this will cause the cloudData factory to synchronize one field (username) from the
+        // cloud with the local object where the field is named "email".  This means that
+        // any other fields contained in the original cloud object would be invisible to the
+        // local object.  And conversely, any local fields added to the local would be ignored
+        // when updating the back end cloud object.
+        //
+
+        var _setProperties = function (cloudObj, fieldMap, objData) {
 
             for (var prop in fieldMap) {
                 var mappedProp = fieldMap[prop];
 
-                cloudObj.set(prop, attrs[mappedProp]);
+                cloudObj.set(prop, objData[mappedProp]);
             }
 
         };
@@ -33,17 +65,6 @@ angular.module('GolfPicks.cloud', [])
             return localObj;
         };
 
-        var _sync = function (localObj) {
-            var fieldMap = localObj._fieldMap;
-            var cloudObj = localObj._cloudObject;
-
-            for (var prop in fieldMap) {
-                var mappedProp = fieldMap[prop];
-
-                cloudObj.set(prop, localObj[mappedProp]);
-            }
-        };
-
         return {
 
             delete: function (localObj) {
@@ -66,13 +87,13 @@ angular.module('GolfPicks.cloud', [])
                 return deferred.promise;
             },
 
-            add: function (className, fieldNames, attrs) {
+            add: function (className, fieldNames, objData) {
                 var deferred = $q.defer();
 
-                if (attrs) {
+                if (objData) {
                     var cloudObj = CloudObjects.Object.create(className);
 
-                    _setProperties(cloudObj, attrs, fieldNames);
+                    _setProperties(cloudObj, fieldNames, objData);
 
                     cloudObj.save({
                         success: function (obj) {
@@ -87,7 +108,7 @@ angular.module('GolfPicks.cloud', [])
                         }
                     });
                 } else {
-                    deferred.reject("cloudData.add: attrs: " + JSON.stringify(attrs));
+                    deferred.reject("cloudData.add: objData: " + JSON.stringify(objData));
                 }
 
                 return deferred.promise;
@@ -98,7 +119,10 @@ angular.module('GolfPicks.cloud', [])
 
                 if (localObj._cloudObject && localObj._fieldMap) {
 
-                    _sync(localObj);
+                    var cloudObj = localObj._cloudObject;
+                    var fieldMap = localObj._fieldMap;
+
+                    _setProperties(cloudObj, fieldMap, localObj);
 
                     localObj._cloudObject.save({
                         success: function (obj) {
@@ -281,7 +305,7 @@ angular.module('GolfPicks.cloud', [])
             }
         };
     }])
-    .factory('cloudDataLog', ['cloudDataCurrentUser', '$q', function (currentUser, $q) {
+    .factory('cloudDataLog', ['cloudDataCurrentUser', function (currentUser) {
         // convenience functions for logging
         return {
             access: function (message) {
@@ -289,7 +313,7 @@ angular.module('GolfPicks.cloud', [])
             }
         }
     }])
-    .factory('cloudDataPlayer', ['cloudData', '$q', function (cloudData, $q) {
+    .factory('cloudDataPlayer', ['cloudData', function (cloudData) {
 
         var _className = "User";
         var _fieldNames = {
@@ -365,107 +389,88 @@ angular.module('GolfPicks.cloud', [])
             }
         }
     }])
-    .factory('cloudDataEvent', ['cloudData', 'cloudDataPlayer', 'cloudDataCourse', function (cloudData, cloudDataPlayer, cloudDataCourse) {
+    .factory('cloudDataEvent', ['cloudData', 'cloudDataPlayer', 'cloudDataCourse', '$q', function (cloudData,
+        cloudDataPlayer, cloudDataCourse, $q) {
 
         var _className = "Event";
-
-        var _getObjectData = function (obj) {
-            var localObj = {};
-
-            localObj._id = obj.getObjectId();
-            localObj._cloudObject = obj;
-
-            localObj.name = obj.get("name");
-            localObj.start = obj.get("start");
-            localObj.end = obj.get("end");
-            localObj.scoreType = obj.get("scoreType");
-            localObj.rounds = obj.get("rounds");
-            localObj.players = obj.get("players");
-
-            return localObj;
+        var _fieldNames = {
+            name: "name",
+            start: "start",
+            end: "end",
+            scoreType: "scoreType",
+            rounds: "rounds",
+            players: "players"
         };
 
-        var _setObjectData = function (cloudObject, localObj) {
-            cloudObject.set("name", localObj.name);
-            cloudObject.set("start", localObj.start);
-            cloudObject.set("end", localObj.end);
-            cloudObject.set("scoreType", localObj.scoreType);
-            cloudObject.set("rounds", localObj.rounds);
-            cloudObject.set("players", localObj.players);
-        };
+        var getPlayers = function (localObj) {
 
-        var callChain = 0;
+            var deferred = $q.defer();
 
-        var handleSuccessCallback = function (localObj, callbacks) {
-            callChain--;
-            if (callChain == 0) {
-                if (callbacks && callbacks.success) callbacks.success(localObj);
-            }
-        };
+            // in a non-PGA round, the golfer ids and scores
+            // will be contained directly in this object.  For PGA rounds
+            // the scoring data is loaded separately from the official tour site
+            console.log("Scoring format is : " + localObj.scoreType);
 
-        var handleErrorCallback = function (err, callbacks) {
-            if (callChain >= 0) {
-                callChain = -1;
+            if (localObj.scoreType == "pga-live-scoring") {
+                console.log("PGA round, not loading golfer data");
 
-                console.log("error getting event: " + err);
+                // resolve immediately since we aren't loading golfer data
+                deferred.resolve(localObj);
+            } else {
+                console.log("non PGA round, loading golfer data");
 
-                if (callbacks && callbacks.error) callbacks.error(err);
-            }
-        };
+                var players = localObj.players;
+                var ids = [];
 
-        var getPlayers = function (localObj, callbacks) {
+                for (var i = 0; i < players.length; i++) {
+                    var player = players[i];
+                    ids.push(player.user);
+                }
 
-            callChain++;
+                cloudDataPlayer.getList(ids)
+                    .then(function (objs) {
 
-            var players = localObj.players;
-            var ids = [];
+                            // fluff up the players object with player data
+                            var playermap = {};
 
-            for (var i = 0; i < players.length; i++) {
-                var player = players[i];
-                ids.push(player.user);
-            }
-
-            cloudDataPlayer.getList(ids)
-                .then(function (objs) {
-
-                        // fluff up the players object with player data
-                        var playermap = {};
-
-                        for (var i = 0; i < objs.length; i++) {
-                            var obj = objs[i];
-                            playermap[obj._id] = obj;
-                        }
-
-                        var validplayers = [];
-
-                        for (var i = 0; i < players.length; i++) {
-                            var player = players[i];
-                            var playerdetails = playermap[player.user];
-
-                            if (playerdetails) {
-                                player.user = playerdetails;
-                                validplayers.push(player);
-                            } else {
-                                console.log("couldn't find id " + player.user);
-                                console.log("roundmap: " + JSON.stringify(playermap));
+                            for (var i = 0; i < objs.length; i++) {
+                                var obj = objs[i];
+                                playermap[obj._id] = obj;
                             }
-                        }
 
-                        console.log("setting players " + JSON.stringify(validplayers));
+                            var validplayers = [];
 
-                        localObj.players = validplayers;
+                            for (var i = 0; i < players.length; i++) {
+                                var player = players[i];
+                                var playerdetails = playermap[player.user];
 
-                        handleSuccessCallback(localObj, callbacks);
-                    },
-                    function (err) {
+                                if (playerdetails) {
+                                    player.user = playerdetails;
+                                    validplayers.push(player);
+                                } else {
+                                    console.log("couldn't find id " + player.user);
+                                    console.log("roundmap: " + JSON.stringify(playermap));
+                                }
+                            }
 
-                        handleErrorCallback(err, callbacks);
-                    });
+                            console.log("setting players " + JSON.stringify(validplayers));
+
+                            localObj.players = validplayers;
+
+                            deferred.resolve(localObj);
+                        },
+                        function (err) {
+                            deferred.reject(err);
+                        });
+
+            }
+
+            return deferred.promise;
         };
 
-        var getRounds = function (localObj, callbacks) {
+        var getRounds = function (localObj) {
 
-            callChain++;
+            var deferred = $q.defer();
 
             var rounds = localObj.rounds;
             var ids = [];
@@ -502,33 +507,21 @@ angular.module('GolfPicks.cloud', [])
 
                         localObj.rounds = validrounds;
 
-                        handleSuccessCallback(localObj, callbacks);
+                        deferred.resolve(localObj);
                     },
                     function (err) {
-                        handleErrorCallback(err, callbacks);
+                        deferred.reject(err);
                     });
+
+            return deferred.promise;
         };
 
         return {
-            delete: function (localObj, callbacks) {
-                if (localObj._cloudObject) {
-
-                    localObj._cloudObject.delete({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(obj);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                }
+            delete: function (localObj) {
+                return cloudData.delete(localObj);
             },
 
-            save: function (localObj, callbacks) {
+            save: function (localObj) {
                 if (localObj._cloudObject) {
 
                     // de-fluff the rounds and players before saving to back end
@@ -542,98 +535,53 @@ angular.module('GolfPicks.cloud', [])
                         localObj.players[i].user = player.user._id;
                     }
 
-                    var cloudObject = localObj._cloudObject;
-
-                    _setObjectData(cloudObject, localObj);
-
-                    cloudObject.save({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(localObj);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
                 }
+
+                return cloudData.save(localObj);
             },
 
-            add: function (localObj, callbacks) {
-                if (localObj) {
-                    var cloudObject = cloudData.create(_className);
-
-                    _setObjectData(cloudObject, localObj);
-
-                    cloudObject.save({
-                        success: function (obj) {
-                            // return the saved object back 
-                            var saved = _getObjectData(obj);
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(saved);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                }
+            add: function (localObj) {
+                return cloudData.add(_className, _fieldNames, localObj);
             },
 
             //
             // a get of an individual event will do a "deep" get of the
             // players and courses that are part of this event
             //
-            get: function (id, callbacks) {
+            get: function (id) {
+                console.log("cloudDataEvent.get called for " + id);
 
-                cloudData.getObject(_className, id)
-                    .then(function (obj) {
-                            console.log("found course!");
+                var deferred = $q.defer();
 
-                            var localObj = _getObjectData(obj);
+                cloudData.get(_className, _fieldNames, id)
+                    .then(function (localObj) {
+                        // go kick off players and round info requests
+                        var promises = [getPlayers(localObj), getRounds(localObj)];
 
-                            // in a non-PGA round, the golfer ids and scores
-                            // will be contained directly in this object.  For PGA rounds
-                            // the scoring data is loaded separately from the official tour site
-                            console.log("Scoring format is : " + localObj.scoreType);
+                        return $q.all(promises);
+                    })
+                    .then(function (results) {
+                        // all info loaded, fulfill the promise with our loaded object
+                        var localObj = results[0];
 
-                            if (localObj.scoreType != "pga-live-scoring") {
-                                console.log("non PGA round, loading golfer data");
-                                getPlayers(localObj, callbacks);
-                            } else {
-                                console.log("PGA round, not loading golfer data");
-                            }
+                        console.log("cloudDataEvent.get: fully loaded localObj " + JSON.stringify(localObj));
 
-                            getRounds(localObj, callbacks);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+                        deferred.resolve(localObj);
+                    })
+                    .catch(function (err) {
+                        deferred.reject(err);
+                    });
+
+                return deferred.promise;
             },
 
-            getAll: function (callbacks) {
-
-                cloudData.getObjects(_className)
-                    .then(function (objects) {
-
-                            var localObjs = [];
-
-                            for (var i = 0; i < objects.length; i++) {
-                                var obj = objects[i];
-                                var localObj = _getObjectData(obj);
-
-                                localObjs.push(localObj);
-                            }
-
-                            if (callbacks && callbacks.success) callbacks.success(localObjs);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            getList: function (ids) {
+                return cloudData.getList(_className, _fieldNames, ids);
             },
+
+            getAll: function () {
+                return cloudData.getList(_className, _fieldNames);
+            }
 
         }
     }])

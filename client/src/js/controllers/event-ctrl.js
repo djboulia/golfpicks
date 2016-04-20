@@ -93,14 +93,14 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
 
             cloudDataPlayer.save(event)
                 .then(function (obj) {
-                    console.log("saved event " + obj.name);
+                        console.log("saved event " + obj.name);
 
-                    // switch to players page
-                    window.location.href = returnUrl;
-                },
-                function (err) {
-                    console.log("error adding event: " + err);
-                });
+                        // switch to players page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding event: " + err);
+                    });
         } else {
             var event = {
                 name: this.name,
@@ -110,17 +110,16 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
 
             console.log("save player " + event.name + " here");
 
-            cloudDataEvent.add(event, {
-                success: function (obj) {
-                    console.log("saved event " + obj.name);
+            cloudDataEvent.add(event)
+                .then(function (obj) {
+                        console.log("saved event " + obj.name);
 
-                    // switch to picks page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error adding event " + err);
-                }
-            });
+                        // switch to picks page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding event " + err);
+                    });
         }
 
     };
@@ -140,17 +139,16 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
 
         modalInstance.result.then(function (event) {
             console.log("Deleting event " + event.name);
-            cloudDataEvent.delete(event, {
-                success: function (obj) {
-                    console.log("delete successful");
+            cloudDataEvent.delete(event)
+                .then(function (obj) {
+                        console.log("delete successful");
 
-                    // switch to players page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error from delete : " + err);
-                }
-            });
+                        // switch to players page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error from delete : " + err);
+                    });
 
         }, function () {
             console.log('Modal dismissed at: ' + new Date());

@@ -420,46 +420,45 @@ angular.module('GolfPicks.gameData', [])
             };
 
             var loadEventData = function (eventid, callbacks) {
-                cloudDataEvent.get(eventid, {
-                    success: function (event) {
-                        var courseInfo = eventUtils.courses(event);
+                cloudDataEvent.get(eventid)
+                    .then(function (event) {
+                            var courseInfo = eventUtils.courses(event);
 
-                        logger.debug("entering loadEventData courseInfo :" + JSON.stringify(courseInfo));
+                            logger.debug("entering loadEventData courseInfo :" + JSON.stringify(courseInfo));
 
-                        logger.log("scoreType = " + event.scoreType);
+                            logger.log("scoreType = " + event.scoreType);
 
-                        // There are multiple types of scoring systems
-                        // For non PGA events, the scores are contained directly in
-                        // the event record.  For PGA events, we need to load the
-                        // live scoring data from the tour site
+                            // There are multiple types of scoring systems
+                            // For non PGA events, the scores are contained directly in
+                            // the event record.  For PGA events, we need to load the
+                            // live scoring data from the tour site
 
-                        if (event.scoreType == "pga-live-scoring") {
+                            if (event.scoreType == "pga-live-scoring") {
 
-                            // go get the golfer scores from the remote service
-                            cloudDataScores.get(eventid, {
-                                success: function (tournament) {
-                                    logger.log("got scores!");
+                                // go get the golfer scores from the remote service
+                                cloudDataScores.get(eventid, {
+                                    success: function (tournament) {
+                                        logger.log("got scores!");
 
-                                    logger.debug("loadEventData courseInfo :" + JSON.stringify(courseInfo));
+                                        logger.debug("loadEventData courseInfo :" + JSON.stringify(courseInfo));
 
-                                    if (callbacks && callbacks.success) callbacks.success(event, tournament.scores, courseInfo);
-                                },
-                                error: function (err) {
-                                    if (callbacks && callbacks.error) callbacks.error(err);
-                                }
-                            });
-                        } else {
-                            // match up scores and players
-                            var golfers = eventUtils.golfers(event);
+                                        if (callbacks && callbacks.success) callbacks.success(event, tournament.scores, courseInfo);
+                                    },
+                                    error: function (err) {
+                                        if (callbacks && callbacks.error) callbacks.error(err);
+                                    }
+                                });
+                            } else {
+                                // match up scores and players
+                                var golfers = eventUtils.golfers(event);
 
-                            if (callbacks && callbacks.success) callbacks.success(event, golfers, courseInfo);
-                        }
+                                if (callbacks && callbacks.success) callbacks.success(event, golfers, courseInfo);
+                            }
 
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) callbacks.error(err);
-                    }
-                });
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) callbacks.error(err);
+                        });
             };
 
             return {

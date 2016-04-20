@@ -1,6 +1,6 @@
 // TODO: put this in a common function
 var mergeScoresAndPlayers = function (roundid, event) {
-    
+
     var scores = [];
 
     if (event.rounds[roundid].scores.length == 0) {
@@ -41,7 +41,7 @@ var mergeScoresAndPlayers = function (roundid, event) {
             });
         }
     }
-    
+
     return scores;
 }
 
@@ -67,28 +67,27 @@ function RoundCtrl($scope, $stateParams, $cookieStore, cloudDataEvent) {
     if ($stateParams.id) {
         // load up the existing data in our form
 
-        cloudDataEvent.get($stateParams.id, {
-            success: function (obj) {
-                event = obj;
+        cloudDataEvent.get($stateParams.id)
+            .then(function (obj) {
+                    event = obj;
 
-                var scores = mergeScoresAndPlayers(roundid, event);
+                    var scores = mergeScoresAndPlayers(roundid, event);
 
-                $scope.$apply(function () {
-                    $scope.title = "Round " + (roundid + 1);
-                    $scope.roundid = roundid;
-                    $scope.course = event.rounds[roundid].course.name;
-                    $scope.name = event.name;
-                    $scope.date = event.rounds[roundid].date;
-                    $scope.rounds = event.rounds;
-                    $scope.scores = scores;
-                    $scope.existingEvent = true;
+                    $scope.$apply(function () {
+                        $scope.title = "Round " + (roundid + 1);
+                        $scope.roundid = roundid;
+                        $scope.course = event.rounds[roundid].course.name;
+                        $scope.name = event.name;
+                        $scope.date = event.rounds[roundid].date;
+                        $scope.rounds = event.rounds;
+                        $scope.scores = scores;
+                        $scope.existingEvent = true;
+                    });
+
+                },
+                function (err) {
+                    console.log("error getting event: " + err);
                 });
-
-            },
-            error: function (err) {
-                console.log("error getting event: " + err);
-            }
-        });
     }
 
 

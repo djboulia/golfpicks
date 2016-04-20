@@ -1,9 +1,9 @@
 angular.module('GolfPicks')
     .controller('EventLeadersCtrl', ['$scope', '$stateParams', '$location',
-                                     'gameData', 'gameUtils', 'cloudDataEvent', 'eventUtils', EventLeadersCtrl]);
+                                     'gameData', 'gameUtils', 'eventUtils', EventLeadersCtrl]);
 
 
-function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, cloudDataEvent, eventUtils) {
+function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, eventUtils) {
 
     //
     // pos is a string either with the golfer's place in the tournament (1,2,3) or their
