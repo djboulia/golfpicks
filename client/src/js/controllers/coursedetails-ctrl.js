@@ -15,83 +15,82 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
         $scope.id = $stateParams.id;
         $scope.editable = currentUser.isAdmin();
 
-        cloudDataCourse.get($stateParams.id, {
-            success: function (obj) {
-                existingCourse = obj;
+        cloudDataCourse.get($stateParams.id)
+            .then(function (obj) {
+                    existingCourse = obj;
 
-                $scope.name = existingCourse.name;
-                $scope.tee = existingCourse.tee;
-                $scope.par = existingCourse.par;
-                $scope.yardage = existingCourse.yardage;
-                $scope.slope = existingCourse.slope;
-                $scope.rating = existingCourse.rating;
+                    $scope.name = existingCourse.name;
+                    $scope.tee = existingCourse.tee;
+                    $scope.par = existingCourse.par;
+                    $scope.yardage = existingCourse.yardage;
+                    $scope.slope = existingCourse.slope;
+                    $scope.rating = existingCourse.rating;
 
-                var front9 = {
-                    yardage: 0,
-                    par: 0,
-                    holes: []
-                }
-
-                if (existingCourse.holes) {
-                    for (var i = 0; i < 9; i++) {
-                        var hole = existingCourse.holes[i];
-
-                        front9.yardage += parseInt(hole.yardage);
-                        front9.par += parseInt(hole.par);
-                        front9.holes.push(hole);
+                    var front9 = {
+                        yardage: 0,
+                        par: 0,
+                        holes: []
                     }
-                }
 
-                $scope.front9 = front9;
+                    if (existingCourse.holes) {
+                        for (var i = 0; i < 9; i++) {
+                            var hole = existingCourse.holes[i];
 
-                var back9 = {
-                    yardage: 0,
-                    par: 0,
-                    holes: []
-                }
-
-                if (existingCourse.holes) {
-                    for (var i = 9; i < 18; i++) {
-                        var hole = existingCourse.holes[i];
-
-                        back9.yardage += parseInt(hole.yardage);
-                        back9.par += parseInt(hole.par);
-                        back9.holes.push(hole);
+                            front9.yardage += parseInt(hole.yardage);
+                            front9.par += parseInt(hole.par);
+                            front9.holes.push(hole);
+                        }
                     }
-                }
 
-                $scope.back9 = back9;
+                    $scope.front9 = front9;
 
-                $scope.hasHoleDetails = (existingCourse.holes) ? true : false;
+                    var back9 = {
+                        yardage: 0,
+                        par: 0,
+                        holes: []
+                    }
 
-                if (existingCourse.location) {
-                    var location = existingCourse.location;
+                    if (existingCourse.holes) {
+                        for (var i = 9; i < 18; i++) {
+                            var hole = existingCourse.holes[i];
 
-                    weatherData.forecast(
-                        location.lat,
-                        location.lng, {
-                            success: function (data) {
-                                console.log("Data from weather service: " + JSON.stringify(data));
+                            back9.yardage += parseInt(hole.yardage);
+                            back9.par += parseInt(hole.par);
+                            back9.holes.push(hole);
+                        }
+                    }
 
-                                data.temp = Math.round(data.temp);
-                                data.wind = Math.round(data.wind);
-                                data.metric.temp = Math.round(data.metric.temp);
+                    $scope.back9 = back9;
 
-                                $scope.weather = data;
-                                $scope.weatherImg = '<img src="' + data.icon + '">';
-                            },
-                            error: function (err) {
-                                console.log("Error from weather service: " + err);
-                            }
-                        });
-                }
+                    $scope.hasHoleDetails = (existingCourse.holes) ? true : false;
 
-                $scope.existingCourse = true;
-            },
-            error: function (err) {
-                console.log("error getting course " + err);
-            }
-        });
+                    if (existingCourse.location) {
+                        var location = existingCourse.location;
+
+                        weatherData.forecast(
+                            location.lat,
+                            location.lng, {
+                                success: function (data) {
+                                    console.log("Data from weather service: " + JSON.stringify(data));
+
+                                    data.temp = Math.round(data.temp);
+                                    data.wind = Math.round(data.wind);
+                                    data.metric.temp = Math.round(data.metric.temp);
+
+                                    $scope.weather = data;
+                                    $scope.weatherImg = '<img src="' + data.icon + '">';
+                                },
+                                error: function (err) {
+                                    console.log("Error from weather service: " + err);
+                                }
+                            });
+                    }
+
+                    $scope.existingCourse = true;
+                },
+                function (err) {
+                    console.log("error getting course " + err);
+                });
     } else {
         $scope.title = "Course Information Not Found";
     }

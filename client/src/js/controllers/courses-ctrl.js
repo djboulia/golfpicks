@@ -11,14 +11,11 @@ function CoursesCtrl($scope, $cookieStore, cloudDataCourse) {
     $scope.editUrl = editUrl;
     $scope.detailsUrl = detailsUrl;
 
-    cloudDataCourse.getAll({
-        success: function (courses) {
-            $scope.courses = courses;
-        },
-        error: function (err) {
-            console.log("error");
-        }
-    });
-
-
+    cloudDataCourse.getAll()
+        .then(function (courses) {
+                $scope.courses = courses;
+            },
+            function (err) {
+                console.log("error");
+            });
 };

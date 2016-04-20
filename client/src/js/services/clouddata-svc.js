@@ -28,23 +28,23 @@ angular.module('GolfPicks.cloud', [])
             localObj._cloudObject = cloudObj;
             localObj._fieldMap = fieldMap;
 
-            console.debug("_makeLocalObject: localObj: " + JSON.stringify(localObj) + ", fieldMap: " + fieldMap + ", cloudObj: " + cloudObj);
+            console.debug("_makeLocalObject: localObj: " + JSON.stringify(localObj));
 
             return localObj;
         };
 
+        var _sync = function (localObj) {
+            var fieldMap = localObj._fieldMap;
+            var cloudObj = localObj._cloudObject;
+
+            for (var prop in fieldMap) {
+                var mappedProp = fieldMap[prop];
+
+                cloudObj.set(prop, localObj[mappedProp]);
+            }
+        };
+
         return {
-
-            sync: function (localObj) {
-                var fieldMap = localObj._fieldMap;
-                var cloudObj = localObj._cloudObject;
-
-                for (var prop in fieldMap) {
-                    var mappedProp = fieldMap[prop];
-
-                    cloudObj.set(prop, localObj[mappedProp]);
-                }
-            },
 
             delete: function (localObj) {
                 var deferred = $q.defer();
@@ -66,7 +66,7 @@ angular.module('GolfPicks.cloud', [])
                 return deferred.promise;
             },
 
-            add: function (className, fieldNames, attrs ) {
+            add: function (className, fieldNames, attrs) {
                 var deferred = $q.defer();
 
                 if (attrs) {
@@ -98,7 +98,7 @@ angular.module('GolfPicks.cloud', [])
 
                 if (localObj._cloudObject && localObj._fieldMap) {
 
-                    this.sync(localObj);
+                    _sync(localObj);
 
                     localObj._cloudObject.save({
                         success: function (obj) {
@@ -328,156 +328,40 @@ angular.module('GolfPicks.cloud', [])
     .factory('cloudDataCourse', ['cloudData', function (cloudData) {
 
         var _className = "Course";
-
-        var _getObjectData = function (obj) {
-            var course = {};
-
-            course._id = obj.getObjectId();
-            course._cloudObject = obj;
-
-            course.name = obj.get("name");
-            course.tee = obj.get("tee");
-            course.par = obj.get("par");
-            course.yardage = obj.get("yardage");
-            course.slope = obj.get("slope");
-            course.rating = obj.get("rating");
-            course.holes = obj.get("holes");
-            course.location = obj.get("location");
-
-            return course;
-        };
-
-        var _setObjectData = function (cloudObject, course) {
-            cloudObject.set("name", course.name);
-            cloudObject.set("tee", course.tee);
-            cloudObject.set("par", course.par);
-            cloudObject.set("yardage", course.yardage);
-            cloudObject.set("slope", course.slope);
-            cloudObject.set("rating", course.rating);
-            cloudObject.set("holes", course.holes);
-            cloudObject.set("location", course.location);
+        var _fieldNames = {
+            name: "name",
+            tee: "tee",
+            par: "par",
+            yardage: "yardage",
+            slope: "slope",
+            rating: "rating",
+            holes: "holes",
+            location: "location"
         };
 
         return {
-            delete: function (course, callbacks) {
-                if (course._cloudObject) {
-
-                    course._cloudObject.delete({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(obj);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                }
+            delete: function (course) {
+                return cloudData.delete(course);
             },
 
-            save: function (course, callbacks) {
-                if (course._cloudObject) {
-                    var cloudObject = course._cloudObject;
-
-                    _setObjectData(cloudObject, course);
-
-                    cloudObject.save({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(course);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                }
+            save: function (course) {
+                return cloudData.save(course);
             },
 
-            add: function (course, callbacks) {
-                if (course) {
-                    var cloudObject = cloudData.create(_className);
-
-                    _setObjectData(cloudObject, course);
-
-                    cloudObject.save({
-                        success: function (obj) {
-                            // return the saved object back 
-                            var saved = _getObjectData(obj);
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(saved);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                }
+            add: function (courseData) {
+                return cloudData.add(_className, _fieldNames, courseData);
             },
 
-            get: function (id, callbacks) {
-
-                cloudData.getObject(_className, id)
-                    .then(function (obj) {
-                            console.log("found course!");
-
-                            var course = _getObjectData(obj);
-
-                            if (callbacks && callbacks.success) callbacks.success(course);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            get: function (id) {
+                return cloudData.get(_className, _fieldNames, id);
             },
 
-            getList: function (ids, callbacks) {
-                var thisObj = this;
-
-                cloudData.getObjects(_className, ids)
-                    .then(function (objects) {
-
-                            console.log("found objects!");
-                            var localObjs = [];
-
-                            for (var i = 0; i < objects.length; i++) {
-                                var obj = objects[i];
-                                var localObj = _getObjectData(obj);
-
-                                localObjs.push(localObj);
-                            }
-
-                            if (callbacks && callbacks.success) callbacks.success(localObjs);
-                        },
-
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            getList: function (ids) {
+                return cloudData.getList(_className, _fieldNames, ids);
             },
 
-            getAll: function (callbacks) {
-
-                cloudData.getObjects(_className)
-                    .then(function (objects) {
-
-                            var courses = [];
-
-                            for (var i = 0; i < objects.length; i++) {
-                                var obj = objects[i];
-                                var course = _getObjectData(obj);
-
-                                courses.push(course);
-                            }
-
-                            if (callbacks && callbacks.success) callbacks.success(courses);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            getAll: function () {
+                return cloudData.getList(_className, _fieldNames);
             }
         }
     }])
@@ -590,40 +474,39 @@ angular.module('GolfPicks.cloud', [])
                 ids.push(round.course);
             }
 
-            cloudDataCourse.getList(ids, {
-                success: function (objs) {
+            cloudDataCourse.getList(ids)
+                .then(function (objs) {
 
-                    // fluff up the rounds object with course data
-                    var roundmap = {};
+                        // fluff up the rounds object with course data
+                        var roundmap = {};
 
-                    for (var i = 0; i < objs.length; i++) {
-                        var obj = objs[i];
-                        roundmap[obj._id] = obj;
-                    }
-
-                    var validrounds = [];
-
-                    for (var i = 0; i < rounds.length; i++) {
-                        var round = rounds[i];
-                        var coursedetails = roundmap[round.course];
-
-                        if (coursedetails) {
-                            round.course = coursedetails;
-                            validrounds.push(round);
-                        } else {
-                            console.log("couldn't find id " + round.course);
-                            console.log("roundmap: " + JSON.stringify(roundmap));
+                        for (var i = 0; i < objs.length; i++) {
+                            var obj = objs[i];
+                            roundmap[obj._id] = obj;
                         }
-                    }
 
-                    localObj.rounds = validrounds;
+                        var validrounds = [];
 
-                    handleSuccessCallback(localObj, callbacks);
-                },
-                error: function (err) {
-                    handleErrorCallback(err, callbacks);
-                }
-            });
+                        for (var i = 0; i < rounds.length; i++) {
+                            var round = rounds[i];
+                            var coursedetails = roundmap[round.course];
+
+                            if (coursedetails) {
+                                round.course = coursedetails;
+                                validrounds.push(round);
+                            } else {
+                                console.log("couldn't find id " + round.course);
+                                console.log("roundmap: " + JSON.stringify(roundmap));
+                            }
+                        }
+
+                        localObj.rounds = validrounds;
+
+                        handleSuccessCallback(localObj, callbacks);
+                    },
+                    function (err) {
+                        handleErrorCallback(err, callbacks);
+                    });
         };
 
         return {

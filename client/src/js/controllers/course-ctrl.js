@@ -13,62 +13,97 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
         // load up the existing data in our form
         $scope.title = "Update Course";
 
-        cloudDataCourse.get($stateParams.id, {
-            success: function (obj) {
-                existingCourse = obj;
+        cloudDataCourse.get($stateParams.id)
+            .then(function (obj) {
+                    existingCourse = obj;
 
-                $scope.name = existingCourse.name;
-                $scope.tee = existingCourse.tee;
-                $scope.par = existingCourse.par;
-                $scope.yardage = existingCourse.yardage;
-                $scope.slope = existingCourse.slope;
-                $scope.rating = existingCourse.rating;
-                $scope.holes = existingCourse.holes;
-                $scope.existingCourse = true;
-                $scope.loaded = true;
-            },
-            error: function (err) {
-                console.log("error getting course " + err);
-            }
-        });
+                    $scope.name = existingCourse.name;
+                    $scope.tee = existingCourse.tee;
+                    $scope.par = existingCourse.par;
+                    $scope.yardage = existingCourse.yardage;
+                    $scope.slope = existingCourse.slope;
+                    $scope.rating = existingCourse.rating;
+                    $scope.holes = existingCourse.holes;
+                    $scope.existingCourse = true;
+                    $scope.loaded = true;
+                },
+                function (err) {
+                    console.log("error getting course " + err);
+                });
     } else {
         $scope.title = "New Course";
-        
+
         // load up the default data structures
         $scope.name = "";
         $scope.tee = "";
-        $scope.holes = [ { number : 1 }, { number : 2}, { number : 3 },
-                         { number : 4 }, { number : 5 }, { number : 6 },
-                         { number : 7 }, { number : 8 }, { number : 9 },
-                         { number : 10 }, { number : 11 }, { number : 12 },
-                         { number : 13 }, { number : 14 }, { number : 15 },
-                         { number : 16 }, { number : 17 }, { number : 18 }];
+        $scope.holes = [{
+                number: 1
+            }, {
+                number: 2
+            }, {
+                number: 3
+            },
+            {
+                number: 4
+            }, {
+                number: 5
+            }, {
+                number: 6
+            },
+            {
+                number: 7
+            }, {
+                number: 8
+            }, {
+                number: 9
+            },
+            {
+                number: 10
+            }, {
+                number: 11
+            }, {
+                number: 12
+            },
+            {
+                number: 13
+            }, {
+                number: 14
+            }, {
+                number: 15
+            },
+            {
+                number: 16
+            }, {
+                number: 17
+            }, {
+                number: 18
+            }];
         $scope.loaded = true;
     }
 
     $scope.submit = function () {
-        
-        console.log("Saving " + JSON.stringify( $scope.holes ));
-        
+
+        console.log("Saving " + JSON.stringify($scope.holes));
+
         // calculate the par and yardage
         var holes = $scope.holes;
         var yardage = 0;
         var par = 0;
-        
-        for (var i=0; i<holes.length; i++) {
+
+        for (var i = 0; i < holes.length; i++) {
             var hole = holes[i];
-            
-            if (hole.yardage) {   
+
+            if (hole.yardage) {
                 var int = parseInt(hole.yardage);
-                
+
                 if (!isNaN(int)) {
                     yardage += int;
                 }
             }
-            
-            if (hole.par) {   
+
+            if (hole.par) {
                 var int = parseInt(hole.par);
-                
+
                 if (!isNaN(int)) {
                     par += int;
                 }
@@ -86,17 +121,16 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
             existingCourse.rating = this.rating;
             existingCourse.holes = holes;
 
-            cloudDataCourse.save(existingCourse, {
-                success: function (obj) {
-                    console.log("saved course " + obj.name);
+            cloudDataCourse.save(existingCourse)
+                .then(function (obj) {
+                        console.log("saved course " + obj.name);
 
-                    // return to main page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error adding course " + err);
-                }
-            });
+                        // return to main page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding course " + err);
+                    });
         } else {
             var course = {
                 name: this.name,
@@ -110,17 +144,16 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
 
             console.log("save course " + course.name + " here");
 
-            cloudDataCourse.add(course, {
-                success: function (obj) {
-                    console.log("saved course " + obj.name);
+            cloudDataCourse.add(course)
+                .then(function (obj) {
+                        console.log("saved course " + obj.name);
 
-                    // switch to picks page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error adding course " + err);
-                }
-            });
+                        // switch to picks page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding course " + err);
+                    });
         }
 
     };
@@ -132,25 +165,24 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
             templateUrl: 'deleteCourse.html',
             controller: 'ModalCourseDeleteCtrl',
             resolve: {
-                player: function () {
+                course: function () {
                     return existingCourse;
                 }
             }
         });
 
-        modalInstance.result.then(function (player) {
-            console.log("Deleting player " + player.name);
-            cloudDataCourse.delete(player, {
-                success: function (obj) {
-                    console.log("delete successful");
+        modalInstance.result.then(function (course) {
+            console.log("Deleting course " + course.name);
+            cloudDataCourse.delete(course)
+                .then(function (obj) {
+                        console.log("delete successful");
 
-                    // switch to players page
-                    window.location.href = playersUrl;
-                },
-                error: function (err) {
-                    console.log("error from delete : " + err);
-                }
-            });
+                        // switch to players page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error from delete : " + err);
+                    });
 
         }, function () {
             console.log('Modal dismissed at: ' + new Date());
@@ -163,7 +195,7 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
 // It is not the same as the $modal service used above.
 
 angular.module('GolfPicks')
-    .controller('ModalCourseDeleteCtrl', ['$scope', '$uibModalInstance', 'player', ModalCourseDeleteCtrl]);
+    .controller('ModalCourseDeleteCtrl', ['$scope', '$uibModalInstance', 'course', ModalCourseDeleteCtrl]);
 
 function ModalCourseDeleteCtrl($scope, $uibModalInstance, course) {
     $scope.course = course;

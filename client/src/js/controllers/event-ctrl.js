@@ -2,10 +2,10 @@ angular.module('GolfPicks')
     .controller('EventCtrl', ['$scope', '$stateParams',
                                '$uibModal', '$cookieStore',
                                'cloudDataCurrentUser', 'cloudDataEvent', 'cloudDataPlayer',
-                               'cloudDataCourse', 'gameData', EventCtrl]);
+                               'gameData', EventCtrl]);
 
 function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
-    currentUser, cloudDataEvent, cloudDataPlayer, cloudDataCourse, gameData) {
+    currentUser, cloudDataEvent, cloudDataPlayer, gameData) {
     var returnUrl = "#";
     var courseUrl = "#/coursedetails";
     var editRoundUrl = "#/eventdetails/id/round/" + $stateParams.id;
