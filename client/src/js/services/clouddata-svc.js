@@ -516,31 +516,47 @@ angular.module('GolfPicks.cloud', [])
             return deferred.promise;
         };
 
+        var _removePlayers = function (localObj) {
+            if (localObj && localObj.players) {
+
+                for (var i = 0; i < localObj.players.length; i++) {
+                    var player = localObj.players[i];
+                    localObj.players[i].user = player.user._id;
+                }
+
+            }
+
+        };
+
+        var _removeRounds = function (localObj) {
+            if (localObj && localObj.rounds) {
+
+                // de-fluff the rounds and players before saving to back end
+                for (var i = 0; i < localObj.rounds.length; i++) {
+                    var round = localObj.rounds[i];
+                    localObj.rounds[i].course = round.course._id;
+                }
+
+            }
+
+        };
+
         return {
             delete: function (localObj) {
                 return cloudData.delete(localObj);
             },
 
             save: function (localObj) {
-                if (localObj._cloudObject) {
-
-                    // de-fluff the rounds and players before saving to back end
-                    for (var i = 0; i < localObj.rounds.length; i++) {
-                        var round = localObj.rounds[i];
-                        localObj.rounds[i].course = round.course._id;
-                    }
-
-                    for (var i = 0; i < localObj.players.length; i++) {
-                        var player = localObj.players[i];
-                        localObj.players[i].user = player.user._id;
-                    }
-
-                }
+                _removePlayers(localObj);
+                _removeRounds(localObj);
 
                 return cloudData.save(localObj);
             },
 
             add: function (localObj) {
+                _removePlayers(localObj);
+                _removeRounds(localObj);
+
                 return cloudData.add(_className, _fieldNames, localObj);
             },
 
