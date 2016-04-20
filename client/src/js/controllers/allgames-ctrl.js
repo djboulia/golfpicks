@@ -11,21 +11,20 @@ function AllGamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, g
     var testingMode = $location.search().testingMode ? true : false;
     console.log("testingMode is set to " + testingMode);
 
-    gameData.loadGames({
-        success: function (games) {
+    gameData.loadGames()
+        .then(function (games) {
 
-            var statusMessage = "";
+                var statusMessage = "";
 
-            console.log("games : " + JSON.stringify(games));
+                console.log("games : " + JSON.stringify(games));
 
-            $scope.statusMessage = statusMessage;
-            $scope.gameUrl = gameUrl;
-            $scope.games = games;
-            $scope.loaded = true;
+                $scope.statusMessage = statusMessage;
+                $scope.gameUrl = gameUrl;
+                $scope.games = games;
+                $scope.loaded = true;
 
-        },
-        error: function (err) {
-            $scope.statusMessage = "Error loading game history!";
-        }
-    });
+            },
+            function (err) {
+                $scope.statusMessage = "Error loading game history!";
+            });
 };

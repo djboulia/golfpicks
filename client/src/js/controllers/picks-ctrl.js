@@ -164,49 +164,50 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
                         }
                     }
 
-                    gameData.loadRankedPlayers(game.eventid, {
-                        success: function (event, players) {
+                    gameData.loadRankedPlayers(game.eventid)
+                        .then(function (result) {
+                                var event = result.event;
+                                var golfers = result.golfers;
 
-                            if (!game.gamers) {
-                                game.gamers = [{
-                                    "user": currentUser.getId(),
-                                    "picks": []
-                            }];
-                            } else {
-                                // might have previously stored picks
-                                var picks = [];
-                                var gamers = game.gamers;
+                                if (!game.gamers) {
+                                    game.gamers = [{
+                                        "user": currentUser.getId(),
+                                        "picks": []
+                                    }];
+                                } else {
+                                    // might have previously stored picks
+                                    var picks = [];
+                                    var gamers = game.gamers;
 
-                                for (var i = 0; i < gamers.length; i++) {
-                                    var gamer = gamers[i];
-                                    if (gamer.user == currentUser.getId()) {
-                                        picks = gamer.picks;
+                                    for (var i = 0; i < gamers.length; i++) {
+                                        var gamer = gamers[i];
+                                        if (gamer.user == currentUser.getId()) {
+                                            picks = gamer.picks;
+                                        }
                                     }
+
+                                    loadSavedPicks(golfers, picks);
+                                    debug("Picks : " + JSON.stringify(picks));
                                 }
 
-                                loadSavedPicks(players, picks);
-                                debug("Picks : " + JSON.stringify(picks));
-                            }
+                                $scope.name = event.name;
+                                $scope.start = event.start;
+                                $scope.end = event.end;
+                                $scope.rounds = event.rounds;
+                                $scope.players = golfers;
+                                $scope.NUM_SELECTIONS = NUM_SELECTIONS;
+                                $scope.NUM_TOP_RANK = NUM_TOP_RANK;
+                                $scope.NUM_TOP_ALLOWED = NUM_TOP_ALLOWED;
+                                $scope.loaded = true;
 
-                            $scope.name = event.name;
-                            $scope.start = event.start;
-                            $scope.end = event.end;
-                            $scope.rounds = event.rounds;
-                            $scope.players = players;
-                            $scope.NUM_SELECTIONS = NUM_SELECTIONS;
-                            $scope.NUM_TOP_RANK = NUM_TOP_RANK;
-                            $scope.NUM_TOP_ALLOWED = NUM_TOP_ALLOWED;
-                            $scope.loaded = true;
+                            },
+                            function (err) {
+                                console.log("error getting event: " + err);
 
-                        },
-                        error: function (err) {
-                            console.log("error getting event: " + err);
-
-                            $scope.$apply(function () {
-                                $scope.errorMessage = "Couldn't access event information!";
+                                $scope.$apply(function () {
+                                    $scope.errorMessage = "Couldn't access event information!";
+                                });
                             });
-                        }
-                    });
                 },
                 function (err) {
                     logger.error("Couldn't access game information!");

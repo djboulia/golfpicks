@@ -9,9 +9,9 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
     // pos is a string either with the golfer's place in the tournament (1,2,3) or their
     // status if they are no longer in the tournament: CUT, WD, DNS
     //
-    var comparePosition = function(a, b) {
-        
-        if (a==b){
+    var comparePosition = function (a, b) {
+
+        if (a == b) {
             return 0;
         }
 
@@ -65,137 +65,140 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
             // the EVENT holds the golfers
             // the GAME is the game played based on the golfer's scores
 
-            gameData.loadEvent(eventid, {
-                success: function (event, golfers, courseInfo) {
-                    var roundStatus = eventUtils.roundStatus(golfers, event.rounds.length);
-                    var roundNumbers = [];
-                    var lowRounds = [];
+            gameData.loadEvent(eventid)
+                .then(function (result) {
+                        var event = result.event;
+                        var golfers = result.golfers;
+                        var courseInfo = result.courseInfo;
 
-                    for (var i = 0; i < courseInfo.length; i++) {
-                        roundNumbers.push(String(i + 1));
-                        lowRounds[String(i + 1)] = "-";
-                    }
+                        var roundStatus = eventUtils.roundStatus(golfers, event.rounds.length);
+                        var roundNumbers = [];
+                        var lowRounds = [];
 
-                    // find last played round, walking backwards
-                    var currentRound = -1;
-
-                    for (var i = roundStatus.length - 1; i >= 0; i--) {
-                        if (roundStatus[i]) {
-                            currentRound = i;
-                            break;
+                        for (var i = 0; i < courseInfo.length; i++) {
+                            roundNumbers.push(String(i + 1));
+                            lowRounds[String(i + 1)] = "-";
                         }
-                    }
 
-                    if (currentRound >= 0) {
+                        // find last played round, walking backwards
+                        var currentRound = -1;
 
-                        // store low score for each round of the tournament
-                        var leaders = eventUtils.roundLeaders(golfers, courseInfo);
+                        for (var i = roundStatus.length - 1; i >= 0; i--) {
+                            if (roundStatus[i]) {
+                                currentRound = i;
+                                break;
+                            }
+                        }
 
-                        for (var i = 0; i <= currentRound; i++) {
-                            var roundNumber = new String(i + 1);
+                        if (currentRound >= 0) {
 
-                            if (i == currentRound) {
-                                lowRounds[roundNumber] = (leaders[i][0]) ? leaders[i][0].score : '-';
+                            // store low score for each round of the tournament
+                            var leaders = eventUtils.roundLeaders(golfers, courseInfo);
 
-                                // loop through the current day scores and convert to net par
-                                // this makes in progress rounds format more nicely
+                            for (var i = 0; i <= currentRound; i++) {
+                                var roundNumber = new String(i + 1);
 
-                                for (var g = 0; g < golfers.length; g++) {
-                                    var golfer = golfers[g];
+                                if (i == currentRound) {
+                                    lowRounds[roundNumber] = (leaders[i][0]) ? leaders[i][0].score : '-';
 
-                                    if (golfer["today"] != '-') {
-                                        golfer[roundNumber] = golfer["today"];
+                                    // loop through the current day scores and convert to net par
+                                    // this makes in progress rounds format more nicely
+
+                                    for (var g = 0; g < golfers.length; g++) {
+                                        var golfer = golfers[g];
+
+                                        if (golfer["today"] != '-') {
+                                            golfer[roundNumber] = golfer["today"];
+                                        }
                                     }
+                                } else {
+
+                                    // sort lowest round total
+                                    golfers.sort(function (a, b) {
+                                        return a[roundNumber] - b[roundNumber];
+                                    });
+
+                                    // first element is low score
+                                    lowRounds[roundNumber] = golfers[0][roundNumber];
+                                }
+
+                            }
+
+                            var roundNumber = new String(currentRound + 1);
+
+                            // TODO: fix for non PGA case
+                            // modify totals to be relative to par
+                            var isPGA = true;
+                            if (!isPGA) {
+                                // find lowest totals
+                                golfers.sort(function (a, b) {
+                                    if (a.total == b.total) {
+                                        return 0;
+                                    } else if (a.total == '-') {
+                                        return 1;
+                                    } else if (b.total == '-') {
+                                        return -1;
+                                    } else {
+                                        return a.strokes - b.strokes;
+                                    }
+                                });
+
+                                var totalPar = 0;
+
+                                for (var i = 0; i <= currentRound; i++) {
+                                    totalPar += courseInfo[i].par;
+                                }
+
+                                for (var i = 0; i < golfers.length; i++) {
+                                    var golfer = golfers[i];
+
+                                    golfer.total = eventUtils.formatNetScore(golfer.total - totalPar);
                                 }
                             } else {
 
-                                // sort lowest round total
+                                console.debug("Golfers: " + JSON.stringify(golfers));
+
+                                // sort by position
                                 golfers.sort(function (a, b) {
-                                    return a[roundNumber] - b[roundNumber];
+                                    return comparePosition(a.pos, b.pos);
                                 });
 
-                                // first element is low score
-                                lowRounds[roundNumber] = golfers[0][roundNumber];
-                            }
 
+                                //                            golfers.sort(function (a, b) {
+                                //                                var aTotal = eventUtils.parseNetScore(a.total);
+                                //                                var bTotal = eventUtils.parseNetScore(b.total);
+                                //
+                                //                                if (aTotal == bTotal) {
+                                //                                    return 0;
+                                //                                } else if (!eventUtils.isValidNetScore(a.total)) {
+                                //                                    return 1;
+                                //                                } else if (!eventUtils.isValidNetScore(b.total)) {
+                                //                                    return -1;
+                                //                                } else {
+                                //                                    return aTotal - bTotal;
+                                //                                }
+                                //                            });
+                            }
                         }
 
-                        var roundNumber = new String(currentRound + 1);
+                        $scope.name = event.name;
+                        $scope.courseInfo = courseInfo;
+                        $scope.golfers = golfers;
+                        $scope.roundNumbers = roundNumbers;
+                        $scope.lowRounds = lowRounds;
+                        $scope.eventOverviewUrl = "#/eventdetails/id/" + eventid;
 
-                        // TODO: fix for non PGA case
-                        // modify totals to be relative to par
-                        var isPGA = true;
-                        if (!isPGA) {
-                            // find lowest totals
-                            golfers.sort(function (a, b) {
-                                if (a.total == b.total) {
-                                    return 0;
-                                } else if (a.total == '-') {
-                                    return 1;
-                                } else if (b.total == '-') {
-                                    return -1;
-                                } else {
-                                    return a.strokes - b.strokes;
-                                }
-                            });
+                        $scope.loaded = true;
 
-                            var totalPar = 0;
+                    },
+                    function (err) {
+                        // The object was not retrieved successfully.
+                        console.error("Couldn't access event information!");
 
-                            for (var i = 0; i <= currentRound; i++) {
-                                totalPar += courseInfo[i].par;
-                            }
-
-                            for (var i = 0; i < golfers.length; i++) {
-                                var golfer = golfers[i];
-
-                                golfer.total = eventUtils.formatNetScore(golfer.total - totalPar);
-                            }
-                        } else {
-
-                            console.debug("Golfers: " + JSON.stringify(golfers));
-
-                            // sort by position
-                            golfers.sort(function (a, b) {
-                                return comparePosition(a.pos, b.pos);
-                            });
-
-
-                            //                            golfers.sort(function (a, b) {
-                            //                                var aTotal = eventUtils.parseNetScore(a.total);
-                            //                                var bTotal = eventUtils.parseNetScore(b.total);
-                            //                                
-                            //                                if (aTotal == bTotal) {
-                            //                                    return 0;
-                            //                                } else if (!eventUtils.isValidNetScore(a.total)) {
-                            //                                    return 1;
-                            //                                } else if (!eventUtils.isValidNetScore(b.total)) {
-                            //                                    return -1;
-                            //                                } else {
-                            //                                    return aTotal - bTotal;
-                            //                                }
-                            //                            });
-                        }
-                    }
-
-                    $scope.name = event.name;
-                    $scope.courseInfo = courseInfo;
-                    $scope.golfers = golfers;
-                    $scope.roundNumbers = roundNumbers;
-                    $scope.lowRounds = lowRounds;
-                    $scope.eventOverviewUrl = "#/eventdetails/id/" + eventid;
-
-                    $scope.loaded = true;
-
-                },
-                error: function (err) {
-                    // The object was not retrieved successfully.
-                    console.error("Couldn't access event information!");
-
-                    $scope.$apply(function () {
-                        $scope.errorMessage = "Couldn't access event information!";
+                        $scope.$apply(function () {
+                            $scope.errorMessage = "Couldn't access event information!";
+                        });
                     });
-                }
-            });
         }
 
         var eventid = $stateParams.id;

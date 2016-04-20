@@ -41,24 +41,25 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
     if ($stateParams.id) {
         // load up the existing data in our form
 
-        gameData.loadRankedPlayers($stateParams.id, {
-            success: function (event, golfers) {
+        gameData.loadRankedPlayers($stateParams.id)
+            .then(function (result) {
+                    var event = result.event;
+                    var golfers = result.golfers;
 
-                $scope.title = "Update Event";
-                $scope.name = event.name;
-                $scope.start = event.start;
-                $scope.end = event.end;
-                $scope.players = golfers;
-                $scope.rounds = event.rounds;
-                $scope.existingEvent = true;
+                    $scope.title = "Update Event";
+                    $scope.name = event.name;
+                    $scope.start = event.start;
+                    $scope.end = event.end;
+                    $scope.players = golfers;
+                    $scope.rounds = event.rounds;
+                    $scope.existingEvent = true;
 
-                insertMap(event.rounds);
+                    insertMap(event.rounds);
 
-            },
-            error: function (err) {
-                console.log("error getting event: " + err);
-            }
-        });
+                },
+                function (err) {
+                    console.log("error getting event: " + err);
+                });
     }
 
     $scope.startopen = function ($event) {

@@ -1,9 +1,9 @@
 console.log("loading GolfPicks.gameData");
 
 angular.module('GolfPicks.gameData', [])
-    .factory('gameData', ['cloudDataGame', 'cloudDataEvent',
+    .factory('gameData', ['$q', 'cloudDataGame', 'cloudDataEvent',
                           'cloudDataPlayer', 'cloudDataScores', 'gameUtils', 'eventUtils',
-        function (cloudDataGame, cloudDataEvent, cloudDataPlayer, cloudDataScores, gameUtils, eventUtils) {
+        function ($q, cloudDataGame, cloudDataEvent, cloudDataPlayer, cloudDataScores, gameUtils, eventUtils) {
             var logger = gameUtils.logger;
 
             var sortByRank = function (records) {
@@ -373,53 +373,68 @@ angular.module('GolfPicks.gameData', [])
                 return gamers;
             };
 
-            var processLeaderboardData = function (gamers, event, golfers, courseInfo, callbacks) {
+            var processLeaderboardData = function (gamers, event, golfers, courseInfo) {
+                var deferred = $q.defer();
 
-                var roundStatus = eventUtils.roundStatus(golfers, event.rounds.length);
-                logger.log("Rounds started: " + JSON.stringify(roundStatus));
+                if (gamers) {
 
-                var gamer_ids = [];
+                    var roundStatus = eventUtils.roundStatus(golfers, event.rounds.length);
+                    logger.log("Rounds started: " + JSON.stringify(roundStatus));
 
-                if (!gamers) logger.error("processLeaderboardData: invalid gamers object!");
+                    var gamer_ids = [];
 
-                gamers.forEach(function (gamer) {
-                    logger.debug("picks: " + JSON.stringify(gamer.picks));
-                    gamer.picks = expandPicks(gamer.picks, golfers);
-                    gamer_ids.push(gamer.user);
-                });
+                    if (!gamers) logger.error("processLeaderboardData: invalid gamers object!");
 
-                // now go load the user info for each of the gamers
-                cloudDataPlayer.getList(gamer_ids)
-                    .then(function (users) {
-                            var validgamers = [];
+                    gamers.forEach(function (gamer) {
+                        logger.debug("picks: " + JSON.stringify(gamer.picks));
+                        gamer.picks = expandPicks(gamer.picks, golfers);
+                        gamer_ids.push(gamer.user);
+                    });
 
-                            users.forEach(function (user) {
-                                gamers.forEach(function (gamer) {
-                                    if (user._id == gamer.user) {
-                                        //			  		alert("found match for " + object.objectId);
-                                        gamer.user = user;
+                    // now go load the user info for each of the gamers
+                    cloudDataPlayer.getList(gamer_ids)
+                        .then(function (users) {
+                                var validgamers = [];
 
-                                        // only keep those we can find a valid user object for...
-                                        validgamers.push(gamer);
-                                    }
+                                users.forEach(function (user) {
+                                    gamers.forEach(function (gamer) {
+                                        if (user._id == gamer.user) {
+                                            //			  		alert("found match for " + object.objectId);
+                                            gamer.user = user;
+
+                                            // only keep those we can find a valid user object for...
+                                            validgamers.push(gamer);
+                                        }
+                                    });
                                 });
+
+                                gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
+                                gamers = addRoundLeaders(gamers);
+
+                                deferred.resolve({
+                                    name: event.name,
+                                    courseInfo: courseInfo,
+                                    gamers: gamers
+                                });
+                            },
+                            function (err) {
+                                deferred.reject(err);
                             });
+                } else {
+                    // no players playing in this event, so no leaderboard info
+                    deferred.resolve({
+                        name: event.name,
+                        courseInfo: courseInfo,
+                        gamers: null
+                    });
+                }
 
-                            gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
-                            gamers = addRoundLeaders(gamers);
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(event.name, courseInfo, gamers);
-                            }
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error(err);
-                            }
-                        });
+                return deferred.promise;
             };
 
-            var loadEventData = function (eventid, callbacks) {
+            var loadEventData = function (eventid) {
+                var deferred = $q.defer();
+
                 cloudDataEvent.get(eventid)
                     .then(function (event) {
                             var courseInfo = eventUtils.courses(event);
@@ -442,23 +457,33 @@ angular.module('GolfPicks.gameData', [])
 
                                         logger.debug("loadEventData courseInfo :" + JSON.stringify(courseInfo));
 
-                                        if (callbacks && callbacks.success) callbacks.success(event, tournament.scores, courseInfo);
+                                        deferred.resolve({
+                                            event: event,
+                                            golfers: tournament.scores,
+                                            courseInfo: courseInfo
+                                        });
                                     },
                                     error: function (err) {
-                                        if (callbacks && callbacks.error) callbacks.error(err);
+                                        deferred.reject(err);
                                     }
                                 });
                             } else {
                                 // match up scores and players
                                 var golfers = eventUtils.golfers(event);
 
-                                if (callbacks && callbacks.success) callbacks.success(event, golfers, courseInfo);
+                                deferred.resolve({
+                                    event: event,
+                                    golfers: golfers,
+                                    courseInfo: courseInfo
+                                });
                             }
 
                         },
                         function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
+                            deferred.reject(err);
                         });
+
+                return deferred.promise;
             };
 
             return {
@@ -473,12 +498,13 @@ angular.module('GolfPicks.gameData', [])
                 //
                 // if there are no active games, this will be blank
                 //
-                loadUserGameHistory: function (currentUser, callbacks) {
-
+                loadUserGameHistory: function (currentUser) {
+                    var deferred = $q.defer();
                     var logger = gameUtils.logger;
 
                     cloudDataGame.getAll()
                         .then(function (games) {
+
                                 logger.debug(JSON.stringify(games));
 
                                 var gameHistory = {
@@ -537,12 +563,15 @@ angular.module('GolfPicks.gameData', [])
                                 });
 
                                 // return game history
-                                if (callbacks && callbacks.success) callbacks.success(gameHistory);
+                                deferred.resolve(gameHistory);
                             },
                             function (err) {
                                 logger.error("Couldn't access game information!");
-                                if (callbacks && callbacks.error) callbacks.error(err);
+
+                                deferred.reject(err);
                             });
+
+                    return deferred.promise;
                 },
 
                 //
@@ -550,8 +579,8 @@ angular.module('GolfPicks.gameData', [])
                 //
                 // returns a list of all games in the back end store
                 //
-                loadGames: function (callbacks) {
-
+                loadGames: function () {
+                    var deferred = $q.defer();
                     var logger = gameUtils.logger;
 
                     cloudDataGame.getAll()
@@ -571,119 +600,116 @@ angular.module('GolfPicks.gameData', [])
                                 });
 
                                 // return game list
-                                if (callbacks && callbacks.success) callbacks.success(games);
+                                deferred.resolve(games);
                             },
                             function (err) {
                                 logger.error("Couldn't access game information!");
-                                if (callbacks && callbacks.error) callbacks.error(err);
+
+                                deferred.reject(err);
                             });
+
+                    return deferred.promise;
                 },
 
 
-                loadNewsFeed: function (eventid, callbacks) {
-                    loadEventData(eventid, {
-                        success: function (event, golfers, courseInfo) {
-                            var feedItems = [];
+                loadNewsFeed: function (eventid) {
+                    var deferred = $q.defer();
 
-                            var currentRound = eventUtils.getCurrentRoundInProgress(golfers, event.rounds.length);
+                    loadEventData(eventid)
+                        .then(function (result) {
+                                var event = result.event;
+                                var golfers = result.golfers;
+                                var courseInfo = result.courseInfo;
 
-                            if (currentRound > 0) {
+                                var feedItems = [];
+                                var currentRound = eventUtils.getCurrentRoundInProgress(golfers, event.rounds.length);
 
-                                var roundNumber = new String(currentRound);
-                                var totalPar = 0;
+                                if (currentRound > 0) {
 
-                                for (var i = 0; i < currentRound; i++) {
-                                    totalPar += courseInfo[i].par;
-                                }
+                                    var roundNumber = new String(currentRound);
+                                    var totalPar = 0;
 
-                                // console.debug("total par: " + totalPar + ", currentRound: " + currentRound);
-                                // console.debug(JSON.stringify(golfers));
-
-                                //TODO: need to fix this for non PGA events
-                                var isPGA = true;
-                                if (isPGA) {
-                                    // First entry is the tournament leader; return this and all ties
-                                    //                                    var score = golfers[0].strokes;
-                                    //                                    var netScore = score - totalPar;
-
-                                    var leaders = eventUtils.tournamentLeaders(golfers);
-                                    var text = (leaders.length > 1) ? "Tournament leaders" : "Tournament leader";
-
-                                    feedItems.push(text);
-
-                                    for (var i = 0; i < leaders.length; i++) {
-                                        var leader = leaders[i];
-
-                                        feedItems.push(leader.name + " " + leader.total);
+                                    for (var i = 0; i < currentRound; i++) {
+                                        totalPar += courseInfo[i].par;
                                     }
 
-                                    var roundLeaders = eventUtils.roundLeaders(golfers, courseInfo);
-                                    logger.log("roundLeaders: " + JSON.stringify(roundLeaders));
+                                    // console.debug("total par: " + totalPar + ", currentRound: " + currentRound);
+                                    // console.debug(JSON.stringify(golfers));
 
-                                    if (roundLeaders[currentRound - 1].length > 0) {
-                                        var leaders = roundLeaders[currentRound - 1];
+                                    //TODO: need to fix this for non PGA events
+                                    var isPGA = true;
+                                    if (isPGA) {
+                                        // First entry is the tournament leader; return this and all ties
+                                        //                                    var score = golfers[0].strokes;
+                                        //                                    var netScore = score - totalPar;
 
-                                        var text = "Day " + currentRound + " low scores";
+                                        var leaders = eventUtils.tournamentLeaders(golfers);
+                                        var text = (leaders.length > 1) ? "Tournament leaders" : "Tournament leader";
 
                                         feedItems.push(text);
 
                                         for (var i = 0; i < leaders.length; i++) {
                                             var leader = leaders[i];
 
-                                            feedItems.push(leader.name + " " + leader.score);
+                                            feedItems.push(leader.name + " " + leader.total);
                                         }
+
+                                        var roundLeaders = eventUtils.roundLeaders(golfers, courseInfo);
+                                        logger.log("roundLeaders: " + JSON.stringify(roundLeaders));
+
+                                        if (roundLeaders[currentRound - 1].length > 0) {
+                                            var leaders = roundLeaders[currentRound - 1];
+
+                                            var text = "Day " + currentRound + " low scores";
+
+                                            feedItems.push(text);
+
+                                            for (var i = 0; i < leaders.length; i++) {
+                                                var leader = leaders[i];
+
+                                                feedItems.push(leader.name + " " + leader.score);
+                                            }
+                                        }
+
+                                        //                                    // find lowest rounds for current round by sorting the round scores
+                                        //                                    golfers.sort(function (a, b) {
+                                        //                                        return a[roundNumber] - b[roundNumber];
+                                        //                                    });
+                                        //
+                                        //                                    // First entry is the leader; return round leader and all ties
+                                        //                                    score = golfers[0][roundNumber];
+                                        //                                    netScore = score - courseInfo[currentRound].par;
+                                        //
+                                        //                                    feedItems.push("Round " + roundNumber +
+                                        //                                        " (" + courseInfo[currentRound].name + ") low rounds");
+                                        //
+                                        //                                    for (var i = 0; i < golfers.length; i++) {
+                                        //                                        var golfer = golfers[i];
+                                        //                                        if (golfer[roundNumber] == score) {
+                                        //                                            feedItems.push(golfer.name + " " + score +
+                                        //                                                " (" + eventUtils.formatNetScore(netScore) + ")");
+                                        //                                        }
+                                        //                                    }
                                     }
 
-                                    //                                    // find lowest rounds for current round by sorting the round scores
-                                    //                                    golfers.sort(function (a, b) {
-                                    //                                        return a[roundNumber] - b[roundNumber];
-                                    //                                    });
-                                    //
-                                    //                                    // First entry is the leader; return round leader and all ties
-                                    //                                    score = golfers[0][roundNumber];
-                                    //                                    netScore = score - courseInfo[currentRound].par;
-                                    //
-                                    //                                    feedItems.push("Round " + roundNumber +
-                                    //                                        " (" + courseInfo[currentRound].name + ") low rounds");
-                                    //
-                                    //                                    for (var i = 0; i < golfers.length; i++) {
-                                    //                                        var golfer = golfers[i];
-                                    //                                        if (golfer[roundNumber] == score) {
-                                    //                                            feedItems.push(golfer.name + " " + score +
-                                    //                                                " (" + eventUtils.formatNetScore(netScore) + ")");
-                                    //                                        }
-                                    //                                    }
                                 }
 
-                            }
+                                deferred.resolve(feedItems)
+                            },
+                            function (err) {
+                                deferred.reject(err);
+                            });
 
-                            if (callbacks && callbacks.success) callbacks.success(feedItems);
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-
+                    return deferred.promise;
                 },
 
-                loadGame: function (gameid, callbacks) {
+                loadGame: function (gameid) {
 
                     // load the current game
                     // the EVENT holds the golfers
                     // the GAME is the game played based on the golfer's scores
 
-                    cloudDataGame.get(gameid)
-                        .then(function (game) {
-                                if (callbacks && callbacks.success) {
-                                    callbacks.success(game);
-                                }
-                            },
-                            function (err) {
-                                if (callbacks && callbacks.error) {
-                                    logger.debug("loadGame error for gameid" + gameid + ": " + err);
-                                    callbacks.error(err);
-                                }
-                            });
+                    return cloudDataGame.get(gameid);
                 },
 
                 //
@@ -691,12 +717,15 @@ angular.module('GolfPicks.gameData', [])
                 //
                 // returns the given game and a hashmap of the gamers
                 //
-                loadGameWithGamers: function (gameid, callbacks) {
+                loadGameWithGamers: function (gameid) {
+                    var deferred = $q.defer();
 
                     var logger = gameUtils.logger;
+                    var game;
 
-                    this.loadGame(gameid, {
-                        success: function (game) {
+                    this.loadGame(gameid)
+                        .then(function (result) {
+                            game = result;
 
                             // now get all the player ids
                             var gamerlist = [];
@@ -708,88 +737,80 @@ angular.module('GolfPicks.gameData', [])
 
                             logger.log("gamer list:" + JSON.stringify(gamerlist));
 
-                            cloudDataPlayer.getAll()
-                                .then(
-                                    function (gamers) {
+                            return cloudDataPlayer.getAll();
+                        })
+                        .then(function (gamers) {
 
-                                        // turn the list into a hashmap by id
-                                        var gamerMap = {};
+                            // turn the list into a hashmap by id
+                            var gamerMap = {};
 
-                                        for (var i = 0; i < gamers.length; i++) {
-                                            gamerMap[gamers[i]._id] = gamers[i];
-                                        }
+                            for (var i = 0; i < gamers.length; i++) {
+                                gamerMap[gamers[i]._id] = gamers[i];
+                            }
 
-                                        logger.log("returning map: " + JSON.stringify(gamers));
+                            logger.log("returning map: " + JSON.stringify(gamers));
 
-                                        if (callbacks && callbacks.success) {
-                                            callbacks.success(game, gamerMap);
-                                        }
-                                    },
-                                    function (err) {
-                                        if (callbacks && callbacks.error) {
-                                            callbacks.error(err);
-                                        }
+                            deferred.resolve({
+                                game: game,
+                                gamerMap: gamerMap
+                            });
+                        })
+                        .catch(function (err) {
+                            deferred.reject(err);
+                        });
+
+                    return deferred.promise;
+                },
+
+                loadEvent: function (eventid) {
+                    return loadEventData(eventid);
+                },
+
+                loadRankedPlayers: function (eventid) {
+                    var deferred = $q.defer();
+
+                    loadEventData(eventid)
+                        .then(function (result) {
+                                var event = result.event;
+                                var golfers = result.golfers;
+                                var courseInfo = result.courseInfo;
+
+                                var players = [];
+
+                                for (var i = 0; i < golfers.length; i++) {
+                                    var golfer = golfers[i];
+
+                                    players.push({
+                                        name: golfer.name,
+                                        rank: golfer.rank,
+                                        player_id: golfer.player_id,
+                                        selectable: true,
+                                        selected: false
                                     });
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error(err);
-                            }
-                        }
+                                }
 
-                    });
-                },
+                                players = sortByRank(players);
 
-                loadEvent: function (eventid, callbacks) {
-                    loadEventData(eventid, {
-                        success: function (event, golfers, courseInfo) {
+                                for (var i = 0; i < players.length; i++) {
+                                    players[i].index = i + 1;
+                                }
 
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(event, golfers, courseInfo);
-                            }
-
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                },
-
-                loadRankedPlayers: function (eventid, callbacks) {
-                    loadEventData(eventid, {
-                        success: function (event, golfers, courseInfo) {
-                            var players = [];
-
-                            for (var i = 0; i < golfers.length; i++) {
-                                var golfer = golfers[i];
-
-                                players.push({
-                                    name: golfer.name,
-                                    rank: golfer.rank,
-                                    player_id: golfer.player_id,
-                                    selectable: true,
-                                    selected: false
+                                deferred.resolve({
+                                    event: event,
+                                    golfers: players
                                 });
-                            }
 
-                            players = sortByRank(players);
+                            },
+                            function (err) {
+                                deferred.reject(err);
+                            });
 
-                            for (var i = 0; i < players.length; i++) {
-                                players[i].index = i + 1;
-                            }
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(event, players);
-                            }
-
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
+                    return deferred.promise;
                 },
 
-                loadLeaderboard: function (game, callbacks) {
+                loadLeaderboard: function (game) {
+                    var deferred = $q.defer();
+
                     // load the current event associated with this game
                     // the EVENT holds the golfers
                     // the GAME is the game played based on the golfer's scores
@@ -797,26 +818,23 @@ angular.module('GolfPicks.gameData', [])
                     // callback expects parameters: name, courseInfo, gamers
                     var eventid = game.eventid;
 
-                    loadEventData(eventid, {
-                        success: function (event, golfers, courseInfo) {
-                            if (!game.gamers) {
-                                // no players playing in this event, so no leaderboard info
-                                if (callbacks && callbacks.success) {
-                                    callbacks.success(event.name, courseInfo, null);
-                                }
+                    loadEventData(eventid)
+                        .then(function (result) {
+                            var event = result.event;
+                            var golfers = result.golfers;
+                            var courseInfo = result.courseInfo;
 
-                                return;
-                            }
+                            return processLeaderboardData(game.gamers, event, golfers, courseInfo);
+                        })
+                        .then(function (result) {
+                                deferred.resolve(result);
+                        })
+                        .catch(function (err) {
+                                deferred.reject(err);
+                        });
 
-                            processLeaderboardData(game.gamers, event, golfers, courseInfo, callbacks);
-
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-
+                    return deferred.promise;
                 }
 
             }
-                }]);
+    }]);
