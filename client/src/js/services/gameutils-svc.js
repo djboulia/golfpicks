@@ -107,18 +107,18 @@ angular.module('GolfPicks.gameUtils', [])
             // 		end	    : tournament end time
             //
             //
-            getGameDetails: function (cloudDataGame) {
+            getGameDetails: function (game) {
                 var gameDetails = {
-                    event: cloudDataGame.name,
-                    eventid: cloudDataGame._id
+                    event: game.name,
+                    eventid: game._id
                 };
 
-                if (cloudDataGame.start) {
-                    gameDetails.start = Date.parse(cloudDataGame.start);
+                if (game.start) {
+                    gameDetails.start = Date.parse(game.start);
                 }
 
-                if (cloudDataGame.end) {
-                    gameDetails.end = Date.parse(cloudDataGame.end);
+                if (game.end) {
+                    gameDetails.end = Date.parse(game.end);
                 }
 
                 return gameDetails;

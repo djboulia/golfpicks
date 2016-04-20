@@ -19,7 +19,7 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
 
     // TODO: fix this for non PGA
     var isPGA = true;
-    
+
     if (isPGA) {
         NUM_SELECTIONS = 10;
         NUM_TOP_ALLOWED = 2;
@@ -135,87 +135,86 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
     // get the event information
     if (gameid) {
 
-        cloudDataGame.get(gameid, {
-            success: function (game) {
+        cloudDataGame.get(gameid)
+            .then(function (game) {
 
-                currentGame = game;
+                    currentGame = game;
 
-                if (!testingMode) {
-                    var gameDetails = gameUtils.getGameDetails(game);
+                    if (!testingMode) {
+                        var gameDetails = gameUtils.getGameDetails(game);
 
-                    // give players a 10 hr grace period 
-                    // (10AM on day of tournament) to complete picks
-                    gameDetails = gameUtils.addGracePeriod(gameDetails, 10);
+                        // give players a 10 hr grace period
+                        // (10AM on day of tournament) to complete picks
+                        gameDetails = gameUtils.addGracePeriod(gameDetails, 10);
 
-                    if (gameUtils.tournamentInProgress(gameDetails.start,
-                            gameDetails.end)) {
-                        $scope.$apply(function () {
-                            $scope.errorMessage = "Tournament is in progress, picks can no longer be made.";
-                        });
+                        if (gameUtils.tournamentInProgress(gameDetails.start,
+                                gameDetails.end)) {
+                            $scope.$apply(function () {
+                                $scope.errorMessage = "Tournament is in progress, picks can no longer be made.";
+                            });
 
-                        return;
-                    } else if (gameUtils.tournamentComplete(gameDetails.start,
-                            gameDetails.end)) {
-                        $scope.$apply(function () {
-                            $scope.errorMessage = "This tournament has already ended, picks can no longer be made.";
-                        });
+                            return;
+                        } else if (gameUtils.tournamentComplete(gameDetails.start,
+                                gameDetails.end)) {
+                            $scope.$apply(function () {
+                                $scope.errorMessage = "This tournament has already ended, picks can no longer be made.";
+                            });
 
-                        return;
+                            return;
+                        }
                     }
-                }
 
-                gameData.loadRankedPlayers(game.eventid, {
-                    success: function (event, players) {
+                    gameData.loadRankedPlayers(game.eventid, {
+                        success: function (event, players) {
 
-                        if (!game.gamers) {
-                            game.gamers = [{
-                                "user": currentUser.getId(),
-                                "picks": []
+                            if (!game.gamers) {
+                                game.gamers = [{
+                                    "user": currentUser.getId(),
+                                    "picks": []
                             }];
-                        } else {
-                            // might have previously stored picks
-                            var picks = [];
-                            var gamers = game.gamers;
+                            } else {
+                                // might have previously stored picks
+                                var picks = [];
+                                var gamers = game.gamers;
 
-                            for (var i = 0; i < gamers.length; i++) {
-                                var gamer = gamers[i];
-                                if (gamer.user == currentUser.getId()) {
-                                    picks = gamer.picks;
+                                for (var i = 0; i < gamers.length; i++) {
+                                    var gamer = gamers[i];
+                                    if (gamer.user == currentUser.getId()) {
+                                        picks = gamer.picks;
+                                    }
                                 }
+
+                                loadSavedPicks(players, picks);
+                                debug("Picks : " + JSON.stringify(picks));
                             }
 
-                            loadSavedPicks(players, picks);
-                            debug("Picks : " + JSON.stringify(picks));
+                            $scope.name = event.name;
+                            $scope.start = event.start;
+                            $scope.end = event.end;
+                            $scope.rounds = event.rounds;
+                            $scope.players = players;
+                            $scope.NUM_SELECTIONS = NUM_SELECTIONS;
+                            $scope.NUM_TOP_RANK = NUM_TOP_RANK;
+                            $scope.NUM_TOP_ALLOWED = NUM_TOP_ALLOWED;
+                            $scope.loaded = true;
+
+                        },
+                        error: function (err) {
+                            console.log("error getting event: " + err);
+
+                            $scope.$apply(function () {
+                                $scope.errorMessage = "Couldn't access event information!";
+                            });
                         }
+                    });
+                },
+                function (err) {
+                    logger.error("Couldn't access game information!");
 
-                        $scope.name = event.name;
-                        $scope.start = event.start;
-                        $scope.end = event.end;
-                        $scope.rounds = event.rounds;
-                        $scope.players = players;
-                        $scope.NUM_SELECTIONS = NUM_SELECTIONS;
-                        $scope.NUM_TOP_RANK = NUM_TOP_RANK;
-                        $scope.NUM_TOP_ALLOWED = NUM_TOP_ALLOWED;
-                        $scope.loaded = true;
-
-                    },
-                    error: function (err) {
-                        console.log("error getting event: " + err);
-
-                        $scope.$apply(function () {
-                            $scope.errorMessage = "Couldn't access event information!";
-                        });
-                    }
+                    $scope.$apply(function () {
+                        $scope.errorMessage = "Couldn't access game information!";
+                    });
                 });
-            },
-            error: function (err) {
-                logger.error("Couldn't access game information!");
-
-                $scope.$apply(function () {
-                    $scope.errorMessage = "Couldn't access game information!";
-                });
-            }
-        });
 
     }
 
@@ -258,20 +257,19 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
 
         console.log("saving picks: " + JSON.stringify(picks));
 
-        cloudDataGame.savePicks(currentGame, currentUser, picks, {
-            success: function (game) {
-                $scope.$apply(function () {
-                    $scope.picksMessage = "Picks saved.";
+        cloudDataGame.savePicks(currentGame, currentUser, picks)
+            .then(function (game) {
+                    $scope.$apply(function () {
+                        $scope.picksMessage = "Picks saved.";
+                    });
+                    changed = false;
+                },
+                function (err) {
+                    console.error("error saving picks");
+                    $scope.$apply(function () {
+                        $scope.picksMessage = "Error saving picks!";
+                    });
                 });
-                changed = false;
-            },
-            error: function (err) {
-                console.error("error saving picks");
-                $scope.$apply(function () {
-                    $scope.picksMessage = "Error saving picks!";
-                });
-            }
-        });
     };
 
 

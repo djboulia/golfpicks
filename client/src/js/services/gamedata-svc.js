@@ -478,73 +478,72 @@ angular.module('GolfPicks.gameData', [])
 
                     var logger = gameUtils.logger;
 
-                    cloudDataGame.getAll({
-                        success: function (games) {
-                            logger.debug(JSON.stringify(games));
+                    cloudDataGame.getAll()
+                        .then(function (games) {
+                                logger.debug(JSON.stringify(games));
 
-                            var gameHistory = {
-                                active: { // the currently active game (if any)
-                                    inProgress: false,
-                                    joined: false
-                                },
-                                history: [] // list of games for this user
-                            };
+                                var gameHistory = {
+                                    active: { // the currently active game (if any)
+                                        inProgress: false,
+                                        joined: false
+                                    },
+                                    history: [] // list of games for this user
+                                };
 
-                            games.forEach(function (game) {
+                                games.forEach(function (game) {
 
-                                var gameDetails = gameUtils.getGameDetails(game);
-                                gameUtils.addGracePeriod(gameDetails, 10);
+                                    var gameDetails = gameUtils.getGameDetails(game);
+                                    gameUtils.addGracePeriod(gameDetails, 10);
 
-                                if (!gameUtils.tournamentComplete(
-                                        gameDetails.start,
-                                        gameDetails.end)) {
-
-                                    // make this the active game
-                                    gameHistory.active.event = gameDetails.event;
-                                    gameHistory.active.eventid = gameDetails.eventid;
-
-                                    if (gameUtils.tournamentInProgress(
+                                    if (!gameUtils.tournamentComplete(
                                             gameDetails.start,
                                             gameDetails.end)) {
 
-                                        gameHistory.active.inProgress = true;
-                                    }
-                                }
+                                        // make this the active game
+                                        gameHistory.active.event = gameDetails.event;
+                                        gameHistory.active.eventid = gameDetails.eventid;
 
-                                // look through each game to see if current user is one of the players
-                                var gamerids = game.gamers;
+                                        if (gameUtils.tournamentInProgress(
+                                                gameDetails.start,
+                                                gameDetails.end)) {
 
-                                for (var j = 0; j < gamerids.length; j++) {
-
-                                    if (currentUser.getId() == gamerids[j].user) {
-
-                                        if (gameHistory.active.eventid == gameDetails.eventid) {
-                                            gameHistory.active.joined = true;
-                                        } else {
-                                            // add it to our history
-                                            gameHistory.history.push(gameDetails);
+                                            gameHistory.active.inProgress = true;
                                         }
                                     }
-                                }
-                            });
 
-                            // sort the gameHistory by date
-                            gameHistory.history.sort(function (a, b) {
-                                if (a.start == b.start) {
-                                    return 0;
-                                } else {
-                                    return (a.start > b.start) ? -1 : 1;
-                                }
-                            });
+                                    // look through each game to see if current user is one of the players
+                                    var gamerids = game.gamers;
 
-                            // return game history
-                            if (callbacks && callbacks.success) callbacks.success(gameHistory);
-                        },
-                        error: function (err) {
-                            logger.error("Couldn't access game information!");
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
+                                    for (var j = 0; j < gamerids.length; j++) {
+
+                                        if (currentUser.getId() == gamerids[j].user) {
+
+                                            if (gameHistory.active.eventid == gameDetails.eventid) {
+                                                gameHistory.active.joined = true;
+                                            } else {
+                                                // add it to our history
+                                                gameHistory.history.push(gameDetails);
+                                            }
+                                        }
+                                    }
+                                });
+
+                                // sort the gameHistory by date
+                                gameHistory.history.sort(function (a, b) {
+                                    if (a.start == b.start) {
+                                        return 0;
+                                    } else {
+                                        return (a.start > b.start) ? -1 : 1;
+                                    }
+                                });
+
+                                // return game history
+                                if (callbacks && callbacks.success) callbacks.success(gameHistory);
+                            },
+                            function (err) {
+                                logger.error("Couldn't access game information!");
+                                if (callbacks && callbacks.error) callbacks.error(err);
+                            });
                 },
 
                 //
@@ -556,30 +555,29 @@ angular.module('GolfPicks.gameData', [])
 
                     var logger = gameUtils.logger;
 
-                    cloudDataGame.getAll({
-                        success: function (games) {
-                            logger.debug(JSON.stringify(games));
+                    cloudDataGame.getAll()
+                        .then(function (games) {
+                                logger.debug(JSON.stringify(games));
 
-                            // sort the games by date
-                            games.sort(function (a, b) {
-                                var aDate = Date.parse(a.start);
-                                var bDate = Date.parse(b.start);
+                                // sort the games by date
+                                games.sort(function (a, b) {
+                                    var aDate = Date.parse(a.start);
+                                    var bDate = Date.parse(b.start);
 
-                                if (aDate == bDate) {
-                                    return 0;
-                                } else {
-                                    return (aDate > bDate) ? -1 : 1;
-                                }
+                                    if (aDate == bDate) {
+                                        return 0;
+                                    } else {
+                                        return (aDate > bDate) ? -1 : 1;
+                                    }
+                                });
+
+                                // return game list
+                                if (callbacks && callbacks.success) callbacks.success(games);
+                            },
+                            function (err) {
+                                logger.error("Couldn't access game information!");
+                                if (callbacks && callbacks.error) callbacks.error(err);
                             });
-
-                            // return game list
-                            if (callbacks && callbacks.success) callbacks.success(games);
-                        },
-                        error: function (err) {
-                            logger.error("Couldn't access game information!");
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
                 },
 
 
@@ -675,20 +673,18 @@ angular.module('GolfPicks.gameData', [])
                     // the EVENT holds the golfers
                     // the GAME is the game played based on the golfer's scores
 
-                    cloudDataGame.get(gameid, {
-                        success: function (game) {
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(game);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) {
-                                logger.debug("loadGame error for gameid" + gameid + ": " + err);
-                                callbacks.error(err);
-                            }
-                        }
-                    });
-
+                    cloudDataGame.get(gameid)
+                        .then(function (game) {
+                                if (callbacks && callbacks.success) {
+                                    callbacks.success(game);
+                                }
+                            },
+                            function (err) {
+                                if (callbacks && callbacks.error) {
+                                    logger.debug("loadGame error for gameid" + gameid + ": " + err);
+                                    callbacks.error(err);
+                                }
+                            });
                 },
 
                 //

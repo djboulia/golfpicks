@@ -640,90 +640,40 @@ angular.module('GolfPicks.cloud', [])
     .factory('cloudDataGame', ['cloudData', function (cloudData) {
 
         var _className = "Game";
-
-        var _getObjectData = function (obj) {
-            var localObj = {};
-
-            localObj._id = obj.getObjectId();
-            localObj._cloudObject = obj;
-
-            localObj.name = obj.get("name");
-            localObj.start = obj.get("start");
-            localObj.end = obj.get("end");
-            localObj.eventid = obj.get("event");
-            localObj.gamers = obj.get("gamers");
-
-            return localObj;
-        };
-
-        var _setObjectData = function (cloudObject, localObj) {
-            cloudObject.set("name", localObj.name);
-            cloudObject.set("start", localObj.start);
-            cloudObject.set("end", localObj.end);
-            cloudObject.set("event", localObj.eventid);
-            cloudObject.set("gamers", localObj.gamers);
+        var _fieldNames = {
+            name: "name",
+            start: "start",
+            end: "end",
+            event: "eventid",
+            gamers: "gamers"
         };
 
         return {
-            save: function (localObj, callbacks) {
-                if (localObj._cloudObject) {
-                    var cloudObject = localObj._cloudObject;
-
-                    _setObjectData(cloudObject, localObj);
-
-                    cloudObject.save({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(localObj);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        }
-                    });
-                }
+            delete: function (localObj) {
+                return cloudData.delete(localObj);
             },
 
-            get: function (id, callbacks) {
-
-                cloudData.getObject(_className, id)
-                    .then(function (obj) {
-                            console.log("found " + _className + " with id " + id);
-
-                            var localObj = _getObjectData(obj);
-
-                            if (callbacks && callbacks.success) callbacks.success(localObj);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            save: function (localObj) {
+                return cloudData.save(localObj);
             },
 
-
-            getAll: function (callbacks) {
-
-                cloudData.getObjects(_className)
-                    .then(function (objects) {
-
-                            var courses = [];
-
-                            for (var i = 0; i < objects.length; i++) {
-                                var obj = objects[i];
-                                var course = _getObjectData(obj);
-
-                                courses.push(course);
-                            }
-
-                            if (callbacks && callbacks.success) callbacks.success(courses);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            add: function (localData) {
+                return cloudData.add(_className, _fieldNames, localData);
             },
 
-            savePicks: function (game, currentUser, picks, callbacks) {
+            get: function (id) {
+                return cloudData.get(_className, _fieldNames, id);
+            },
+
+            getList: function (ids) {
+                return cloudData.getList(_className, _fieldNames, ids);
+            },
+
+            getAll: function () {
+                return cloudData.getList(_className, _fieldNames);
+            },
+
+            savePicks: function (game, currentUser, picks) {
 
                 var found = false;
                 var gamers = game.gamers;
@@ -753,7 +703,7 @@ angular.module('GolfPicks.cloud', [])
                 console.debug("Submitting the following picks: " +
                     JSON.stringify(picks));
 
-                this.save(game, callbacks);
+                return this.save(game);
             }
 
         }
