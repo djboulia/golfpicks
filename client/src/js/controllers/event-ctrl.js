@@ -91,17 +91,16 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
             event.start = this.start;
             event.end = this.end;
 
-            cloudDataPlayer.save(event, {
-                success: function (obj) {
+            cloudDataPlayer.save(event)
+                .then(function (obj) {
                     console.log("saved event " + obj.name);
 
                     // switch to players page
                     window.location.href = returnUrl;
                 },
-                error: function (err) {
+                function (err) {
                     console.log("error adding event: " + err);
-                }
-            });
+                });
         } else {
             var event = {
                 name: this.name,

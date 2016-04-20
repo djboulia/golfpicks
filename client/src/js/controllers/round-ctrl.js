@@ -47,12 +47,11 @@ var mergeScoresAndPlayers = function (roundid, event) {
 
 angular.module('GolfPicks')
     .controller('RoundCtrl', ['$scope', '$stateParams', '$cookieStore',
-                               'cloudDataEvent', 'cloudDataPlayer',
-                               'cloudDataCourse', RoundCtrl]);
+                               'cloudDataEvent', 'cloudDataCourse', RoundCtrl]);
 
 
 function RoundCtrl($scope, $stateParams, $cookieStore,
-    cloudDataEvent, cloudDataPlayer, cloudDataCourse) {
+    cloudDataEvent, cloudDataCourse) {
 
     console.log("reached round controller with id " +
         $stateParams.id + " and round id " + $stateParams.roundid);

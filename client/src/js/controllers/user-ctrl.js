@@ -15,20 +15,19 @@ function PlayerCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataPlay
         // load up the existing data in our form
         $scope.title = "Update User";
 
-        cloudDataPlayer.get($stateParams.id, {
-            success: function (playerObject) {
-                existingPlayer = playerObject;
+        cloudDataPlayer.get($stateParams.id)
+            .then(function (playerObject) {
+                    existingPlayer = playerObject;
 
-                $scope.name = existingPlayer.name;
-                $scope.email = existingPlayer.email;
-                $scope.password = existingPlayer.password;
-                $scope.existingPlayer = true;
-                $scope.loaded = true;
-            },
-            error: function (err) {
-                console.log("error getting user " + err);
-            }
-        });
+                    $scope.name = existingPlayer.name;
+                    $scope.email = existingPlayer.email;
+                    $scope.password = existingPlayer.password;
+                    $scope.existingPlayer = true;
+                    $scope.loaded = true;
+                },
+                function (err) {
+                    console.log("error getting user " + err);
+                });
     } else {
         $scope.title = "New User";
         $scope.loaded = true;
@@ -43,17 +42,16 @@ function PlayerCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataPlay
             existingPlayer.email = this.email;
             existingPlayer.password = this.password;
 
-            cloudDataPlayer.save(existingPlayer, {
-                success: function (playerObject) {
-                    console.log("saved player " + playerObject.name);
+            cloudDataPlayer.save(existingPlayer)
+                .then(function (playerObject) {
+                        console.log("saved player " + playerObject.name);
 
-                    // switch to players page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error adding player " + err);
-                }
-            });
+                        // switch to players page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding player " + err);
+                    });
         } else {
             var player = {
                 name: this.name,
@@ -62,19 +60,18 @@ function PlayerCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataPlay
                 handicap: this.handicap
             };
 
-            console.log("save player " + player.name + " here");
+            console.log("create new player " + player.name + " here");
 
-            cloudDataPlayer.add(player, {
-                success: function (playerObject) {
-                    console.log("saved player " + playerObject.name);
+            cloudDataPlayer.add(player)
+                .then(function (playerObject) {
+                        console.log("saved player " + playerObject.name);
 
-                    // switch to picks page
-                    window.location.href = returnUrl;
-                },
-                error: function (err) {
-                    console.log("error adding player " + err);
-                }
-            });
+                        // switch to picks page
+                        window.location.href = returnUrl;
+                    },
+                    function (err) {
+                        console.log("error adding player " + err);
+                    });
         }
 
     };
@@ -94,17 +91,16 @@ function PlayerCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataPlay
 
         modalInstance.result.then(function (player) {
             console.log("Deleting player " + player.name);
-            cloudDataPlayer.delete(player, {
-                success: function (obj) {
+            cloudDataPlayer.delete(player)
+                .then(function (obj) {
                     console.log("delete successful");
 
                     // switch to players page
                     window.location.href = returnUrl;
                 },
-                error: function (err) {
+                function (err) {
                     console.log("error from delete : " + err);
-                }
-            });
+                });
 
         }, function () {
             console.log('Modal dismissed at: ' + new Date());

@@ -150,9 +150,9 @@ angular.module('GolfPicks.gameData', [])
 
                 }
 
-                console.debug("getRoundNetTotals: pick " + JSON.stringify(pick) + 
-                              " roundtotals = " + JSON.stringify(roundtotals));
-                
+                console.debug("getRoundNetTotals: pick " + JSON.stringify(pick) +
+                    " roundtotals = " + JSON.stringify(roundtotals));
+
                 return roundtotals;
             };
 
@@ -389,35 +389,34 @@ angular.module('GolfPicks.gameData', [])
                 });
 
                 // now go load the user info for each of the gamers
-                cloudDataPlayer.getList(gamer_ids, {
-                    success: function (users) {
-                        var validgamers = [];
+                cloudDataPlayer.getList(gamer_ids)
+                    .then(function (users) {
+                            var validgamers = [];
 
-                        users.forEach(function (user) {
-                            gamers.forEach(function (gamer) {
-                                if (user._id == gamer.user) {
-                                    //			  		alert("found match for " + object.objectId);
-                                    gamer.user = user;
+                            users.forEach(function (user) {
+                                gamers.forEach(function (gamer) {
+                                    if (user._id == gamer.user) {
+                                        //			  		alert("found match for " + object.objectId);
+                                        gamer.user = user;
 
-                                    // only keep those we can find a valid user object for...
-                                    validgamers.push(gamer);
-                                }
+                                        // only keep those we can find a valid user object for...
+                                        validgamers.push(gamer);
+                                    }
+                                });
                             });
+
+                            gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
+                            gamers = addRoundLeaders(gamers);
+
+                            if (callbacks && callbacks.success) {
+                                callbacks.success(event.name, courseInfo, gamers);
+                            }
+                        },
+                        function (err) {
+                            if (callbacks && callbacks.error) {
+                                callbacks.error(err);
+                            }
                         });
-
-                        gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
-                        gamers = addRoundLeaders(gamers);
-
-                        if (callbacks && callbacks.success) {
-                            callbacks.success(event.name, courseInfo, gamers);
-                        }
-                    },
-                    error: function (err) {
-                        if (callbacks && callbacks.error) {
-                            callbacks.error(err);
-                        }
-                    }
-                });
             };
 
             var loadEventData = function (eventid, callbacks) {
@@ -714,29 +713,28 @@ angular.module('GolfPicks.gameData', [])
 
                             logger.log("gamer list:" + JSON.stringify(gamerlist));
 
-                            cloudDataPlayer.getAll({
-                                success: function (gamers) {
+                            cloudDataPlayer.getAll()
+                                .then(
+                                    function (gamers) {
 
-                                    // turn the list into a hashmap by id
-                                    var gamerMap = {};
+                                        // turn the list into a hashmap by id
+                                        var gamerMap = {};
 
-                                    for (var i = 0; i < gamers.length; i++) {
-                                        gamerMap[gamers[i]._id] = gamers[i];
-                                    }
+                                        for (var i = 0; i < gamers.length; i++) {
+                                            gamerMap[gamers[i]._id] = gamers[i];
+                                        }
 
-                                    logger.log("returning map: " + JSON.stringify(gamers));
+                                        logger.log("returning map: " + JSON.stringify(gamers));
 
-                                    if (callbacks && callbacks.success) {
-                                        callbacks.success(game, gamerMap);
-                                    }
-                                },
-                                error: function (err) {
-                                    if (callbacks && callbacks.error) {
-                                        callbacks.error(err);
-                                    }
-                                }
-                            });
-
+                                        if (callbacks && callbacks.success) {
+                                            callbacks.success(game, gamerMap);
+                                        }
+                                    },
+                                    function (err) {
+                                        if (callbacks && callbacks.error) {
+                                            callbacks.error(err);
+                                        }
+                                    });
                         },
                         error: function (err) {
                             if (callbacks && callbacks.error) {

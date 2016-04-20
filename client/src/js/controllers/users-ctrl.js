@@ -8,15 +8,12 @@ function PlayersCtrl($scope, $cookieStore, cloudDataPlayer) {
 
     $scope.editUrl = editUrl;
 
-    cloudDataPlayer.getAll( {
-        success: function (players) {
-            $scope.players = players;
-            $scope.loaded = true;
-        },
-        error: function (err) {
-            console.log("error");
-        }
-    });
-
-
+    cloudDataPlayer.getAll()
+        .then(function (players) {
+                $scope.players = players;
+                $scope.loaded = true;
+            },
+            function (err) {
+                console.log("error");
+            });
 };

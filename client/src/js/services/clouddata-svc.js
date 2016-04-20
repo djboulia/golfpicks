@@ -2,10 +2,119 @@ console.log("loading GolfPicks.cloud");
 
 angular.module('GolfPicks.cloud', [])
     .factory('cloudData', ['$q', function ($q) {
+
+        var _setProperties = function (cloudObj, attrs, fieldMap) {
+
+            for (var prop in fieldMap) {
+                var mappedProp = fieldMap[prop];
+
+                cloudObj.set(prop, attrs[mappedProp]);
+            }
+
+        };
+
+        var _makeLocalObject = function (cloudObj, fieldMap) {
+            var localObj = {};
+
+            if (!fieldMap) console.error("_makeLocalObject: fieldMap is " + JSON.stringify(fieldMap));
+
+            for (var prop in fieldMap) {
+                var mappedProp = fieldMap[prop];
+
+                localObj[mappedProp] = cloudObj.get(prop);
+            }
+
+            localObj._id = cloudObj.getObjectId();
+            localObj._cloudObject = cloudObj;
+            localObj._fieldMap = fieldMap;
+
+            console.debug("_makeLocalObject: localObj: " + JSON.stringify(localObj) + ", fieldMap: " + fieldMap + ", cloudObj: " + cloudObj);
+
+            return localObj;
+        };
+
         return {
 
-            create: function (className, obj) {
-                return CloudObjects.Object.create(className, obj);
+            sync: function (localObj) {
+                var fieldMap = localObj._fieldMap;
+                var cloudObj = localObj._cloudObject;
+
+                for (var prop in fieldMap) {
+                    var mappedProp = fieldMap[prop];
+
+                    cloudObj.set(prop, localObj[mappedProp]);
+                }
+            },
+
+            delete: function (localObj) {
+                var deferred = $q.defer();
+                var obj = localObj._cloudObject;
+
+                if (obj) {
+                    obj.delete({
+                        success: function (result) {
+                            deferred.resolve(result);
+                        },
+                        error: function (err) {
+                            deferred.reject(err);
+                        }
+                    });
+                } else {
+                    deferred.reject("cloudData.delete: cloudObject is " + JSON.stringify(obj));
+                }
+
+                return deferred.promise;
+            },
+
+            add: function (className, fieldNames, attrs ) {
+                var deferred = $q.defer();
+
+                if (attrs) {
+                    var cloudObj = CloudObjects.Object.create(className);
+
+                    _setProperties(cloudObj, attrs, fieldNames);
+
+                    cloudObj.save({
+                        success: function (obj) {
+
+                            var localObj = _makeLocalObject(obj, fieldNames);
+
+                            deferred.resolve(localObj);
+
+                        },
+                        error: function (err) {
+                            deferred.reject(err);
+                        }
+                    });
+                } else {
+                    deferred.reject("cloudData.add: attrs: " + JSON.stringify(attrs));
+                }
+
+                return deferred.promise;
+            },
+
+            save: function (localObj) {
+                var deferred = $q.defer();
+
+                if (localObj._cloudObject && localObj._fieldMap) {
+
+                    this.sync(localObj);
+
+                    localObj._cloudObject.save({
+                        success: function (obj) {
+                            // return the saved object back
+                            deferred.resolve(localObj);
+                        },
+                        error: function (err) {
+                            deferred.reject(err);
+                        }
+                    });
+                } else {
+                    deferred.reject("cloudData.save: _cloudObject is " + localObj._cloudObject +
+                        " and _fieldMap is " + localObj._fieldMap);
+                }
+
+                return deferred.promise;
             },
 
             getObject: function (className, id) {
@@ -38,6 +147,24 @@ angular.module('GolfPicks.cloud', [])
                 return deferred.promise;
             },
 
+            get: function (className, fieldNames, id) {
+                var deferred = $q.defer();
+
+                this.getObject(className, id)
+                    .then(function (obj) {
+                            console.log("found object!");
+
+                            var localObj = _makeLocalObject(obj, fieldNames);
+
+                            deferred.resolve(localObj);
+                        },
+                        function (err) {
+                            deferred.reject(err);
+                        });
+
+                return deferred.promise;
+            },
+
             getObjects: function (className, ids) {
 
                 var deferred = $q.defer();
@@ -57,6 +184,33 @@ angular.module('GolfPicks.cloud', [])
                         deferred.reject(err);
                     }
                 });
+
+                return deferred.promise;
+            },
+
+            getList: function (className, fieldNames, ids) {
+                var deferred = $q.defer();
+
+                this.getObjects(className, ids)
+                    .then(function (objects) {
+
+                            console.log("found objects!");
+                            var localObjs = [];
+                            var i;
+
+                            for (i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var localObj = _makeLocalObject(obj, fieldNames);
+
+                                localObjs.push(localObj);
+                            }
+
+                            deferred.resolve(localObjs);
+                        },
+
+                        function (err) {
+                            deferred.reject(err);
+                        });
 
                 return deferred.promise;
             }
@@ -127,171 +281,46 @@ angular.module('GolfPicks.cloud', [])
             }
         };
     }])
-    .factory('cloudDataLog', ['cloudDataCurrentUser', function (currentUser) {
+    .factory('cloudDataLog', ['cloudDataCurrentUser', '$q', function (currentUser, $q) {
         // convenience functions for logging
         return {
-            access: function (message, callbacks) {
-                CloudObjects.Log.write(currentUser.getDisplayName(), "access", message, callbacks);
+            access: function (message) {
+                CloudObjects.Log.write(currentUser.getDisplayName(), "access", message, null);
             }
         }
     }])
-    .factory('cloudDataPlayer', ['cloudData', function (cloudData) {
+    .factory('cloudDataPlayer', ['cloudData', '$q', function (cloudData, $q) {
 
         var _className = "User";
-
-        var _assignPlayer = function (obj) {
-            var player = {};
-
-            player._id = obj.getObjectId();
-            player.name = obj.get("name");
-            player.email = obj.get("username");
-            player.password = obj.get("password");
-            player._cloudObject = obj;
-
-            return player;
+        var _fieldNames = {
+            name: "name",
+            username: "email",
+            password: "password"
         };
 
         return {
-            delete: function (player, callbacks) {
-                if (player._cloudObject) {
-
-                    player._cloudObject.delete({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(obj);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error(err);
-                            }
-                        }
-                    });
-                }
+            delete: function (player) {
+                return cloudData.delete(player);
             },
 
-            save: function (player, callbacks) {
-                if (player._cloudObject) {
-
-                    player._cloudObject.set("name", player.name);
-                    player._cloudObject.set("username", player.email);
-                    player._cloudObject.set("password", player.password);
-
-                    player._cloudObject.save({
-                        success: function (obj) {
-                            // return the saved object back 
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(player);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error(err);
-                            }
-                        }
-                    });
-                }
+            save: function (player) {
+                return cloudData.save(player);
             },
 
-            add: function (player, callbacks) {
-                if (player) {
-                    var attrs = {
-                        name: player.name,
-                        username: player.email,
-                        password: player.password
-                    };
-
-                    player = cloudData.create(_className, attrs);
-
-                    player.save({
-                        success: function (obj) {
-                            // return the saved object back 
-                            attrs._id = obj.getObjectId();
-                            attrs._cloudObject = obj;
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(attrs);
-                            }
-                        },
-                        error: function (err) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error(err);
-                            }
-                        }
-                    });
-                }
+            add: function (playerData) {
+                return cloudData.add(_className, _fieldNames, playerData);
             },
 
-            get: function (id, callbacks) {
-                var thisObj = this;
-
-                cloudData.getObject(_className, id)
-                    .then(function (obj) {
-                            console.log("found object!");
-
-                            var player = _assignPlayer(obj);
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(player);
-                            }
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error(err);
-                            }
-                        });
+            get: function (id) {
+                return cloudData.get(_className, _fieldNames, id);
             },
 
-            getList: function (ids, callbacks) {
-                var thisObj = this;
-
-                cloudData.getObjects(_className, ids)
-                    .then(function (objects) {
-
-                            console.log("found objects!");
-                            var players = [];
-                            var i;
-
-                            for (i = 0; i < objects.length; i++) {
-                                var obj = objects[i];
-                                var player = _assignPlayer(obj);
-
-                                players.push(player);
-                            }
-
-                            if (callbacks && callbacks.success) callbacks.success(players);
-                        },
-
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            getList: function (ids) {
+                return cloudData.getList(_className, _fieldNames, ids);
             },
 
-            getAll: function (callbacks) {
-                var thisObj = this;
-
-                cloudData.getObjects(_className)
-                    .then(function (objects) {
-
-                            console.log("found objects!");
-                            var players = [];
-                            var i;
-
-                            for (i = 0; i < objects.length; i++) {
-                                var obj = objects[i];
-                                var player = _assignPlayer(obj);
-
-                                players.push(player);
-                            }
-
-                            if (callbacks && callbacks.success) callbacks.success(players);
-                        },
-                        function (err) {
-                            if (callbacks && callbacks.error) callbacks.error(err);
-                        });
+            getAll: function () {
+                return cloudData.getList(_className, _fieldNames);
             }
 
         }
@@ -512,44 +541,43 @@ angular.module('GolfPicks.cloud', [])
                 ids.push(player.user);
             }
 
-            cloudDataPlayer.getList(ids, {
-                success: function (objs) {
+            cloudDataPlayer.getList(ids)
+                .then(function (objs) {
 
-                    // fluff up the players object with player data
-                    var playermap = {};
+                        // fluff up the players object with player data
+                        var playermap = {};
 
-                    for (var i = 0; i < objs.length; i++) {
-                        var obj = objs[i];
-                        playermap[obj._id] = obj;
-                    }
-
-                    var validplayers = [];
-
-                    for (var i = 0; i < players.length; i++) {
-                        var player = players[i];
-                        var playerdetails = playermap[player.user];
-
-                        if (playerdetails) {
-                            player.user = playerdetails;
-                            validplayers.push(player);
-                        } else {
-                            console.log("couldn't find id " + player.user);
-                            console.log("roundmap: " + JSON.stringify(playermap));
+                        for (var i = 0; i < objs.length; i++) {
+                            var obj = objs[i];
+                            playermap[obj._id] = obj;
                         }
-                    }
 
-                    console.log("setting players " + JSON.stringify(validplayers));
+                        var validplayers = [];
 
-                    localObj.players = validplayers;
+                        for (var i = 0; i < players.length; i++) {
+                            var player = players[i];
+                            var playerdetails = playermap[player.user];
 
-                    handleSuccessCallback(localObj, callbacks);
-                },
-                error: function (err) {
+                            if (playerdetails) {
+                                player.user = playerdetails;
+                                validplayers.push(player);
+                            } else {
+                                console.log("couldn't find id " + player.user);
+                                console.log("roundmap: " + JSON.stringify(playermap));
+                            }
+                        }
 
-                    handleErrorCallback(err, callbacks);
-                }
-            });
-        }
+                        console.log("setting players " + JSON.stringify(validplayers));
+
+                        localObj.players = validplayers;
+
+                        handleSuccessCallback(localObj, callbacks);
+                    },
+                    function (err) {
+
+                        handleErrorCallback(err, callbacks);
+                    });
+        };
 
         var getRounds = function (localObj, callbacks) {
 
@@ -596,7 +624,7 @@ angular.module('GolfPicks.cloud', [])
                     handleErrorCallback(err, callbacks);
                 }
             });
-        }
+        };
 
         return {
             delete: function (localObj, callbacks) {
