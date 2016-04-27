@@ -1,7 +1,7 @@
 module.exports = function (Gamer) {
 
     Gamer.login = function (user, pass, cb) {
-        console.log("user " + user + " pass " + pass);
+        console.log("logging in user " + user);
 
         Gamer.find("", function (err, gamers) {
 

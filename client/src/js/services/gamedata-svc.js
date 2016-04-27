@@ -150,7 +150,7 @@ angular.module('GolfPicks.gameData', [])
 
                 }
 
-                console.debug("getRoundNetTotals: pick " + JSON.stringify(pick) +
+                logger.debug("getRoundNetTotals: pick " + JSON.stringify(pick) +
                     " roundtotals = " + JSON.stringify(roundtotals));
 
                 return roundtotals;
@@ -290,8 +290,6 @@ angular.module('GolfPicks.gameData', [])
             var expandPicks = function (picks, scores) {
                 var pickscores = [];
 
-                console.debug("expandPicks scores: " + JSON.stringify(scores));
-
                 for (var j = 0; j < picks.length; j++) {
                     for (var i = 0; i < scores.length; i++) {
                         if (scores[i].player_id == picks[j].id) {
@@ -301,7 +299,7 @@ angular.module('GolfPicks.gameData', [])
                     }
                 }
 
-                console.debug("expandPicks: " + JSON.stringify(pickscores));
+                logger.debug("expandPicks: " + JSON.stringify(pickscores));
 
                 return pickscores;
             };

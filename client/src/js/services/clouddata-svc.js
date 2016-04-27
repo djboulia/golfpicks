@@ -82,7 +82,7 @@ angular.module('GolfPicks.cloud', [])
             localObj._fieldMap = fieldMap;
             localObj._className = className;
 
-            console.debug("_makeLocalObject: localObj: " + JSON.stringify(localObj));
+            // console.debug("_makeLocalObject: localObj: " + JSON.stringify(localObj));
 
             return localObj;
         };
@@ -195,7 +195,7 @@ angular.module('GolfPicks.cloud', [])
             },
 
             getList: function (className, fieldNames, ids) {
-                console.debug("cloudData.getList: className " + className + " ids " + JSON.stringify(ids));
+                console.debug("cloudData.getList: className: " + className + ", ids: " + JSON.stringify(ids));
 
                 var deferred = $q.defer();
                 var model = _modelFromClassName(className);

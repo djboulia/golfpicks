@@ -4,7 +4,7 @@ angular.module('GolfPicks.eventUtils', [])
     .factory('eventUtils', [function () {
 
         var config = {
-            debug: true // turn this on to get debug info
+            debug: false // turn this on to get debug info
         };
 
         var logger = {

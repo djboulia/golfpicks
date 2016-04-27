@@ -277,7 +277,7 @@ angular.module('GolfPicks.data', [])
             // players and courses that are part of this event
             //
             get: function (id) {
-                console.log("cloudDataEvent.get called for " + id);
+//                console.log("cloudDataEvent.get called for " + id);
 
                 var deferred = $q.defer();
 
@@ -292,7 +292,7 @@ angular.module('GolfPicks.data', [])
                         // all info loaded, fulfill the promise with our loaded object
                         var localObj = results[0];
 
-                        console.log("cloudDataEvent.get: fully loaded localObj " + JSON.stringify(localObj));
+//                        console.log("cloudDataEvent.get: fully loaded localObj " + JSON.stringify(localObj));
 
                         deferred.resolve(localObj);
                     })

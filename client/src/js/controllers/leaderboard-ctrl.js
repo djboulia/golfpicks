@@ -127,7 +127,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
 
                             if (gamers) {
 
-                                console.debug(JSON.stringify(gamers));
+                                //console.debug(JSON.stringify(gamers));
 
                                 console.debug("getting news for event " + game.eventid);
                                 getNewsFeed(game.eventid);
