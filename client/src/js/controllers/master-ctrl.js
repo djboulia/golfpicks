@@ -3,23 +3,28 @@
  */
 
 angular.module('GolfPicks')
-    .controller('MasterCtrl', ['$scope', '$cookieStore','$location',  
+    .controller('MasterCtrl', ['$scope', '$cookieStore', '$location',
                                '$rootScope', 'cloudDataCurrentUser', 'cloudDataLog', MasterCtrl]);
 
 var loginUrl = "/#/login";
 
 var initCurrentUser = function ($scope, $location, currentUser) {
 
-    $scope.loggedIn = currentUser.isLoggedIn();    
-    $scope.username = currentUser.getDisplayName();
-    $scope.admin = currentUser.isAdmin();
-    $scope.logOut = function () {
-        currentUser.logOut();
-        window.location.href = loginUrl;
-//        $location.path(loginUrl);
-    };
+    if (currentUser) {
+        $scope.loggedIn = currentUser.isLoggedIn();
+        $scope.username = currentUser.getDisplayName();
+        $scope.admin = currentUser.isAdmin();
+        $scope.logOut = function () {
+            currentUser.logOut();
+            window.location.href = loginUrl;
+            //        $location.path(loginUrl);
+        };
 
-    return true;
+        return true;
+
+    } else {
+        return false;
+    }
 };
 
 function MasterCtrl($scope, $cookieStore, $location, $rootScope, currentUser, cloudLog) {

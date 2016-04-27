@@ -1,7 +1,7 @@
 angular.module('GolfPicks', 
                ['ui.bootstrap', 'ui.router', 
-                'ngCookies', 'ngRoute', 'ngSanitize',
-                'GolfPicks.cloud', 'GolfPicks.weatherData',
+                'ngCookies', 'ngRoute', 'ngSanitize', 'lbServices',
+                'GolfPicks.cloud', 'GolfPicks.data', 'GolfPicks.weatherData',
                 'GolfPicks.gameData', 'GolfPicks.gameUtils', 'GolfPicks.eventUtils'])
         .run(run);
 
@@ -21,4 +21,3 @@ angular.module('GolfPicks',
             }
         });
     }
- 

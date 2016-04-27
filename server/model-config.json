@@ -31,5 +31,35 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "Game": {
+    "dataSource": "golfpicks",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "Event": {
+    "dataSource": "golfpicks",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "Course": {
+    "dataSource": "golfpicks",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "Gamer": {
+    "dataSource": "golfpicks",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "Log": {
+    "dataSource": "golfpicks",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }

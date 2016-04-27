@@ -615,7 +615,7 @@
             var ObjectModule = this.pluginManager.getPluginById("Object");
             var QueryModule = this.pluginManager.getPluginById("Query");
 
-            var query = QueryModule.create("User");
+            var query = QueryModule.create("Gamer");
             query.isEqualTo("username", user);
             query.isEqualTo("password", pass);
             query.find({
