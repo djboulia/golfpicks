@@ -8,21 +8,6 @@ var app = module.exports = loopback();
 app.use(bodyParser.json());
 
 //
-//  implement our RESTful data handler
-//
-app.get('/data/classnames', data.showClasses);
-
-app.get('/data/objects', data.showObjects);
-
-app.post('/data/objects', data.createObject);
-
-app.get('/data/objects/:id?', data.showObject);
-
-app.delete('/data/objects/:id?', data.deleteObject);
-
-app.put('/data/objects/:id?', data.updateObject);
-
-//
 //  PGA tour live scoring information here
 //
 app.get('/data/scores/:id?', data.showScore);
