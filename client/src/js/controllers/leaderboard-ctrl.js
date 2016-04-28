@@ -37,10 +37,8 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
             var start = gameDetails.start;
             var eventname = gameDetails.event;
 
-            $scope.$apply(function () {
-                $scope.errorMessage = "'" + eventname + "' has not yet started. Check back again on " +
-                    gameUtils.dateString(start) + ".";
-            });
+            $scope.errorMessage = "'" + eventname + "' has not yet started. Check back again on " +
+                gameUtils.dateString(start) + ".";
         }
 
         var newsTickerStarted = false;
@@ -104,6 +102,30 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                     });
         };
 
+        var getWeatherForecast = function ($scope, location) {
+
+            console.log("weatherForecast for " + JSON.stringify(location));
+
+            if (location) {
+
+                weatherData.forecast(location.lat, location.lng)
+                    .then(function (data) {
+                            console.log("Data from weather service: " + JSON.stringify(data));
+
+                            data.temp = Math.round(data.temp);
+                            data.wind = Math.round(data.wind);
+                            data.metric.temp = Math.round(data.metric.temp);
+
+                            $scope.weather = data;
+                            $scope.weatherImg = '<img src="' + data.icon + '">';
+                        },
+                        function (err) {
+                            console.log("Error from weather service: " + err);
+                        });
+            }
+
+        };
+
         // called when we've loaded initial game data
         var gameLoadedHandler = function (game) {
 
@@ -153,24 +175,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                                 $scope.loaded = true;
                                 $scope.statusMessage = "";
 
-                                if (currentCourse.location) {
-                                    var location = currentCourse.location;
-
-                                    weatherData.forecast(location.lat, location.lng)
-                                        .then(function (data) {
-                                                console.log("Data from weather service: " + JSON.stringify(data));
-
-                                                data.temp = Math.round(data.temp);
-                                                data.wind = Math.round(data.wind);
-                                                data.metric.temp = Math.round(data.metric.temp);
-
-                                                $scope.weather = data;
-                                                $scope.weatherImg = '<img src="' + data.icon + '">';
-                                            },
-                                            function (err) {
-                                                console.log("Error from weather service: " + err);
-                                            });
-                                }
+                                getWeatherForecast($scope, currentCourse.location);
 
                                 var now = Date.now();
 
@@ -204,9 +209,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                         // The object was not retrieved successfully.
                         console.error("Couldn't access game information!");
 
-                        $scope.$apply(function () {
-                            $scope.errorMessage = "Couldn't access game information!";
-                        });
+                        $scope.errorMessage = "Couldn't access game information!";
                     })
         } else {
             console.log("error! no gameid specified!");
