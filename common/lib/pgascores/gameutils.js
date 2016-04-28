@@ -11,7 +11,7 @@ exports.tournamentInProgress = function (event) {
     var start = Date.parse(event.start);
     var end = Date.parse(event.end);
     var now = Date.now();
-    
+
     end = end + (1000 * 59 * 60 * 24); // go to end of the day
 
 //    console.log("tournamentInProgress: start: " + start + " end: " + end + " now: " + now);

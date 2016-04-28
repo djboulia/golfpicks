@@ -120,7 +120,7 @@ var findByName = function (rankings, name) {
     //		console.log("findByName firing callback...");
 
     // use a fuzzy search to match up names so we can normalize
-    // Freddie vs. Fredrik, etc. 
+    // Freddie vs. Fredrik, etc.
     // returns exactly a result or null if no match
 
     var lastMatch = -1;
@@ -153,7 +153,7 @@ var findByName = function (rankings, name) {
     }
 
     // if we get all the way through with no perfect match,
-    // return the best "fuzzy" match	
+    // return the best "fuzzy" match
     if (lastMatchIndex >= 0) {
         result = rankings[lastMatchIndex];
     }
@@ -215,7 +215,7 @@ exports.get = function (eventid, event, course, callbacks) {
                             addPlayerRankings(tournament, rankings);
 
                             eventCache.put(eventid, tournament);
-                            
+
                             if (callbacks && callbacks.success) {
                                 callbacks.success(tournament);
                             }
@@ -224,7 +224,7 @@ exports.get = function (eventid, event, course, callbacks) {
 
                 } else if (provider === "golfchannel") {
                     console.log("Using Golf Channel provider");
-                    
+
                     golfChannelProvider.getEvent(event, course, function (tournament) {
 
                         //                    console.log("tournament: " + JSON.stringify(tournament));
@@ -236,7 +236,7 @@ exports.get = function (eventid, event, course, callbacks) {
                             addPlayerRankings(tournament, rankings);
 
                             eventCache.put(eventid, tournament);
-                            
+
                             if (callbacks && callbacks.success) {
                                 callbacks.success(tournament);
                             }

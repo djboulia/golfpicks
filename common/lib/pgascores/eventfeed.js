@@ -27,15 +27,15 @@ exports.getEventStats = function( eventid, eventdata ) {
     // 3. Multi-way tie for lead
     //
     var leaders = [];
-    
+
     var scores = JSUtils.clone(eventdata.scores);
     for (var i=0; i<scores.length; i++) {
         if (scores[i].pos == "1" || scores[i].pos == "T1") {
             leaders.push( scores[i] );
         }
     }
-    
-    // now look for low rounds for the day   
+
+    // now look for low rounds for the day
     // sort the array by today's lowest rounds
     scores.sort( function(a, b) {
         if (isValidScore(a.today) && isValidScore(b.today)) {
@@ -48,10 +48,10 @@ exports.getEventStats = function( eventid, eventdata ) {
             return a.today < b.today;
         };
     } );
-    
+
     var lowrounds = [];
     for (var i=0; i<scores.length; i++) {
-        if (isValidScore(scores[i].today)) {            
+        if (isValidScore(scores[i].today)) {
             if (i==0) {
                 lowrounds.push( scores[i] );
             } else {

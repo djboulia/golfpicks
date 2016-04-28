@@ -1,8 +1,8 @@
 /**
  * toText
- * Collapse an html node tree into just its text elements 
+ * Collapse an html node tree into just its text elements
  *
- * @el : a JQuery selector returned element tree 
+ * @el : a JQuery selector returned element tree
  * @returns: a string of text from inside the elements
  */
 exports.toText = function( el ) {
@@ -13,12 +13,12 @@ exports.toText = function( el ) {
 		if (el.children != undefined) {
 			for (var i=0; i<el.children.length; i++) {
 				var strChildren = exports.toText(el.children[i]);
-				
+
 				str += strChildren;
 			}
 		}
 	}
-	
+
 	return str;
 };
 

@@ -13,7 +13,7 @@
  * make the name lower case
  * The string "Ted Jones-Davis, Jr." would becomes "ted_jones_davis_jr"
  *
- *	
+ *
  *	@str 		: the string with the player's name
  *  @returns	: the normalized string
  */
@@ -22,7 +22,7 @@ exports.normalize = function( str ) {
 	str = str.replace( /\./g, '');	// remove any periods
 	str = str.replace( /-/g, '_');	// replace hyphens with underscores
 	str = str.replace( /\s/g, '_');	// spaces with underscores
-	str = str.toLowerCase();	
+	str = str.toLowerCase();
 	return str;
 };
 

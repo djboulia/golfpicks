@@ -1,7 +1,7 @@
 /**
  *
  * implement a simple caching mechanism for web content
- * 
+ *
  * @param ttl : cache time in seconds
  *
  **/
@@ -30,11 +30,11 @@ exports.Cache = function(ttl) {
 
         return data;
     };
-    
+
     this.put = function(key, obj) {
         if (obj) {
             console.log("setting cache entry for " + key);
-            
+
             this.cache[key] = {
                 "data": obj,
                 "timestamp": Date.now()

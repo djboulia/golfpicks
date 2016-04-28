@@ -1,7 +1,7 @@
 /**
  *
  *	Get the world rankings from the Golf Channel site.  See pgatourprovider.js for another
- * 	option.  
+ * 	option.
  *
  *  The PGA tour site is flaky with historical data... it used to have the PGA championship
  *  past leaderboards (prior to 2016) but then stopped listing past events.  The Golf Channel
@@ -25,7 +25,7 @@ var isValidScore = function (score) {
 
 var withdrewFromTournament = function( record ) {
     var pos = record["pos"];
-    
+
     return pos == "WD";
 };
 
@@ -39,22 +39,22 @@ var withdrewFromTournament = function( record ) {
 //
 var fixMidRoundWithdrawal = function( record, par ) {
     if (withdrewFromTournament(record)) {
-        
+
         // walk backward looking for last round with a score
         for (var i=4; i>0; i--) {
             if (isValidScore(record[i])) {
-                
-                // is the score bogus relative to par?  For our purposes we'll assume 
+
+                // is the score bogus relative to par?  For our purposes we'll assume
                 // anything more than 5 under is bogus when a player withdraws
                 if ((parseInt(record[i]) - par) < -5) {
                     console.log("Changing round " + i + " score to WD in record " + JSON.stringify(record));
 
                     record[i] = "WD";
                     break;
-                } 
+                }
             }
         }
-        
+
     }
 
     return record;
@@ -124,7 +124,7 @@ var fields = [
     "name",     // 3: player name
     "total",
     "thru",
-    "today",    
+    "today",
     "1",        // 7-10: scores for each round
     "2",
     "3",
@@ -150,7 +150,7 @@ var getEvent = function (event, course, callback) {
 
             var $ = cheerio.load(html);
 
-            // get table data		
+            // get table data
             var table = $('table.gc_leaderboard');
             if (table == undefined) {
                 console.log("Couldn't find event table!");
@@ -176,7 +176,7 @@ var getEvent = function (event, course, callback) {
                         }
 
                         if (key != "") {
-                            // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues 
+                            // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues
                             record[key] = $(this).text().replace(/\s/g, ' ').trim();
                         }
 
@@ -196,7 +196,7 @@ var getEvent = function (event, course, callback) {
                         record["today"] = '-';
                         record["thru"] = '-';
                     }
-                    
+
                     if (withdrewFromTournament(record)) {
                         record = fixMidRoundWithdrawal(record, course.par);
                     }
@@ -205,7 +205,7 @@ var getEvent = function (event, course, callback) {
                     if (!isValidScore(record["strokes"])) {
                         record["strokes"] = '-';
                     }
-                    
+
                     if (gameUtils.tournamentComplete(event) && record["4"]=="-") {
                         // some tournaments implement a "secondary cut" after round 3
                         // check for that and set to MDF which means Made Cut - Did not Finish
@@ -214,7 +214,7 @@ var getEvent = function (event, course, callback) {
                         record["today"] = '-';
                         record["thru"] = '-';
                     }
-                    
+
                     console.log(JSON.stringify(record));
 
                     records.push(record);
@@ -250,7 +250,7 @@ var getEvent = function (event, course, callback) {
  *	getEvent
  *
  *	@event 			: event details
- *	@course 		: course details 
+ *	@course 		: course details
  *	@callback 		: will be called back with eventdata as only argument
  *		 			  eventdata : hash of event keys, tournament descriptions
  */

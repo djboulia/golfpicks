@@ -2,7 +2,7 @@
  *
  *	Get the world rankings from the PGA tour site.  See yahooprovider.js for another
  * 	option.  The PGA tour site gives the more complete list of world rankings
- *  (through 1000 players). 
+ *  (through 1000 players).
  *  The Yahoo site has the same info but is limited to the top 250 players.
  *
  **/
@@ -59,7 +59,7 @@ var _formatTeeTime = function (theDate) {
     }
 };
 
-// is there a current round in progress?  we define that as 
+// is there a current round in progress?  we define that as
 // an active player who is thru less than 18 holes.  we want
 // to show live scoring of the number of strokes in this round
 var _roundInProgress = function (player) {
@@ -84,16 +84,16 @@ var _getCurrentEvent = function (event, course, callback) {
 
             /**
              *
-             * the format of the JSON object is rather complex, but the part we care about is 
+             * the format of the JSON object is rather complex, but the part we care about is
              * the leaderboard data structure
              *
                { ...
-			
+
             	 leaderboard : {
-            		players: [ 
+            		players: [
             			{ player_bio : { first_name: "Bubba", last_name: "Watson" },
-            			  rounds :  [ 
-            							{ "round_number" : 1, "strokes" : 180 },  ... 
+            			  rounds :  [
+            							{ "round_number" : 1, "strokes" : 180 },  ...
             						],
             		    }, ...
             			]
@@ -140,7 +140,7 @@ var _getCurrentEvent = function (event, course, callback) {
                         var round_number = round["round_number"];
 
                         if (round.strokes != null) {
-                            // full round score exists here, keep it 
+                            // full round score exists here, keep it
                             // and subtract this day's score from the total
                             record[round_number] = round.strokes;
                             total_strokes = total_strokes - round.strokes;
@@ -161,8 +161,8 @@ var _getCurrentEvent = function (event, course, callback) {
                         // console.log( "round " + round_number + " strokes: " + rounds[j].strokes + " time: " + time );
 
                         record[round_number] = _formatStrokes(round_number, player.status, rounds[j]);
-                        
-                        // [djb 04/13/2016] pos field is blank when player is cut or withdraws, 
+
+                        // [djb 04/13/2016] pos field is blank when player is cut or withdraws,
                         // set pos to CUT or WD to normalize with other data sources
                         //
                         if (player.status == 'cut') {
@@ -267,7 +267,7 @@ var _getPastEvent = function (event, course, callback) {
 
             var $ = cheerio.load(html);
 
-            // get table data		
+            // get table data
             var table = $('table.table-styled');
             if (table == undefined) {
                 console.log("Couldn't find event table!");
@@ -328,7 +328,7 @@ var _getPastEvent = function (event, course, callback) {
                             default:
                             }
 
-                            // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues 
+                            // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues
                             if (key != "") record[key] = $(this).text().replace(/\s/g, ' ').trim();
 
                             ndx++;
@@ -343,7 +343,7 @@ var _getPastEvent = function (event, course, callback) {
                         for (var i = 1; i <= 4; i++) {
                             record[i] = _fixEmptyRoundScore(i, record);
                         }
-                        
+
                         // normalize to our data format
                         if (record["pos"] == "W/D") {
                             record["pos"] = "WD";
@@ -389,7 +389,7 @@ var _reverseName = function (str) {
 }
 
 /**
- * For upcoming events, the PGA tour site won't show the leaderboard until the day of, so 
+ * For upcoming events, the PGA tour site won't show the leaderboard until the day of, so
  * until then we have to parse the field
  **/
 var _getFutureEvent = function (event, course, callback) {
@@ -402,7 +402,7 @@ var _getFutureEvent = function (event, course, callback) {
 
             var $ = cheerio.load(html);
 
-            // get table data		
+            // get table data
             var fieldcontent = $('.field-table-content');
             if (fieldcontent == undefined) {
                 console.log("Couldn't find field!");
@@ -458,7 +458,7 @@ var _getFutureEvent = function (event, course, callback) {
 /**
  *
  * returns an array of objects of the form:
- 		[ { "player_id" : "tiger_woods", "rank" : 0, "name" : "Tiger Woods" }, 
+ 		[ { "player_id" : "tiger_woods", "rank" : 0, "name" : "Tiger Woods" },
  		  { "player_id" : "phil_michelson", "rank" : 2, "name" : "Phil Mickelson" }, ... ];
  **/
 var _getPGARankings = function (year, callback) {
@@ -479,7 +479,7 @@ var _getPGARankings = function (year, callback) {
 
             var $ = cheerio.load(html);
 
-            // get table data		
+            // get table data
             var table = $('table#statsTable');
             if (table == undefined) {
                 console.log("Couldn't find rankings!");
@@ -523,7 +523,7 @@ var _getPGARankings = function (year, callback) {
                         default:
                         }
 
-                        // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues 
+                        // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues
                         if (key != "") record[key] = $(this).text().replace(/\s/g, ' ').trim();
 
                         ndx++;
@@ -538,7 +538,7 @@ var _getPGARankings = function (year, callback) {
                         console.log("found invalid record = " + JSON.stringify(record));
                     }
 
-                    //				console.log( "row=" + row + " player_id=" + record.player_id + 
+                    //				console.log( "row=" + row + " player_id=" + record.player_id +
                     //							 "name=" + record.name + " rank=" + record.rank );
                 }
 
@@ -577,7 +577,7 @@ var isCurrentYear = function (date) {
  *	getEvent
  *
  *	@event 			: event details
- *	@course 		: course details 
+ *	@course 		: course details
  *	@callback 		: will be called back with eventdata as only argument
  *		 			  eventdata : hash of event keys, tournament descriptions
  */
@@ -605,7 +605,7 @@ exports.getEvent = function (event, course, callback) {
     } else if (tournamentComplete(start, end)) {
         console.log("about to call …getPastEvent");
 
-        // must be an upcoming tournament, load the field of participants				
+        // must be an upcoming tournament, load the field of participants
         _getPastEvent(event, course, function (eventdata) {
             if (eventdata == null) {
 
@@ -621,7 +621,7 @@ exports.getEvent = function (event, course, callback) {
     } else {
         console.log("about to call …getFutureEvent");
 
-        // must be an upcoming tournament, load the field of participants				
+        // must be an upcoming tournament, load the field of participants
         _getFutureEvent(event, course, function (eventdata)
             // _getCurrentEvent(event, function(eventdata)
             {
@@ -641,7 +641,7 @@ exports.getEvent = function (event, course, callback) {
 
 /**
  *	getRankings		: return current world rankings for PGA tour players
- *	
+ *
  *	@year			: rankings year to return.  if year is in current year, will be the
  *					  latest world rankings for players
  *

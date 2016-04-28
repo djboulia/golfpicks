@@ -18,7 +18,7 @@ var logger = {
 };
 
 
-var scores = require('./scores.js');
+var scores = require('../../common/lib/scores.js');
 
 var cloudant = require('cloudant')({
     account: me,
