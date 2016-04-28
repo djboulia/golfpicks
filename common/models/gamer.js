@@ -40,12 +40,15 @@ module.exports = function (Gamer) {
                 path: '/login',
                 verb: 'post'
             },
+            description: 'Login the current user',
             accepts: [{
                     arg: 'user',
+                    description: 'Email address of user',
                     type: 'string'
                 },
                 {
                     arg: 'password',
+                    description: 'Password for user',
                     type: 'string'
                 }],
             returns: {
