@@ -2,8 +2,8 @@ console.log("loading GolfPicks.gameData");
 
 angular.module('GolfPicks.gameData', [])
     .factory('gameData', ['$q', 'cloudDataGame', 'cloudDataEvent',
-                          'cloudDataPlayer', 'cloudDataScores', 'gameUtils', 'eventUtils',
-        function ($q, cloudDataGame, cloudDataEvent, cloudDataPlayer, cloudDataScores, gameUtils, eventUtils) {
+                          'cloudDataPlayer', 'gameUtils', 'eventUtils',
+        function ($q, cloudDataGame, cloudDataEvent, cloudDataPlayer, gameUtils, eventUtils) {
             var logger = gameUtils.logger;
 
             var sortByRank = function (records) {
@@ -449,8 +449,8 @@ angular.module('GolfPicks.gameData', [])
                             if (event.scoreType == "pga-live-scoring") {
 
                                 // go get the golfer scores from the remote service
-                                cloudDataScores.get(eventid, {
-                                    success: function (tournament) {
+                                cloudDataEvent.scores(eventid).then(
+                                    function (tournament) {
                                         logger.log("got scores!");
 
                                         logger.debug("loadEventData courseInfo :" + JSON.stringify(courseInfo));
@@ -461,10 +461,10 @@ angular.module('GolfPicks.gameData', [])
                                             courseInfo: courseInfo
                                         });
                                     },
-                                    error: function (err) {
+                                    function (err) {
                                         deferred.reject(err);
-                                    }
-                                });
+                                    });
+
                             } else {
                                 // match up scores and players
                                 var golfers = eventUtils.golfers(event);
@@ -825,10 +825,10 @@ angular.module('GolfPicks.gameData', [])
                             return processLeaderboardData(game.gamers, event, golfers, courseInfo);
                         })
                         .then(function (result) {
-                                deferred.resolve(result);
+                            deferred.resolve(result);
                         })
                         .catch(function (err) {
-                                deferred.reject(err);
+                            deferred.reject(err);
                         });
 
                     return deferred.promise;

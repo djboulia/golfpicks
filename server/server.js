@@ -1,17 +1,10 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
-var data = require('./routes/data');
 var bodyParser = require('body-parser');
 
 var app = module.exports = loopback();
 
 app.use(bodyParser.json());
-
-//
-//  PGA tour live scoring information here
-//
-app.get('/data/scores/:id?', data.showScore);
-
 
 app.start = function () {
     // start the web server
