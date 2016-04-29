@@ -1,8 +1,7 @@
 console.log("loading GolfPicks.data");
 
 angular.module('GolfPicks.data', [])
-    .factory('cloudDataLog', ['cloudData', 'cloudDataCurrentUser', function (cloudData, currentUser) {
-        var _className = "Log";
+    .factory('cloudDataLog', ['cloudData', 'cloudDataCurrentUser', 'Log', function (cloudData, currentUser, model) {
         var _fieldNames = {
             user: "user",
             type: "type",
@@ -21,13 +20,12 @@ angular.module('GolfPicks.data', [])
                     time: Date.now()
                 };
 
-                return cloudData.add(_className, _fieldNames, data);
+                return cloudData.add(model, _fieldNames, data);
             }
         }
     }])
-    .factory('cloudDataPlayer', ['cloudData', function (cloudData) {
+    .factory('cloudDataPlayer', ['cloudData', 'Gamer', function (cloudData, model) {
 
-        var _className = "Gamer";
         var _fieldNames = {
             name: "name",
             username: "email",
@@ -36,7 +34,7 @@ angular.module('GolfPicks.data', [])
 
         return {
             delete: function (player) {
-                return cloudData.delete(player);
+                return cloudData.delete(model, player);
             },
 
             save: function (player) {
@@ -44,26 +42,25 @@ angular.module('GolfPicks.data', [])
             },
 
             add: function (playerData) {
-                return cloudData.add(_className, _fieldNames, playerData);
+                return cloudData.add(model, _fieldNames, playerData);
             },
 
             get: function (id) {
-                return cloudData.get(_className, _fieldNames, id);
+                return cloudData.get(model, _fieldNames, id);
             },
 
             getList: function (ids) {
-                return cloudData.getList(_className, _fieldNames, ids);
+                return cloudData.getList(model, _fieldNames, ids);
             },
 
             getAll: function () {
-                return cloudData.getList(_className, _fieldNames);
+                return cloudData.getList(model, _fieldNames);
             }
 
         }
     }])
-    .factory('cloudDataCourse', ['cloudData', function (cloudData) {
+    .factory('cloudDataCourse', ['cloudData', 'Course', function (cloudData, model) {
 
-        var _className = "Course";
         var _fieldNames = {
             name: "name",
             tee: "tee",
@@ -77,7 +74,7 @@ angular.module('GolfPicks.data', [])
 
         return {
             delete: function (course) {
-                return cloudData.delete(course);
+                return cloudData.delete(model, course);
             },
 
             save: function (course) {
@@ -85,26 +82,25 @@ angular.module('GolfPicks.data', [])
             },
 
             add: function (courseData) {
-                return cloudData.add(_className, _fieldNames, courseData);
+                return cloudData.add(model, _fieldNames, courseData);
             },
 
             get: function (id) {
-                return cloudData.get(_className, _fieldNames, id);
+                return cloudData.get(model, _fieldNames, id);
             },
 
             getList: function (ids) {
-                return cloudData.getList(_className, _fieldNames, ids);
+                return cloudData.getList(model, _fieldNames, ids);
             },
 
             getAll: function () {
-                return cloudData.getList(_className, _fieldNames);
+                return cloudData.getList(model, _fieldNames);
             }
         }
     }])
     .factory('cloudDataEvent', ['cloudData', 'cloudDataPlayer', 'cloudDataCourse', 'Event', '$q', function (cloudData,
-        cloudDataPlayer, cloudDataCourse, Event, $q) {
+        cloudDataPlayer, cloudDataCourse, model, $q) {
 
-        var _className = "Event";
         var _fieldNames = {
             name: "name",
             start: "start",
@@ -255,10 +251,11 @@ angular.module('GolfPicks.data', [])
 
         return {
             delete: function (localObj) {
-                return cloudData.delete(localObj);
+                return cloudData.delete(model, localObj);
             },
 
             save: function (localObj) {
+                // flatten any player and round info before saving
                 _removePlayers(localObj);
                 _removeRounds(localObj);
 
@@ -266,10 +263,11 @@ angular.module('GolfPicks.data', [])
             },
 
             add: function (localObj) {
+                // flatten any player and round info before saving
                 _removePlayers(localObj);
                 _removeRounds(localObj);
 
-                return cloudData.add(_className, _fieldNames, localObj);
+                return cloudData.add(model, _fieldNames, localObj);
             },
 
             //
@@ -281,7 +279,7 @@ angular.module('GolfPicks.data', [])
 
                 var deferred = $q.defer();
 
-                cloudData.get(_className, _fieldNames, id)
+                cloudData.get(model, _fieldNames, id)
                     .then(function (localObj) {
                         // go kick off players and round info requests
                         var promises = [getPlayers(localObj), getRounds(localObj)];
@@ -304,11 +302,11 @@ angular.module('GolfPicks.data', [])
             },
 
             getList: function (ids) {
-                return cloudData.getList(_className, _fieldNames, ids);
+                return cloudData.getList(model, _fieldNames, ids);
             },
 
             getAll: function () {
-                return cloudData.getList(_className, _fieldNames);
+                return cloudData.getList(model, _fieldNames);
             },
 
             scores: function (id) {
@@ -316,7 +314,7 @@ angular.module('GolfPicks.data', [])
                 // that retrieves the scores for this event
                 var deferred = $q.defer();
 
-                Event.scores({
+                model.scores({
                         id: id
                     },
                     function (response) {
@@ -332,9 +330,8 @@ angular.module('GolfPicks.data', [])
 
         }
     }])
-    .factory('cloudDataGame', ['cloudData', function (cloudData) {
+    .factory('cloudDataGame', ['cloudData', 'Game', function (cloudData, model) {
 
-        var _className = "Game";
         var _fieldNames = {
             name: "name",
             start: "start",
@@ -345,7 +342,7 @@ angular.module('GolfPicks.data', [])
 
         return {
             delete: function (localObj) {
-                return cloudData.delete(localObj);
+                return cloudData.delete(model, localObj);
             },
 
             save: function (localObj) {
@@ -353,19 +350,19 @@ angular.module('GolfPicks.data', [])
             },
 
             add: function (localData) {
-                return cloudData.add(_className, _fieldNames, localData);
+                return cloudData.add(model, _fieldNames, localData);
             },
 
             get: function (id) {
-                return cloudData.get(_className, _fieldNames, id);
+                return cloudData.get(model, _fieldNames, id);
             },
 
             getList: function (ids) {
-                return cloudData.getList(_className, _fieldNames, ids);
+                return cloudData.getList(model, _fieldNames, ids);
             },
 
             getAll: function () {
-                return cloudData.getList(_className, _fieldNames);
+                return cloudData.getList(model, _fieldNames);
             },
 
             savePicks: function (game, currentUser, picks) {

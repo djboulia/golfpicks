@@ -1,7 +1,7 @@
 console.log("loading GolfPicks.cloud");
 
 angular.module('GolfPicks.cloud', [])
-    .factory('cloudData', ['$q', 'Course', 'Event', 'Game', 'Gamer', 'Log', function ($q, Course, Event, Game, Gamer, Log) {
+    .factory('cloudData', ['$q', function ($q) {
 
         //
         // cloudData is a wrapper for the back end StrongLoop data API
@@ -9,11 +9,12 @@ angular.module('GolfPicks.cloud', [])
         // To insulate us from the details of the back end, this class performs actions to
         // synchronize the cloud object with a local object representation
         //
-        // Each cloud object consists of a className which represents the type of the object, a unique
-        // identifier named "_id" and a set of fields representing the data elements of the object
+        // Each cloud object is backed by a StrongLoop model which represents the type of the object
+        // Data returned from the model consists of a unique identifier named "_id"
+        // and a set of fields representing the data elements of the object
         //
-        // In golfpicks, examples of valid classes are:
-        //      User, Game, Event, Course
+        // In golfpicks, examples of valid models are:
+        //      Gamer, Game, Event, Course
         //
         // to insulate us from the representation in the data store, we also
         // define a list of field names which are the ONLY things that will be synced
@@ -35,18 +36,6 @@ angular.module('GolfPicks.cloud', [])
         // when updating the back end cloud object.
         //
 
-        var _models = {
-            Gamer: Gamer,
-            Course: Course,
-            Event: Event,
-            Game: Game,
-            Log: Log
-        };
-
-        var _modelFromClassName = function (className) {
-            return _models[className];
-        };
-
         var _setProperties = function (cloudObj, fieldMap, objData) {
 
             for (var prop in fieldMap) {
@@ -57,7 +46,7 @@ angular.module('GolfPicks.cloud', [])
 
         };
 
-        var _newCloudObject = function (className, fieldMap, objData) {
+        var _newCloudObject = function (fieldMap, objData) {
             var cloudObj = {};
             cloudObj.attributes = {};
 
@@ -66,7 +55,7 @@ angular.module('GolfPicks.cloud', [])
             return cloudObj;
         };
 
-        var _makeLocalObject = function (className, cloudObj, fieldMap) {
+        var _makeLocalObject = function (cloudObj, fieldMap) {
             var localObj = {};
 
             if (!fieldMap) console.error("_makeLocalObject: fieldMap is " + JSON.stringify(fieldMap));
@@ -80,7 +69,6 @@ angular.module('GolfPicks.cloud', [])
             localObj._id = cloudObj.id;
             localObj._cloudObject = cloudObj;
             localObj._fieldMap = fieldMap;
-            localObj._className = className;
 
             // console.debug("_makeLocalObject: localObj: " + JSON.stringify(localObj));
 
@@ -89,14 +77,12 @@ angular.module('GolfPicks.cloud', [])
 
         return {
 
-            delete: function (localObj) {
+            delete: function (model, localObj) {
                 console.debug("cloudData.delete: " + JSON.stringify(localObj));
 
                 var deferred = $q.defer();
                 var obj = localObj._cloudObject;
                 var id = localObj._id;
-                var className = localObj._className;
-                var model = _modelFromClassName(className);
 
                 if (obj) {
                     model.deleteById({
@@ -115,18 +101,17 @@ angular.module('GolfPicks.cloud', [])
                 return deferred.promise;
             },
 
-            add: function (className, fieldNames, objData) {
-                console.debug("cloudData.add: className " + className + " objData " + JSON.stringify(objData));
+            add: function (model, fieldNames, objData) {
+                console.debug("cloudData.add: objData " + JSON.stringify(objData));
 
                 var deferred = $q.defer();
-                var model = _modelFromClassName(className);
 
                 if (objData) {
-                    var cloudObj = _newCloudObject(className, fieldNames, objData);
+                    var cloudObj = _newCloudObject(fieldNames, objData);
 
                     var obj = model.create(cloudObj,
                         function (obj) {
-                            var localObj = _makeLocalObject(className, obj, fieldNames);
+                            var localObj = _makeLocalObject(obj, fieldNames);
 
                             deferred.resolve(localObj);
                         },
@@ -170,11 +155,10 @@ angular.module('GolfPicks.cloud', [])
                 return deferred.promise;
             },
 
-            get: function (className, fieldNames, id) {
-                console.debug("cloudData.get: className " + className + " id " + id);
+            get: function (model, fieldNames, id) {
+                console.debug("cloudData.get: id " + id);
 
                 var deferred = $q.defer();
-                var model = _modelFromClassName(className);
 
                 model.findById({
                         id: id
@@ -182,7 +166,7 @@ angular.module('GolfPicks.cloud', [])
                     function (obj) {
                         console.log("found object!");
 
-                        var localObj = _makeLocalObject(className, obj, fieldNames);
+                        var localObj = _makeLocalObject(obj, fieldNames);
 
                         deferred.resolve(localObj);
                     },
@@ -194,11 +178,10 @@ angular.module('GolfPicks.cloud', [])
                 return deferred.promise;
             },
 
-            getList: function (className, fieldNames, ids) {
-                console.debug("cloudData.getList: className: " + className + ", ids: " + JSON.stringify(ids));
+            getList: function (model, fieldNames, ids) {
+                console.debug("cloudData.getList: ids: " + JSON.stringify(ids));
 
                 var deferred = $q.defer();
-                var model = _modelFromClassName(className);
 
                 // if a list of ids is given, then filter based on that
                 var filter = "";
@@ -224,7 +207,7 @@ angular.module('GolfPicks.cloud', [])
 
                         for (i = 0; i < objects.length; i++) {
                             var obj = objects[i];
-                            var localObj = _makeLocalObject(className, obj, fieldNames);
+                            var localObj = _makeLocalObject(obj, fieldNames);
 
                             localObjs.push(localObj);
                         }
