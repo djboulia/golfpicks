@@ -2,10 +2,10 @@ angular.module('GolfPicks')
     .controller('EventCtrl', ['$scope', '$stateParams',
                                '$uibModal', '$cookieStore',
                                'cloudDataCurrentUser', 'cloudDataEvent', 'cloudDataPlayer',
-                               'gameData', EventCtrl]);
+                               'gameData', 'mapWidget', EventCtrl]);
 
 function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
-    currentUser, cloudDataEvent, cloudDataPlayer, gameData) {
+    currentUser, cloudDataEvent, cloudDataPlayer, gameData, mapWidget) {
     var returnUrl = "#";
     var courseUrl = "#/coursedetails";
     var editRoundUrl = "#/eventdetails/id/round/" + $stateParams.id;
@@ -168,6 +168,9 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
             var bounds = undefined;
 
             // build out our bounding box for this map based on locations of courses
+            // for PGA events, the course stays the same for all rounds
+            // for non-PGA events, the course could change each day
+            //
             // TODO: fix for non PGA
             var isPGA = true;
 
@@ -200,69 +203,25 @@ function EventCtrl($scope, $stateParams, $uibModal, $cookieStore,
                     if (location) {
                         var label = String(i + 1);
 
-                        addMarker(label, rounds[i], map);
+                        mapWidget.addCourseMarker(label, rounds[i].course, map);
                     }
                 }
 
             } else {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 5
-                });
-
-                var location = new google.maps.LatLng(rounds[0].course.location.lat, rounds[0].course.location.lng);
-                map.setCenter(location);
-
                 var location = rounds[0].course.location;
 
                 if (location) {
+                    map = mapWidget.create('map', location);
+
                     var label = "1-4";
 
-                    addMarker(label, rounds[0], map);
+                    mapWidget.addCourseMarker(label, rounds[0].course, map);
                 }
 
             }
         }
     };
 
-    var openWindow = undefined;
-
-    // Adds a marker to the map.
-    function addMarker(label, round, map) {
-
-        var location = round.course.location;
-
-        // Add the marker at the clicked location, and add the next-available label
-        // from the array of alphabetical characters.
-        var marker = new google.maps.Marker({
-            position: location,
-            label: label,
-            title: round.course.name,
-            map: map
-        });
-
-        marker.addListener('click', function () {
-            var contentString = '<div><div>Round:<b>' + label + '</b></div>' +
-                '<div>Course:<b> <a href="' + courseUrl + '/id/' + round.course._id + '">' + round.course.name + '</a></b></div>' +
-                '<div>Par:<b>' + round.course.par + '</b></div>' +
-                '</div>';
-
-            var infoWindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-
-            if (openWindow) {
-                openWindow.close();
-                openWindow = undefined;
-            }
-
-            infoWindow.open(map, marker);
-
-            openWindow = infoWindow;
-
-            console.log('clicked! ' + label);
-        });
-
-    }
 
 };
 

@@ -1,11 +1,51 @@
 angular.module('GolfPicks')
     .controller('CourseCtrl', ['$scope', '$stateParams', '$uibModal', '$cookieStore', 'cloudDataCourse', CourseCtrl]);
 
+var initializeHoleData = function () {
+    return [{
+            number: 1
+            }, {
+            number: 2
+            }, {
+            number: 3
+            }, {
+            number: 4
+            }, {
+            number: 5
+            }, {
+            number: 6
+            }, {
+            number: 7
+            }, {
+            number: 8
+            }, {
+            number: 9
+            }, {
+            number: 10
+            }, {
+            number: 11
+            }, {
+            number: 12
+            }, {
+            number: 13
+            }, {
+            number: 14
+            }, {
+            number: 15
+            }, {
+            number: 16
+            }, {
+            number: 17
+            }, {
+            number: 18
+            }
+        ];
+};
 
 function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCourse) {
     var returnUrl = "#/courses";
 
-    console.log("reached courses controller with id " + $stateParams.id);
+    console.log("reached course controller with id " + $stateParams.id);
 
     var existingCourse = undefined;
 
@@ -23,7 +63,8 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
                     $scope.yardage = existingCourse.yardage;
                     $scope.slope = existingCourse.slope;
                     $scope.rating = existingCourse.rating;
-                    $scope.holes = existingCourse.holes;
+                    $scope.location = existingCourse.location;
+                    $scope.holes = existingCourse.holes || initializeHoleData();
                     $scope.existingCourse = true;
                     $scope.loaded = true;
                 },
@@ -36,48 +77,8 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
         // load up the default data structures
         $scope.name = "";
         $scope.tee = "";
-        $scope.holes = [{
-                number: 1
-            }, {
-                number: 2
-            }, {
-                number: 3
-            },
-            {
-                number: 4
-            }, {
-                number: 5
-            }, {
-                number: 6
-            },
-            {
-                number: 7
-            }, {
-                number: 8
-            }, {
-                number: 9
-            },
-            {
-                number: 10
-            }, {
-                number: 11
-            }, {
-                number: 12
-            },
-            {
-                number: 13
-            }, {
-                number: 14
-            }, {
-                number: 15
-            },
-            {
-                number: 16
-            }, {
-                number: 17
-            }, {
-                number: 18
-            }];
+        $scope.location = {};
+        $scope.holes = initializeHoleData();
         $scope.loaded = true;
     }
 
@@ -119,7 +120,11 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
             existingCourse.yardage = yardage;
             existingCourse.slope = this.slope;
             existingCourse.rating = this.rating;
+            existingCourse.location.lat = parseFloat(this.location.lat);
+            existingCourse.location.lng = parseFloat(this.location.lng);
             existingCourse.holes = holes;
+
+            console.log( "location " + JSON.stringify(existingCourse.location));
 
             cloudDataCourse.save(existingCourse)
                 .then(function (obj) {
@@ -139,6 +144,7 @@ function CourseCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataCour
                 yardage: yardage,
                 slope: this.slope,
                 rating: this.rating,
+                location: {lat: parseFloat(this.location.lat), lng: parseFloat(this.location.lng)},
                 holes: this.holes
             };
 

@@ -1,8 +1,9 @@
 angular.module('GolfPicks')
     .controller('CourseDetailsCtrl', ['$scope', '$stateParams', '$cookieStore',
-                                      'cloudDataCourse', 'cloudDataCurrentUser', 'weatherData', CourseDetailsCtrl]);
+                                      'cloudDataCourse', 'cloudDataCurrentUser',
+                                      'weatherData', 'mapWidget', CourseDetailsCtrl]);
 
-function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, currentUser, weatherData) {
+function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, currentUser, weatherData, mapWidget) {
     var returnUrl = "#/courses";
 
     console.log("reached courses controller with id " + $stateParams.id);
@@ -25,6 +26,7 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
                     $scope.yardage = existingCourse.yardage;
                     $scope.slope = existingCourse.slope;
                     $scope.rating = existingCourse.rating;
+                    $scope.location = existingCourse.location;
 
                     var front9 = {
                         yardage: 0,
@@ -81,6 +83,11 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
                                 function (err) {
                                     console.log("Error from weather service: " + err);
                                 });
+
+                        var map = mapWidget.create('map', existingCourse.location);
+
+                        mapWidget.addCourseMarker(existingCourse.name, existingCourse, map);
+
                     }
 
                     $scope.existingCourse = true;
