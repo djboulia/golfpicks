@@ -3,8 +3,9 @@ angular.module('GolfPicks')
 
 function AllGamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, gameData) {
 
-    var gameUrl = "#/game";
+    var gamePlayersUrl = "#/gameplayers";
     var picksUrl = "#/picks";
+    var editUrl = '#/gamep';
 
     console.log("reached allgames controller!");
 
@@ -19,7 +20,8 @@ function AllGamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, g
                 console.log("games : " + JSON.stringify(games));
 
                 $scope.statusMessage = statusMessage;
-                $scope.gameUrl = gameUrl;
+                $scope.gamePlayersUrl = gamePlayersUrl;
+                $scope.editUrl = editUrl;
                 $scope.games = games;
                 $scope.loaded = true;
 
