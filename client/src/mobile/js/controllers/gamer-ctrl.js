@@ -1,3 +1,5 @@
+console.log('gamer');
+
 angular.module('GolfPicksMobile')
     .controller('GamerCtrl', ['$rootScope', '$scope', '$state', '$stateParams',
                                 '$location', '$ionicLoading',
@@ -47,20 +49,18 @@ function GamerCtrl($rootScope, $scope, $state,
         };
 
         var tooEarlyMessage = function (gameDetails) {
-            $scope.$apply(function () {
-                $scope.statusMessage = "Tournament Leaderboard<br/><br/>'" + gameDetails.name + "' has not yet started.<br/>  Check back again on " + dateString(gameDetails.start) + ".";
-            });
+            $scope.statusMessage = "Tournament Leaderboard<br/><br/>'" + gameDetails.name + "' has not yet started.<br/>  Check back again on " + dateString(gameDetails.start) + ".";
         };
 
         var updateScope = function (gameData) {
             var gamers = gameData.gamers;
-            
+
             // find the specific gamer we need
             for (var i = 0; i < gamers.length; i++) {
                 var gamer = gamers[i];
 
                 if (gamer.objectId == $stateParams.gamer) {
-                    
+
                     console.debug(JSON.stringify(gamer));
 
                     $scope.gamer = gamer;
@@ -100,81 +100,65 @@ function GamerCtrl($rootScope, $scope, $state,
 
                 // build the leaderboard information by combining latest event scoring
                 // information with the players selected by the gamers
-                gameData.loadLeaderboard(game, {
-                    success: function (event, courseinfo, gamers) {
+                gameData.loadLeaderboard(game)
+                    .then(function (result) {
+                            var event = result.name;
+                            var courseinfo = result.courseInfo;
+                            var gamers = result.gamers;
 
-                        if (gamers) {
+                            if (gamers) {
 
-                            console.debug(JSON.stringify(gamers));
-
-                            
-                            var currentRound = eventUtils.getCurrentRound(courseinfo);
-                            var currentCourse = courseinfo[currentRound - 1];
-                            var roundTitles = eventUtils.getRoundTitles(courseinfo);
-
-                            // only display a maximum of 4 rounds on mobile devices
-                            var displayRounds = eventUtils.getDisplayRounds(currentRound, courseinfo.length, 4);
-
-                            var gameData = {
-                                event: event,
-                                courseInfo: currentCourse,
-                                currentRound: currentRound,
-                                roundTitles: roundTitles,
-                                displayRounds: displayRounds,
-                                gamers: gamers
-                            };
+                                console.debug(JSON.stringify(gamers));
 
 
-                            $scope.$apply(function () {
+                                var currentRound = eventUtils.getCurrentRound(courseinfo);
+                                var currentCourse = courseinfo[currentRound - 1];
+                                var roundTitles = eventUtils.getRoundTitles(courseinfo);
+
+                                // only display a maximum of 4 rounds on mobile devices
+                                var displayRounds = eventUtils.getDisplayRounds(currentRound, courseinfo.length, 4);
+
+                                var gameData = {
+                                    event: event,
+                                    courseInfo: currentCourse,
+                                    currentRound: currentRound,
+                                    roundTitles: roundTitles,
+                                    displayRounds: displayRounds,
+                                    gamers: gamers
+                                };
+
+
                                 updateScope(gameData);
-                            });
 
-                            // cache the result
-                            if (gameid) {
-                                console.log("Caching gameData result for event " + event);
-                                gameDataCache.set(gameid, gameData);
+                                // cache the result
+                                if (gameid) {
+                                    console.log("Caching gameData result for event " + event);
+                                    gameDataCache.set(gameid, gameData);
+                                }
+
+                            } else {
+                                console.error("No players for the current game.");
+                                $scope.statusMessage = "No players for the current game.";
+
+                                // Trigger refresh complete on the pull to refresh action
+                                $scope.$broadcast('scroll.refreshComplete');
+
+                                $ionicLoading.hide();
                             }
 
-                        } else {
-                            console.error("No players for the current game.");
-                            $scope.$apply(function () {
-                                $scope.statusMessage = "No players for the current game.";
-                            });
+                        },
+                        function (error) {
+                            console.error("Couldn't access leaderboard information!");
+
+                            $scope.errorMessage = "Couldn't access leaderboard information!";
 
                             // Trigger refresh complete on the pull to refresh action
                             $scope.$broadcast('scroll.refreshComplete');
 
                             $ionicLoading.hide();
-                        }
-
-                    },
-                    error: function (error) {
-                        console.error("Couldn't access leaderboard information!");
-
-                        $scope.$apply(function () {
-                            $scope.errorMessage = "Couldn't access leaderboard information!";
                         });
 
-                        // Trigger refresh complete on the pull to refresh action
-                        $scope.$broadcast('scroll.refreshComplete');
-
-                        $ionicLoading.hide();
-                    }
-                });
             }
-        }
-
-        var gameLoadedErrHandler = function (error) {
-            // The object was not retrieved successfully.
-            console.error("Couldn't access game information!");
-            $scope.$apply(function () {
-                $scope.statusMessage = "Couldn't access game information!";
-            });
-
-            // Trigger refresh complete on the pull to refresh action
-            $scope.$broadcast('scroll.refreshComplete');
-
-            $ionicLoading.hide();
         }
 
         if (gameid) {
@@ -185,10 +169,18 @@ function GamerCtrl($rootScope, $scope, $state,
 
                 updateScope(cachedGameData);
             } else {
-                gameData.loadGame(gameid, {
-                    success: gameLoadedHandler,
-                    error: gameLoadedErrHandler
-                });
+                gameData.loadGame(gameid)
+                    .then(gameLoadedHandler,
+                        function (error) {
+                            // The object was not retrieved successfully.
+                            console.error("Couldn't access game information!");
+                            $scope.statusMessage = "Couldn't access game information!";
+
+                            // Trigger refresh complete on the pull to refresh action
+                            $scope.$broadcast('scroll.refreshComplete');
+
+                            $ionicLoading.hide();
+                        });
             }
         } else {
             console.log("error! no gameid specified!");

@@ -173,7 +173,9 @@ gulp.task('build-strongloop-angular', function () {
     return gulp.src('./server/server.js')
         .pipe(loopbackAngular())
         .pipe(rename('lb-services.js'))
-        .pipe(gulp.dest('./client/dist/js'));
+        .pipe(gulp.dest('./client/dist/js'))
+        .pipe(gulp.dest('./client/dist/mobile/js'));
+;
 });
 
 /**

@@ -1,3 +1,5 @@
+console.log("logout");
+
 angular.module('GolfPicksMobile')
 
 // Handle logout of a user

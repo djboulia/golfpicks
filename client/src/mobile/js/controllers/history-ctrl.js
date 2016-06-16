@@ -1,23 +1,22 @@
 console.log("historytab!");
 
 var pages = {
-	loginUrl 		: "login",
-	postLoginUrl 	: "tab.list-index",
-	leaderboardUrl 	: "tab.leaderboard",
-	gamerUrl 		: "gamer",
-	picksUrl 		: "#/picks"
+    loginUrl: "login",
+    postLoginUrl: "tab.list-index",
+    leaderboardUrl: "tab.leaderboard",
+    gamerUrl: "gamer",
+    picksUrl: "#/picks"
 };
 
 
 angular.module('GolfPicksMobile')
-    .controller('HistoryCtrl', ['$rootScope', '$scope', '$state', 
-                                '$location', '$ionicLoading', 
+    .controller('HistoryCtrl', ['$rootScope', '$scope', '$state',
+                                '$location', '$ionicLoading',
                                 'cloudDataCurrentUser', 'gameData', HistoryCtrl]);
 
 // Display Tournament History for the current player
-function HistoryCtrl($rootScope, $scope, $state, 
-                                      $location, $ionicLoading, 
-                                      cloudDataCurrentUser, gameData) {
+function HistoryCtrl($rootScope, $scope, $state, $location, $ionicLoading,
+    cloudDataCurrentUser, gameData) {
 
     var loginUrl = "login";
 
@@ -47,61 +46,56 @@ function HistoryCtrl($rootScope, $scope, $state,
         // if testingMode is a url parameter, turn off some of the date/rule checking
         var testingMode = $location.search().testingMode ? true : false;
 
-        gameData.loadUserGameHistory(cloudDataCurrentUser, {
-            success: function (gameHistory) {
-                //console.log( JSON.stringify( gameHistory ));
+        gameData.loadUserGameHistory(cloudDataCurrentUser)
+            .then(function (gameHistory) {
+                    //console.log( JSON.stringify( gameHistory ));
 
-                var statusMessage = "";
+                    var statusMessage = "";
 
-                if (!testingMode && gameHistory.active.inProgress) {
-                    
-                    statusMessage = "Tournament in progress:<br><b>" +
-                        gameHistory.active.event + "</b>";
-                    
-                } else {
-                    if (gameHistory.active.eventid) {
-                        var picksUrl = pages.picksUrl + "/" + gameHistory.active.eventid;
+                    if (!testingMode && gameHistory.active.inProgress) {
 
-                        if (gameHistory.active.joined) {
-                            statusMessage = 'Upcoming tournament:<br><b>' +
-                                gameHistory.active.event +
-                                '</b><br>The tournament has not yet started.  You can still update your <a href="' +
-                                picksUrl + '">picks</a>';
-                        } else {
-                            statusMessage = 'Upcoming tournament:<br><b>' +
-                                gameHistory.active.event +
-                                '</b><br>You have not yet joined this event. Make your <a href="' + picksUrl + '">picks</a>';
-                        }
+                        statusMessage = "Tournament in progress:<br><b>" +
+                            gameHistory.active.event + "</b>";
+
                     } else {
-                        statusMessage = 'No upcoming tournament.';
+                        if (gameHistory.active.eventid) {
+                            var picksUrl = pages.picksUrl + "/" + gameHistory.active.eventid;
+
+                            if (gameHistory.active.joined) {
+                                statusMessage = 'Upcoming tournament:<br><b>' +
+                                    gameHistory.active.event +
+                                    '</b><br>The tournament has not yet started.  You can still update your <a href="' +
+                                    picksUrl + '">picks</a>';
+                            } else {
+                                statusMessage = 'Upcoming tournament:<br><b>' +
+                                    gameHistory.active.event +
+                                    '</b><br>You have not yet joined this event. Make your <a href="' + picksUrl + '">picks</a>';
+                            }
+                        } else {
+                            statusMessage = 'No upcoming tournament.';
+                        }
                     }
-                }
 
-                console.log("Active game: " + JSON.stringify(gameHistory.active));
+                    console.log("Active game: " + JSON.stringify(gameHistory.active));
 
-                $scope.$apply(function () {
                     $scope.statusMessage = statusMessage;
                     $scope.active = gameHistory.active;
                     $scope.gameHistory = gameHistory.history;
                     $scope.loaded = true;
-                });
 
-                // Trigger refresh complete on the pull to refresh action
-                $scope.$broadcast('scroll.refreshComplete');
+                    // Trigger refresh complete on the pull to refresh action
+                    $scope.$broadcast('scroll.refreshComplete');
 
-                $ionicLoading.hide();
-            },
-            error: function (err) {
-                $scope.$apply(function () {
+                    $ionicLoading.hide();
+                },
+                function (err) {
                     $scope.statusMessage = "Error loading game history!";
+
+                    // Trigger refresh complete on the pull to refresh action
+                    $scope.$broadcast('scroll.refreshComplete');
+
+                    $ionicLoading.hide();
                 });
-
-                // Trigger refresh complete on the pull to refresh action
-                $scope.$broadcast('scroll.refreshComplete');
-
-                $ionicLoading.hide();
-            }
-        });
 
     }
 

@@ -1,3 +1,5 @@
+console.log("leaderboard!");
+
 angular.module('GolfPicksMobile')
     .controller('LeaderboardCtrl', ['$rootScope', '$scope', '$state', '$stateParams',
                                 '$location', '$ionicLoading',
@@ -48,9 +50,7 @@ function LeaderboardCtrl($rootScope, $scope, $state,
         };
 
         var tooEarlyMessage = function (gameDetails) {
-            $scope.$apply(function () {
-                $scope.statusMessage = "Tournament Leaderboard<br/><br/>'" + gameDetails.name + "' has not yet started.<br/>  Check back again on " + dateString(gameDetails.start) + ".";
-            });
+            $scope.statusMessage = "Tournament Leaderboard<br/><br/>'" + gameDetails.name + "' has not yet started.<br/>  Check back again on " + dateString(gameDetails.start) + ".";
         };
 
         var newsTickerStarted = false;
@@ -92,37 +92,37 @@ function LeaderboardCtrl($rootScope, $scope, $state,
 
         var getNewsFeed = function (eventid) {
 
-            gameData.loadNewsFeed(eventid, {
-                success: function (feedItems) {
-                    // load each feed item into our ticker
-                    var feedString = undefined;
+            gameData.loadNewsFeed(eventid)
+                .then(function (feedItems) {
+                        // load each feed item into our ticker
+                        var feedString = undefined;
 
-                    for (var i = 0; i < feedItems.length; i++) {
-                        var feedItem = feedItems[i];
+                        for (var i = 0; i < feedItems.length; i++) {
+                            var feedItem = feedItems[i];
 
-                        if (feedString) {
-                            feedString += " &nbsp;&nbsp~&nbsp;&nbsp; " + feedItem;
-                        } else {
-                            feedString = feedItem;
+                            if (feedString) {
+                                feedString += " &nbsp;&nbsp~&nbsp;&nbsp; " + feedItem;
+                            } else {
+                                feedString = feedItem;
+                            }
                         }
-                    }
-                    
-                    console.log("about to load news feed");
 
-                    $scope.newsfeed = feedString;
-                },
-                error: function (error) {
-                    console.error("Couldn't get news feed!");
+                        console.log("about to load news feed");
 
-                    var courseinfo = $scope.courseinfo;
+                        $scope.newsfeed = feedString;
+                    },
+                    function (error) {
+                        console.error("Couldn't get news feed!");
 
-                    // on error, just default to showing course information
-                    $scope.newsfeed = "Course: " + courseinfo.course +
-                        " &nbsp;&nbsp;~&nbsp;&nbsp; Par: " + courseinfo.par +
-                        " &nbsp;&nbsp;~&nbsp;&nbsp; Yardage: " +
-                        courseinfo.yardage;
-                }
-            });
+                        var courseinfo = $scope.courseinfo;
+
+                        // on error, just default to showing course information
+                        $scope.newsfeed = "Course: " + courseinfo.course +
+                            " &nbsp;&nbsp;~&nbsp;&nbsp; Par: " + courseinfo.par +
+                            " &nbsp;&nbsp;~&nbsp;&nbsp; Yardage: " +
+                            courseinfo.yardage;
+                    });
+
         };
 
         // called when we've loaded initial game data
@@ -143,86 +143,71 @@ function LeaderboardCtrl($rootScope, $scope, $state,
 
                 // build the leaderboard information by combining latest event scoring
                 // information with the players selected by the gamers
-                gameData.loadLeaderboard(game, {
-                    success: function (event, courseinfo, gamers) {
+                gameData.loadLeaderboard(game)
+                    .then(function (result) {
+                            var event = result.name;
+                            var courseinfo = result.courseInfo;
+                            var gamers = result.gamers;
 
-                        if (gamers) {
+                            if (gamers) {
 
-                            console.debug(JSON.stringify(gamers));
+                                console.debug(JSON.stringify(gamers));
 
-                            console.debug("getting news for event " + game.eventid);
-                            getNewsFeed(game.eventid);
+                                console.debug("getting news for event " + game.eventid);
+                                getNewsFeed(game.eventid);
 
-                            var currentRound = eventUtils.getCurrentRound(courseinfo);
-                            var currentCourse = courseinfo[currentRound - 1];
-                            var roundTitles = eventUtils.getRoundTitles(courseinfo);
-                            
-                            // only display a maximum of 4 rounds on mobile devices
-                            var displayRounds = eventUtils.getDisplayRounds(currentRound, courseinfo.length, 4);
+                                var currentRound = eventUtils.getCurrentRound(courseinfo);
+                                var currentCourse = courseinfo[currentRound - 1];
+                                var roundTitles = eventUtils.getRoundTitles(courseinfo);
 
-                            var gameData = {
-                                event: event,
-                                courseInfo: currentCourse,
-                                currentRound: currentRound,
-                                roundTitles: roundTitles,
-                                displayRounds: displayRounds,
-                                gamers: gamers
-                            };
+                                // only display a maximum of 4 rounds on mobile devices
+                                var displayRounds = eventUtils.getDisplayRounds(currentRound, courseinfo.length, 4);
 
-                            $scope.$apply(function () {
+                                var gameData = {
+                                    event: event,
+                                    courseInfo: currentCourse,
+                                    currentRound: currentRound,
+                                    roundTitles: roundTitles,
+                                    displayRounds: displayRounds,
+                                    gamers: gamers
+                                };
+
                                 updateScope(gameData);
-                            });
 
-                            // cache the result
-                            if (gameid) {
-                                console.log("Caching gameData result for event " + event);
+                                // cache the result
+                                if (gameid) {
+                                    console.log("Caching gameData result for event " + event);
 
-                                gameDataCache.set(gameid, gameData);
+                                    gameDataCache.set(gameid, gameData);
+                                }
+
+                                // Trigger refresh complete on the pull to refresh action
+                                $scope.$broadcast('scroll.refreshComplete');
+
+                                $ionicLoading.hide();
+                            } else {
+                                console.error("No players for the current game.");
+
+                                $scope.statusMessage = "No players for the current game.";
+
+                                // Trigger refresh complete on the pull to refresh action
+                                $scope.$broadcast('scroll.refreshComplete');
+
+                                $ionicLoading.hide();
                             }
 
-                            // Trigger refresh complete on the pull to refresh action
-                            $scope.$broadcast('scroll.refreshComplete');
+                        },
+                        function (error) {
+                            console.error("Couldn't access leaderboard information!");
 
-                            $ionicLoading.hide();
-                        } else {
-                            console.error("No players for the current game.");
-
-                            $scope.$apply(function () {
-                                $scope.statusMessage = "No players for the current game.";
-                            });
+                            $scope.statusMessage = "Couldn't access leaderboard information!";
 
                             // Trigger refresh complete on the pull to refresh action
                             $scope.$broadcast('scroll.refreshComplete');
 
                             $ionicLoading.hide();
-                        }
-
-                    },
-                    error: function (error) {
-                        console.error("Couldn't access leaderboard information!");
-
-                        $scope.statusMessage = "Couldn't access leaderboard information!";
-
-                        // Trigger refresh complete on the pull to refresh action
-                        $scope.$broadcast('scroll.refreshComplete');
-
-                        $ionicLoading.hide();
-                    }
-                });
+                        });
             }
-        }
-
-        var gameLoadedErrHandler = function (error) {
-            // The object was not retrieved successfully.
-            console.error("Couldn't access game information!");
-            $scope.$apply(function () {
-                $scope.statusMessage = "Couldn't access game information!";
-            });
-
-            // Trigger refresh complete on the pull to refresh action
-            $scope.$broadcast('scroll.refreshComplete');
-
-            $ionicLoading.hide();
         }
 
         if (gameid) {
@@ -238,10 +223,18 @@ function LeaderboardCtrl($rootScope, $scope, $state,
 
                 $ionicLoading.hide();
             } else {
-                gameData.loadGame(gameid, {
-                    success: gameLoadedHandler,
-                    error: gameLoadedErrHandler
-                });
+                gameData.loadGame(gameid)
+                    .then(gameLoadedHandler,
+                        function (error) {
+                            // The object was not retrieved successfully.
+                            console.error("Couldn't access game information!");
+                            $scope.statusMessage = "Couldn't access game information!";
+
+                            // Trigger refresh complete on the pull to refresh action
+                            $scope.$broadcast('scroll.refreshComplete');
+
+                            $ionicLoading.hide();
+                        });
             }
 
             if (!newsTickerStarted) {

@@ -1,3 +1,5 @@
+console.log("picks");
+
 angular.module('GolfPicksMobile')
     .controller('PicksCtrl', ['$rootScope', '$scope', '$state',
                                 '$stateParams', '$location', '$ionicLoading',
@@ -21,7 +23,7 @@ function PicksCtrl($rootScope, $scope, $state, $stateParams,
 
     // TODO: fix this for non PGA
     var isPGA = true;
-    
+
     if (isPGA) {
         NUM_SELECTIONS = 10;
         NUM_TOP_ALLOWED = 2;
@@ -210,113 +212,109 @@ function PicksCtrl($rootScope, $scope, $state, $stateParams,
             template: 'Loading...'
         });
 
-        cloudDataGame.get(gameid, {
-            success: function (game) {
+        cloudDataGame.get(gameid)
+            .then(function (game) {
 
-                currentGame = game;
+                    currentGame = game;
 
-                if (!testingMode) {
-                    var gameDetails = gameUtils.getGameDetails(game);
+                    if (!testingMode) {
+                        var gameDetails = gameUtils.getGameDetails(game);
 
-                    // give players a 10 hr grace period 
-                    // (10AM on day of tournament) to complete picks
-                    gameDetails = gameUtils.addGracePeriod(gameDetails, 10);
+                        // give players a 10 hr grace period
+                        // (10AM on day of tournament) to complete picks
+                        gameDetails = gameUtils.addGracePeriod(gameDetails, 10);
 
-                    if (gameUtils.tournamentInProgress(gameDetails.start,
-                            gameDetails.end)) {
-                        $scope.$apply(function () {
+                        if (gameUtils.tournamentInProgress(gameDetails.start,
+                                gameDetails.end)) {
+
                             $scope.statusMessage = "Tournament is in progress, picks can no longer be made.";
-                        });
 
-                        // Trigger refresh complete on the pull to refresh action
-                        $scope.$broadcast('scroll.refreshComplete');
+                            // Trigger refresh complete on the pull to refresh action
+                            $scope.$broadcast('scroll.refreshComplete');
 
-                        $ionicLoading.hide();
+                            $ionicLoading.hide();
 
-                        return;
-                    } else if (gameUtils.tournamentComplete(gameDetails.start,
-                            gameDetails.end)) {
-                        $scope.$apply(function () {
+                            return;
+                        } else if (gameUtils.tournamentComplete(gameDetails.start,
+                                gameDetails.end)) {
+
                             $scope.statusMessage = "This tournament has already ended, picks can no longer be made.";
-                        });
 
-                        // Trigger refresh complete on the pull to refresh action
-                        $scope.$broadcast('scroll.refreshComplete');
+                            // Trigger refresh complete on the pull to refresh action
+                            $scope.$broadcast('scroll.refreshComplete');
 
-                        $ionicLoading.hide();
+                            $ionicLoading.hide();
 
-                        return;
-                    }
-                }
-
-                gameData.loadRankedPlayers(game.eventid, {
-                    success: function (event, players) {
-
-                        if (!game.gamers) {
-                            game.gamers = [{
-                                "user": currentUser.getId(),
-                                "picks": []
-                            }];
-                        } else {
-                            // might have previously stored picks
-                            var picks = [];
-                            var gamers = game.gamers;
-
-                            for (var i = 0; i < gamers.length; i++) {
-                                var gamer = gamers[i];
-                                if (gamer.user == currentUser.getId()) {
-                                    picks = gamer.picks;
-                                }
-                            }
-
-                            loadSavedPicks(players, picks);
-                            debug("Picks : " + JSON.stringify(picks));
+                            return;
                         }
-
-                        $scope.name = event.name;
-                        $scope.start = event.start;
-                        $scope.end = event.end;
-                        $scope.rounds = event.rounds;
-                        $scope.players = players;
-                        $scope.NUM_SELECTIONS = NUM_SELECTIONS;
-                        $scope.NUM_TOP_RANK = NUM_TOP_RANK;
-                        $scope.loaded = true;
-                        
-                        console.log("players: " + JSON.stringify(players));
-
-
-                        // Trigger refresh complete on the pull to refresh action
-                        $scope.$broadcast('scroll.refreshComplete');
-
-                        $ionicLoading.hide();
-                    },
-                    error: function (err) {
-                        console.log("error getting event: " + err);
-
-                        $scope.$apply(function () {
-                            $scope.statusMessage = "Couldn't access event information!";
-                        });
-
-                        // Trigger refresh complete on the pull to refresh action
-                        $scope.$broadcast('scroll.refreshComplete');
-
-                        $ionicLoading.hide();
                     }
-                });
-            },
-            error: function (err) {
-                logger.error("Couldn't access game information!");
 
-                $scope.$apply(function () {
+
+                    gameData.loadRankedPlayers(game.eventid)
+                        .then(function (result) {
+                                var event = result.event;
+                                var golfers = result.golfers;
+
+                                if (!game.gamers) {
+                                    game.gamers = [{
+                                        "user": currentUser.getId(),
+                                        "picks": []
+                            }];
+                                } else {
+                                    // might have previously stored picks
+                                    var picks = [];
+                                    var gamers = game.gamers;
+
+                                    for (var i = 0; i < gamers.length; i++) {
+                                        var gamer = gamers[i];
+                                        if (gamer.user == currentUser.getId()) {
+                                            picks = gamer.picks;
+                                        }
+                                    }
+
+                                    loadSavedPicks(golfers, picks);
+                                    debug("Picks : " + JSON.stringify(picks));
+                                }
+
+                                $scope.name = event.name;
+                                $scope.start = event.start;
+                                $scope.end = event.end;
+                                $scope.rounds = event.rounds;
+                                $scope.players = golfers;
+                                $scope.NUM_SELECTIONS = NUM_SELECTIONS;
+                                $scope.NUM_TOP_RANK = NUM_TOP_RANK;
+                                $scope.loaded = true;
+
+                                console.log("golfers: " + JSON.stringify(golfers));
+
+
+                                // Trigger refresh complete on the pull to refresh action
+                                $scope.$broadcast('scroll.refreshComplete');
+
+                                $ionicLoading.hide();
+
+                            },
+                            function (err) {
+                                console.log("error getting event: " + err);
+
+                                $scope.statusMessage = "Couldn't access event information!";
+
+                                // Trigger refresh complete on the pull to refresh action
+                                $scope.$broadcast('scroll.refreshComplete');
+
+                                $ionicLoading.hide();
+                            });
+                },
+                function (err) {
+                    logger.error("Couldn't access game information!");
+
                     $scope.statusMessage = "Couldn't access game information!";
+
+                    // Trigger refresh complete on the pull to refresh action
+                    $scope.$broadcast('scroll.refreshComplete');
+
+                    $ionicLoading.hide();
                 });
-
-                // Trigger refresh complete on the pull to refresh action
-                $scope.$broadcast('scroll.refreshComplete');
-
-                $ionicLoading.hide();
-            }
-        });
 
     }
 
@@ -374,30 +372,27 @@ function PicksCtrl($rootScope, $scope, $state, $stateParams,
 
         console.log("saving picks: " + JSON.stringify(picks));
 
-        cloudDataGame.savePicks(currentGame, currentUser, picks, {
-            success: function (game) {
-                $scope.$apply(function () {
+        cloudDataGame.savePicks(currentGame, currentUser, picks)
+            .then(function (game) {
                     $scope.picksMessage = "Picks saved.";
-                });
-                changed = false;
 
-                // Trigger refresh complete on the pull to refresh action
-                $scope.$broadcast('scroll.refreshComplete');
+                    changed = false;
 
-                $ionicLoading.hide();
-            },
-            error: function (err) {
-                console.error("error saving picks");
-                $scope.$apply(function () {
+                    // Trigger refresh complete on the pull to refresh action
+                    $scope.$broadcast('scroll.refreshComplete');
+
+                    $ionicLoading.hide();
+                },
+                function (err) {
+                    console.error("error saving picks");
+
                     $scope.picksMessage = "Error saving picks!";
+
+                    // Trigger refresh complete on the pull to refresh action
+                    $scope.$broadcast('scroll.refreshComplete');
+
+                    $ionicLoading.hide();
                 });
-
-                // Trigger refresh complete on the pull to refresh action
-                $scope.$broadcast('scroll.refreshComplete');
-
-                $ionicLoading.hide();
-            }
-        });
 
     };
 
