@@ -149,16 +149,12 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
 
                         if (gameUtils.tournamentInProgress(gameDetails.start,
                                 gameDetails.end)) {
-                            $scope.$apply(function () {
-                                $scope.errorMessage = "Tournament is in progress, picks can no longer be made.";
-                            });
+                            $scope.errorMessage = "Tournament is in progress, picks can no longer be made.";
 
                             return;
                         } else if (gameUtils.tournamentComplete(gameDetails.start,
                                 gameDetails.end)) {
-                            $scope.$apply(function () {
-                                $scope.errorMessage = "This tournament has already ended, picks can no longer be made.";
-                            });
+                            $scope.errorMessage = "This tournament has already ended, picks can no longer be made.";
 
                             return;
                         }
@@ -204,17 +200,13 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
                             function (err) {
                                 console.log("error getting event: " + err);
 
-                                $scope.$apply(function () {
-                                    $scope.errorMessage = "Couldn't access event information!";
-                                });
+                                $scope.errorMessage = "Couldn't access event information!";
                             });
                 },
                 function (err) {
                     logger.error("Couldn't access game information!");
 
-                    $scope.$apply(function () {
-                        $scope.errorMessage = "Couldn't access game information!";
-                    });
+                    $scope.errorMessage = "Couldn't access game information!";
                 });
 
     }
@@ -260,16 +252,12 @@ function PicksCtrl($scope, $stateParams, $cookieStore,
 
         cloudDataGame.savePicks(currentGame, currentUser, picks)
             .then(function (game) {
-                    $scope.$apply(function () {
-                        $scope.picksMessage = "Picks saved.";
-                    });
+                    $scope.picksMessage = "Picks saved.";
                     changed = false;
                 },
                 function (err) {
                     console.error("error saving picks");
-                    $scope.$apply(function () {
-                        $scope.picksMessage = "Error saving picks!";
-                    });
+                    $scope.picksMessage = "Error saving picks!";
                 });
     };
 

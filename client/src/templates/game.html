@@ -1,0 +1,91 @@
+<div ng-controller="GameCtrl">
+    <script type="text/ng-template" id="deleteGame.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm delete</h3>
+        </div>
+        <div class="modal-body">
+            <div>Delete game {{game.name}}? This will permanently remove the game.</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <div class="row">
+
+        <rd-loading ng-hide="loaded"></rd-loading>
+
+        <div class="col-md-6" ng-show="loaded">
+            <rd-widget>
+                <rd-widget-header icon="fa-user" title="{{title}}">
+                    <a ng-show="existingCourse" href="" ng-click="delete()">Delete</a>
+                </rd-widget-header>
+                <rd-widget-body classes="no-padding">
+                    <form>
+                        <div class="table-responsive" style="min-height:600px;">
+                            <table class="table">
+                                <tr>
+                                    <td><span>Event Name:</span>
+                                    </td>
+                                    <td>
+                                        <input size="60" ng-model="name"></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span>Start:</span>
+                                    </td>
+                                    <td>
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="start" ng-change="startChanged()" is-open="popup.start" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" datepicker-append-to-body="true" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openPopup('start')">
+                                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span>End:</span>
+                                    </td>
+                                    <td>
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="end" is-open="popup.end" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" datepicker-options="dateOptions" datepicker-append-to-body="true" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="openPopup('end')">
+                                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span>Tournament:</span>
+                                    </td>
+                                    <td>
+                                        <select ng-model="major" ng-options="x.name for x in majors">
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span>Course:</span>
+                                    </td>
+                                    <td>
+                                        <select ng-model="course" ng-options="x.name for x in courses">
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr class="text-center">
+                                    <td colspan="3">
+                                        <button ng-click="submit()">Save</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </form>
+                </rd-widget-body>
+            </rd-widget>
+
+        </div>
+    </div>
+</div>

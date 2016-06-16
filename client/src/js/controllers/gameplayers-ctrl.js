@@ -1,7 +1,7 @@
 angular.module('GolfPicks')
-    .controller('GameCtrl', ['$scope', '$stateParams', 'gameData', GameCtrl]);
+    .controller('GamePlayersCtrl', ['$scope', '$stateParams', 'gameData', GamePlayersCtrl]);
 
-function GameCtrl($scope, $stateParams, gameData) {
+function GamePlayersCtrl($scope, $stateParams, gameData) {
 
     console.log("reached game controller with id " + $stateParams.id);
 

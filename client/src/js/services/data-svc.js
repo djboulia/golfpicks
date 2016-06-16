@@ -106,6 +106,10 @@ angular.module('GolfPicks.data', [])
             start: "start",
             end: "end",
             scoreType: "scoreType",
+            provider: "provider",
+            baseurl: "baseurl",
+            tour: "tour",
+            tournament_id: "tournament_id",
             rounds: "rounds",
             players: "players"
         };

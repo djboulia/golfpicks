@@ -5,7 +5,7 @@ function AllGamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, g
 
     var gamePlayersUrl = "#/gameplayers";
     var picksUrl = "#/picks";
-    var editUrl = '#/gamep';
+    var editUrl = '#/game';
 
     console.log("reached allgames controller!");
 

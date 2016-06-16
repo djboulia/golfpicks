@@ -23,10 +23,22 @@ angular.module('GolfPicks').config(['$stateProvider', '$routeProvider', '$urlRou
                 label: 'Games',
                 crumbs: 'Home / Games'
             })
+            .state('game', {
+                url: '/game',
+                templateUrl: 'templates/game.html',
+                label: 'Game',
+                crumbs: 'Home / Games / Game'
+            })
+            .state('game/id', {
+                url: '/game/id/:id',
+                templateUrl: 'templates/game.html',
+                label: 'Game',
+                crumbs: 'Home / Games / Game'
+            })
             .state('gameplayers', {
                 url: '/gameplayers/id/:id',
                 templateUrl: 'templates/gameplayers.html',
-                label: 'Games',
+                label: 'Game Players',
                 crumbs: 'Home / Games / Game Players'
             })
             .state('about', {

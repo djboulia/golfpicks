@@ -30,6 +30,8 @@
     "angular-route": "^1.5.2",
     "angular-touch": "^1.5.2",
     "angular-breadcrumb": "^0.4.1",
-    "ionic": "^1.2.4"
+    "ionic": "^1.2.4",
+    "angular-material": "^1.0.8",
+    "angular-aria": "^1.5.5"
   }
 }

@@ -132,6 +132,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
             // if the tournament hasn't started, don't display the leaderboard
             var gameDetails = gameUtils.getGameDetails(game);
 
+            console.log("checking for too early: " + JSON.stringify(gameDetails));
             if (!testingMode && hasNotStarted(gameDetails)) {
 
                 console.log("too early!");
@@ -210,7 +211,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                         console.error("Couldn't access game information!");
 
                         $scope.errorMessage = "Couldn't access game information!";
-                    })
+                    });
         } else {
             console.log("error! no gameid specified!");
             $scope.errorMessage = "error! no gameid specified!";
