@@ -15,7 +15,7 @@
                                 <tr ng-if="active.event">
                                     <td class="text-center"><b>{{active.event}}</b>
                                     </td>
-                                    <td class="text-center"><a ng-href="{{leaderboardUrl}}/id/{{active.eventid}}">Leaderboard</a>
+                                    <td ng-if="active.inProgress" class="text-center"><a ng-href="{{leaderboardUrl}}/id/{{active.eventid}}">Leaderboard</a>
                                     </td>
                                 </tr>
 
