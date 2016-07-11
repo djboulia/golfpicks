@@ -385,7 +385,12 @@ var _getPastEvent = function (event, course, callback) {
  **/
 var _reverseName = function (str) {
     var parts = str.split(",");
-    return parts[1].trim() + " " + parts[0].trim();
+    if (parts.length<2) {
+        console.log("_reverseName: warning, couldn't reverse name " + str);
+        return str;
+    } else {
+        return parts[1].trim() + " " + parts[0].trim();
+    }
 }
 
 /**
@@ -416,23 +421,27 @@ var _getFutureEvent = function (event, course, callback) {
             // process each row in the table
             $('div', fieldcontent).each(function (i, div) {
 
-                var record = {};
-                record["name"] = _reverseName($(this).text().replace(/\s/g, ' ')).trim();
-                record["1"] = "-";
-                record["2"] = "-";
-                record["3"] = "-";
-                record["4"] = "-";
-                record["pos"] = "-";
-                record["today"] = "-";
-                record["thru"] = "-";
-                record["total"] = "-";
-                record["strokes"] = "-";
+                if ($(this).text().length >0) {
+                    var record = {};
+                    record["name"] = _reverseName($(this).text().replace(/\s/g, ' ')).trim();
+                    record["1"] = "-";
+                    record["2"] = "-";
+                    record["3"] = "-";
+                    record["4"] = "-";
+                    record["pos"] = "-";
+                    record["today"] = "-";
+                    record["thru"] = "-";
+                    record["total"] = "-";
+                    record["strokes"] = "-";
 
-                records.push(record);
+                    records.push(record);
 
-                console.log("row=" + row + " name=" + record.name);
+                    console.log("row=" + row + " name=" + record.name);
 
-                row++;
+                    row++;
+                } else {
+                    console.log("_getFutureEvent: skipping blank entry");
+                }
             });
 
             var courseInfo = {
