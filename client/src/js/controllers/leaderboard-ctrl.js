@@ -147,6 +147,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                             var event = result.name;
                             var courseinfo = result.courseInfo;
                             var gamers = result.gamers;
+                            var watson = result.watson;
 
                             if (gamers) {
 
@@ -173,6 +174,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                                     currentCourse.yardage;
 
                                 $scope.gamers = gamers;
+                                $scope.watson = watson;
                                 $scope.loaded = true;
                                 $scope.statusMessage = "";
 

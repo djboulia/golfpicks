@@ -84,6 +84,7 @@ function LeaderboardCtrl($rootScope, $scope, $state,
             $scope.newsfeed = "Course: " + courseInfo.name + " Par: " +
                 courseInfo.par + " Yardage: " + courseInfo.yardage;
             $scope.gamers = gameData.gamers;
+            $scope.watson = gameData.watson;
             $scope.loaded = true;
             $scope.statusMessage = undefined;
         };
@@ -148,6 +149,7 @@ function LeaderboardCtrl($rootScope, $scope, $state,
                             var event = result.name;
                             var courseinfo = result.courseInfo;
                             var gamers = result.gamers;
+                            var watson = result.watson;
 
                             if (gamers) {
 
@@ -169,7 +171,8 @@ function LeaderboardCtrl($rootScope, $scope, $state,
                                     currentRound: currentRound,
                                     roundTitles: roundTitles,
                                     displayRounds: displayRounds,
-                                    gamers: gamers
+                                    gamers: gamers,
+                                    watson: watson
                                 };
 
                                 updateScope(gameData);
@@ -257,6 +260,19 @@ function LeaderboardCtrl($rootScope, $scope, $state,
 
         $state.go(pathUrl, {
             gamer: gamer.objectId,
+            eventid: $stateParams.eventid
+        });
+    };
+
+    $scope.selectWatson = function () {
+        console.log("Clicked on Watson ");
+
+        var pathUrl = "tab.gamer";
+
+        console.log("calling $state.go on " + pathUrl);
+
+        $state.go(pathUrl, {
+            gamer: "watson",
             eventid: $stateParams.eventid
         });
     };

@@ -53,23 +53,38 @@ function GamerCtrl($rootScope, $scope, $state,
         };
 
         var updateScope = function (gameData) {
-            var gamers = gameData.gamers;
 
-            // find the specific gamer we need
-            for (var i = 0; i < gamers.length; i++) {
-                var gamer = gamers[i];
+            if ($stateParams.gamer == "watson") {
+                $scope.watson = gameData.watson;
+                $scope.gamer = null;
+                $scope.title = "Watson";
+                $scope.event = gameData.event;
+                $scope.courseInfo = gameData.courseInfo;
+                $scope.roundTitles = gameData.roundTitles;
+                $scope.displayRounds = gameData.displayRounds;
+                $scope.loaded = true;
+                $scope.statusMessage = undefined;
+            } else {
+                var gamers = gameData.gamers;
 
-                if (gamer.objectId == $stateParams.gamer) {
+                // find the specific gamer we need
+                for (var i = 0; i < gamers.length; i++) {
+                    var gamer = gamers[i];
 
-                    console.debug(JSON.stringify(gamer));
+                    if (gamer.objectId == $stateParams.gamer) {
 
-                    $scope.gamer = gamer;
-                    $scope.event = gameData.event;
-                    $scope.courseInfo = gameData.courseInfo;
-                    $scope.roundTitles = gameData.roundTitles;
-                    $scope.displayRounds = gameData.displayRounds;
-                    $scope.loaded = true;
-                    $scope.statusMessage = undefined;
+                        console.debug(JSON.stringify(gamer));
+
+                        $scope.watson = null;
+                        $scope.gamer = gamer;
+                        $scope.title = gamer.name;
+                        $scope.event = gameData.event;
+                        $scope.courseInfo = gameData.courseInfo;
+                        $scope.roundTitles = gameData.roundTitles;
+                        $scope.displayRounds = gameData.displayRounds;
+                        $scope.loaded = true;
+                        $scope.statusMessage = undefined;
+                    }
                 }
             }
 
@@ -105,6 +120,7 @@ function GamerCtrl($rootScope, $scope, $state,
                             var event = result.name;
                             var courseinfo = result.courseInfo;
                             var gamers = result.gamers;
+                            var watson = result.watson;
 
                             if (gamers) {
 
@@ -124,7 +140,8 @@ function GamerCtrl($rootScope, $scope, $state,
                                     currentRound: currentRound,
                                     roundTitles: roundTitles,
                                     displayRounds: displayRounds,
-                                    gamers: gamers
+                                    gamers: gamers,
+                                    watson: watson
                                 };
 
 

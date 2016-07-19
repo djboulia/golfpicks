@@ -47,6 +47,12 @@ angular.module('GolfPicks').config(['$stateProvider', '$routeProvider', '$urlRou
                 label: 'About',
                 crumbs: 'Home / About'
             })
+            .state('aboutwatson', {
+                url: '/aboutwatson',
+                templateUrl: 'templates/aboutwatson.html',
+                label: 'How Watson is Used in GolfPicks',
+                crumbs: 'Home / Watson'
+            })
             .state('support', {
                 url: '/support',
                 templateUrl: 'templates/support.html',

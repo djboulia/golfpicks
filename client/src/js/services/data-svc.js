@@ -341,7 +341,8 @@ angular.module('GolfPicks.data', [])
             start: "start",
             end: "end",
             event: "eventid",
-            gamers: "gamers"
+            gamers: "gamers",
+            watson: "watson"
         };
 
         return {

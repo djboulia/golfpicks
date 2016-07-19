@@ -182,6 +182,10 @@ tr.selected {
 	font-size: 115%;
 }
 
+a.instructions {
+    color: yellow;
+}
+
 .leadercell {
 	color:yellow; 
 	background-color:#004400;

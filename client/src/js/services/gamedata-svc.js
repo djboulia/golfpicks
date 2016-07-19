@@ -371,7 +371,36 @@ angular.module('GolfPicks.gameData', [])
                 return gamers;
             };
 
-            var processLeaderboardData = function (gamers, event, golfers, courseInfo) {
+            var getWatsonScores = function (game, event, golfers, courseInfo) {
+                console.log("watson data is: " + JSON.stringify(game.watson));
+
+                //
+                // djb [07/14/2016] add Watson to the game if data is available!
+                //
+                if (game.watson) {
+                    var roundStatus = eventUtils.roundStatus(golfers, event.rounds.length);
+
+                    // fill in watson picks
+                    var picks = expandPicks(game.watson.picks, golfers);
+                    console.log("picks: " + JSON.stringify(picks));
+
+                    // fluff up watson into an array which getScores expects
+                    var watsonArray = [{
+                        user: {
+                            name: "Watson"
+                        },
+                        picks: picks
+                                }];
+                    watsonArray = getScores(courseInfo, roundStatus, watsonArray, event.scoreType);
+                    return watsonArray[0];  // first element is watson's score
+                }
+
+                return null;
+
+            };
+
+            var processLeaderboardData = function (game, event, golfers, courseInfo) {
+                var gamers = game.gamers;
                 var deferred = $q.defer();
 
                 if (gamers) {
@@ -409,10 +438,14 @@ angular.module('GolfPicks.gameData', [])
                                 gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
                                 gamers = addRoundLeaders(gamers);
 
+                                var watson = getWatsonScores(game, event, golfers, courseInfo);
+                                console.log("watson scores: " + JSON.stringify(watson));
+
                                 deferred.resolve({
                                     name: event.name,
                                     courseInfo: courseInfo,
-                                    gamers: gamers
+                                    gamers: gamers,
+                                    watson: watson
                                 });
                             },
                             function (err) {
@@ -822,7 +855,7 @@ angular.module('GolfPicks.gameData', [])
                             var golfers = result.golfers;
                             var courseInfo = result.courseInfo;
 
-                            return processLeaderboardData(game.gamers, event, golfers, courseInfo);
+                            return processLeaderboardData(game, event, golfers, courseInfo);
                         })
                         .then(function (result) {
                             deferred.resolve(result);

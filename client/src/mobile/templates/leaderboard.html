@@ -56,6 +56,19 @@
                 <ion-item class="item item-divider golf-item-leaderboard">
                     <div style="text-align:center;"><span class="golf-col-leader">&nbsp;*&nbsp;</span> Round Leader</div>
                 </ion-item>
+
+                <ion-item ng-show="watson" ng-click="selectWatson()" item="watson" class="item golf-item-leaderboard">
+
+                    <div class="row">
+                        <div class="col col-50"><img src="images/watsonlogo.png" height="20"></div>
+                        <div class="col golf-col" ng-repeat="displayRound in displayRounds">
+                            {{watson.scores[displayRound]}}</div>
+                        <div class="col golf-col"><i class="icon ion-chevron-right"></i>
+                        </div>
+                    </div>
+
+                </ion-item>
+
                 <ion-item class="item">
                 </ion-item>
 

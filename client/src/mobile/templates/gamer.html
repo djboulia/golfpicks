@@ -1,4 +1,4 @@
-<ion-view view-title="{{gamer.name}}">
+<ion-view view-title="{{title}}">
 
     <div class="bar bar-subheader bar-light">
         <h1 class="title">{{event}}</h1>
@@ -47,9 +47,38 @@
             </ion-item>
 
         </ion-list>
-	</div>
 	
-    </ion-content>
+        <ion-list can-swipe="true" class="list" ng-show="watson">
+            <ion-item class="item item-divider golf-item">
+				<div class="row">
+				  <div class="col col-50"></div>
+				  <div class="col" style="text-align:right;"
+                       ng-repeat="displayRound in displayRounds">{{roundTitles[displayRound]}}</div>
+				</div>
+			</ion-item>
+
+
+            <ion-item ng-repeat="pick in watson.picks track by $index" item="pick" class="item golf-item">
+
+				<div class="row">
+				  <div class="col col-50">{{pick.name}}</div>
+				  <div class="col" style="text-align:right;"
+					  ng-repeat="displayRound in displayRounds">{{pick.rounds[displayRound]}}</div>
+				</div>
+
+            </ion-item>
+
+            <ion-item class="item golf-item golf-item-total item-divider">
+
+				<div class="row">
+				  <div class="col col-50"><b>Total</b></div>
+				  <div class="col" style="text-align:right;"
+					  ng-repeat="displayRound in displayRounds">{{watson.scores[displayRound]}}</div>
+				</div>
+
+            </ion-item>
+
+        </ion-list>    </ion-content>
 
 
 </ion-view>
