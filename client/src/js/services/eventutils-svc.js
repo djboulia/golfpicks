@@ -238,11 +238,12 @@ angular.module('GolfPicks.eventUtils', [])
                 return golfers;
             },
 
+            // [07/29/2016] had to change this based on the way the back end data for
+            //              live scoring is now reported. We use the "thru" key to
+            //              determine if anyone is mid way through a round
+            //
             // identify rounds that have not yet started.  This will allow
             // us to carry over prior day totals for players that haven't teed off yet
-            //
-            // we infer a round's status by looking at the scores in each round.  if 
-            // there are any valid scores, the round has begun.
             //
             // as input, we expect an array of golfers (see golfers method below)
             // 
@@ -265,8 +266,22 @@ angular.module('GolfPicks.eventUtils', [])
 
                         round = round.toString();
 
-                        if (self.isValidScore(golfer[round])) statusData[i] = ROUND_STARTED;
+                        if (self.isValidScore(golfer[round])) {
+                            statusData[i] = ROUND_STARTED;
+                        } else {
+                            // no valid score, but see if there is an in progress round
+                            var thru = parseInt(golfer['thru']);
+//                            console.log("golfer " + golfer['name'] + " thru: " + thru);
+
+                            if (!isNaN(thru) && thru <18) {
+                                statusData[i] = ROUND_STARTED;
+                            }
+
+                            // short circuit the loop here... last valid score
+                            break;
+                        }
                     }
+
                 });
 
                 return statusData;

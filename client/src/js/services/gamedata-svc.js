@@ -6,6 +6,11 @@ angular.module('GolfPicks.gameData', [])
         function ($q, cloudDataGame, cloudDataEvent, cloudDataPlayer, gameUtils, eventUtils) {
             var logger = gameUtils.logger;
 
+            var isNumber = function(str) {
+                var result = parseInt(str);
+                return !isNaN(result);
+            };
+
             var sortByRank = function (records) {
 
                 records.sort(function (a, b) {
@@ -27,21 +32,31 @@ angular.module('GolfPicks.gameData', [])
                 return matchArray != null;
             };
 
+            // [djb 7/29/2016] changes in the way the back end provider handles
+            //                 scoring made me change the method for finding the
+            //                 score for rounds in progress.  We now look at
+            //                 the "thru" key to see if the round is in progress
             // look at today's score and figure out if round is in progress
-            var findTodayScoreIndex = function (todayScore, rounds) {
+            var findTodayScoreIndex = function (pick, rounds) {
+                var todayScore = pick['today'];
+                var thru = pick['thru'];
                 var rnd;
                 var today = -1;
 
-                if (todayScore != "-") {
-                    // round may be in progress, walk backwards
-                    // through rounds to find which one is today
-                    for (rnd = rounds.length - 1; rnd >= 0; rnd--) {
-                        if (eventUtils.isValidScore(rounds[rnd])) {
+                var inProgress = (isNumber(thru) && thru < 18) ? true : false;
+
+                if (inProgress && todayScore != "-") {
+                    logger.debug("round is in progress");
+
+                    // round is in progress, find first round without a valid score
+                    for (rnd = 0; rnd < rounds.length; rnd++) {
+                        if (!eventUtils.isValidScore(rounds[rnd])) {
                             today = rnd;
                             break;
                         }
                     }
                 }
+
                 return today;
             };
 
@@ -87,6 +102,8 @@ angular.module('GolfPicks.gameData', [])
             //
             var getRoundNetTotals = function (courseInfo, roundStartedData, pick, isLiveScoring) {
 
+                logger.debug("getRoundTotals: isLiveScoring=" + isLiveScoring );
+
                 var rounds = [],
                     par = [],
                     roundtotals = [];
@@ -109,17 +126,24 @@ angular.module('GolfPicks.gameData', [])
                 }
 
                 var todayScore = (isLiveScoring) ? pick["today"] : "";
-                var todayIndex = (isLiveScoring) ? findTodayScoreIndex(todayScore, rounds) : -1;
+                var todayIndex = (isLiveScoring) ? findTodayScoreIndex(pick, rounds) : -1;
                 var roundtotal = 0;
                 var j;
+
+                logger.debug("getRoundTotals: todayIndex=" + todayIndex );
 
                 for (j = 0; j < rounds.length; j++) {
 
                     // scores can include non numeric values, like "MC" for missed cut
                     // so check the validity of the score before trying to use it
-                    if (eventUtils.isValidScore(rounds[j])) {
-                        var net = (todayIndex == j) ?
-                            eventUtils.parseNetScore(todayScore) : parseInt(rounds[j]) - par[j];
+                    if (todayIndex == j) {
+                        var net = eventUtils.parseNetScore(todayScore);
+
+                        roundtotal += net;
+
+                        roundtotals[j] = roundtotal;
+                    } else if (eventUtils.isValidScore(rounds[j])) {
+                        var net = parseInt(rounds[j]) - par[j];
 
                         roundtotal += net;
 
