@@ -23,7 +23,7 @@ var isValidScore = function (score) {
     return false;
 };
 
-var withdrewFromTournament = function( record ) {
+var withdrewFromTournament = function (record) {
     var pos = record["pos"];
 
     return pos == "WD";
@@ -37,11 +37,11 @@ var withdrewFromTournament = function( record ) {
 // we try to look for invalid scores like this and just reset them to
 // blank so that it doesn't invalidate other stats like low round of the day
 //
-var fixMidRoundWithdrawal = function( record, par ) {
+var fixMidRoundWithdrawal = function (record, par) {
     if (withdrewFromTournament(record)) {
 
         // walk backward looking for last round with a score
-        for (var i=4; i>0; i--) {
+        for (var i = 4; i > 0; i--) {
             if (isValidScore(record[i])) {
 
                 // is the score bogus relative to par?  For our purposes we'll assume
@@ -118,24 +118,134 @@ var playerFinishedTournament = function (record) {
 // labels for the fields we want to keep
 //
 var fields = [
-    "",         // 0: don't keep this field, which has no data
-    "pos",      // 1: position on the leaderboard
-    "",         // 2: don't keep this field, which has movement up/down the rankings (not interesting)
-    "name",     // 3: player name
+    "", // 0: don't keep this field, which has no data
+    "pos", // 1: position on the leaderboard
+    "", // 2: don't keep this field, which has movement up/down the rankings (not interesting)
+    "name", // 3: player name
     "total",
     "thru",
     "today",
-    "1",        // 7-10: scores for each round
+    "1", // 7-10: scores for each round
     "2",
     "3",
     "4",
-    "strokes"   // 11: total number of strokes
+    "strokes" // 11: total number of strokes
 ];
 
+//
+// for live scoring, the golf channel will adjust the table to show a tee time
+// instead of the normal scoring.  this ste of fields adjusts for that case
+//
+var fieldsTeeTime = [
+    "", // 0: don't keep this field, which has no data
+    "pos", // 1: position on the leaderboard
+    "", // 2: don't keep this field, which has movement up/down the rankings (not interesting)
+    "name", // 3: player name
+    "total",
+    "",
+    "1", // 6-9: scores for each round
+    "2",
+    "3",
+    "4",
+    "strokes" // 10: total number of strokes
+];
+var POS_TEETIME = 5;
 
-/**
- * For past events, go to the PGA tour site archive
- **/
+// walk through the table rows, calling the callback for each
+// row we find.  callback will take two parameters: the index of the row (zero based) and an
+// array of text elements representing each cell in the row
+//
+// NOTE: due to HTML colspan attributes, each array of rowData could be a different size
+//
+var processTableRows = function ($, table, callback) {
+    var row = 0;
+
+    $('tr.playerRow', table).each(function (i, tr) {
+        var rowData = [];
+
+        var td = $('td', tr);
+
+        if (td.each != undefined) {
+
+            td.each(function (i, el) {
+                // replace whitespace with spaces to resolve encoding issues
+                var cell = $(this).text().replace(/\s/g, ' ').trim();
+
+                rowData.push(cell);
+            });
+
+            console.log("row " + row + "= " + JSON.stringify(rowData));
+
+        } else {
+            // no elements in the row
+            console.log("warning! no elements in table row " + row);
+        }
+
+        if (callback) callback(row, rowData);
+
+        row++;
+    });
+
+};
+
+// for well formatted rows, we want to return a record with the following fields in it
+// pos, name, total, thru, today, 1, 2, 3, 4, strokes
+//
+var formatRowData = function (rowData) {
+    var record = undefined;
+
+    if (rowData.length == fields.length) {
+        // easy case... just map fields to cells
+        record = {};
+
+        for (var i = 0; i < fields.length; i++) {
+            var key = fields[i];
+
+            if (key != '') {
+                record[key] = rowData[i];
+            }
+        }
+    } else if (rowData.length == fieldsTeeTime.length) {
+        // here we need to do some mapping to get the right type of record
+        // since the tee time info will screw up the field mapping
+        record = {};
+
+        for (var i = 0; i < fieldsTeeTime.length; i++) {
+            var key = fieldsTeeTime[i];
+
+            if (key != '') {
+                record[key] = rowData[i];
+            }
+        }
+
+        // in this case the 'thru' and 'today' fields are replaced with
+        // the tee time info.  since the player hasn't teed off yet today
+        // we set these values accordingly
+        record['thru'] = '-';
+        record['today'] = '-';
+
+        // insert the tee time into the first blank round
+        var teetime = rowData[POS_TEETIME];
+
+        for (var rnd = 1; rnd <= 4; rnd++) {
+            var key = rnd.toString();
+
+            if (record[key] == '') {
+                record[key] = teetime;
+                break;
+            }
+        }
+    } else {
+        console.log("warning: found row with " + rowData.length + " elements");
+    }
+
+    return record;
+};
+
+
+//
+// main entry point for getting scores
+//
 var getEvent = function (event, course, callback) {
     console.log("Event " + JSON.stringify(event));
 
@@ -161,27 +271,16 @@ var getEvent = function (event, course, callback) {
             var row = 0;
             var records = [];
 
-            // process each row in the table
-            $('tr.playerRow', table).each(function (i, tr) {
-                var record = {};
+            processTableRows($, table, function (row, rowData) {
+                var record = formatRowData(rowData);
 
-                var td = $('td', tr);
-                if (td.each != undefined) {
-                    var ndx = 0;
-                    td.each(function (i, el) {
-                        var key = "";
+                console.log("formatted record " + JSON.stringify(record));
 
-                        if (ndx < fields.length) {
-                            key = fields[ndx];
-                        }
-
-                        if (key != "") {
-                            // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues
-                            record[key] = $(this).text().replace(/\s/g, ' ').trim();
-                        }
-
-                        ndx++;
-                    });
+                if (!record) {
+                    // unrecognized format
+                    console.log("warning: unrecognized row data " + JSON.stringify(rowData));
+                } else {
+                    // do post processing on the data
 
                     record["name"] = formatName(record);
 
@@ -206,7 +305,7 @@ var getEvent = function (event, course, callback) {
                         record["strokes"] = '-';
                     }
 
-                    if (gameUtils.tournamentComplete(event) && record["4"]=="-") {
+                    if (gameUtils.tournamentComplete(event) && record["4"] == "-") {
                         // some tournaments implement a "secondary cut" after round 3
                         // check for that and set to MDF which means Made Cut - Did not Finish
                         console.log("Setting round 4 score to MDF in record " + JSON.stringify(record));
@@ -218,12 +317,8 @@ var getEvent = function (event, course, callback) {
                     console.log(JSON.stringify(record));
 
                     records.push(record);
-
-                    //						console.log( "row=" + row + " name=" + record.name);
                 }
 
-
-                row++;
             });
 
             var courseInfo = {
