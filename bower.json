@@ -36,6 +36,6 @@
   },
   "resolutions": {
     "angular": "^1.6.1",
-    "angular-ui-router": "^0.2.18",
+    "angular-ui-router": "^0.2.18"
   }
 }
