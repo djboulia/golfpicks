@@ -17,10 +17,10 @@
   ],
   "dependencies": {
     "rdash-ui": "1.0.*",
-    "angular": "^1.5.1",
+    "angular": "^1.6.1",
     "angular-cookies": "~1.5.0",
     "angular-bootstrap": "~1.0.3",
-    "angular-ui-router": "^0.2.15",
+    "angular-ui-router": "^0.2.18",
     "bootstrap": "~3.3.6",
     "font-awesome": "~4.5.0",
     "angular-resource": "^1.5.0",
