@@ -2,14 +2,18 @@
 
 To build this project for the first time, you will need npm, node bower and gulp installed.  Once you have those, do this:
 
-npm install
+sudo npm install
+
 bower install
+
 gulp
 
 For this project to run successfully, you will need to configure your cloudant database
 name and credentials in the file:
 
+
 server/datasources.json
+
 
 Change History:
 
