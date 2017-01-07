@@ -33,5 +33,9 @@
     "ionic": "^1.2.4",
     "angular-material": "^1.0.8",
     "angular-aria": "^1.5.5"
+  },
+  "resolutions": {
+    "angular": "^1.6.1",
+    "angular-ui-router": "^0.2.18",
   }
 }
