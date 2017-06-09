@@ -267,18 +267,23 @@ angular.module('GolfPicks.eventUtils', [])
                         round = round.toString();
 
                         if (self.isValidScore(golfer[round])) {
+                            logger.debug( "found valid score for round " + round + ", golfer " +
+                                         JSON.stringify(golfer));
                             statusData[i] = ROUND_STARTED;
-                        } else {
-                            // no valid score, but see if there is an in progress round
-                            var thru = parseInt(golfer['thru']);
-//                            console.log("golfer " + golfer['name'] + " thru: " + thru);
 
-                            if (!isNaN(thru) && thru <18) {
-                                statusData[i] = ROUND_STARTED;
-                            }
-
-                            // short circuit the loop here... last valid score
-                            break;
+//                        } else {
+//                            // no valid score, but see if there is an in progress round
+//                            var thru = parseInt(golfer['thru']);
+//                            logger.debug("golfer " + golfer['name'] + " thru: " + thru);
+//
+//                            if (!isNaN(thru) && thru <18) {
+//                                logger.debug( "found in progress score for round " + round + ", golfer " +
+//                                             JSON.stringify(golfer) + " thru " + thru);
+//                                statusData[i] = ROUND_STARTED;
+//                            }
+//
+//                            // short circuit the loop here... last valid score
+//                            break;
                         }
                     }
 

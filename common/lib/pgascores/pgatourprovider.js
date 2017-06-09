@@ -175,7 +175,7 @@ var _getCurrentEvent = function (event, course, callback) {
 
 
                 records.push(record);
-//                console.log(record);
+                //                console.log(record);
             }
 
 
@@ -293,39 +293,39 @@ var _getPastEvent = function (event, course, callback) {
                             // build out the fields we want to keep
                             // should be in the order:
                             switch (ndx) {
-                            case 0:
-                                key = "name";
-                                break;
+                                case 0:
+                                    key = "name";
+                                    break;
 
-                            case 1:
-                                key = "pos";
-                                break;
+                                case 1:
+                                    key = "pos";
+                                    break;
 
-                            case 2:
-                                key = "1";
-                                break;
+                                case 2:
+                                    key = "1";
+                                    break;
 
-                            case 3:
-                                key = "2";
-                                break;
+                                case 3:
+                                    key = "2";
+                                    break;
 
-                            case 4:
-                                key = "3";
-                                break;
+                                case 4:
+                                    key = "3";
+                                    break;
 
-                            case 5:
-                                key = "4";
-                                break;
+                                case 5:
+                                    key = "4";
+                                    break;
 
-                            case 6:
-                                key = "strokes";
-                                break;
+                                case 6:
+                                    key = "strokes";
+                                    break;
 
-                            case 7:
-                                key = "purse";
-                                break;
+                                case 7:
+                                    key = "purse";
+                                    break;
 
-                            default:
+                                default:
                             }
 
                             // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues
@@ -350,7 +350,7 @@ var _getPastEvent = function (event, course, callback) {
                         }
 
                         records.push(record);
-//                        console.log(record);
+                        //                        console.log(record);
 
                         //						console.log( "row=" + row + " name=" + record.name);
                     }
@@ -385,7 +385,7 @@ var _getPastEvent = function (event, course, callback) {
  **/
 var _reverseName = function (str) {
     var parts = str.split(",");
-    if (parts.length<2) {
+    if (parts.length < 2) {
         console.log("_reverseName: warning, couldn't reverse name " + str);
         return str;
     } else {
@@ -396,53 +396,48 @@ var _reverseName = function (str) {
 /**
  * For upcoming events, the PGA tour site won't show the leaderboard until the day of, so
  * until then we have to parse the field
+ *
+ * djb [04/03/2017] had to change this to adapt to changes in the pgatour site
+ *
  **/
 var _getFutureEvent = function (event, course, callback) {
 
     console.log("Event " + JSON.stringify(event));
-    var fieldUrl = "http://www.pgatour.com/tournaments/" + event.baseurl + "/field.html";
+
+    var fieldUrl = "http://www.pgatour.com/data/r/" + event.tournament_id + "/field.json";
+    console.log("Getting field info from: " + fieldUrl);
 
     request(fieldUrl, function (error, response, html) {
         if (!error && response.statusCode == 200) {
+            var json = JSON.parse( html );
 
-            var $ = cheerio.load(html);
+            if (!json.Tournament || !json.Tournament.Players) {
+                console.log(JSON.stringify(json));
 
-            // get table data
-            var fieldcontent = $('.field-table-content');
-            if (fieldcontent == undefined) {
-                console.log("Couldn't find field!");
+                console.log("Didn't get the right JSON object back!");
                 callback(null);
                 return;
             }
 
-            var row = 0;
             var records = [];
 
-            // process each row in the table
-            $('div', fieldcontent).each(function (i, div) {
+            for (var i = 0; i < json.Tournament.Players.length; i++) {
+                var player = json.Tournament.Players[i];
+                var record = {};
 
-                if ($(this).text().length >0) {
-                    var record = {};
-                    record["name"] = _reverseName($(this).text().replace(/\s/g, ' ')).trim();
-                    record["1"] = "-";
-                    record["2"] = "-";
-                    record["3"] = "-";
-                    record["4"] = "-";
-                    record["pos"] = "-";
-                    record["today"] = "-";
-                    record["thru"] = "-";
-                    record["total"] = "-";
-                    record["strokes"] = "-";
+                record["name"] = _reverseName(player.PlayerName.replace(/\s/g, ' ')).trim();
+                record["1"] = "-";
+                record["2"] = "-";
+                record["3"] = "-";
+                record["4"] = "-";
+                record["pos"] = "-";
+                record["today"] = "-";
+                record["thru"] = "-";
+                record["total"] = "-";
+                record["strokes"] = "-";
 
-                    records.push(record);
-
-                    console.log("row=" + row + " name=" + record.name);
-
-                    row++;
-                } else {
-                    console.log("_getFutureEvent: skipping blank entry");
-                }
-            });
+                records.push(record);
+            }
 
             var courseInfo = {
                 "course": course.name,
@@ -521,15 +516,15 @@ var _getPGARankings = function (year, callback) {
                         // build out the fields we want to keep
                         // should be in the order:
                         switch (ndx) {
-                        case 0:
-                            key = "rank";
-                            break;
+                            case 0:
+                                key = "rank";
+                                break;
 
-                        case 2:
-                            key = "name";
-                            break;
+                            case 2:
+                                key = "name";
+                                break;
 
-                        default:
+                            default:
                         }
 
                         // [djb 4-7-2015] replace whitespace with spaces to resolve encoding issues

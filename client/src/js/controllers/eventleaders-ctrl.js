@@ -80,6 +80,8 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
                             lowRounds[String(i + 1)] = "-";
                         }
 
+                        console.log("roundStatus = " + JSON.stringify(roundStatus, null, 2));
+
                         // find last played round, walking backwards
                         var currentRound = -1;
 
@@ -89,6 +91,9 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
                                 break;
                             }
                         }
+
+                        console.log("current round = " + currentRound);
+                        console.log("golfers before = " + JSON.stringify(golfers, null, 2));
 
                         if (currentRound >= 0) {
 
@@ -123,6 +128,8 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
                                 }
 
                             }
+
+                            console.log("golfers after = " + JSON.stringify(golfers, null, 2));
 
                             var roundNumber = new String(currentRound + 1);
 

@@ -6,7 +6,7 @@ angular.module('GolfPicks.gameData', [])
         function ($q, cloudDataGame, cloudDataEvent, cloudDataPlayer, gameUtils, eventUtils) {
             var logger = gameUtils.logger;
 
-            var isNumber = function(str) {
+            var isNumber = function (str) {
                 var result = parseInt(str);
                 return !isNaN(result);
             };
@@ -43,14 +43,22 @@ angular.module('GolfPicks.gameData', [])
                 var rnd;
                 var today = -1;
 
-                var inProgress = (isNumber(thru) && thru < 18) ? true : false;
+                //                var inProgress = (isNumber(thru) && thru < 18) ? true : false;
+                //
+                //                if (inProgress && todayScore != "-") {
+                if (todayScore != "-") {
+                    // round may be in progress, walk backwards
+                    // through rounds to find which one is today
+                    for (rnd = rounds.length - 1; rnd >= 0; rnd--) {
+                        if (eventUtils.isValidScore(rounds[rnd])) {
 
-                if (inProgress && todayScore != "-") {
-                    logger.debug("round is in progress");
+                            console.debug("round is in progress, using today index of " + rnd +
+                                          " rounds of " + JSON.stringify(rounds));
 
-                    // round is in progress, find first round without a valid score
-                    for (rnd = 0; rnd < rounds.length; rnd++) {
-                        if (!eventUtils.isValidScore(rounds[rnd])) {
+                            //
+                            //                            // round is in progress, find first round without a valid score
+                            //                            for (rnd = 0; rnd < rounds.length; rnd++) {
+                            //                                if (!eventUtils.isValidScore(rounds[rnd])) {
                             today = rnd;
                             break;
                         }
@@ -102,7 +110,7 @@ angular.module('GolfPicks.gameData', [])
             //
             var getRoundNetTotals = function (courseInfo, roundStartedData, pick, isLiveScoring) {
 
-                logger.debug("getRoundTotals: isLiveScoring=" + isLiveScoring );
+                logger.debug("getRoundTotals: isLiveScoring=" + isLiveScoring);
 
                 var rounds = [],
                     par = [],
@@ -116,9 +124,10 @@ angular.module('GolfPicks.gameData', [])
 
                     var score = pick[roundNumber];
 
-                    if (!score) {
-                        score = "-";
-                    }
+// djb [04-07-2017] more changes due to back end pga site differences
+//                    if (!score) {
+//                        score = "-";
+//                    }
                     rounds.push(score);
 
                     par.push(courseInfo[i].par);
@@ -130,7 +139,7 @@ angular.module('GolfPicks.gameData', [])
                 var roundtotal = 0;
                 var j;
 
-                logger.debug("getRoundTotals: todayIndex=" + todayIndex );
+                logger.debug("getRoundTotals: todayIndex=" + todayIndex);
 
                 for (j = 0; j < rounds.length; j++) {
 
@@ -416,7 +425,7 @@ angular.module('GolfPicks.gameData', [])
                         picks: picks
                                 }];
                     watsonArray = getScores(courseInfo, roundStatus, watsonArray, event.scoreType);
-                    return watsonArray[0];  // first element is watson's score
+                    return watsonArray[0]; // first element is watson's score
                 }
 
                 return null;
