@@ -379,10 +379,6 @@ angular.module('GolfPicks.data', [])
                     ", gamerid : " + currentUser.getId() +
                     ", picks : " + JSON.stringify(picks));
 
-// [djb 6/12/2017] The code below *should* work from the generated model code.  I couldn't get it
-//                  to work propoerly, so I went directly to the URL via $resource.  This is ugly
-//                  but will need to revisit later.
-//
                 model.updateGamerPicks(
                     {
                         id: game._id,
@@ -397,6 +393,12 @@ angular.module('GolfPicks.data', [])
                         deferred.reject(err);
                     });
 
+// [djb 6/12/2017] I couldn't get the model generated code to work properly at first due to a bug
+//                 in the usage docs for the loopback generated code.  So intially I just used
+//                 Angular $resource to go directly at the REST API.  I eventually figured out the
+//                 doc error and was able to use updateGamerPicks above.  I'm keeping the original
+//                 code in here for reference.
+//
 //                var GameResource = $resource('/api/Games/:id/Gamers/:gamerid/picks', null,
 //                                             { 'update': {method: 'POST'}
 //                                             });
