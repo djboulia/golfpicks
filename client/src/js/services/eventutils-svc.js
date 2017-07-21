@@ -142,6 +142,11 @@ angular.module('GolfPicks.eventUtils', [])
                 return !isNaN(this.parseNetScore(score));
             },
 
+            isNumber: function (str) {
+                var result = parseInt(str);
+                return !isNaN(result);
+            },
+
             // 
             // return an array of course information (course name, par, etc.) for
             // each round in the tournament.
@@ -271,19 +276,19 @@ angular.module('GolfPicks.eventUtils', [])
                                          JSON.stringify(golfer));
                             statusData[i] = ROUND_STARTED;
 
-//                        } else {
-//                            // no valid score, but see if there is an in progress round
-//                            var thru = parseInt(golfer['thru']);
-//                            logger.debug("golfer " + golfer['name'] + " thru: " + thru);
-//
-//                            if (!isNaN(thru) && thru <18) {
-//                                logger.debug( "found in progress score for round " + round + ", golfer " +
-//                                             JSON.stringify(golfer) + " thru " + thru);
-//                                statusData[i] = ROUND_STARTED;
-//                            }
-//
-//                            // short circuit the loop here... last valid score
-//                            break;
+                        } else {
+                            // no valid score, but see if there is an in progress round
+                            var thru = golfer['thru'];
+                            logger.debug("golfer " + golfer['name'] + " thru: " + thru);
+
+                            if (self.isNumber(thru) && thru <18) {
+                                logger.debug( "found in progress score for round " + round + ", golfer " +
+                                             JSON.stringify(golfer) + " thru " + thru);
+                                statusData[i] = ROUND_STARTED;
+                            }
+
+                            // short circuit the loop here... last valid score
+                            break;
                         }
                     }
 

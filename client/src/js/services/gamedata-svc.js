@@ -43,26 +43,20 @@ angular.module('GolfPicks.gameData', [])
                 var rnd;
                 var today = -1;
 
-                //                var inProgress = (isNumber(thru) && thru < 18) ? true : false;
-                //
-                //                if (inProgress && todayScore != "-") {
-                if (todayScore != "-") {
-                    // round may be in progress, walk backwards
-                    // through rounds to find which one is today
-                    for (rnd = rounds.length - 1; rnd >= 0; rnd--) {
-                        if (eventUtils.isValidScore(rounds[rnd])) {
+                var inProgress = (eventUtils.isNumber(thru) && thru < 18) ? true : false;
 
-                            console.debug("round is in progress, using today index of " + rnd +
-                                          " rounds of " + JSON.stringify(rounds));
-
-                            //
-                            //                            // round is in progress, find first round without a valid score
-                            //                            for (rnd = 0; rnd < rounds.length; rnd++) {
-                            //                                if (!eventUtils.isValidScore(rounds[rnd])) {
+                if (inProgress && todayScore != "-") {
+                    // round is in progress, find first round without a valid score
+                    for (rnd = 0; rnd < rounds.length; rnd++) {
+                        if (!eventUtils.isValidScore(rounds[rnd])) {
                             today = rnd;
                             break;
                         }
                     }
+
+                    console.debug("round is in progress, using today index of " + rnd +
+                        " rounds of " + JSON.stringify(rounds));
+
                 }
 
                 return today;
@@ -124,10 +118,10 @@ angular.module('GolfPicks.gameData', [])
 
                     var score = pick[roundNumber];
 
-// djb [04-07-2017] more changes due to back end pga site differences
-//                    if (!score) {
-//                        score = "-";
-//                    }
+                    // djb [04-07-2017] more changes due to back end pga site differences
+                    if (!score) {
+                        score = "-";
+                    }
                     rounds.push(score);
 
                     par.push(courseInfo[i].par);
@@ -467,6 +461,8 @@ angular.module('GolfPicks.gameData', [])
                                         }
                                     });
                                 });
+
+                                logger.debug("validgamers: " + JSON.stringify(validgamers));
 
                                 gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
                                 gamers = addRoundLeaders(gamers);

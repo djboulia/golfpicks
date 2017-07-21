@@ -133,6 +133,8 @@ var _getCurrentEvent = function (event, course, callback) {
                 if (_roundInProgress(player)) {
 
                     // handle in progress rounds specially to give live scoring stats
+                    console.log("in progress player: " + JSON.stringify(player));
+
                     var total_strokes = player.total_strokes;
 
                     for (var j = 0; j < rounds.length; j++) {
@@ -145,8 +147,13 @@ var _getCurrentEvent = function (event, course, callback) {
                             record[round_number] = round.strokes;
                             total_strokes = total_strokes - round.strokes;
                         } else {
-                            // incomplete round, plug in the total strokes here and get out
-                            record[round_number] = total_strokes;
+                            // [djb 06/15/2017] total_strokes no longer provides the in round
+                            //                  totals... during the round it can be null, so
+                            //                  account for that here.
+                            if (total_strokes != null) {
+                                // incomplete round, plug in the total strokes here and get out
+                                record[round_number] = total_strokes;
+                            }
                             break;
                         }
                     }
