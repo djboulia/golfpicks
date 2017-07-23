@@ -92,8 +92,8 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
                             }
                         }
 
-                        console.log("current round = " + currentRound);
-                        console.log("golfers before = " + JSON.stringify(golfers, null, 2));
+//                        console.log("current round = " + currentRound);
+//                        console.log("golfers before = " + JSON.stringify(golfers, null, 2));
 
                         if (currentRound >= 0) {
 
@@ -120,7 +120,16 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
 
                                     // sort lowest round total
                                     golfers.sort(function (a, b) {
-                                        return a[roundNumber] - b[roundNumber];
+                                        var aScore = a[roundNumber];
+                                        var bScore = b[roundNumber];
+
+                                        if (isNaN(aScore)) {
+                                            return 1;
+                                        } else if (isNaN(bScore)) {
+                                            return -1;
+                                        }
+
+                                        return aScore - bScore;
                                     });
 
                                     // first element is low score
@@ -129,7 +138,7 @@ function EventLeadersCtrl($scope, $stateParams, $location, gameData, gameUtils, 
 
                             }
 
-                            console.log("golfers after = " + JSON.stringify(golfers, null, 2));
+//                            console.log("golfers after = " + JSON.stringify(golfers, null, 2));
 
                             var roundNumber = new String(currentRound + 1);
 
