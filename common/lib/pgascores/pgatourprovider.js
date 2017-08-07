@@ -199,7 +199,8 @@ var _getCurrentEvent = function (event, course, callback) {
                 "created_at": new Date()
             });
         } else {
-            console.log("Error retrieving page: " + JSON.stringify(response));
+            console.log("Error retrieving page: " + url);
+//            console.log("Error retrieving page: " + JSON.stringify(response));
             callback(null);
         }
     });
@@ -605,7 +606,7 @@ exports.getEvent = function (event, course, callback) {
         _getCurrentEvent(event, course, function (eventdata) {
             if (eventdata == null) {
 
-                console.log("PGA event call failed!");
+                console.log("PGA current event call failed!");
                 callback(null);
 
             } else {
@@ -620,7 +621,7 @@ exports.getEvent = function (event, course, callback) {
         _getPastEvent(event, course, function (eventdata) {
             if (eventdata == null) {
 
-                console.log("PGA event call failed!");
+                console.log("PGA prior event call failed!");
                 callback(null);
 
             } else {
@@ -638,7 +639,7 @@ exports.getEvent = function (event, course, callback) {
             {
                 if (eventdata == null) {
 
-                    console.log("PGA event call failed!");
+                    console.log("PGA future event call failed!");
                     callback(null);
 
                 } else {
@@ -666,7 +667,7 @@ exports.getRankings = function (year, callback) {
     _getPGARankings(year, function (eventdata) {
         if (eventdata == null) {
 
-            console.log("PGA Tour call failed!");
+            console.log("PGA Tour rankings call failed!");
             callback(null);
 
         } else {

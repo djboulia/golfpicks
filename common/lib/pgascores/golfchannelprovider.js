@@ -334,7 +334,8 @@ var getEvent = function (event, course, callback) {
                 "created_at": new Date()
             });
         } else {
-            console.log("Error retrieving page: " + JSON.stringify(response));
+            console.log("Error retrieving page: " + url);
+//            console.log("Error retrieving page: " + JSON.stringify(response));
             callback(null);
         }
     });
@@ -359,7 +360,7 @@ exports.getEvent = function (event, course, callback) {
     getEvent(event, course, function (eventdata) {
         if (eventdata == null) {
 
-            console.log("PGA event call failed!");
+            console.log("Golf channel provider PGA event call failed!");
             callback(null);
 
         } else {
