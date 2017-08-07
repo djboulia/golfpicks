@@ -34,6 +34,46 @@ var worldRankings = function (year, callbacks) {
     }
 };
 
+//
+// pick up common abbreviations for first names
+// e.g. Alex is an abbreviation of Alexander
+//
+var sameFirstName = function( firstName1, firstName2 ) {
+    var names = {
+        'alexander' : ["alex"],
+        'soren' : ["søren"],
+        'william' : ["bill", "billy", "will", "willy"]
+    };
+
+    // do the simple check first
+    if (firstName1 == firstName2) {
+        return true;
+    }
+
+    var key;
+    for (key in names) {
+
+        var nicknames = names[key];
+
+        if (key==firstName1) {
+
+            for (var i=0; i<nicknames.length; i++) {
+                if (nicknames[i] == firstName2) {
+                    return true;
+                }
+            }
+        } else if (key==firstName2) {
+
+            for (var i=0; i<nicknames.length; i++) {
+                if (nicknames[i] == firstName1) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 
 // attempts to match name1 and name2
@@ -89,7 +129,7 @@ var fuzzyMatch = function (name1, name2) {
         if (words1.length > 0 && words2.length > 0) {
             word1 = words1.shift();
             word2 = words2.shift();
-            if (word1 == word2) {
+            if (sameFirstName(word1, word2)) {
                 result++;
 
                 // finally look at remainder
@@ -110,7 +150,7 @@ var fuzzyMatch = function (name1, name2) {
 
     if (result > 0) {
         var matchTypes = ["exact", "last name", "last name/first name initial", "last name and first name"]
-            //		console.log( "found fuzzy match at name1:'" + name1 + "' name2:'" + name2 + "' - matched: " + matchTypes[result]);
+		console.log( "found fuzzy match at name1:'" + name1 + "' name2:'" + name2 + "' - matched: " + matchTypes[result]);
     }
 
     return (result > 0) ? result : -1;
