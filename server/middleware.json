@@ -13,9 +13,9 @@
     },
     "helmet#xssFilter": {},
     "helmet#frameguard": {
-      "params": [
-        "deny"
-      ]
+      "params": {
+        "action": "deny"
+      }
     },
     "helmet#hsts": {
       "params": {
@@ -49,6 +49,6 @@
     "loopback#urlNotFound": {}
   },
   "final:after": {
-    "loopback#errorHandler": {}
+    "strong-error-handler": {}
   }
 }
