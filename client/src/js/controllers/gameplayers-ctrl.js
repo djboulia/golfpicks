@@ -20,6 +20,10 @@ function GamePlayersCtrl($scope, $stateParams, gameData) {
                         var gamer = game.gamers[i];
 
                         if (gamer.picks) {
+                            if (!gamerMap[gamer.user]) {
+                              console.log("ERROR: found null entry for " + gamer.user);
+                            }
+
                             picks.push(gamerMap[gamer.user]);
 
                             //remove it from the list

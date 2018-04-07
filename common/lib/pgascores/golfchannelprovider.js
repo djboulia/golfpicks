@@ -83,16 +83,25 @@ var fixEmptyRoundScore = function (round, record) {
 // normalize golf channel name format to our standard
 //
 var formatName = function (record) {
-    var name = record["name"];
+  var name = record["name"];
 
-    // if players started on back nine, they will have an asterisk at the
-    // end of their name.  remove that
-    if (name.slice(-1) == "*") {
-        name = name.slice(0, -1);
-    }
+  // if players started on back nine, they will have an asterisk at the
+  // end of their name.  remove that
+  var ndx = name.indexOf("*");
 
-    // golf channel puts them in last, first.  we want it to be [first] [last]
-    return nameUtils.reverseName(name).trim();
+  if (ndx>=0) {
+      name = name.substr(0, ndx);
+  }
+
+  var amateurTag = " (a)";
+
+  if (name.endsWith(amateurTag)) {
+      name = name.substr(0, name.length-amateurTag.length);
+      console.log("trimmed amateur tag from " + name);
+  }
+
+  // golf channel puts them in last, first.  we want it to be [first] [last]
+  return nameUtils.reverseName(name).trim();
 }
 
 //

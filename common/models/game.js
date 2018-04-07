@@ -247,7 +247,7 @@ module.exports = function (Game) {
                 },
                 {
                     arg: 'picks',
-                    type: 'object',
+                    type: 'array',
                     http: { source: 'body' },
                     required: true
                 }

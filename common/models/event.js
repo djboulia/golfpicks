@@ -41,10 +41,11 @@ module.exports = function (Event) {
                     return;
                 }
 
+                console.log("finding course " + courseid);
+
                 // find the course information
                 Course.findById(courseid, function (err, courserecord) {
-                    if (!err) {
-
+                    if (!err && courserecord) {
                         var course = courserecord.attributes;
 
                         // call the scoring service
@@ -61,7 +62,7 @@ module.exports = function (Event) {
                         });
 
                     } else {
-                        logger.error("Error!" + JSON.stringify(err));
+                        logger.error("Error!" + JSON.stringify(err) + " courserecord " + courserecord);
                         cb(err, null);
                     }
                 });
