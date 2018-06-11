@@ -130,6 +130,8 @@ function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, 
                 console.log("error getting game " + err);
             });
     } else {
+        console.log("New Game");
+        
         $scope.title = "New Game";
 
         // load up the default data structures
