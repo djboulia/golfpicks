@@ -24,7 +24,7 @@ var paths = {
     templates: 'client/src/templates/**/*.html',
     index: 'client/src/index.html',
     mobile: 'client/src/mobile/**/*.*',
-    bower_fonts: 'client/src/components/**/*.{ttf,woff,eof,svg}'
+    bower_fonts: 'client/src/components/**/*.{ttf,woff,woff2,eof,svg}'
 };
 
 var mobile_paths = {
