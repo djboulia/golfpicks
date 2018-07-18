@@ -66,16 +66,9 @@ var _roundInProgress = function (player) {
     return player.status == "active" && player.thru && player.thru < 18;
 };
 
-/**
- *
- * For live scoring during an event, we go to the PGA tour site data feed
- * This comes in as a JSON document with the live leaderboard data
- *
- **/
-var _getCurrentEvent = function (event, course, callback) {
+var _getLeaderboardStats = function (url, event, course, callback) {
     console.log("Event " + JSON.stringify(event));
 
-    var url = "http://www.pgatour.com/data/r/" + event.tournament_id + "/leaderboard-v2.json?ts=" + Date.now();
     console.log("url : " + url);
 
     request(url, function (error, response, html) {
@@ -204,6 +197,19 @@ var _getCurrentEvent = function (event, course, callback) {
             callback(null);
         }
     });
+}
+
+
+/**
+ *
+ * For live scoring during an event, we go to the PGA tour site data feed
+ * This comes in as a JSON document with the live leaderboard data
+ *
+ **/
+var _getCurrentEvent = function (event, course, callback) {
+  var url = "http://www.pgatour.com/data/r/" + event.tournament_id + "/leaderboard-v2.json?ts=" + Date.now();
+
+  _getLeaderboardStats(url, event, course, callback);
 }
 
 var _netScore = function (net) {
@@ -406,64 +412,19 @@ var _reverseName = function (str) {
  * until then we have to parse the field
  *
  * djb [04/03/2017] had to change this to adapt to changes in the pgatour site
+ * djb [07/17/2018] moved to new .json data source for upcoming events
  *
  **/
 var _getFutureEvent = function (event, course, callback) {
 
-    console.log("Event " + JSON.stringify(event));
+  var start = new Date(Date.parse(event.start));
+  var year = start.getFullYear();
 
-    var fieldUrl = "http://www.pgatour.com/data/r/" + event.tournament_id + "/field.json";
-    console.log("Getting field info from: " + fieldUrl);
+    console.log("Event " + JSON.stringify(event) + " tournament_id " + event.tournament_id + " year " + year);
 
-    request(fieldUrl, function (error, response, html) {
-        if (!error && response.statusCode == 200) {
-            var json = JSON.parse( html );
+    var url = "https://statdata.pgatour.com/r/" + event.tournament_id + "/" + year + "/leaderboard-v2mini.json";
 
-            if (!json.Tournament || !json.Tournament.Players) {
-                console.log(JSON.stringify(json));
-
-                console.log("Didn't get the right JSON object back!");
-                callback(null);
-                return;
-            }
-
-            var records = [];
-
-            for (var i = 0; i < json.Tournament.Players.length; i++) {
-                var player = json.Tournament.Players[i];
-                var record = {};
-
-                record["name"] = _reverseName(player.PlayerName.replace(/\s/g, ' ')).trim();
-                record["1"] = "-";
-                record["2"] = "-";
-                record["3"] = "-";
-                record["4"] = "-";
-                record["pos"] = "-";
-                record["today"] = "-";
-                record["thru"] = "-";
-                record["total"] = "-";
-                record["strokes"] = "-";
-
-                records.push(record);
-            }
-
-            var courseInfo = {
-                "course": course.name,
-                "par": course.par.toString(),
-                "yardage": course.yardage.toString()
-            };
-
-            callback({
-                "name": event.name,
-                "course": courseInfo,
-                "scores": records,
-                "created_at": new Date()
-            });
-        } else {
-            console.log("Error retrieving page: " + JSON.stringify(response));
-            callback(null);
-        }
-    });
+    _getLeaderboardStats(url, event, course, callback);
 }
 
 
