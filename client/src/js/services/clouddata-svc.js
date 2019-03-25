@@ -179,6 +179,7 @@ angular.module('GolfPicks.cloud', [])
             },
 
             getList: function (model, fieldNames, ids) {
+                console.debug("model: " + JSON.stringify(model));
                 console.debug("cloudData.getList: ids: " + JSON.stringify(ids));
 
                 var deferred = $q.defer();
@@ -201,7 +202,7 @@ angular.module('GolfPicks.cloud', [])
                 model.find(filter,
                     function (objects) {
 
-                        console.log("found objects!");
+                        console.log("found objects! " + JSON.stringify(objects));
                         var localObjs = [];
                         var i;
 

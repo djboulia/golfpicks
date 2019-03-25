@@ -76,11 +76,11 @@ angular.module('GolfPicks.gameData', [])
                     var val = (top5[j].length == 0) ? "-" : eventUtils.formatNetScore(net);
 
                     if (enforceCutLine) {
-                        // djb [08/09/2014] if there are less than 5 valid scores, 
-                        // then this gamer has "missed the cut" and therefore the 
+                        // djb [08/09/2014] if there are less than 5 valid scores,
+                        // then this gamer has "missed the cut" and therefore the
                         // scores don't count
                         //
-                        // djb [04/09/2015] don't look at first two rounds since 
+                        // djb [04/09/2015] don't look at first two rounds since
                         // there is no cut yet
                         if (j > 1 && top5[j].length > 0 && top5[j].length < 5) {
                             logger.log("Round " + (j + 1) + " top 5 has only " +
@@ -152,7 +152,7 @@ angular.module('GolfPicks.gameData', [])
 
                         roundtotals[j] = roundtotal;
                     } else {
-                        // djb [08/08/2014] 
+                        // djb [08/08/2014]
                         // look for case where the 2nd/3rd/4th round is in progress, but player hasn't started yet
                         // only take rounds where the score is a tee time to avoid WDs, MCs, etc.
 
@@ -214,17 +214,17 @@ angular.module('GolfPicks.gameData', [])
                 return fmt;
             };
 
-            // 
+            //
             // build a data structure like the following:
             // an array of gamers, with their picks, totals, and scores
             // each pick is an array of golfers with their round scores
-            // all scores are stored and formatted as net to par, 
+            // all scores are stored and formatted as net to par,
             // e.g. E for even, -1 for 1 under, +2 for 2 over, a dash ("-")
             // when there is no score (either due to missed cut or round not
             // yet completed
             //
             //  [ { "name" : "Don Boulia", "objectId" : "c0323-234234-234234-2343"
-            //	  "picks"  : [ { "name" : "Tiger Woods", "rounds" : [ "+1", "E", "-3", "-5"]}...], 
+            //	  "picks"  : [ { "name" : "Tiger Woods", "rounds" : [ "+1", "E", "-3", "-5"]}...],
             //	  "totals" : [ "+1", "+5", "E", "-1"],
             //	  "scores" : [ "+1", "E", "-3 ... ] }, ... ]
 
@@ -282,14 +282,14 @@ angular.module('GolfPicks.gameData', [])
                                 // the totals for this round
                                 if (totals[j] == "-") totals[j] = 0;
 
-                                // update our running totals and top5 list		
+                                // update our running totals and top5 list
                                 totals[j] += roundtotals[j];
                                 top5[j] = updateTop5(roundtotals[j], top5[j]);
                             } else {
                                 logger.debug("returning non score value " + displayVal + "(round " + (j + 1) + ") for player " + picks[i].name);
                             }
 
-                            // debug					
+                            // debug
                             //				displayVal += " (" + roundtotals[j] + ")";
 
                             pickDetail["rounds"].push(displayVal);
@@ -355,7 +355,7 @@ angular.module('GolfPicks.gameData', [])
             }
 
             //
-            // adds an array called "rounds" to each gamer. each array element 
+            // adds an array called "rounds" to each gamer. each array element
             // contains two fields - their score, and a boolean indicating if they are
             // the round leader
             //
@@ -848,6 +848,8 @@ angular.module('GolfPicks.gameData', [])
                                         selected: false
                                     });
                                 }
+
+                                console.log("players: " + JSON.stringify(players));
 
                                 players = sortByRank(players);
 

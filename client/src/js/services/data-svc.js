@@ -25,6 +25,7 @@ angular.module('GolfPicks.data', [])
         }
     }])
     .factory('cloudDataPlayer', ['cloudData', 'Gamer', function (cloudData, model) {
+      console.log("constructor: cloudDataPlayer model: " + JSON.stringify(model));
 
         var _fieldNames = {
             name: "name",
@@ -60,6 +61,7 @@ angular.module('GolfPicks.data', [])
         }
     }])
     .factory('cloudDataCourse', ['cloudData', 'Course', function (cloudData, model) {
+      console.log("constructor: cloudDataCourse model: " + JSON.stringify(model));
 
         var _fieldNames = {
             name: "name",
@@ -94,6 +96,7 @@ angular.module('GolfPicks.data', [])
             },
 
             getAll: function () {
+                console.log("CloudDataCourse.getAll model : " + model);
                 return cloudData.getList(model, _fieldNames);
             }
         }
