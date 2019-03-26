@@ -5,10 +5,13 @@
   },
   "golfpicks": {
     "database": "golfpicks",
-    "username": "73533436-838f-4812-ae5c-1341294dd1d1-bluemix",
-    "password": "864416b31a5c61deec2eeab3537af0dbd2d21315ea6ffc862303d4b024b4d636",
+    "username": "xxxxfixmexxxx",
+    "password": "xxxxfixmexxxx",
     "name": "golfpicks",
     "modelIndex": "className",
-    "connector": "cloudant"
-  }
+    "connector": "cloudant",
+    "plugin": "retry",
+    "retryAttempts": 3,
+    "retryTimeout": 1000
+    }
 }
