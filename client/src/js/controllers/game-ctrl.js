@@ -10,9 +10,9 @@ function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, 
     var majors = [
         {
             name: "The Masters",
-            provider: 'pga',
-            baseurl: "masters-tournament",
-            id: "014"
+            provider: 'golfchannel',
+            baseurl: "masters-tournament/",
+            id: "pga-tour"
         },
         {
             name: "The U.S. Open",
