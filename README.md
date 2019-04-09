@@ -37,5 +37,12 @@ Each player will select 10 golfers.  Of those 10, you can only select 2 of the t
 
 ## Change History:
 
+Aoril 9, 2019:
+Changes to accommodate Golf Channel site.
+
+March 26, 2019:
+Moved from Bluemix to IBM Cloud labeling
+Moved to Cloudant Lite plan, added retry plugin to accommodate rate limiting
+
 March 25, 2016: 
 Moved to Loopback and responsive RDash Angular UI
