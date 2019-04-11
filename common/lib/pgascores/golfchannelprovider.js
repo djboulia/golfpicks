@@ -14,6 +14,17 @@ var cheerio = require('cheerio');
 var nameUtils = require('./nameutils.js');
 var gameUtils = require('./gameutils.js');
 
+var formatNetScore = function (score) {
+    // pretty print the score with zero represented as "even"
+    // and above par scores with a leading + sign
+    if (score == 0) return "E";
+
+    if (score > 0) return "+" + score;
+
+    return String(score);
+};
+
+
 var isValidScore = function (score) {
   // if it has anything but digits, that's bad
   if (String(score).search(/^\s*\d+\s*$/) != -1) {
@@ -383,9 +394,14 @@ var getTournamentData = function ($) {
     return;
   }
 
-  // the tournament data has all sorts of escaped characters
-  // munge it back by converting unicode numbers and special characters
+  // the tournament data is stored as a string in a script with
+  // all sorts of escaped characters.  A normal JSON.parse doesn't seem
+  // to process it.  I think there's an encoding/conversion issue somewhere
+  // To fix, we munge it back by converting unicode numbers and special characters
   var tournament_string = text.substr(start + searchString.length + 1, end - 1);
+
+  console.log(tournament_string.substr(0, 30) + "..." + tournament_string.substr(-30));
+
   var r = /\\u([\d\w]{4})/gi;
   tournament_string = tournament_string.replace(r, function (match, grp) {
     return String.fromCharCode(parseInt(grp, 16));
@@ -463,12 +479,15 @@ var getEvent = function (event, course, callback) {
           record.thru = golfer.thruHole;
         }
 
-        if (golfer.todayPar) {
-          record.today = golfer.todayPar;
-          record.total = golfer.todayPar;
-        }
-
-        for (var j = 0; j < golfer.leaderboardRounds.length; j++) {
+        if (golfer.todayPar != null) {
+            record.today = formatNetScore(golfer.todayPar);
+          }
+  
+          if (golfer.overallPar != null) {
+            record.total = formatNetScore(golfer.overallPar);
+          }
+  
+            for (var j = 0; j < golfer.leaderboardRounds.length; j++) {
           var roundInfo = golfer.leaderboardRounds[j];
           record[roundInfo.roundNumber] = roundInfo.roundScore;
         }
