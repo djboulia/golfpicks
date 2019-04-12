@@ -156,7 +156,7 @@ angular.module('GolfPicks.gameData', [])
                         // look for case where the 2nd/3rd/4th round is in progress, but player hasn't started yet
                         // only take rounds where the score is a tee time to avoid WDs, MCs, etc.
 
-                        if (j > 0 && isValidTeeTime(rounds[j]) && roundStartedData[j]) {
+                        if (j > 0 && (isValidTeeTime(rounds[j]) || rounds[j] == '-') && roundStartedData[j]) {
 
                             // take yesterday's total
                             roundtotals[j] = roundtotals[j - 1];
