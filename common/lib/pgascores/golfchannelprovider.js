@@ -373,11 +373,11 @@ var getTournamentData = function ($) {
   // get all script tags, look for the tournament data and parse it
   var scripts = $('script');
   if (scripts == undefined) {
-    console.log("Couldn't find scripts!");
-    callback(null);
-    return;
+      console.log("Couldn't find scripts!");
+      callback(null);
+      return;
   } else {
-    console.log("found scripts");
+      console.log("found scripts");
   }
 
   // all event info now stored in this variable in the web page
@@ -385,13 +385,13 @@ var getTournamentData = function ($) {
   var text = scripts.text();
   var start = text.indexOf(searchString);
   var end = text
-    .substr(start + searchString.length)
-    .indexOf('";');
+      .substr(start + searchString.length)
+      .indexOf('";');
 
   if (start < 0) {
-    console.log("Couldn't find tournament data!!");
-    callback(null);
-    return;
+      console.log("Couldn't find tournament data!!");
+      callback(null);
+      return;
   }
 
   // the tournament data is stored as a string in a script with
@@ -404,13 +404,14 @@ var getTournamentData = function ($) {
 
   var r = /\\u([\d\w]{4})/gi;
   tournament_string = tournament_string.replace(r, function (match, grp) {
-    return String.fromCharCode(parseInt(grp, 16));
+      return String.fromCharCode(parseInt(grp, 16));
   });
-  var r = /\\([–’‘éúíá\\\/])/gi;
+  var r = /\\([–’‘éúíáñö“”\\\/])/gi;
   tournament_string = tournament_string.replace(r, function (match, grp) {
-    return grp;
+      return grp;
   });
-  // console.log(tournament_string);
+
+  console.log(tournament_string.substr(0, 1000));
   console.log("start " + start + " end " + end);
 
   var tournament_data = JSON.parse(tournament_string);
@@ -481,20 +482,27 @@ var getEvent = function (event, course, callback) {
 
         if (golfer.todayPar != null) {
             record.today = formatNetScore(golfer.todayPar);
-          }
+        }
   
-          if (golfer.overallPar != null) {
+        if (golfer.overallPar != null) {
             record.total = formatNetScore(golfer.overallPar);
-          }
+        }
   
-            for (var j = 0; j < golfer.leaderboardRounds.length; j++) {
+        for (var j = 0; j < golfer.leaderboardRounds.length; j++) {
           var roundInfo = golfer.leaderboardRounds[j];
           record[roundInfo.roundNumber] = roundInfo.roundScore;
         }
 
         if (golfer.status.toLowerCase() === "cut") {
-          record[3] = "CUT";
-          record[4] = "CUT";
+          if (record[3] == 0) {
+            record[3] = "CUT";
+            record[4] = "CUT";
+          } else {
+            // some tournaments employ a secondary cut after day three
+            // these players will still be "cut" but have a day 3
+            // score. MDF == Made Cut Didn't Finish            
+            record[4] = "MDF";
+          }
         } else if (golfer.status.toLowerCase() === "did not start") {
           record[1] = "DNS";
           record[2] = "DNS";
@@ -506,11 +514,17 @@ var getEvent = function (event, course, callback) {
               record[rounds] = "WD";
             }
           }
-        }
-
-        // translate any empty round scores into an appropriate format
-        for (var rounds = 1; rounds <= 4; rounds++) {
-          record[rounds] = fixEmptyRoundScore(rounds, record);
+        } else if (golfer.status === "") {
+            // look for the case where the golfer is still active in the
+            // tournament, but has not completed all of his rounds
+            // in this case, we put his tee time in the next scoring slot
+            // this mimics old behavior in a prior golf data provider
+            for (var round=1; round <= 4 ; round++) {
+                if (record[round] === '-') {
+                    record[round] = golfer.teeTime;
+                    break;
+                }
+            }
         }
 
         // The Golf Channel site puts scores in even for players who didn't make the
