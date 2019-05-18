@@ -494,10 +494,13 @@ var getEvent = function (event, course, callback) {
         }
 
         if (golfer.status.toLowerCase() === "cut") {
-          if (record[3] == 0) {
+          if (record[3] == 0 || record[3] == '-') {
             record[3] = "CUT";
             record[4] = "CUT";
           } else {
+            
+            console.log("setting MDF: " + JSON.stringify(record));
+
             // some tournaments employ a secondary cut after day three
             // these players will still be "cut" but have a day 3
             // score. MDF == Made Cut Didn't Finish            
