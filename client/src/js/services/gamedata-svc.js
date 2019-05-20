@@ -23,10 +23,12 @@ angular.module('GolfPicks.gameData', [])
                 return records;
             };
 
+            // [djb 5/20/2019] added timezone possibility for tee times
+            //
             // see if the round score is actually a tee time in the format
-            // hh:mm [am|pm]
+            // hh:mm [am|pm] or hh:mm [am|pm] [TZ]
             var isValidTeeTime = function (timeStr) {
-                var timePat = /^(\d{1,2}):(\d{2})?(\s?(AM|am|PM|pm))?$/;
+                var timePat = /^(\d{1,2})(:(\d{2}))?(\s?(AM|am|PM|pm))?(\s?([A-Z][A-Z]))?$/;
                 var matchArray = timeStr.match(timePat);
 
                 return matchArray != null;
