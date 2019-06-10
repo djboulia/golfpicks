@@ -4,14 +4,25 @@
     "connector": "memory"
   },
   "golfpicks": {
-    "database": "golfpicks",
-    "username": "xxxxfixmexxxx",
-    "password": "xxxxfixmexxxx",
+    "database": "golfpicks-pwcc",
+    "username": "xxxxxfixmexxxxxxx",
+    "password": "xxxxxfixmexxxxxxx",
     "name": "golfpicks",
     "modelIndex": "className",
     "connector": "cloudant",
     "plugin": "retry",
     "retryAttempts": 3,
     "retryTimeout": 1000
+    },
+    "golfpicks-internal-courses": {
+      "database": "golfpicks-internal-courses",
+      "username": "xxxxxfixmexxxxxxx",
+      "password": "xxxxxfixmexxxxxxx",
+      "name": "golfpicks-internal-courses",
+      "modelIndex": "className",
+      "connector": "cloudant",
+      "plugin": "retry",
+      "retryAttempts": 3,
+      "retryTimeout": 1000
     }
 }

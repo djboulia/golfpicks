@@ -45,7 +45,7 @@
     "$resolved": true
   },
   "Course": {
-    "dataSource": "golfpicks",
+    "dataSource": "golfpicks-internal-courses",
     "public": true,
     "$promise": {},
     "$resolved": true
