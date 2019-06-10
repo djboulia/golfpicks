@@ -10,27 +10,23 @@ function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, 
     var majors = [
         {
             name: "The Masters",
-            provider: 'golfchannel',
-            baseurl: "masters-tournament/",
-            id: "pga-tour"
-        },
-        {
-            name: "The U.S. Open",
-            provider: 'pga',
-            baseurl: "us-open",
-            id: "026"
-        },
-        {
-            name: "The Open Championship",
-            provider: 'pga',
-            baseurl: "the-open-championship",
-            id: "100"
+            provider: 'tourdata',
+            tournament_id: "27"
         },
         {
             name: "The PGA Championship",
-            provider: 'golfchannel',
-            baseurl: "pga-championship",
-            id: "pga-of-america"
+            provider: 'tourdata',
+            tournament_id: "32"
+        },
+        {
+            name: "The U.S. Open",
+            provider: 'tourdata',
+            tournament_id: "36"
+        },
+        {
+            name: "The Open Championship",
+            provider: 'tourdata',
+            tournament_id: "42"
         }
     ];
 
@@ -40,10 +36,10 @@ function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, 
     var findTournament = function (event) {
         var major = undefined;
 
-        console.log("looking for major " + event.baseurl);
+        console.log("looking for major " + event.name);
 
         for (var i = 0; i < majors.length; i++) {
-            if (majors[i].baseurl == event.baseurl) {
+            if (majors[i].tournament_id == event.tournament_id) {
                 major = majors[i];
                 break;
             }
@@ -200,14 +196,8 @@ function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, 
                     existingEvent.end = self.end;
                     existingEvent.scoreType = "pga-live-scoring";
                     existingEvent.provider = self.major.provider;
-                    existingEvent.baseurl = self.major.baseurl;
+                    existingEvent.tournament_id = self.major.tournament_id;
                     existingEvent.rounds = [];
-
-                    if (existingEvent.provider == 'pga') {
-                        existingEvent.tournament_id = self.major.id;
-                    } else {
-                        existingEvent.tour = self.major.id;
-                    }
 
                     existingEvent.rounds = getRounds(self.start, self.end, self.course);
 
@@ -233,15 +223,9 @@ function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, 
                 end: self.end,
                 scoreType: "pga-live-scoring",
                 provider: self.major.provider,
-                baseurl: self.major.baseurl,
+                tournament_id: self.major.tournament_id,
                 rounds: []
             };
-
-            if (event.provider == 'pga') {
-                event.tournament_id = self.major.id;
-            } else {
-                event.tour = self.major.id;
-            }
 
             event.rounds = getRounds(self.start, self.end, self.course);
 

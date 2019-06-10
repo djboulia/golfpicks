@@ -1,6 +1,6 @@
 var pgaProvider = require('./pgascores/pgatourprovider.js');
-var yahooProvider = require('./pgascores/pgatourprovider.js');
 var golfChannelProvider = require('./pgascores/golfchannelprovider.js');
+var TourData = require('./pgascores/tourdata.js');
 var NameUtils = require('./pgascores/nameutils.js');
 var cacheModule = require('./cache.js');
 
@@ -38,11 +38,11 @@ var worldRankings = function (year, callbacks) {
 // pick up common abbreviations for first names
 // e.g. Alex is an abbreviation of Alexander
 //
-var sameFirstName = function( firstName1, firstName2 ) {
+var sameFirstName = function (firstName1, firstName2) {
     var names = {
-        'alexander' : ["alex"],
-        'soren' : ["søren"],
-        'william' : ["bill", "billy", "will", "willy"]
+        'alexander': ["alex"],
+        'soren': ["søren"],
+        'william': ["bill", "billy", "will", "willy"]
     };
 
     // do the simple check first
@@ -55,16 +55,16 @@ var sameFirstName = function( firstName1, firstName2 ) {
 
         var nicknames = names[key];
 
-        if (key==firstName1) {
+        if (key == firstName1) {
 
-            for (var i=0; i<nicknames.length; i++) {
+            for (var i = 0; i < nicknames.length; i++) {
                 if (nicknames[i] == firstName2) {
                     return true;
                 }
             }
-        } else if (key==firstName2) {
+        } else if (key == firstName2) {
 
-            for (var i=0; i<nicknames.length; i++) {
+            for (var i = 0; i < nicknames.length; i++) {
                 if (nicknames[i] == firstName1) {
                     return true;
                 }
@@ -150,7 +150,7 @@ var fuzzyMatch = function (name1, name2) {
 
     if (result > 0) {
         var matchTypes = ["exact", "last name", "last name/first name initial", "last name and first name"]
-		console.log( "found fuzzy match at name1:'" + name1 + "' name2:'" + name2 + "' - matched: " + matchTypes[result]);
+        console.log("found fuzzy match at name1:'" + name1 + "' name2:'" + name2 + "' - matched: " + matchTypes[result]);
     }
 
     return (result > 0) ? result : -1;
@@ -227,77 +227,112 @@ exports.get = function (eventid, event, course, callbacks) {
 
     var theDate = new Date(event.start);
     var year = theDate.getFullYear();
+    var provider = event.provider;
 
-    console.log("getting world rankings for " + year);
+    if (provider === "tourdata") {
 
-    worldRankings(year, {
-        success: function (rankings) {
+        var tournament_id = event.tournament_id;
+        var tourData = new TourData(year);
 
-            var tournament = eventCache.get(eventid);
+        tourData.getRankings()
+            .then(rankings => {
+                tourData.getEvent(tournament_id)
+                    .then(tournament => {
+                        addPlayerRankings(tournament, rankings);
 
-            if (tournament) {
-                if (callbacks && callbacks.success) {
-                    callbacks.success(tournament);
+                        if (callbacks && callbacks.success) {
+                            callbacks.success(tournament);
+                        }
+                    })
+                    .catch((e) => {
+                        console.log("Error retrieving event data!");
+
+                        if (callbacks && callbacks.error) {
+                            callbacks.error(e);
+                        }
+                    });
+            })
+            .catch((e) => {
+                console.log("Error retrieving ranking data!");
+
+                if (callbacks && callbacks.error) {
+                    callbacks.error(e);
                 }
-            } else {
-                var provider = event.provider;
+            });
 
-                // use the appropriate tour data provider
-                if (provider === "pga") {
-                    pgaProvider.getEvent(event, course, function (tournament) {
+    } else {
 
-                        //                    console.log("tournament: " + JSON.stringify(tournament));
-                        if (!tournament) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error("Couldn't get PGA event information!");
-                            }
-                        } else {
-                            addPlayerRankings(tournament, rankings);
+        console.log("getting world rankings for " + year);
 
-                            eventCache.put(eventid, tournament);
+        worldRankings(year, {
+            success: function (rankings) {
 
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(tournament);
-                            }
-                        }
-                    });
+                var tournament = eventCache.get(eventid);
 
-                } else if (provider === "golfchannel") {
-                    console.log("Using Golf Channel provider");
-
-                    golfChannelProvider.getEvent(event, course, function (tournament) {
-
-                        //                    console.log("tournament: " + JSON.stringify(tournament));
-                        if (!tournament) {
-                            if (callbacks && callbacks.error) {
-                                callbacks.error("Couldn't get PGA event information!");
-                            }
-                        } else {
-                            addPlayerRankings(tournament, rankings);
-
-                            eventCache.put(eventid, tournament);
-
-                            if (callbacks && callbacks.success) {
-                                callbacks.success(tournament);
-                            }
-                        }
-                    });
-
+                if (tournament) {
+                    if (callbacks && callbacks.success) {
+                        callbacks.success(tournament);
+                    }
                 } else {
-                    var str = "Error: invalid provider " + provider + " found!"
 
-                    console.log(str);
-                    if (callbacks && callbacks.error) {
-                        callbacks.error(str);
+                    // use the appropriate tour data provider
+                    if (provider === "pga") {
+                        pgaProvider.getEvent(event, course, function (tournament) {
+
+                            //                    console.log("tournament: " + JSON.stringify(tournament));
+                            if (!tournament) {
+                                if (callbacks && callbacks.error) {
+                                    callbacks.error("Couldn't get PGA event information!");
+                                }
+                            } else {
+                                addPlayerRankings(tournament, rankings);
+
+                                eventCache.put(eventid, tournament);
+
+                                if (callbacks && callbacks.success) {
+                                    callbacks.success(tournament);
+                                }
+                            }
+                        });
+
+                    } else if (provider === "golfchannel") {
+                        console.log("Using Golf Channel provider");
+
+                        golfChannelProvider.getEvent(event, course, function (tournament) {
+
+                            //                    console.log("tournament: " + JSON.stringify(tournament));
+                            if (!tournament) {
+                                if (callbacks && callbacks.error) {
+                                    callbacks.error("Couldn't get PGA event information!");
+                                }
+                            } else {
+                                addPlayerRankings(tournament, rankings);
+
+                                eventCache.put(eventid, tournament);
+
+                                if (callbacks && callbacks.success) {
+                                    callbacks.success(tournament);
+                                }
+                            }
+                        });
+
+                    } else {
+                        var str = "Error: invalid provider " + provider + " found!"
+
+                        console.log(str);
+                        if (callbacks && callbacks.error) {
+                            callbacks.error(str);
+                        }
                     }
                 }
+            },
+            error: function (err) {
+                if (callbacks && callbacks.error) {
+                    callbacks.error(err);
+                }
             }
-        },
-        error: function (err) {
-            if (callbacks && callbacks.error) {
-                callbacks.error(err);
-            }
-        }
-    });
+        });
+
+    }
 
 };
