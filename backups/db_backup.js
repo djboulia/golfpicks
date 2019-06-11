@@ -1,7 +1,7 @@
 var Promise = require('promise');
 
-var me = '73533436-838f-4812-ae5c-1341294dd1d1-bluemix';
-var password = "864416b31a5c61deec2eeab3537af0dbd2d21315ea6ffc862303d4b024b4d636";
+var me =  "xxxxxxxxxxFixMexxxxxxxxxxxx";
+var password = "xxxxxxxxxxFixMexxxxxxxxxxxx";
 var dbName = 'golfpicks';
 
 var cloudant = require('cloudant')({
