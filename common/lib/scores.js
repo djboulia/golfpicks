@@ -1,38 +1,5 @@
-var pgaProvider = require('./pgascores/pgatourprovider.js');
-var golfChannelProvider = require('./pgascores/golfchannelprovider.js');
 var TourData = require('./pgascores/tourdata.js');
 var NameUtils = require('./pgascores/nameutils.js');
-var cacheModule = require('./cache.js');
-
-var worldRankingsCache = new cacheModule.Cache(60 * 60 * 24); // 24 hrs in seconds
-var eventCache = new cacheModule.Cache(60 * 5); // 5 mins
-
-var worldRankings = function (year, callbacks) {
-
-    var rankings = worldRankingsCache.get(year);
-
-    if (rankings) {
-        if (callbacks && callbacks.success) {
-            callbacks.success(rankings);
-        }
-    } else {
-        // get the current world rankings
-        pgaProvider.getRankings(year, function (rankings) {
-            if (rankings) {
-                if (callbacks && callbacks.success) {
-                    // cache for next time
-                    worldRankingsCache.put(year, rankings);
-
-                    callbacks.success(rankings);
-                }
-            } else {
-                if (callbacks && callbacks.error) {
-                    callbacks.error("Error getting world rankings!");
-                }
-            }
-        });
-    }
-};
 
 //
 // pick up common abbreviations for first names
@@ -229,6 +196,13 @@ exports.get = function (eventid, event, course, callbacks) {
     var year = theDate.getFullYear();
     var provider = event.provider;
 
+    //
+    // [06/11/2019] djb - moved all tournament and ranking data to a 
+    //                    separate service.  source is here:
+    //                    https://github.com/djboulia/tourdata
+    //                    simplifies this code such that we only support
+    //                    one data provider
+    //
     if (provider === "tourdata") {
 
         var tournament_id = event.tournament_id;
@@ -261,78 +235,7 @@ exports.get = function (eventid, event, course, callbacks) {
             });
 
     } else {
-
-        console.log("getting world rankings for " + year);
-
-        worldRankings(year, {
-            success: function (rankings) {
-
-                var tournament = eventCache.get(eventid);
-
-                if (tournament) {
-                    if (callbacks && callbacks.success) {
-                        callbacks.success(tournament);
-                    }
-                } else {
-
-                    // use the appropriate tour data provider
-                    if (provider === "pga") {
-                        pgaProvider.getEvent(event, course, function (tournament) {
-
-                            //                    console.log("tournament: " + JSON.stringify(tournament));
-                            if (!tournament) {
-                                if (callbacks && callbacks.error) {
-                                    callbacks.error("Couldn't get PGA event information!");
-                                }
-                            } else {
-                                addPlayerRankings(tournament, rankings);
-
-                                eventCache.put(eventid, tournament);
-
-                                if (callbacks && callbacks.success) {
-                                    callbacks.success(tournament);
-                                }
-                            }
-                        });
-
-                    } else if (provider === "golfchannel") {
-                        console.log("Using Golf Channel provider");
-
-                        golfChannelProvider.getEvent(event, course, function (tournament) {
-
-                            //                    console.log("tournament: " + JSON.stringify(tournament));
-                            if (!tournament) {
-                                if (callbacks && callbacks.error) {
-                                    callbacks.error("Couldn't get PGA event information!");
-                                }
-                            } else {
-                                addPlayerRankings(tournament, rankings);
-
-                                eventCache.put(eventid, tournament);
-
-                                if (callbacks && callbacks.success) {
-                                    callbacks.success(tournament);
-                                }
-                            }
-                        });
-
-                    } else {
-                        var str = "Error: invalid provider " + provider + " found!"
-
-                        console.log(str);
-                        if (callbacks && callbacks.error) {
-                            callbacks.error(str);
-                        }
-                    }
-                }
-            },
-            error: function (err) {
-                if (callbacks && callbacks.error) {
-                    callbacks.error(err);
-                }
-            }
-        });
-
+        console.log("ERROR: unsupported data provider " + provider);
     }
 
 };
