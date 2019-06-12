@@ -1,7 +1,7 @@
 angular.module('GolfPicks', 
                ['ui.bootstrap', 'ui.router', 
                 'ngCookies', 'ngRoute', 'ngSanitize', 'ngAria', 'ngMaterial', 'lbServices',
-                'GolfPicks.cloud', 'GolfPicks.data', 'GolfPicks.weatherData', 'GolfPicks.mapWidget',
+                'GolfPicks.cloud', 'GolfPicks.data', 'GolfPicks.mapWidget',
                 'GolfPicks.gameData', 'GolfPicks.gameUtils', 'GolfPicks.eventUtils'])
         .run(run);
 

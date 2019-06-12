@@ -1,10 +1,11 @@
 angular.module('GolfPicks')
     .controller('LeaderboardCtrl', ['$scope', '$stateParams', '$location',
-                                    'gameData', 'gameUtils', 'eventUtils',
-                                    'weatherData', LeaderboardCtrl]);
+        'gameData', 'gameUtils', 'eventUtils',
+        LeaderboardCtrl
+    ]);
 
 
-function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, eventUtils, weatherData) {
+function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, eventUtils) {
     var gameid = $stateParams.id;
 
     $scope.courseUrl = "coursedetails";
@@ -102,27 +103,23 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                     });
         };
 
-        var getWeatherForecast = function ($scope, location) {
+        var getWeatherForecast = function ($scope, eventid) {
 
-            console.log("weatherForecast for " + JSON.stringify(location));
+            console.log("weatherForecast for event " + eventid);
 
-            if (location) {
+            gameData.loadWeather(eventid)
+                .then(function (data) {
+                        console.log("Data from weather service: " + JSON.stringify(data));
 
-                weatherData.forecast(location.lat, location.lng)
-                    .then(function (data) {
-                            console.log("Data from weather service: " + JSON.stringify(data));
+                        data.temp = Math.round(data.temp);
+                        data.wind = Math.round(data.wind);
+                        data.metric.temp = Math.round(data.metric.temp);
 
-                            data.temp = Math.round(data.temp);
-                            data.wind = Math.round(data.wind);
-                            data.metric.temp = Math.round(data.metric.temp);
-
-                            $scope.weather = data;
-                            $scope.weatherImg = '<img src="' + data.icon + '">';
-                        },
-                        function (err) {
-                            console.log("Error from weather service: " + err);
-                        });
-            }
+                        $scope.weather = data;
+                    },
+                    function (err) {
+                        console.log("Error from weather service: " + err);
+                    });
 
         };
 
@@ -178,7 +175,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                                 $scope.loaded = true;
                                 $scope.statusMessage = "";
 
-                                getWeatherForecast($scope, currentCourse.location);
+                                getWeatherForecast($scope, game.eventid);
 
                                 var now = Date.now();
 

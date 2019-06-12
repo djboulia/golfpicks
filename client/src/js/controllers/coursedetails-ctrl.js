@@ -1,9 +1,9 @@
 angular.module('GolfPicks')
     .controller('CourseDetailsCtrl', ['$scope', '$stateParams', '$cookieStore',
-                                      'cloudDataCourse', 'cloudDataCurrentUser',
-                                      'weatherData', 'mapWidget', CourseDetailsCtrl]);
+        'cloudDataCourse', 'cloudDataCurrentUser', 'mapWidget', CourseDetailsCtrl
+    ]);
 
-function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, currentUser, weatherData, mapWidget) {
+function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, currentUser, mapWidget) {
     var returnUrl = "#/courses";
 
     console.log("reached courses controller with id " + $stateParams.id);
@@ -69,7 +69,7 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
                     if (existingCourse.location) {
                         var location = existingCourse.location;
 
-                        weatherData.forecast(location.lat, location.lng)
+                        cloudDataCourse.weather($stateParams.id)
                             .then(function (data) {
                                     console.log("Data from weather service: " + JSON.stringify(data));
 
@@ -78,7 +78,6 @@ function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, 
                                     data.metric.temp = Math.round(data.metric.temp);
 
                                     $scope.weather = data;
-                                    $scope.weatherImg = '<img src="' + data.icon + '">';
                                 },
                                 function (err) {
                                     console.log("Error from weather service: " + err);

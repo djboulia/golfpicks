@@ -14,7 +14,8 @@
                         <div>Rating: {{rating}}</div>
                         <div>Slope: {{slope}}</div>
                     </div>
-                    <div style="display:inline-block; vertical-align:bottom; min-height:55px;" ng-show="!hasHoleDetails">
+                    <div style="display:inline-block; vertical-align:bottom; min-height:55px;"
+                        ng-show="!hasHoleDetails">
                         <div>Par: {{par}}</div>
                         <div>Yardage: {{yardage}}</div>
                     </div>
@@ -27,6 +28,10 @@
                                     </tr>
                                     <tr>
                                         <td>{{weather.temp}}&deg; F/{{weather.metric.temp}}&deg; C</td>
+                                        <td rowspan="2">
+                                            <img ng-src="/img/weathericons/icon{{weather.icon}}.png"
+                                                style="width:50px;height:40px;padding-left:10px;">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>{{weather.wind}} MPH</td>
@@ -34,16 +39,6 @@
                                 </tbody>
                             </table>
 
-                        </div>
-                        <div style="display:inline-block; vertical-align:bottom; min-height:55px;">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td ng-bind-html="weatherImg">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </rd-widget-body>

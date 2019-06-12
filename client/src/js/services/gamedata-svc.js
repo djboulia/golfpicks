@@ -2,7 +2,7 @@ console.log("loading GolfPicks.gameData");
 
 angular.module('GolfPicks.gameData', [])
     .factory('gameData', ['$q', 'cloudDataGame', 'cloudDataEvent',
-                          'cloudDataPlayer', 'gameUtils', 'eventUtils',
+        'cloudDataPlayer', 'gameUtils', 'eventUtils',
         function ($q, cloudDataGame, cloudDataEvent, cloudDataPlayer, gameUtils, eventUtils) {
             var logger = gameUtils.logger;
 
@@ -419,7 +419,7 @@ angular.module('GolfPicks.gameData', [])
                             name: "Watson"
                         },
                         picks: picks
-                                }];
+                    }];
                     watsonArray = getScores(courseInfo, roundStatus, watsonArray, event.scoreType);
                     return watsonArray[0]; // first element is watson's score
                 }
@@ -765,6 +765,20 @@ angular.module('GolfPicks.gameData', [])
                     return deferred.promise;
                 },
 
+                loadWeather: function (eventid) {
+                    var deferred = $q.defer();
+
+                    cloudDataEvent.weather(eventid)
+                        .then(function (data) {
+                                deferred.resolve(data);
+                            },
+                            function (err) {
+                                deferred.reject(err);
+                            });
+
+                    return deferred.promise;
+                },
+
                 loadGame: function (gameid) {
 
                     // load the current game
@@ -901,4 +915,5 @@ angular.module('GolfPicks.gameData', [])
                 }
 
             }
-    }]);
+        }
+    ]);
