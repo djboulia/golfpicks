@@ -12,8 +12,12 @@ var JsonRequest = function (url) {
                 var json = null;
 
                 if (!error) {
-                    json = JSON.parse(body);
-                    resolve(json);
+                    try {
+                        json = JSON.parse(body);
+                        resolve(json);
+                    } catch (e) {
+                        reject(e);
+                    }
                 } else {
                     console.log("Error!: " + error);
                     reject(error);
