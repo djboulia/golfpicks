@@ -205,6 +205,15 @@ exports.get = function (eventid, event, course, callbacks) {
     //
     if (provider === "tourdata") {
 
+        // [09/16/2020] djb - started adding the specific tour season year
+        //                    since due to COVID seasons don't map directly
+        //                    to the calendar year.
+        var season = parseInt(event.season);
+        if (season != NaN) {
+            console.log("found season in event record, setting year to " + season);
+            year = season;
+        }
+
         var tournament_id = event.tournament_id;
         var tourData = new TourData(year);
 
