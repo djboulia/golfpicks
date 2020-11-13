@@ -16,6 +16,7 @@ var JsonRequest = function (url) {
                         json = JSON.parse(body);
                         resolve(json);
                     } catch (e) {
+                        console.log("JsonRequest error: " + body);
                         reject(e);
                     }
                 } else {

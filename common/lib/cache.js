@@ -5,7 +5,7 @@
  * @param ttl : cache time in seconds
  *
  **/
-exports.Cache = function(ttl) {
+const Cache = function(ttl) {
     this.ttl = ttl;
     this.cache = {};
 
@@ -44,3 +44,5 @@ exports.Cache = function(ttl) {
         }
     };
 };
+
+module.exports = Cache;

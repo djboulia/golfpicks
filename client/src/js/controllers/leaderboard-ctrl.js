@@ -105,15 +105,24 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
 
         var getWeatherForecast = function ($scope, eventid) {
 
-            console.log("weatherForecast for event " + eventid);
+            console.log("weather forecast for event " + eventid);
 
             gameData.loadWeather(eventid)
                 .then(function (data) {
                         console.log("Data from weather service: " + JSON.stringify(data));
 
-                        data.temp = Math.round(data.temp);
-                        data.wind = Math.round(data.wind);
-                        data.metric.temp = Math.round(data.metric.temp);
+                        if (data.temp) {
+                            data.temp = Math.round(data.temp);
+                            data.wind = Math.round(data.wind);
+                            data.metric.temp = Math.round(data.metric.temp);
+                        } else {
+                            console.log("invalid weather data!");
+                            data = {
+                                temp : '-',
+                                wind : '-',
+                                metric : { temp: '-'}
+                            }
+                        }
 
                         $scope.weather = data;
                     },
