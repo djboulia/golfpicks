@@ -209,7 +209,7 @@ exports.get = function (eventid, event, course, callbacks) {
         //                    since due to COVID seasons don't map directly
         //                    to the calendar year.
         var season = parseInt(event.season);
-        if (season != NaN) {
+        if (!isNaN(season)) {
             console.log("found season in event record, setting year to " + season);
             year = season;
         }
