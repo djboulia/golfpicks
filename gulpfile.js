@@ -1,7 +1,6 @@
 var gulp = require('gulp'),
     debug = require('gulp-debug'),
     nodemon = require('gulp-nodemon'),
-    loopbackAngular = require('gulp-loopback-sdk-angular'),
     usemin = require('gulp-usemin'),
     wrap = require('gulp-wrap'),
     connect = require('gulp-connect'),
@@ -166,24 +165,11 @@ gulp.task('custom-templates', function () {
         .pipe(gulp.dest('client/dist/templates'));
 });
 
-/**
- * auto-generate angular $resource handlers from LoopBack services
- **/
-gulp.task('build-strongloop-angular', function () {
-    return gulp.src('./server/server.js')
-        .pipe(loopbackAngular())
-        .pipe(rename('lb-services.js'))
-        .pipe(gulp.dest('./client/dist/js'))
-        .pipe(gulp.dest('./client/dist/mobile/js'));
-;
-});
 
 /**
  * Watch custom files
  */
 gulp.task('watch', function () {
-    gulp.watch([paths.models], ['build-strongloop-angular']);
-    gulp.watch([paths.server], ['build-strongloop-angular']);
     gulp.watch([paths.images], ['custom-images']);
     gulp.watch([paths.cssstyles], ['usemin']);
     gulp.watch([paths.styles], ['custom-less']);
@@ -216,6 +202,5 @@ gulp.task('start', function () {
  * Gulp tasks
  */
 gulp.task('mobile-build', ['mobile-usemin', 'mobile-build-custom']);
-gulp.task('build', ['mobile-build', 'usemin', 'build-assets', 'build-custom',
-                    'build-strongloop-angular']);
+gulp.task('build', ['mobile-build', 'usemin', 'build-assets', 'build-custom']);
 gulp.task('default', ['build', 'start', 'watch']);

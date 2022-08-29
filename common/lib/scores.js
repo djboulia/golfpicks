@@ -190,61 +190,58 @@ var addPlayerRankings = function (eventdata, rankings) {
     }
 };
 
-exports.get = function (eventid, event, course, callbacks) {
+exports.get = function (event) {
 
-    var theDate = new Date(event.start);
-    var year = theDate.getFullYear();
-    var provider = event.provider;
-
-    //
-    // [06/11/2019] djb - moved all tournament and ranking data to a 
-    //                    separate service.  source is here:
-    //                    https://github.com/djboulia/tourdata
-    //                    simplifies this code such that we only support
-    //                    one data provider
-    //
-    if (provider === "tourdata") {
-
-        // [09/16/2020] djb - started adding the specific tour season year
-        //                    since due to COVID seasons don't map directly
-        //                    to the calendar year.
-        var season = parseInt(event.season);
-        if (!isNaN(season)) {
-            console.log("found season in event record, setting year to " + season);
-            year = season;
+    return new Promise( (resolve, reject) => {
+        var theDate = new Date(event.start);
+        var year = theDate.getFullYear();
+        var provider = event.provider;
+    
+        //
+        // [06/11/2019] djb - moved all tournament and ranking data to a 
+        //                    separate service.  source is here:
+        //                    https://github.com/djboulia/tourdata
+        //                    simplifies this code such that we only support
+        //                    one data provider
+        //
+        if (provider === "tourdata") {
+    
+            // [09/16/2020] djb - started adding the specific tour season year
+            //                    since due to COVID seasons don't map directly
+            //                    to the calendar year.
+            var season = parseInt(event.season);
+            if (!isNaN(season)) {
+                console.log("found season in event record, setting year to " + season);
+                year = season;
+            }
+    
+            var tournament_id = event.tournament_id;
+            var tourData = new TourData(year);
+    
+            tourData.getRankings()
+                .then(rankings => {
+                    tourData.getEvent(tournament_id)
+                        .then(tournament => {
+                            addPlayerRankings(tournament, rankings);
+                            
+                            resolve(tournament);
+                        })
+                        .catch((e) => {
+                            console.log("Error retrieving event data!");
+    
+                            reject(e);
+                        });
+                })
+                .catch((e) => {
+                    console.log("Error retrieving ranking data!");
+                    reject(e);
+                });
+    
+        } else {
+            const str = "ERROR: unsupported data provider " + provider;
+            console.log(str);
+            reject(str);
         }
-
-        var tournament_id = event.tournament_id;
-        var tourData = new TourData(year);
-
-        tourData.getRankings()
-            .then(rankings => {
-                tourData.getEvent(tournament_id)
-                    .then(tournament => {
-                        addPlayerRankings(tournament, rankings);
-
-                        if (callbacks && callbacks.success) {
-                            callbacks.success(tournament);
-                        }
-                    })
-                    .catch((e) => {
-                        console.log("Error retrieving event data!");
-
-                        if (callbacks && callbacks.error) {
-                            callbacks.error(e);
-                        }
-                    });
-            })
-            .catch((e) => {
-                console.log("Error retrieving ranking data!");
-
-                if (callbacks && callbacks.error) {
-                    callbacks.error(e);
-                }
-            });
-
-    } else {
-        console.log("ERROR: unsupported data provider " + provider);
-    }
+    });
 
 };

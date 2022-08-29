@@ -1,7 +1,7 @@
 console.log("loading GolfPicks.cloud");
 
 angular.module('GolfPicks.cloud', [])
-    .factory('cloudData', ['$q', function ($q) {
+    .factory('cloudData', ['$q', '$http', function ($q, $http) {
 
         //
         // cloudData is a wrapper for the back end StrongLoop data API
@@ -78,7 +78,7 @@ angular.module('GolfPicks.cloud', [])
         return {
 
             delete: function (model, localObj) {
-                console.debug("cloudData.delete: " + JSON.stringify(localObj));
+                // console.debug("cloudData.delete: " + JSON.stringify(localObj));
 
                 var deferred = $q.defer();
                 var obj = localObj._cloudObject;
@@ -86,8 +86,8 @@ angular.module('GolfPicks.cloud', [])
 
                 if (obj) {
                     model.deleteById({
-                            id: id
-                        },
+                        id: id
+                    },
                         function (result) {
                             deferred.resolve(result);
                         },
@@ -102,14 +102,14 @@ angular.module('GolfPicks.cloud', [])
             },
 
             add: function (model, fieldNames, objData) {
-                console.debug("cloudData.add: objData " + JSON.stringify(objData));
+                // console.debug("cloudData.add: objData " + JSON.stringify(objData));
 
                 var deferred = $q.defer();
 
                 if (objData) {
                     var cloudObj = _newCloudObject(fieldNames, objData);
 
-                    var obj = model.create(cloudObj,
+                    model.create(cloudObj,
                         function (obj) {
                             var localObj = _makeLocalObject(obj, fieldNames);
 
@@ -120,13 +120,13 @@ angular.module('GolfPicks.cloud', [])
                         });
 
                 } else {
-                    deferred.reject("cloudData.add: objData: " + JSON.stringify(objData));
+                    deferred.reject("error cloudData.add: objData: " + JSON.stringify(objData));
                 }
 
                 return deferred.promise;
             },
 
-            save: function (localObj) {
+            save: function (model, localObj) {
                 console.debug("cloudData.save: " + JSON.stringify(localObj));
 
                 var deferred = $q.defer();
@@ -138,7 +138,7 @@ angular.module('GolfPicks.cloud', [])
 
                     _setProperties(cloudObj, fieldMap, localObj);
 
-                    cloudObj.$save(
+                    model.put(cloudObj,
                         function (obj) {
                             // return the saved object back
                             deferred.resolve(localObj);
@@ -161,10 +161,10 @@ angular.module('GolfPicks.cloud', [])
                 var deferred = $q.defer();
 
                 model.findById({
-                        id: id
-                    },
+                    id: id
+                },
                     function (obj) {
-                        console.log("found object!");
+                        // console.log("found object!");
 
                         var localObj = _makeLocalObject(obj, fieldNames);
 
@@ -179,46 +179,68 @@ angular.module('GolfPicks.cloud', [])
             },
 
             getList: function (model, fieldNames, ids) {
-                console.debug("model: " + JSON.stringify(model));
+                // console.debug("model: ", model);
                 console.debug("cloudData.getList: ids: " + JSON.stringify(ids));
 
                 var deferred = $q.defer();
 
-                // if a list of ids is given, then filter based on that
-                var filter = "";
+                // // if a list of ids is given, then filter based on that
+                // var filter = "";
 
+                // if (ids) {
+                //     filter = {
+                //         filter: {
+                //             where: {
+                //                 id: {
+                //                     inq: ids
+                //                 }
+                //             }
+                //         }
+                //     };
+                // }
                 if (ids) {
-                    filter = {
-                        filter: {
-                            where: {
-                                id: {
-                                    inq: ids
-                                }
+                    model.findByIds(ids,
+                        function (objects) {
+
+                            // console.log("found objects! " + JSON.stringify(objects));
+                            var localObjs = [];
+                            var i;
+
+                            for (i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var localObj = _makeLocalObject(obj, fieldNames);
+
+                                localObjs.push(localObj);
                             }
-                        }
-                    };
+
+                            deferred.resolve(localObjs);
+                        },
+                        function (err) {
+                            console.error("cloudData.getList error :" + JSON.stringify(err));
+                            deferred.reject(err);
+                        });
+                } else {
+                    model.findAll(
+                        function (objects) {
+
+                            // console.log("found objects! " + JSON.stringify(objects));
+                            var localObjs = [];
+                            var i;
+
+                            for (i = 0; i < objects.length; i++) {
+                                var obj = objects[i];
+                                var localObj = _makeLocalObject(obj, fieldNames);
+
+                                localObjs.push(localObj);
+                            }
+
+                            deferred.resolve(localObjs);
+                        },
+                        function (err) {
+                            console.error("cloudData.getList error :" + JSON.stringify(err));
+                            deferred.reject(err);
+                        });
                 }
-
-                model.find(filter,
-                    function (objects) {
-
-                        console.log("found objects! " + JSON.stringify(objects));
-                        var localObjs = [];
-                        var i;
-
-                        for (i = 0; i < objects.length; i++) {
-                            var obj = objects[i];
-                            var localObj = _makeLocalObject(obj, fieldNames);
-
-                            localObjs.push(localObj);
-                        }
-
-                        deferred.resolve(localObjs);
-                    },
-                    function (err) {
-                        console.error("cloudData.getList error :" + JSON.stringify(err));
-                        deferred.reject(err);
-                    });
 
                 return deferred.promise;
             }
@@ -305,7 +327,7 @@ angular.module('GolfPicks.cloud', [])
             logIn: function (user, pass) {
                 var deferred = $q.defer();
 
-                Gamer.login({user:user, password:pass},
+                Gamer.login({ user: user, password: pass },
                     function (result) {
                         if (result) {
                             var gamer = result;

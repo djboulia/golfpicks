@@ -1,24 +1,28 @@
 {
-  "name": "golfpicks",
+  "name": "golfpicks-pwcc",
   "version": "2.0.0",
   "author": "Don Boulia",
   "main": "server/server.js",
   "scripts": {
-    "start": "node .",
+    "start": "node server/server.js",
+    "dev": "node -r dotenv/config server/server.js dotenv_config_path=./.env.dev",
     "pretest": "jshint .",
     "posttest": "nsp check"
   },
   "dependencies": {
+    "aws-sdk": "^2.1202.0",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "uuid": "^8.3.2",
     "cheerio": "^0.20.0",
-    "cloudant": "1.7.1",
     "compression": "^1.0.3",
-    "cors": "^2.5.2",
     "helmet": "^3.10.0",
-    "loopback": "^3.0.0",
-    "loopback-boot": "^2.6.5",
-    "loopback-component-explorer": "^5.0.0",
-    "loopback-connector-cloudant": "^1.2.5",
-    "loopback-datasource-juggler": "^3.16.0",
     "node.io": "^0.5.1",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^2.0.0"
@@ -43,10 +47,13 @@
     "jshint": "^2.5.6",
     "nsp": "^2.1.0"
   },
+  "overrides": {
+    "graceful-fs": "^4.2.10"
+  },
   "repository": {
     "type": "",
     "url": ""
   },
   "license": "Apache-2.0",
-  "description": "GolfPicks"
+  "description": "GolfPicks Prestonwood"
 }
