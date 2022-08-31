@@ -99,8 +99,32 @@ const Event = function (modelServer, model) {
     modelServer.addCrudMethods(model);
 
     // add any additional entry points here
-    modelServer.methodId('/:id/scores', 'GET', model.scores);
-    modelServer.methodId('/:id/weather', 'GET', model.weather);
+    modelServer.method(
+        '/:id/scores',
+        'GET',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+        ],
+        model.scores
+    );
+
+    modelServer.method(
+        '/:id/weather',
+        'GET',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+        ],
+        model.weather
+    );
+
 }
 
 module.exports = Event;

@@ -129,30 +129,64 @@ const Game = function (modelServer, model) {
         return { picks: game.gamers };
     };
 
-    const getGamerPicksHandler = async function (context) {
-        const id = context.params.id;
-        const gamerid = context.params.gamerid;
-
-        const result = await model.getGamerPicks(id, gamerid);
-        return result;
-    }
-
-    const postGamerPicksHandler = async function (context) {
-        const id = context.params.id;
-        const gamerid = context.params.gamerid;
-        const picks = context.body;
-
-        const result = await model.updateGamerPicks(id, gamerid, picks);
-        return result;
-    }
-
     // expose the create, read, update methods from this model
     modelServer.addCrudMethods(model);
 
     // add any additional entry points here
-    modelServer.methodId('/:id/Gamers', 'GET', model.gamers);
-    modelServer.method('/:id/Gamers/:gamerid/picks', 'GET', getGamerPicksHandler);
-    modelServer.method('/:id/Gamers/:gamerid/picks', 'POST', postGamerPicksHandler);
+    modelServer.method(
+        '/:id/Gamers',
+        'GET',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+        ],
+        model.gamers
+    );
+
+    modelServer.method(
+        '/:id/Gamers/:gamerid/picks',
+        'GET',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+            {
+                name: 'gamerid',
+                source: 'param',
+                type: 'string'
+            },
+        ],
+        model.getGamerPicks
+    );
+
+    modelServer.method(
+        '/:id/Gamers/:gamerid/picks',
+        'POST',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+            {
+                name: 'gamerid',
+                source: 'param',
+                type: 'string'
+            },
+            {
+                name: 'picks',
+                source: 'body',
+                type: 'string'
+            },
+        ],
+        model.updateGamerPicks
+    );
+
 }
 
 module.exports = Game;

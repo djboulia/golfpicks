@@ -42,7 +42,18 @@ const Course = function (modelServer, model) {
     modelServer.addCrudMethods(model);
 
     // add any additional entry points here
-    modelServer.methodId('/:id/weather', 'GET', model.weather);
+    modelServer.method(
+        '/:id/weather',
+        'GET',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+        ],
+        model.weather
+    );
 }
 
 module.exports = Course;

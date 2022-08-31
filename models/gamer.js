@@ -37,20 +37,28 @@ const Gamer = function (modelServer, model) {
         }
     }
 
-    const loginHandler = async function( context ) {
-        const body = context.body;
-        const user = body.user;
-        const password = body.password;
-
-        const result = await model.login(user, password);
-        return result;
-    }
-
     // expose the create, read, update methods from this model
     modelServer.addCrudMethods(model);
 
     // add any additional entry points here
-    modelServer.method('/login', 'POST', loginHandler);
+    modelServer.method(
+        '/login',
+        'POST',
+        [
+            {
+                name: 'user',
+                source: 'body.param',
+                type: 'string'
+            },
+            {
+                name: 'password',
+                source: 'body.param',
+                type: 'string'
+            },
+        ],
+        model.login
+    );
+
 }
 
 module.exports = Gamer;
