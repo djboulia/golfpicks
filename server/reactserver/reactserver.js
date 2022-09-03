@@ -110,6 +110,7 @@ const ReactServer = function (clientDirStatic) {
         }
         else if (e instanceof Error) {
             console.log(`DEBUG: ${method} caught error: ${e.message}`);
+            console.log(`DEBUG: ${e.stack}`);
             jsonResponse.error(500, e.message);
         } else {
             // if it's not an error object, just return the raw error
