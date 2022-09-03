@@ -164,6 +164,44 @@ angular.module('GolfPicks.serverApi', [])
                     }
                 );
             },
+
+            leaderboard: function (obj, success, err) {
+                const id = obj.id;
+                console.debug("Game.leaderboard: " + id);
+
+                var apiPath = path + '/' + id + '/leaderboard';
+
+                $http.get(apiPath).then(
+                    function successCallback(response) {
+                        console.log("got leaderboard ", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("leaderboard failed");
+                        err(response);
+                    }
+                );
+
+            },
+
+            withGamerDetail: function (obj, success, err) {
+                const id = obj.id;
+                console.debug("Game.withGamerDetail: " + id);
+
+                var apiPath = path + '/' + id + '/withGamerDetail';
+
+                $http.get(apiPath).then(
+                    function successCallback(response) {
+                        console.log("got gamer detail ", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("withGamerDetail failed");
+                        err(response);
+                    }
+                );
+
+            }
         }
     }])
     .factory('Event', ['$http', 'Model', function ($http, model) {
@@ -223,6 +261,63 @@ angular.module('GolfPicks.serverApi', [])
                         err(response);
                     }
                 );
+            },
+
+            deepGet: function (obj, success, err) {
+                const id = obj.id;
+                console.debug("Event.deepGet: " + id);
+
+                var apiPath = path + '/' + id + '/deep';
+
+                $http.get(apiPath).then(
+                    function successCallback(response) {
+                        console.log("got golfer scores", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("withGolferScores failed");
+                        err(response);
+                    }
+                );
+
+            },
+
+            leaders: function (obj, success, err) {
+                const id = obj.id;
+                console.debug("Event.leaders: " + id);
+
+                var apiPath = path + '/' + id + '/leaders';
+
+                $http.get(apiPath).then(
+                    function successCallback(response) {
+                        console.log("got leaders", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("leaders failed");
+                        err(response);
+                    }
+                );
+
+            },
+
+            newsfeed: function (obj, success, err) {
+                const id = obj.id;
+                console.debug("Event.newsfeed: " + id);
+
+                var apiPath = path + '/' + id + '/newsfeed';
+
+                $http.get(apiPath).then(
+                    function successCallback(response) {
+                        console.log("got newsfeed", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("newsfeed failed");
+                        err(response);
+                    }
+                );
+
             }
         }
     }])
@@ -303,6 +398,25 @@ angular.module('GolfPicks.serverApi', [])
                     },
                     function errorCallback(response) {
                         console.log("login failed");
+                        err(response);
+                    }
+                );
+
+            },
+
+            games: function (obj, success, err) {
+                const id = obj.id;
+                console.debug("Gamer.games: " + id);
+
+                var apiPath = path + '/' + id + '/Games';
+
+                $http.get(apiPath).then(
+                    function successCallback(response) {
+                        console.log("got games", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("games failed");
                         err(response);
                     }
                 );

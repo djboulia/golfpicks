@@ -148,7 +148,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
 
                 // build the leaderboard information by combining latest event scoring
                 // information with the players selected by the gamers
-                gameData.loadLeaderboard(game)
+                gameData.loadLeaderboard(gameid)
                     .then(function (result) {
                             var event = result.name;
                             var courseinfo = result.courseInfo;

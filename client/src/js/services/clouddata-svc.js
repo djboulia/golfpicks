@@ -396,6 +396,32 @@ angular.module('GolfPicks.cloud', [])
 
             isEqualTo: function (obj) {
                 return this.getId() == obj._id;
+            },
+
+            games: function () {
+                console.log('cloudCurrentUser.games');
+                const id = this.getId();
+                var deferred = $q.defer();
+
+                Gamer.games({ id: id },
+                    function (result) {
+                        if (result) {
+                            deferred.resolve(result);
+                        } else {
+                            deferred.reject({
+                                "err": "Couldn't get game history"
+                            });
+                        }
+                    },
+                    function (err) {
+                        console.error("error getting game history for user :" + id + " err: " + JSON.stringify(err));
+
+                        deferred.reject({
+                            "err": err
+                        });
+                    });
+
+                return deferred.promise;
             }
         };
     }]);

@@ -393,6 +393,7 @@ angular.module('GolfPicks.eventUtils', [])
                 var lastRoundPlayed = this.lastRoundPlayed(roundStatus);
                 var useToday = (lastRoundPlayed == roundNumber) ? true : false;
 
+                // console.log('getRoundNetScore: ', golfer, par, roundNumber, roundStatus);
                 return (useToday) ? this.parseNetScore(golfer.today) : this.formatNetScore(golfer[roundNumber + 1] - par);
             },
 

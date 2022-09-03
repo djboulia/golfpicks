@@ -9,34 +9,21 @@ function GamePlayersCtrl($scope, $stateParams, gameData) {
 
         gameData.loadGameWithGamers($stateParams.id)
             .then(function (result) {
-                    var game = result.game;
-                    var gamerMap = result.gamerMap;
+                    const game = result;
+                    const gamers = game.gamers;
 
                     // see which gamers have made their picks
-                    var picks = [];
-                    var nopicks = [];
+                    const picks = [];
+                    const nopicks = [];
 
-                    for (var i = 0; i < game.gamers.length; i++) {
-                        var gamer = game.gamers[i];
+                    for (var i = 0; i < gamers.length; i++) {
+                        var gamer = gamers[i];
 
                         if (gamer.picks) {
-                            if (!gamerMap[gamer.user]) {
-                              console.log("ERROR: found null entry for " + gamer.user);
-                            }
-
-                            picks.push(gamerMap[gamer.user]);
-
-                            //remove it from the list
-                            delete gamerMap[gamer.user];
+                            picks.push(gamer);
+                        } else {
+                            nopicks.push(gamer);
                         }
-                    }
-
-                    console.log("remaining players " + JSON.stringify(gamerMap));
-
-                    // the remaining objects in the list are folks who haven't
-                    // yet made their picks
-                    for (var prop in gamerMap) {
-                        nopicks.push(gamerMap[prop]);
                     }
 
                     console.log("picks: " + JSON.stringify(picks));

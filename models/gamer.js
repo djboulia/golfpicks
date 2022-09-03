@@ -3,7 +3,13 @@
  * for this model.
  * 
  */
+
+const GameUtils = require('../common/lib/gameutils.js');
+const app = require('../server/app');
+
 const Gamer = function (modelServer, model) {
+
+    const gameUtils = new GameUtils();
 
     model.login = async function (user, password) {
         console.log("logging in user " + user);
@@ -35,6 +41,86 @@ const Gamer = function (modelServer, model) {
         } else {
             throw new Error(err);
         }
+    };
+
+    /**
+     * get all games this gamer has participated in
+     * 
+     * @param {String} id gamer id
+     * @returns a list of games this gamer has played in
+     */
+    model.games = async function (id) {
+        console.log("getting games for gamer " + id);
+
+        const Games = app.getModel('Game');
+
+        const games = await Games.findAll()
+            .catch((err) => {
+                throw new Error(err);
+            });
+
+        const gameHistory = {
+            active: { // the currently active game (if any)
+                inProgress: false,
+                joined: false
+            },
+            history: [] // list of games for this user
+        };
+
+        if (!games) throw new Error('Could not find Games');
+
+        games.forEach(function (gamerecord) {
+            const gameid = gamerecord.id;
+            const game = gamerecord.attributes;
+
+            const gameDetails = gameUtils.getGameDetails(game, gameid);
+            gameUtils.addGracePeriod(gameDetails, 10);
+
+            if (!gameUtils.tournamentComplete(
+                gameDetails.start,
+                gameDetails.end)) {
+
+                // make this the active game
+                gameHistory.active.event = gameDetails.event;
+                gameHistory.active.eventid = gameDetails.eventid;
+
+                if (gameUtils.tournamentInProgress(
+                    gameDetails.start,
+                    gameDetails.end)) {
+
+                    gameHistory.active.inProgress = true;
+                }
+            }
+
+            // look through each game to see if current user is one of the players
+            const gamerids = game.gamers;
+
+            for (let j = 0; j < gamerids.length; j++) {
+
+                if (id === gamerids[j].user) {
+
+                    // console.log(`user ${id} participated in game ${gameid}`);
+
+                    if (gameHistory.active.eventid == gameDetails.eventid) {
+                        gameHistory.active.joined = true;
+                    } else {
+                        // add it to our history
+                        gameHistory.history.push(gameDetails);
+                    }
+                }
+            }
+        });
+
+        // sort the gameHistory by date
+        gameHistory.history.sort(function (a, b) {
+            if (a.start == b.start) {
+                return 0;
+            } else {
+                return (a.start > b.start) ? -1 : 1;
+            }
+        });
+
+        return gameHistory;
     }
 
     // expose the create, read, update methods from this model
@@ -59,6 +145,18 @@ const Gamer = function (modelServer, model) {
         model.login
     );
 
+    modelServer.method(
+        '/:id/Games',
+        'GET',
+        [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            }
+        ],
+        model.games
+    );
 }
 
 module.exports = Gamer;
