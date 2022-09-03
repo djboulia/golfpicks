@@ -112,6 +112,11 @@ const ModelServer = function (server, basePath) {
             type: 'string'
         },
         {
+            name: 'details',
+            source: 'query',
+            type: 'boolean'
+        },
+        {
             name: 'picks',
             source: 'body',
             type: 'array'
@@ -141,10 +146,16 @@ const ModelServer = function (server, basePath) {
                 case 'param':
                     result.push(context.params[arg.name]);
                     break;
+
+                case 'query':
+                    result.push(context.query[arg.name]);
+                    break;
+
                 case 'body':
                     // return the whole body as a parameter
                     result.push(context.body);
                     break;
+
                 case 'body.param':
                     // return a specific parameter in the body
                     const body = context.body;
