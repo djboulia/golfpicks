@@ -1,7 +1,7 @@
 angular.module('GolfPicks')
-    .controller('PlayersCtrl', ['$scope', '$cookieStore', 'cloudDataPlayer', PlayersCtrl]);
+    .controller('PlayersCtrl', ['$scope', 'cloudDataPlayer', PlayersCtrl]);
 
-function PlayersCtrl($scope, $cookieStore, cloudDataPlayer) {
+function PlayersCtrl($scope, cloudDataPlayer) {
     var editUrl = '#/user';
 
     console.log("reached players controller, setting edit url to: " + editUrl);

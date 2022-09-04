@@ -1,10 +1,9 @@
 angular.module('GolfPicks')
     .controller('PlayerCtrl', ['$scope', '$stateParams',
-                               '$uibModal', '$cookieStore',
-                               'cloudDataPlayer', PlayerCtrl]);
+                               '$uibModal', 'cloudDataPlayer', PlayerCtrl]);
 
 
-function PlayerCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataPlayer) {
+function PlayerCtrl($scope, $stateParams, $uibModal, cloudDataPlayer) {
     var returnUrl = "#/users";
 
     console.log("reached player controller with id " + $stateParams.id);

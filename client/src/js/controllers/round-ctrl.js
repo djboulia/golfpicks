@@ -23,7 +23,7 @@ var mergeScoresAndPlayers = function (roundid, event) {
         for (var i = 0; i < event.players.length; i++) {
             var player = event.players[i];
 
-            players[player.user._id] = player;
+            players[player.user.id] = player;
         }
 
         //
@@ -46,11 +46,11 @@ var mergeScoresAndPlayers = function (roundid, event) {
 }
 
 angular.module('GolfPicks')
-    .controller('RoundCtrl', ['$scope', '$stateParams', '$cookieStore',
+    .controller('RoundCtrl', ['$scope', '$stateParams', 
                                'cloudDataEvent', RoundCtrl]);
 
 
-function RoundCtrl($scope, $stateParams, $cookieStore, cloudDataEvent) {
+function RoundCtrl($scope, $stateParams, cloudDataEvent) {
 
     console.log("reached round controller with id " +
         $stateParams.id + " and round id " + $stateParams.roundid);
@@ -67,7 +67,7 @@ function RoundCtrl($scope, $stateParams, $cookieStore, cloudDataEvent) {
     if ($stateParams.id) {
         // load up the existing data in our form
 
-        cloudDataEvent.get($stateParams.id)
+        cloudDataEvent.deepGet($stateParams.id)
             .then(function (obj) {
                     event = obj;
 

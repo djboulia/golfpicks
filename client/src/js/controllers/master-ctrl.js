@@ -4,11 +4,11 @@
 
 angular.module('GolfPicks')
     .controller('MasterCtrl', ['$scope', '$cookieStore', '$location',
-                               '$rootScope', 'cloudDataCurrentUser', 'cloudDataLog', MasterCtrl]);
+        '$rootScope', 'cloudDataCurrentUser', 'cloudDataLog', MasterCtrl]);
 
 var loginUrl = "/#/login";
 
-var initCurrentUser = function ($scope, $location, currentUser) {
+var initCurrentUser = function ($scope, currentUser) {
 
     if (currentUser) {
         $scope.loggedIn = currentUser.isLoggedIn();
@@ -29,7 +29,7 @@ var initCurrentUser = function ($scope, $location, currentUser) {
 
 function MasterCtrl($scope, $cookieStore, $location, $rootScope, currentUser, cloudLog) {
 
-    if (!initCurrentUser($scope, $location, currentUser)) {
+    if (!initCurrentUser($scope, currentUser)) {
         return;
     }
 

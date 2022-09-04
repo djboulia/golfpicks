@@ -1,10 +1,10 @@
 angular.module('GolfPicks')
     .controller('LoginCtrl', ['$scope', '$cookieStore',
-                              'cloudDataCurrentUser', '$location', 'Alerts', LoginCtrl]);
+                              'cloudDataCurrentUser', LoginCtrl]);
 
 var mainUrl = "/index";
 
-function LoginCtrl($scope, $cookieStore, currentUser, $location, Alerts) {
+function LoginCtrl($scope, $cookieStore, currentUser) {
 
     $scope.username = "";
     $scope.password = "";

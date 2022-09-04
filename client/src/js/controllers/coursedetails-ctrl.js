@@ -1,9 +1,9 @@
 angular.module('GolfPicks')
-    .controller('CourseDetailsCtrl', ['$scope', '$stateParams', '$cookieStore',
+    .controller('CourseDetailsCtrl', ['$scope', '$stateParams',
         'cloudDataCourse', 'cloudDataCurrentUser', 'mapWidget', CourseDetailsCtrl
     ]);
 
-function CourseDetailsCtrl($scope, $stateParams, $cookieStore, cloudDataCourse, currentUser, mapWidget) {
+function CourseDetailsCtrl($scope, $stateParams, cloudDataCourse, currentUser, mapWidget) {
     var returnUrl = "#/courses";
 
     console.log("reached courses controller with id " + $stateParams.id);

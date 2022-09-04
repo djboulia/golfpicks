@@ -1,8 +1,8 @@
 angular.module('GolfPicks')
-    .controller('EventsCtrl', ['$scope', '$cookieStore', 'cloudDataEvent', EventsCtrl]);
+    .controller('EventsCtrl', ['$scope', 'cloudDataEvent', EventsCtrl]);
 var eventUrl = '#/round';
 
-function EventsCtrl($scope, $cookieStore, cloudDataEvent) {
+function EventsCtrl($scope, cloudDataEvent) {
 
     var editUrl = '#/event';
     var detailsUrl = '#/eventdetails';

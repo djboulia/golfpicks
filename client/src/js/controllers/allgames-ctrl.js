@@ -1,7 +1,7 @@
 angular.module('GolfPicks')
-    .controller('AllGamesCtrl', ['$scope', '$cookieStore', '$location', '$sanitize', 'cloudDataCurrentUser', 'gameData', AllGamesCtrl]);
+    .controller('AllGamesCtrl', ['$scope', '$location', 'gameData', AllGamesCtrl]);
 
-function AllGamesCtrl($scope, $cookieStore, $location, $sanitize, currentUser, gameData) {
+function AllGamesCtrl($scope, $location, gameData) {
 
     var gamePlayersUrl = "#/gameplayers";
     var picksUrl = "#/picks";

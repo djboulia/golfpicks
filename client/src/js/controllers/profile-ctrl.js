@@ -1,10 +1,9 @@
 angular.module('GolfPicks')
-    .controller('ProfileCtrl', ['$scope', '$stateParams', '$cookieStore',
-                               'cloudDataCurrentUser', 'cloudDataPlayer', ProfileCtrl]);
+    .controller('ProfileCtrl', ['$scope', 'cloudDataCurrentUser',
+        'cloudDataPlayer', ProfileCtrl]);
 
 
-function ProfileCtrl($scope, $stateParams, $cookieStore,
-    currentUser, cloudDataPlayer) {
+function ProfileCtrl($scope, currentUser, cloudDataPlayer) {
 
     console.log("reached profile controller");
 
@@ -15,15 +14,15 @@ function ProfileCtrl($scope, $stateParams, $cookieStore,
 
     cloudDataPlayer.get(currentUser.getId())
         .then(function (playerObject) {
-                console.log("playerObject " + JSON.stringify(playerObject));
+            console.log("playerObject " + JSON.stringify(playerObject));
 
-                existingPlayer = playerObject;
+            existingPlayer = playerObject;
 
-                $scope.name = existingPlayer.name;
-                $scope.email = existingPlayer.email;
-                $scope.password = existingPlayer.password;
-                $scope.existingPlayer = true;
-            },
+            $scope.name = existingPlayer.name;
+            $scope.email = existingPlayer.email;
+            $scope.password = existingPlayer.password;
+            $scope.existingPlayer = true;
+        },
             function (err) {
                 console.log("error getting user " + err);
             });
@@ -48,9 +47,9 @@ function ProfileCtrl($scope, $stateParams, $cookieStore,
                     currentScope.statusMessage = "Profile updated.";
                 });
             },
-            function (err) {
-                console.log("error adding player " + err);
-            });
+                function (err) {
+                    console.log("error adding player " + err);
+                });
     };
 
 };

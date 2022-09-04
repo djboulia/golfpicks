@@ -1,8 +1,8 @@
 angular.module('GolfPicks')
-    .controller('CoursesCtrl', ['$scope', '$cookieStore', 'cloudDataCourse', CoursesCtrl]);
+    .controller('CoursesCtrl', ['$scope', 'cloudDataCourse', CoursesCtrl]);
 
 
-function CoursesCtrl($scope, $cookieStore, cloudDataCourse) {
+function CoursesCtrl($scope, cloudDataCourse) {
     var editUrl = '#/course';
     var detailsUrl = '#/coursedetails';
 

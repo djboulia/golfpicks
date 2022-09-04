@@ -1,12 +1,12 @@
 angular.module('GolfPicks')
-    .controller('PicksCtrl', ['$scope', '$stateParams', '$cookieStore',
-                              '$location', '$sanitize', 'cloudDataGame',
+    .controller('PicksCtrl', ['$scope', '$stateParams', 
+                              '$location', 'cloudDataGame',
                               'gameData', 'cloudDataCurrentUser',
                               'gameUtils', PicksCtrl]);
 
 
-function PicksCtrl($scope, $stateParams, $cookieStore,
-    $location, $sanitize, cloudDataGame, gameData, currentUser, gameUtils) {
+function PicksCtrl($scope, $stateParams, 
+    $location,  cloudDataGame, gameData, currentUser, gameUtils) {
 
     var NUM_SELECTIONS = 3;
     var NUM_TOP_ALLOWED = 1;
