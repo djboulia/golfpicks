@@ -7,9 +7,14 @@ angular.module('GolfPicks.gameData', [])
             var sortByRank = function (records) {
 
                 records.sort(function (a, b) {
+                    // djb [09/04/2022] handles ties in rankings
+                    var aRank = (a.rank.startsWith('T')) ? a.rank.substr(1) : a.rank;
+                    var bRank = (b.rank.startsWith('T')) ? b.rank.substr(1) : b.rank;
+
                     // if unranked supply a sufficiently high numbrer
-                    var aRank = (a.rank == "-") ? 1000 : a.rank;
-                    var bRank = (b.rank == "-") ? 1000 : b.rank;
+                    aRank = (aRank == "-") ? 1000 : aRank;
+                    bRank = (bRank == "-") ? 1000 : bRank;
+
                     return aRank - bRank
                 });
 
@@ -146,7 +151,7 @@ angular.module('GolfPicks.gameData', [])
                                 });
                             }
 
-                            console.log("players: " + JSON.stringify(players));
+//                            console.log("players: " + JSON.stringify(players));
 
                             players = sortByRank(players);
 
