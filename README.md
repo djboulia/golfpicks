@@ -37,6 +37,10 @@ Each player will select 10 golfers.  Of those 10, you can only select 2 of the t
 
 ## Change History:
 
+September 5, 2022:
+Major overhaul to remove loopback dependency 
+Switched backend data sources to Amazon DynamoDB (vs. IBM Cloudant)
+
 Aoril 9, 2019:
 Changes to accommodate Golf Channel site.
 
