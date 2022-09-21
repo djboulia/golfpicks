@@ -56,7 +56,6 @@ gulp.task('mobile-usemin', function () {
 /**
  * Handle custom files
  */
-gulp.task('mobile-build-custom', ['mobile-custom-images', 'mobile-custom-js', 'mobile-custom-services-js', 'mobile-custom-less', 'mobile-custom-templates']);
 
 gulp.task('mobile-custom-images', function () {
     return gulp.src(mobile_paths.images)
@@ -95,6 +94,8 @@ gulp.task('mobile-custom-templates', function () {
         .pipe(gulp.dest('client/dist/mobile/templates'));
 });
 
+gulp.task('mobile-build-custom', ['mobile-custom-images', 'mobile-custom-js', 'mobile-custom-services-js', 'mobile-custom-less', 'mobile-custom-templates']);
+
 /** END MOBILE SECTION **/
 
 
@@ -115,7 +116,6 @@ gulp.task('usemin', function () {
 /**
  * Copy assets
  */
-gulp.task('build-assets', ['copy-bower_fonts', 'copy-mobile-bower_fonts']);
 
 gulp.task('copy-bower_fonts', function () {
     return gulp.src(paths.bower_fonts)
@@ -133,10 +133,11 @@ gulp.task('copy-mobile-bower_fonts', function () {
         .pipe(gulp.dest('client/dist/mobile/lib'));
 });
 
+gulp.task('build-assets', ['copy-bower_fonts', 'copy-mobile-bower_fonts']);
+
 /**
  * Handle custom files
  */
-gulp.task('build-custom', ['custom-images', 'custom-js', 'custom-less', 'custom-templates']);
 
 gulp.task('custom-images', function () {
     return gulp.src(paths.images)
@@ -165,6 +166,7 @@ gulp.task('custom-templates', function () {
         .pipe(gulp.dest('client/dist/templates'));
 });
 
+gulp.task('build-custom', ['custom-images', 'custom-js', 'custom-less', 'custom-templates']);
 
 /**
  * Watch custom files

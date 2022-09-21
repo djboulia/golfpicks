@@ -5,8 +5,13 @@
 //
 var JsonRequest = require('./jsonrequest.js');
 
+const url = process.env.TOURDATA_URL;
+
 var getBaseUrl = function () {
-    var url = "http://tourdata.mybluemix.net/api";
+    if (!url) {
+        console.log('TOURDATA_URL environment variable not found!');
+    }
+
     return url;
 };
 

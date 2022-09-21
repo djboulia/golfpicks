@@ -4,7 +4,6 @@
  * 
  */
 
-const scores = require('../common/lib/scores.js');
 const EventUtils = require('../common/lib/eventutils.js');
 const app = require('../server/app')
 
