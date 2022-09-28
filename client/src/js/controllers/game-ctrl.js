@@ -1,8 +1,8 @@
 angular.module('GolfPicks')
-    .controller('GameCtrl', ['$scope', '$stateParams', '$uibModal', '$cookieStore', 'cloudDataGame', 'cloudDataEvent', 'cloudDataCourse', GameCtrl]);
+    .controller('GameCtrl', ['$scope', '$stateParams', '$uibModal', 'cloudDataGame', 'cloudDataEvent', 'cloudDataCourse', GameCtrl]);
 
 
-function GameCtrl($scope, $stateParams, $uibModal, $cookieStore, cloudDataGame, cloudDataEvent, cloudDataCourse) {
+function GameCtrl($scope, $stateParams, $uibModal, cloudDataGame, cloudDataEvent, cloudDataCourse) {
     var returnUrl = "#/allgames";
 
     console.log("reached game controller with id " + $stateParams.id);
