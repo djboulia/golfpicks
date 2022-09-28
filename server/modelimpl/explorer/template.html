@@ -1,0 +1,962 @@
+<html>
+<link href='/explorer/css/default.css' media='screen' rel='stylesheet' type='text/css'/>
+<p>
+    <b>Model: Gamer</b>
+</p>
+
+<table width="100%">
+    <tr>
+        <td width="20%">POST</td>
+        <td align="left">/api/Gamers</td>
+    </tr>
+</table>
+
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p></p>
+<table>
+    <tr>
+        <td>PUT</td>
+        <td>/api/Gamers</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Gamers</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Gamers/findByIds</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>ids</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Gamers/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>DELETE</td>
+        <td>/api/Gamers/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Gamers/:id/exists</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Gamers/login</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>user</td>
+        <td>body.param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>password</td>
+        <td>body.param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Gamers/:id/Games</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<p>
+    <b>Model: Game</b>
+</p>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Games</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>PUT</td>
+        <td>/api/Games</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Games/findByIds</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>ids</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>DELETE</td>
+        <td>/api/Games/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games/:id/exists</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games/:id/Gamers</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games/:id/withGamerDetail</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games/:id/Gamers/:gamerid/picks</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>gamerid</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Games/:id/Gamers/:gamerid/picks</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>gamerid</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>picks</td>
+        <td>body</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Games/:id/leaderboard</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<p>
+    <b>Model: Event</b>
+</p>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Events</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>PUT</td>
+        <td>/api/Events</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Events/findByIds</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>ids</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>DELETE</td>
+        <td>/api/Events/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id/exists</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id/scores</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id/weather</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id/deep</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id/newsfeed</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Events/:id/leaders</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<p>
+    <b>Model: Course</b>
+</p>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Courses</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>PUT</td>
+        <td>/api/Courses</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Courses</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Courses/findByIds</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>ids</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Courses/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>DELETE</td>
+        <td>/api/Courses/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Courses/:id/exists</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Courses/:id/weather</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<p>
+    <b>Model: Log</b>
+</p>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Logs</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>PUT</td>
+        <td>/api/Logs</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Logs</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>POST</td>
+        <td>/api/Logs/findByIds</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>ids</td>
+        <td>body</td>
+        <td>object</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Logs/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>DELETE</td>
+        <td>/api/Logs/:id</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+<table>
+    <tr>
+        <td>GET</td>
+        <td>/api/Logs/:id/exists</td>
+    </tr>
+</table>
+<p>Parameters:</p>
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Parameter Type</th>
+        <th>Data Type</th>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>param</td>
+        <td>string</td>
+    </tr>
+</table>
+<p/>
+</html>

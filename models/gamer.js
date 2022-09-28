@@ -128,6 +128,7 @@ const Gamer = function (modelServer, model) {
 
     // add any additional entry points here
     modelServer.method(
+        model,
         '/login',
         'POST',
         [
@@ -146,6 +147,7 @@ const Gamer = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/Games',
         'GET',
         [

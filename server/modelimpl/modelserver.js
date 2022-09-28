@@ -1,4 +1,20 @@
-const ModelServer = function (server, basePath) {
+const ModelExplorer = require('./modelexplorer');
+
+const ModelServer = function(server, basePath) {
+
+    const explorer = new ModelExplorer(server, basePath);
+
+    /**
+     * Call this to hang an /explorer endpoint off the supplied
+     * path.  This will provide a UI for accessing all of the API 
+     * endpoints.
+     * 
+     * @param {String} path 
+     */
+    this.enableExplorer = function(path) {
+        explorer.enable(path);
+    }
+
     /**
      * internal method handler.  automatically 
      * appends the basePath (e.g. api/Models)
@@ -8,8 +24,10 @@ const ModelServer = function (server, basePath) {
      * @param {String} verb 
      * @param {Function} fn 
      */
-    const serverMethod = function (path, verb, fn) {
-        const fullPath = basePath + path;
+    const serverMethod = function (model, path, verb, fn) {
+        const modelApiName = model.getModelNamePlural();
+
+        const fullPath = `${basePath}/${modelApiName}${path}`;
         return server.method(fullPath, verb, fn);
     }
 
@@ -21,84 +39,157 @@ const ModelServer = function (server, basePath) {
      */
     this.addCrudMethods = function (model) {
 
-        const create = async function (context) {
-            const body = context.body;
+        const create = async function (record) {
 
-            if (body) {
-                const result = await model.create(body);
+            if (record) {
+                const result = await model.create(record);
                 return result;
             } else {
-                throw new Error('invalid body');
+                throw new Error('create: invalid record');
             }
         }
 
-        const put = async function (context) {
-            const body = context.body;
+        const put = async function (record) {
 
-            if (body) {
-                const result = await model.put(body);
+            if (record) {
+                const result = await model.put(record);
                 return result;
             } else {
-                throw new Error('invalid body');
+                throw new Error('put: invalid record');
             }
         }
 
-        const findAll = async function (context) {
+        const findAll = async function () {
             const result = await model.findAll();
             return result;
         }
 
-        const findById = async function (context) {
-            const id = context.params.id;
+        const findById = async function (id) {
 
             if (id) {
                 const result = await model.findById(id);
                 return result;
             } else {
-                throw new Error('invalid body');
+                throw new Error('findById: invalid id');
             }
         }
 
-        const findByIds = async function (context) {
-            const ids = context.body;
+        const findByIds = async function (ids) {
 
             if (ids) {
                 const result = await model.findByIds(ids);
                 return result;
             } else {
-                throw new Error('invalid body');
+                throw new Error('findByIds: invalid ids');
             }
         }
 
-        const existsById = async function (context) {
-            const id = context.params.id;
+        const existsById = async function (id) {
 
             if (id) {
                 const result = await model.findById(id);
                 return (result === undefined) ? false : true;
             } else {
-                throw new Error('invalid body');
+                throw new Error('existsById: invalid id');
             }
         }
 
-        const deleteById = async function (context) {
-            const id = context.params.id;
+        const deleteById = async function (id) {
 
             if (id) {
                 const result = await model.deleteById(id);
                 return result;
             } else {
-                throw new Error('invalid body');
+                throw new Error('deleteById: invalid id');
             }
         }
 
-        serverMethod('', 'POST', create);
-        serverMethod('', 'PUT', put);
-        serverMethod('', 'GET', findAll);
-        serverMethod('/findByIds', 'POST', findByIds);
-        serverMethod('/:id', 'GET', findById);
-        serverMethod('/:id', 'DELETE', deleteById);
-        serverMethod('/:id/exists', 'GET', existsById);
+        // register this method with our explorer
+        this.method(
+            model,
+            '',
+            'POST',
+            [
+                {
+                    name: 'record',
+                    source: 'body',
+                    type: 'object'
+                },
+            ],
+            create);
+
+        this.method(
+            model,
+            '',
+            'PUT',
+            [
+                {
+                    name: 'record',
+                    source: 'body',
+                    type: 'object'
+                },
+            ],
+            put);
+
+        this.method(
+            model,
+            '',
+            'GET',
+            [
+            ],
+            findAll);
+
+        this.method(
+            model,
+            '/findByIds',
+            'POST',
+            [
+                {
+                    name: 'ids',
+                    source: 'body',
+                    type: 'object'
+                },
+            ],
+            findByIds);
+
+        this.method(
+            model,
+            '/:id',
+            'GET',
+            [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ],
+            findById);
+
+        this.method(
+            model,
+            '/:id',
+            'DELETE',
+            [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ],
+            deleteById);
+
+        this.method(
+            model,
+            '/:id/exists',
+            'GET',
+            [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ],
+            existsById);
     }
 
     //
@@ -182,7 +273,7 @@ const ModelServer = function (server, basePath) {
      * @param {Object} params which arguments to pass to the method (see above)
      * @param {Function} method function to call with params
      */
-    this.method = function (path, verb, params, method) {
+    this.method = function (model, path, verb, params, method) {
 
         const handler = async function (context) {
 
@@ -194,7 +285,10 @@ const ModelServer = function (server, basePath) {
             return result;
         }
 
-        serverMethod(path, verb, handler);
+        // register this method with our explorer
+        explorer.addMethod(model, path, verb, params);
+
+        serverMethod(model, path, verb, handler);
     }
 }
 

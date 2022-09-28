@@ -43,6 +43,7 @@ const Course = function (modelServer, model) {
 
     // add any additional entry points here
     modelServer.method(
+        model,
         '/:id/weather',
         'GET',
         [

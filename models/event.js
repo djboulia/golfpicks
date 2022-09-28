@@ -547,6 +547,7 @@ const Event = function (modelServer, model) {
 
     // add any additional entry points here
     modelServer.method(
+        model,
         '/:id/scores',
         'GET',
         [
@@ -560,6 +561,7 @@ const Event = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/weather',
         'GET',
         [
@@ -573,6 +575,7 @@ const Event = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/deep',
         'GET',
         [
@@ -586,6 +589,7 @@ const Event = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/newsfeed',
         'GET',
         [
@@ -599,6 +603,7 @@ const Event = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/leaders',
         'GET',
         [

@@ -647,6 +647,7 @@ const Game = function (modelServer, model) {
 
     // add any additional entry points here
     modelServer.method(
+        model,
         '/:id/Gamers',
         'GET',
         [
@@ -660,6 +661,7 @@ const Game = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/withGamerDetail',
         'GET',
         [
@@ -674,6 +676,7 @@ const Game = function (modelServer, model) {
 
 
     modelServer.method(
+        model,
         '/:id/Gamers/:gamerid/picks',
         'GET',
         [
@@ -692,6 +695,7 @@ const Game = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/Gamers/:gamerid/picks',
         'POST',
         [
@@ -715,6 +719,7 @@ const Game = function (modelServer, model) {
     );
 
     modelServer.method(
+        model,
         '/:id/leaderboard',
         'GET',
         [

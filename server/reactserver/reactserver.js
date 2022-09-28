@@ -21,6 +21,18 @@ var JsonResponse = function (res) {
     };
 }
 
+var HtmlResponse = function (res) {
+    this.send = function (obj) {
+        res.setHeader('Content-Type', 'text/html');
+        res.end(JSON.stringify(obj));
+    };
+
+    this.error = function (code, err) {
+        res.setHeader('Content-Type', 'text/html');
+        res.status(code);
+        res.send(JSON.stringify({ code: code, message: err.message }));
+    };
+}
 /**
  * do a bunch of default initialization for a backend/frontend app
  * such as cors support, static dir and session state
@@ -69,6 +81,16 @@ const ReactServer = function (clientDirStatic) {
         app.listen(port);
     }
 
+    /**
+     * Add paths for serving static files
+     * 
+     * @param {String} path the path specified in the url, e.g. /public
+     * @param {String} dir the directory on the local file system
+     */
+    this.static = function( path, dir ) {
+        app.use(path, express.static(dir));
+    }
+
 
     /**
      * We don't do anything here at the moment, but we might want to initialize
@@ -102,20 +124,20 @@ const ReactServer = function (clientDirStatic) {
 
     }
 
-    const processError = function (method, jsonResponse, e) {
+    const processError = function (method, response, e) {
         // errors are processed as 500 errors with a message
         if (e instanceof ServerError) {
             console.log(`DEBUG: ${method} caught error ${e.code}: ${e.message}`);
-            jsonResponse.error(e.code, e.message);
+            response.error(e.code, e.message);
         }
         else if (e instanceof Error) {
             console.log(`DEBUG: ${method} caught error: ${e.message}`);
             console.log(`DEBUG: ${e.stack}`);
-            jsonResponse.error(500, e.message);
+            response.error(500, e.message);
         } else {
             // if it's not an error object, just return the raw error
             console.log(`DEBUG: ${method} caught error:`, e);
-            jsonResponse.error(500, e);
+            response.error(500, e);
         }
     }
 
@@ -264,6 +286,74 @@ const ReactServer = function (clientDirStatic) {
 
             default:
                 throw new Error(`invalid verb ${verb} supplied to method`)
+        }
+    }
+
+    /**
+     * call the registered function.  since this is "raw" we don't presume
+     * a JSON result, instead we expect the returned object to be of the form:
+     * 
+     * {
+     *      type : content type of the data, e.g text/html
+     *      data : data to send back
+     * }
+     * 
+    */
+     const callRawFn = async function (fn, req, res) {
+        const result = await fn({ session: req.session, query: req.query, params: req.params, body: req.body });
+
+        // if result is an instance of a special object (like a redirect)
+        // we handle that here.  Otherwise we assume it's a response with
+        // content type and data.
+
+        if (result instanceof Redirect) {
+            console.log('DEBUG: found redirect!');
+
+            const url = result.getUrl();
+            res.redirect(url);
+        } else {
+            if (!result || !result.type || !result.data) throw new Error('callRawFn: Invalid result');
+
+            res.setHeader('Content-Type', result.type);
+            res.end(result.data);
+        }
+    }
+    
+    /**
+     * raw methods for non REST/json end points
+     * 
+     * @param {String} path path for this method
+     * @param {String} verb GET, POST (for now)
+     * @param {Function} fn function called when this method is invoked
+     */
+    this.rawMethod = function (path, verb, fn) {
+        const handler = function (req, res) {
+            // call the function supplied and process the result
+            console.log(`DEBUG: ${verb} handler for ${path} called.`);
+
+            callRawFn(fn, req, res)
+                .catch((e) => {
+                    const htmlResponse = new HtmlResponse(res);
+
+                    processError(`${verb} method`, htmlResponse, e);
+                })
+        }
+
+        switch (verb.toUpperCase()) {
+            case 'GET':
+                return app.get(path, handler);
+
+            case 'POST':
+                return app.post(path, handler);
+
+            case 'PUT':
+                return app.put(path, handler);
+
+            case 'DELETE':
+                return app.delete(path, handler);
+
+            default:
+                throw new Error(`invalid verb ${verb} supplied to rawMethod`)
         }
     }
 }

@@ -1,15 +1,13 @@
-const ModelFactory = require('./modelimpl/modelfactory');
-const ModelServer = require('./modelimpl/modelserver');
+const DbModel = require('./modelimpl/dbmodel');
 
 const models = {};
 
 const App = {
 };
 
-App.addModel = function(server, db, baseUrl, modelClass, modelName, pluralModelName) {
-    const modelServer = new ModelServer(server, `${baseUrl}/${pluralModelName}`);
-    const model = new ModelFactory(modelName, db);
-    const modelApi = new modelClass(modelServer, model);
+App.addModel = function(modelServer, db, modelClass, modelName, modelApiName) {
+    const model = new DbModel(modelServer, db, modelName, modelApiName);
+    model.extend(modelClass);
 
     models[modelName] = model;
 };

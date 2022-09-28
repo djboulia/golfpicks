@@ -6,6 +6,7 @@
 
 const ReactServer = require('./reactserver/reactserver.js');
 const DbModel = require('./db/dynamomodel');
+const ModelServer = require("./modelimpl/modelserver");
 
 const Gamer = require('../models/gamer'); 
 const Game = require('../models/game'); 
@@ -32,13 +33,15 @@ const ApiServer = function (reactClientDir) {
     const BASE_URL = '/api';
 
     this.start = function (port) {
-
+        const modelServer = new ModelServer(server, BASE_URL);
+        modelServer.enableExplorer('');
+            
         // create our models
-        app.addModel( server, db, BASE_URL, Gamer, 'Gamer', 'Gamers');
-        app.addModel( server, db, BASE_URL, Game, 'Game', 'Games');
-        app.addModel( server, db, BASE_URL, Event, 'Event', 'Events');
-        app.addModel( server, db, BASE_URL, Log, 'Log', 'Logs');
-        app.addModel( server, dbCourse, BASE_URL, Course, 'Course', 'Courses');
+        app.addModel( modelServer, db, Gamer, 'Gamer', 'Gamers');
+        app.addModel( modelServer, db, Game, 'Game', 'Games');
+        app.addModel( modelServer, db, Event, 'Event', 'Events');
+        app.addModel( modelServer, dbCourse, Course, 'Course', 'Courses');
+        app.addModel( modelServer, db, Log, 'Log', 'Logs');
 
         console.log('loaded models: ', app.getModels());
         // start the server on the specified port
