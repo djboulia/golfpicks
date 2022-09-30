@@ -85,7 +85,7 @@ angular.module('GolfPicks.serverApi', [])
                 var id = params.id;
                 var idPath = path + '/' + id;
 
-                $http.get(idPath).then(
+                $http.delete(idPath).then(
                     function successCallback(response) {
                         console.log("Successfully deleted data ", response.data);
                         success(response.data);
