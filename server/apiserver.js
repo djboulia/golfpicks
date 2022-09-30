@@ -33,8 +33,7 @@ const ApiServer = function (reactClientDir) {
     const BASE_URL = '/api';
 
     this.start = function (port) {
-        const modelServer = new ModelServer(server, BASE_URL);
-        modelServer.enableExplorer('');
+        const modelServer = new ModelServer("Golfpicks", server, BASE_URL);
             
         // create our models
         app.addModel( modelServer, db, Gamer, 'Gamer', 'Gamers');
@@ -44,6 +43,9 @@ const ApiServer = function (reactClientDir) {
         app.addModel( modelServer, db, Log, 'Log', 'Logs');
 
         console.log('loaded models: ', app.getModels());
+
+        modelServer.enableExplorer('/explorer');
+
         // start the server on the specified port
         server.listen(port);
     }

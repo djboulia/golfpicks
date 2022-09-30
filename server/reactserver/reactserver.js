@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const session = require("express-session");
 const path = require('path');
 const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express');
 
 const ServerError = require('./servererror');
 const Redirect = require('./redirect');
@@ -33,6 +34,7 @@ var HtmlResponse = function (res) {
         res.send(JSON.stringify({ code: code, message: err.message }));
     };
 }
+
 /**
  * do a bunch of default initialization for a backend/frontend app
  * such as cors support, static dir and session state
@@ -87,10 +89,34 @@ const ReactServer = function (clientDirStatic) {
      * @param {String} path the path specified in the url, e.g. /public
      * @param {String} dir the directory on the local file system
      */
-    this.static = function( path, dir ) {
+    this.static = function (path, dir) {
         app.use(path, express.static(dir));
     }
 
+    /**
+     * Add an endpoint for exploring the server side APIs
+     * 
+     * @param {String} path the path that the explorer will be accessed from
+     * @param {String} swaggerDoc the json swagger doc
+     */
+    this.explorer = function (path, swaggerDoc) {
+        var options = {
+            explorer: false
+        };
+
+        app.use(path,
+            function (req, res, next) { 
+            // dynamically set the host, http/https for the swagger doc
+                swaggerDoc.host = req.get('host');
+                swaggerDoc.schemes = [req.protocol];
+
+                req.swaggerDoc = swaggerDoc;
+                
+                next();
+            },
+            swaggerUi.serveFiles(swaggerDoc, options),
+            swaggerUi.setup());
+    }
 
     /**
      * We don't do anything here at the moment, but we might want to initialize
@@ -299,7 +325,7 @@ const ReactServer = function (clientDirStatic) {
      * }
      * 
     */
-     const callRawFn = async function (fn, req, res) {
+    const callRawFn = async function (fn, req, res) {
         const result = await fn({ session: req.session, query: req.query, params: req.params, body: req.body });
 
         // if result is an instance of a special object (like a redirect)
@@ -318,7 +344,7 @@ const ReactServer = function (clientDirStatic) {
             res.end(result.data);
         }
     }
-    
+
     /**
      * raw methods for non REST/json end points
      * 

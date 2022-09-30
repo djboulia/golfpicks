@@ -11,7 +11,10 @@ const Gamer = function (modelServer, model) {
 
     const gameUtils = new GameUtils();
 
-    model.login = async function (user, password) {
+    model.login = async function (credentials) {
+        const user = credentials.user;
+        const password = credentials.password;
+
         console.log("logging in user " + user);
 
         const gamers = await model.findAll()
@@ -133,15 +136,23 @@ const Gamer = function (modelServer, model) {
         'POST',
         [
             {
-                name: 'user',
-                source: 'body.param',
-                type: 'string'
-            },
-            {
-                name: 'password',
-                source: 'body.param',
-                type: 'string'
-            },
+                name: 'credentials',
+                source: 'body',
+                type: 'object',
+                schema: {
+                    "name": 'Credentials',
+                    "properties": {
+                        "user": {
+                            "required": true,
+                            "type": 'string'
+                        },
+                        "password": {
+                            "required": true,
+                            "type": 'string'
+                        }
+                    }
+                }
+            }
         ],
         model.login
     );

@@ -1,18 +1,20 @@
 const ModelExplorer = require('./modelexplorer');
 
-const ModelServer = function(server, basePath) {
+const ModelServer = function(appName, server, basePath) {
 
-    const explorer = new ModelExplorer(server, basePath);
+    const explorer = new ModelExplorer(appName, basePath);
 
     /**
-     * Call this to hang an /explorer endpoint off the supplied
+     * Call this to hang an API explorer endpoint at the supplied
      * path.  This will provide a UI for accessing all of the API 
      * endpoints.
      * 
      * @param {String} path 
      */
     this.enableExplorer = function(path) {
-        explorer.enable(path);
+        const doc = explorer.getSwaggerDoc();
+
+        server.explorer(path, doc);
     }
 
     /**
@@ -147,7 +149,7 @@ const ModelServer = function(server, basePath) {
                 {
                     name: 'ids',
                     source: 'body',
-                    type: 'object'
+                    type: 'array'
                 },
             ],
             findByIds);
@@ -247,14 +249,6 @@ const ModelServer = function(server, basePath) {
                     result.push(context.body);
                     break;
 
-                case 'body.param':
-                    // return a specific parameter in the body
-                    const body = context.body;
-
-                    if (!body) throw new Error(`couldn't find param ${arg.name} in body`)
-
-                    result.push(body[arg.name]);
-                    break;
                 default:
                     throw new Error(`invalid source type ${arg.source}`);
             }
