@@ -105,13 +105,16 @@ const ReactServer = function (clientDirStatic) {
         };
 
         app.use(path,
-            function (req, res, next) { 
-            // dynamically set the host, http/https for the swagger doc
+            function (req, res, next) {                 
+                // dynamically set the host, http/https for the swagger doc
+                // if SWAGGER_PROTOCOL is specified, that overrides the default
+                const protocol = process.env.SWAGGER_PROTOCOL || req.protocol;
+                
                 swaggerDoc.host = req.get('host');
-                swaggerDoc.schemes = [req.protocol];
+                swaggerDoc.schemes = [protocol];
 
                 req.swaggerDoc = swaggerDoc;
-                
+
                 next();
             },
             swaggerUi.serveFiles(swaggerDoc, options),
