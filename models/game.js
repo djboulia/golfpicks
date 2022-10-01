@@ -650,13 +650,22 @@ const Game = function (modelServer, model) {
         model,
         '/:id/Gamers',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get all gamers playing this game",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.gamers
     );
 
@@ -664,13 +673,22 @@ const Game = function (modelServer, model) {
         model,
         '/:id/withGamerDetail',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get the specified game with gamer details included",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ],
+        },
         model.gamerDetail
     );
 
@@ -679,18 +697,27 @@ const Game = function (modelServer, model) {
         model,
         '/:id/Gamers/:gamerid/picks',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-            {
-                name: 'gamerid',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get a gamer's picks for this game.",
+            responses: [
+                {
+                    code: 200,
+                    description: "a picks object with an array of picks for this gamer"
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+                {
+                    name: 'gamerid',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.getGamerPicks
     );
 
@@ -698,23 +725,32 @@ const Game = function (modelServer, model) {
         model,
         '/:id/Gamers/:gamerid/picks',
         'POST',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-            {
-                name: 'gamerid',
-                source: 'param',
-                type: 'string'
-            },
-            {
-                name: 'picks',
-                source: 'body',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Update a gamer's picks for this game.",
+            responses: [
+                {
+                    code: 200,
+                    description: "The updated picks"
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+                {
+                    name: 'gamerid',
+                    source: 'param',
+                    type: 'string'
+                },
+                {
+                    name: 'picks',
+                    source: 'body',
+                    type: 'string'
+                },
+            ]
+        },
         model.updateGamerPicks
     );
 
@@ -722,13 +758,22 @@ const Game = function (modelServer, model) {
         model,
         '/:id/leaderboard',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get the leaderboard for this game",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.leaderboard
     );
 }

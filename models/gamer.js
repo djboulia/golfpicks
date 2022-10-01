@@ -126,48 +126,74 @@ const Gamer = function (modelServer, model) {
         return gameHistory;
     }
 
-    // expose the create, read, update methods from this model
-    modelServer.addCrudMethods(model);
-
-    // add any additional entry points here
+    // add our additional entry points here
+    // order is important since this is how the methods will be displayed
+    // in the API explorer, so we add the login method first
+    
     modelServer.method(
         model,
         '/login',
         'POST',
-        [
-            {
-                name: 'credentials',
-                source: 'body',
-                type: 'object',
-                schema: {
-                    "name": 'Credentials',
-                    "properties": {
-                        "user": {
-                            "required": true,
-                            "type": 'string'
-                        },
-                        "password": {
-                            "required": true,
-                            "type": 'string'
+        {
+            description: "Log in this Gamer",
+            responses: [
+                {
+                    code: 200,
+                    description: "Successful login returns this gamer's record"
+                },
+                {
+                    code: 500,
+                    description: "Invalid log in"
+                }
+            ],
+            params: [
+                {
+                    name: 'credentials',
+                    source: 'body',
+                    type: 'object',
+                    schema: {
+                        "name": 'Credentials',
+                        "properties": {
+                            "user": {
+                                "required": true,
+                                "type": 'string'
+                            },
+                            "password": {
+                                "required": true,
+                                "type": 'string'
+                            }
                         }
                     }
                 }
-            }
-        ],
+            ]
+        },
         model.login
     );
+
+    // expose the create, read, update methods from this model
+    modelServer.addCrudMethods(model);
 
     modelServer.method(
         model,
         '/:id/Games',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            }
-        ],
+        {
+            description: "Get Games associated with this gamer",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                }
+            ]
+        }
+        ,
         model.games
     );
 }

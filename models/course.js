@@ -46,13 +46,22 @@ const Course = function (modelServer, model) {
         model,
         '/:id/weather',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get the current weather conditions for this course",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.weather
     );
 }

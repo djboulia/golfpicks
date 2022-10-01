@@ -1,6 +1,6 @@
 const ModelExplorer = require('./modelexplorer');
 
-const ModelServer = function(appName, server, basePath) {
+const ModelServer = function (appName, server, basePath) {
 
     const explorer = new ModelExplorer(appName, basePath);
 
@@ -11,7 +11,7 @@ const ModelServer = function(appName, server, basePath) {
      * 
      * @param {String} path 
      */
-    this.enableExplorer = function(path) {
+    this.enableExplorer = function (path) {
         const doc = explorer.getSwaggerDoc();
 
         server.explorer(path, doc);
@@ -110,116 +110,187 @@ const ModelServer = function(appName, server, basePath) {
         this.method(
             model,
             '',
+            'GET',
+            {
+                description: "Get all instances of this model",
+                responses: [
+                    {
+                        code: 200,
+                        description: "An array containing  model objects"
+                    }
+                ],
+                params: [
+                ]
+            },
+            findAll);
+
+        this.method(
+            model,
+            '',
             'POST',
-            [
-                {
-                    name: 'record',
-                    source: 'body',
-                    type: 'object'
-                },
-            ],
+            {
+                description: "Create a new instance of this model",
+                responses: [
+                    {
+                        code: 200,
+                        description: "The created model"
+                    }
+                ],
+                params: [
+                    {
+                        name: 'record',
+                        source: 'body',
+                        type: 'object'
+                    }
+                ]
+            },
             create);
 
         this.method(
             model,
             '',
             'PUT',
-            [
-                {
-                    name: 'record',
-                    source: 'body',
-                    type: 'object'
-                },
-            ],
+            {
+                description: "Update an instance of this model",
+                responses: [
+                    {
+                        code: 200,
+                        description: "The updated model"
+                    }
+                ],
+                params: [
+                    {
+                        name: 'record',
+                        source: 'body',
+                        type: 'object'
+                    },
+                ]
+            },
             put);
-
-        this.method(
-            model,
-            '',
-            'GET',
-            [
-            ],
-            findAll);
 
         this.method(
             model,
             '/findByIds',
             'POST',
-            [
-                {
-                    name: 'ids',
-                    source: 'body',
-                    type: 'array'
-                },
-            ],
+            {
+                description: "Find multiple instances of this model",
+                responses: [
+                    {
+                        code: 200,
+                        description: "An array containing the found models"
+                    }
+                ],
+                params: [
+                    {
+                        name: 'ids',
+                        source: 'body',
+                        type: 'array'
+                    },
+                ]
+            },
             findByIds);
 
         this.method(
             model,
             '/:id',
             'GET',
-            [
-                {
-                    name: 'id',
-                    source: 'param',
-                    type: 'string'
-                },
-            ],
+            {
+                description: "Get an instance of this model",
+                responses: [
+                    {
+                        code: 200,
+                        description: "The model object"
+                    }
+                ],
+                params: [
+                    {
+                        name: 'id',
+                        source: 'param',
+                        type: 'string'
+                    },
+                ]
+            },
             findById);
 
         this.method(
             model,
             '/:id',
             'DELETE',
-            [
-                {
-                    name: 'id',
-                    source: 'param',
-                    type: 'string'
-                },
-            ],
+            {
+                description: "Delete an instance of this model",
+                responses: [
+                    {
+                        code: 200,
+                        description: "True if deleted"
+                    }
+                ],
+                params: [
+                    {
+                        name: 'id',
+                        source: 'param',
+                        type: 'string'
+                    },
+                ]
+            },
             deleteById);
 
         this.method(
             model,
             '/:id/exists',
             'GET',
-            [
-                {
-                    name: 'id',
-                    source: 'param',
-                    type: 'string'
-                },
-            ],
+            {
+                description: "Determine if an instance of this model exists",
+                responses: [
+                    {
+                        code: 200,
+                        description: "true or false"
+                    }
+                ],
+                params: [
+                    {
+                        name: 'id',
+                        source: 'param',
+                        type: 'string'
+                    },
+                ]
+            },
             existsById);
     }
 
     //
-    // example of the format of the params object expected 
+    // example of the format of the metadata object expected 
     // in the method entry point below
     //
-    const sampleArgs = [
-        {
-            name: 'id',
-            source: 'param',
-            type: 'string'
-        },
-        {
-            name: 'details',
-            source: 'query',
-            type: 'boolean'
-        },
-        {
-            name: 'picks',
-            source: 'body',
-            type: 'array'
-        },
-        {
-            name: 'user',
-            source: 'body.param',
-            type: 'string'
-        }
-    ];
+    const sampleArgs = {
+        description: "Description of this method",
+        responses: [
+            {
+                code: 200,
+                description: "good result"
+            },
+            {
+                code: 500,
+                description: "bad result"
+            }
+        ],
+        params: [
+            {
+                name: 'id',
+                source: 'param',
+                type: 'string'
+            },
+            {
+                name: 'details',
+                source: 'query',
+                type: 'boolean'
+            },
+            {
+                name: 'picks',
+                source: 'body',
+                type: 'array'
+            }
+        ]
+    };
 
     /**
      * 
@@ -264,10 +335,11 @@ const ModelServer = function(appName, server, basePath) {
      * 
      * @param {String} path 
      * @param {String} verb 
-     * @param {Object} params which arguments to pass to the method (see above)
+     * @param {Object} metadata descriptions about the method, its arguments, etc. (see above)
      * @param {Function} method function to call with params
      */
-    this.method = function (model, path, verb, params, method) {
+    this.method = function (model, path, verb, metadata, method) {
+        const params = metadata.params;
 
         const handler = async function (context) {
 
@@ -280,7 +352,7 @@ const ModelServer = function(appName, server, basePath) {
         }
 
         // register this method with our explorer
-        explorer.addMethod(model, path, verb, params);
+        explorer.addMethod(model, path, verb, metadata);
 
         serverMethod(model, path, verb, handler);
     }

@@ -7,7 +7,7 @@
 const ModelExplorer = function (appName, baseUrl) {
     const models = {};
 
-    this.addMethod = function (model, path, verb, params) {
+    this.addMethod = function (model, path, verb, metadata) {
         const modelApiName = model.getModelNamePlural();
 
         const methods = models[modelApiName] || [];
@@ -16,33 +16,19 @@ const ModelExplorer = function (appName, baseUrl) {
             model: model,
             path: path,
             verb: verb,
-            params: params
+            metadata: metadata
         });
 
         models[modelApiName] = methods;
     };
 
-    const getParameters = function (method) {
-        const params = method.params;
-        let data = '';
-
-        if (params.length > 0) {
-            data += '<p>Parameters:</p>';
-
-            for (let i = 0; i < params.length; i++) {
-                const param = params[i];
-                data += `<table>`;
-                data += `<tr><th>Parameter</th><th>Parameter Type</th><th>Data Type</th></tr>`;
-                data += `<tr><td>${param.name}</td><td>${param.source}</td><td>${param.type}</td></tr>`;
-                data += '</table><p/>';
-            }
-        }
-
-        return data;
-    }
-
     const addModelDefinition = function (swaggerDoc, model) {
         const modelName = model.getModelName();
+
+        swaggerDoc.tags[modelName] = {
+            "name": modelName,
+            "description": "Model definition",
+        }
 
         swaggerDoc.definitions[modelName] = {
             "type": "object",
@@ -53,7 +39,6 @@ const ModelExplorer = function (appName, baseUrl) {
             "properties": {
                 "id": {
                     "type": "integer",
-                    "format": "int64"
                 },
                 "name": {
                     "type": "string"
@@ -84,7 +69,7 @@ const ModelExplorer = function (appName, baseUrl) {
             }
 
             obj.properties[name] = {
-                "type" : property.type
+                "type": property.type
             }
         }
 
@@ -93,7 +78,8 @@ const ModelExplorer = function (appName, baseUrl) {
     }
 
     const addParametersDefinition = function (pathDefinition, definitions, method) {
-        const params = method.params;
+        const metadata = method.metadata;
+        const params = metadata.params;
 
         // console.log('params: ', params);
 
@@ -191,29 +177,40 @@ const ModelExplorer = function (appName, baseUrl) {
         return fullPath;
     }
 
+    const parseResponses = function(responses) {
+        const result = {};
+
+        for (let i=0; i<responses.length; i++) {
+            const response = responses[i];
+
+            result[response.code] = {
+                description : response.description,
+                schema : response.schema
+            }
+        }
+
+        return result;
+    }
+
     const addMethodDefinition = function (swaggerDoc, method) {
         const model = method.model;
         const modelName = model.getModelName();
         const path = buildPath(method);
         const verb = method.verb.toLowerCase();
-
+        const metadata = method.metadata;
+        const description = metadata.description || "";
+        const responses = parseResponses(metadata.responses || []);
         const pathDefinition = swaggerDoc.paths[path] || {};
+
         pathDefinition[verb] = {
-            "description": "Returns all gamers",
+            "tags": [
+                modelName
+            ],
+            "description": description,
             "produces": [
                 "application/json"
             ],
-            "responses": {
-                "200": {
-                    "description": "A list of gamers.",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": `#/definitions/${modelName}`
-                        }
-                    }
-                }
-            }
+            "responses": responses
         }
 
         addParametersDefinition(pathDefinition[verb], swaggerDoc.definitions, method);
@@ -253,6 +250,8 @@ const ModelExplorer = function (appName, baseUrl) {
             "produces": [
                 "application/json"
             ],
+            "tags": {
+            },
             "paths": {
             },
             "definitions": {

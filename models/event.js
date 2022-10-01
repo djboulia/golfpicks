@@ -550,13 +550,22 @@ const Event = function (modelServer, model) {
         model,
         '/:id/scores',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get scores for this event",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.scores
     );
 
@@ -564,13 +573,22 @@ const Event = function (modelServer, model) {
         model,
         '/:id/weather',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get current weather for this event",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.weather
     );
 
@@ -578,13 +596,22 @@ const Event = function (modelServer, model) {
         model,
         '/:id/deep',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Perform a deep get for this event",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.deepGet
     );
 
@@ -592,13 +619,22 @@ const Event = function (modelServer, model) {
         model,
         '/:id/newsfeed',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get the news feed (round leaders, event leaders) for this event",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.newsfeed
     );
 
@@ -606,13 +642,22 @@ const Event = function (modelServer, model) {
         model,
         '/:id/leaders',
         'GET',
-        [
-            {
-                name: 'id',
-                source: 'param',
-                type: 'string'
-            },
-        ],
+        {
+            description: "Get the golfers for this event, sorted by score",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
         model.leaders
     );
 }
