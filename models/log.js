@@ -4,9 +4,9 @@
  * 
  */
 
-const Log = function (modelServer, model) {
+const Log = function (model) {
     // expose the create, read, update methods from this model
-    modelServer.addCrudMethods(model);
+    model.addCrudMethods();
 }
 
 module.exports = Log;

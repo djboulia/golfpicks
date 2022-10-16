@@ -1,8 +1,29 @@
+const ReactServer = require('../reactserver/reactserver.js');
 const ModelExplorer = require('./modelexplorer');
 
-const ModelServer = function (appName, server, basePath) {
+/**
+ * Implements specific methods for serving up model instances for the
+ * app.  Wraps a ReactServer instance with additional handlers for models.
+ * 
+ * @param {String} basePath base path for all API calls
+ * @param {String} staticDir local path for serving static files
+ */
+const ModelServer = function (basePath, staticDir) {
+    const swagger = {
+        explorer: false
+    };
 
-    const explorer = new ModelExplorer(appName, basePath);
+    // core react server handling functions
+    const reactServer = new ReactServer(staticDir);
+
+    const explorer = new ModelExplorer();
+
+    this.enableExplorer = function(name, path, protocols) {
+        swagger.explorer = true;
+        swagger.name = name;
+        swagger.path = path;
+        swagger.protocols = protocols;
+    }
 
     /**
      * Call this to hang an API explorer endpoint at the supplied
@@ -11,10 +32,46 @@ const ModelServer = function (appName, server, basePath) {
      * 
      * @param {String} path 
      */
-    this.enableExplorer = function (path) {
-        const doc = explorer.getSwaggerDoc();
+    const addSwagger = function (name, path, protocols) {
+        const doc = explorer.getSwaggerDoc(name);
 
-        server.explorer(path, doc);
+        const options = {
+            protocols: protocols
+        }
+
+        reactServer.explorer(path, doc, options);
+    }
+
+    /**
+     * start the server on the specified port
+     * 
+     * @param {Integer} port 
+     */
+    this.listen = function (port) {
+        if (swagger.explorer) {
+            addSwagger(swagger.name, swagger.path, swagger.protocols);
+        }
+
+        reactServer.listen(port);
+    }
+
+    /**
+     * extend the base model with our additional server methods
+     * 
+     * @param {Object} model model to extend
+     */
+    this.extend = function (model) {
+        const modelServer = this;
+        const modelName = model.getModelName();
+        const modelNamePlural = model.getModelNamePlural();
+
+        model.addCrudMethods = function () {
+            modelServer.addCrudMethods(modelName, modelNamePlural, model);
+        }
+
+        model.method = function (path, verb, metadata, method) {
+            modelServer.method(modelName, modelNamePlural, model, path, verb, metadata, method);
+        }
     }
 
     /**
@@ -22,15 +79,14 @@ const ModelServer = function (appName, server, basePath) {
      * appends the basePath (e.g. api/Models)
      * to all requests
      * 
+     * @param {String} modelApiName -  
      * @param {String} path 
      * @param {String} verb 
      * @param {Function} fn 
      */
-    const serverMethod = function (model, path, verb, fn) {
-        const modelApiName = model.getModelNamePlural();
-
+    const serverMethod = function (modelApiName, path, verb, fn) {
         const fullPath = `${basePath}/${modelApiName}${path}`;
-        return server.method(fullPath, verb, fn);
+        return reactServer.method(fullPath, verb, fn);
     }
 
     /**
@@ -39,7 +95,7 @@ const ModelServer = function (appName, server, basePath) {
      * 
      * @param {Object} model 
      */
-    this.addCrudMethods = function (model) {
+    this.addCrudMethods = function (modelName, modelApiName, model) {
 
         const create = async function (record) {
 
@@ -108,6 +164,8 @@ const ModelServer = function (appName, server, basePath) {
 
         // register this method with our explorer
         this.method(
+            modelName,
+            modelApiName,
             model,
             '',
             'GET',
@@ -125,6 +183,8 @@ const ModelServer = function (appName, server, basePath) {
             findAll);
 
         this.method(
+            modelName,
+            modelApiName,
             model,
             '',
             'POST',
@@ -147,6 +207,8 @@ const ModelServer = function (appName, server, basePath) {
             create);
 
         this.method(
+            modelName,
+            modelApiName,
             model,
             '',
             'PUT',
@@ -169,6 +231,8 @@ const ModelServer = function (appName, server, basePath) {
             put);
 
         this.method(
+            modelName,
+            modelApiName,
             model,
             '/findByIds',
             'POST',
@@ -191,6 +255,8 @@ const ModelServer = function (appName, server, basePath) {
             findByIds);
 
         this.method(
+            modelName,
+            modelApiName,
             model,
             '/:id',
             'GET',
@@ -213,6 +279,8 @@ const ModelServer = function (appName, server, basePath) {
             findById);
 
         this.method(
+            modelName,
+            modelApiName,
             model,
             '/:id',
             'DELETE',
@@ -235,6 +303,8 @@ const ModelServer = function (appName, server, basePath) {
             deleteById);
 
         this.method(
+            modelName,
+            modelApiName,
             model,
             '/:id/exists',
             'GET',
@@ -338,7 +408,7 @@ const ModelServer = function (appName, server, basePath) {
      * @param {Object} metadata descriptions about the method, its arguments, etc. (see above)
      * @param {Function} method function to call with params
      */
-    this.method = function (model, path, verb, metadata, method) {
+    this.method = function (modelName, modelApiName, model, path, verb, metadata, method) {
         const params = metadata.params;
 
         const handler = async function (context) {
@@ -352,9 +422,9 @@ const ModelServer = function (appName, server, basePath) {
         }
 
         // register this method with our explorer
-        explorer.addMethod(model, path, verb, metadata);
+        explorer.addMethod(modelName, modelApiName, model, path, verb, metadata);
 
-        serverMethod(model, path, verb, handler);
+        serverMethod(modelApiName, path, verb, handler);
     }
 }
 

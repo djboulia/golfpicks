@@ -5,9 +5,9 @@
  */
 
 const EventUtils = require('../common/lib/eventutils.js');
-const app = require('../server/app')
+const app = require('../server/modelimpl/app')
 
-const Game = function (modelServer, model) {
+const Game = function (model) {
     const eventUtils = new EventUtils();
 
     model.gamerDetail = async function (gameid) {
@@ -643,11 +643,10 @@ const Game = function (modelServer, model) {
     };
 
     // expose the create, read, update methods from this model
-    modelServer.addCrudMethods(model);
+    model.addCrudMethods();
 
     // add any additional entry points here
-    modelServer.method(
-        model,
+    model.method(
         '/:id/Gamers',
         'GET',
         {
@@ -669,8 +668,7 @@ const Game = function (modelServer, model) {
         model.gamers
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/withGamerDetail',
         'GET',
         {
@@ -693,8 +691,7 @@ const Game = function (modelServer, model) {
     );
 
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/Gamers/:gamerid/picks',
         'GET',
         {
@@ -721,8 +718,7 @@ const Game = function (modelServer, model) {
         model.getGamerPicks
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/Gamers/:gamerid/picks',
         'POST',
         {
@@ -754,8 +750,7 @@ const Game = function (modelServer, model) {
         model.updateGamerPicks
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/leaderboard',
         'GET',
         {

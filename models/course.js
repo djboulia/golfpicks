@@ -6,7 +6,7 @@
 
 const Weather = require('../common/lib/weather.js');
 
-const Course = function (modelServer, model) {
+const Course = function (model) {
 
     // add a weather method to our model
     model.weather = async function (id) {
@@ -39,11 +39,10 @@ const Course = function (modelServer, model) {
     };
 
     // expose the create, read, update methods from this model
-    modelServer.addCrudMethods(model);
+    model.addCrudMethods();
 
     // add any additional entry points here
-    modelServer.method(
-        model,
+    model.method(
         '/:id/weather',
         'GET',
         {

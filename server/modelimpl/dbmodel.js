@@ -1,29 +1,21 @@
 /**
  * implements a CRUD model backed by a database
  * 
- * @param {Object} modelServer server to expose API endpoints for this model
  * @param {Object} db backend database implementation
- * @param {String} modelName the name of this model
- * @param {String} modelNamePlural the plural form of the model name
+ * @param {Stringt} modelName name for this model
+ * @param {String} modelNamePlural plural name for this model; 
+ *                                 if not supplied, an 's' is added to the model name
  */
-const DbModel = function( modelServer, db, modelName, modelNamePural ) {
+const DbModel = function( db, modelName, modelNamePlural ) {
 
-    /**
-     * 
-     * @returns the model name
-     */
     this.getModelName = function() {
         return modelName;
     }
-
-    /**
-     * 
-     * @returns plural version of this model name
-     */
+    
     this.getModelNamePlural = function() {
-        return modelNamePural;
+        return (modelNamePlural) ? modelNamePlural : modelName + 's';
     }
-
+    
     this.create = async function(attributes) {
         const result = await db.create(modelName, attributes);
         return result;
@@ -53,18 +45,6 @@ const DbModel = function( modelServer, db, modelName, modelNamePural ) {
         const result = await db.deleteById(id);
         return result;   
     }
-
-    /**
-     * Method to extend the base model by adding additional methods
-     * and API entry points.
-     * 
-     * @param {Object} modelClass 
-     * @returns 
-     */
-    this.extend = function(modelClass) {
-        return new modelClass(modelServer, this);
-    }
-
 }
 
 module.exports = DbModel;

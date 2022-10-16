@@ -4,15 +4,16 @@
  * defined in our model.
  */
 
-const ModelExplorer = function (appName, baseUrl) {
+const ModelExplorer = function () {
     const models = {};
 
-    this.addMethod = function (model, path, verb, metadata) {
-        const modelApiName = model.getModelNamePlural();
+    this.addMethod = function (modelName, modelApiName, model, path, verb, metadata) {
 
         const methods = models[modelApiName] || [];
 
         methods.push({
+            modelName: modelName,
+            modelApiName: modelApiName,
             model: model,
             path: path,
             verb: verb,
@@ -22,8 +23,7 @@ const ModelExplorer = function (appName, baseUrl) {
         models[modelApiName] = methods;
     };
 
-    const addModelDefinition = function (swaggerDoc, model) {
-        const modelName = model.getModelName();
+    const addModelDefinition = function (swaggerDoc, modelName, model) {
 
         swaggerDoc.tags[modelName] = {
             "name": modelName,
@@ -160,7 +160,7 @@ const ModelExplorer = function (appName, baseUrl) {
 
         for (let i = 0; i < params.length; i++) {
             const param = params[i];
-            const swaggerParam = '{' + param.substr(1) + '}';
+            const swaggerParam = '{' + param.substring(1) + '}';
 
             newPath = newPath.replace(param, swaggerParam);
         }
@@ -170,10 +170,10 @@ const ModelExplorer = function (appName, baseUrl) {
     }
 
     const buildPath = function (method) {
-        const model = method.model;
+        const modelApiName = method.modelApiName;
         const path = convertPath(method.path);
 
-        const fullPath = '/' + model.getModelNamePlural() + path
+        const fullPath = '/' + modelApiName + path
         return fullPath;
     }
 
@@ -193,8 +193,7 @@ const ModelExplorer = function (appName, baseUrl) {
     }
 
     const addMethodDefinition = function (swaggerDoc, method) {
-        const model = method.model;
-        const modelName = model.getModelName();
+        const modelName = method.modelName;
         const path = buildPath(method);
         const verb = method.verb.toLowerCase();
         const metadata = method.metadata;
@@ -228,7 +227,7 @@ const ModelExplorer = function (appName, baseUrl) {
         }
     }
 
-    this.getSwaggerDoc = function () {
+    this.getSwaggerDoc = function (appName) {
         const swaggerDoc = {
             "swagger": "2.0",
             "info": {
@@ -264,8 +263,9 @@ const ModelExplorer = function (appName, baseUrl) {
 
             if (methods.length > 0) {
                 const model = methods[0].model;
+                const modelName = methods[0].modelName;
 
-                addModelDefinition(swaggerDoc, model);
+                addModelDefinition(swaggerDoc, modelName, model);
 
                 addMethodsDefinition(swaggerDoc, methods);
 

@@ -8,10 +8,10 @@ require("dotenv").config();
 const path = require('path');
 const ApiServer = require('./apiserver.js');
 
-// react client side files are served from here
-const reactClientDir = path.join(__dirname, '..', 'client', 'dist');
+// client side static files are served from here
+const clientDir = path.join(__dirname, '..', 'client', 'dist');
 
-const server = new ApiServer(reactClientDir);
+const server = new ApiServer(clientDir);
 
 const port = process.env.PORT || 3000;
 console.log(`Listening on ${port}`);

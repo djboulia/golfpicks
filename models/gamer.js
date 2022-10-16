@@ -5,9 +5,9 @@
  */
 
 const GameUtils = require('../common/lib/gameutils.js');
-const app = require('../server/app');
+const app = require('../server/modelimpl/app');
 
-const Gamer = function (modelServer, model) {
+const Gamer = function (model) {
 
     const gameUtils = new GameUtils();
 
@@ -129,9 +129,8 @@ const Gamer = function (modelServer, model) {
     // add our additional entry points here
     // order is important since this is how the methods will be displayed
     // in the API explorer, so we add the login method first
-    
-    modelServer.method(
-        model,
+
+    model.method(
         '/login',
         'POST',
         {
@@ -171,10 +170,9 @@ const Gamer = function (modelServer, model) {
     );
 
     // expose the create, read, update methods from this model
-    modelServer.addCrudMethods(model);
+    model.addCrudMethods();
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/Games',
         'GET',
         {

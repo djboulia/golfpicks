@@ -6,9 +6,9 @@
 
 const scores = require('../common/lib/scores.js');
 const EventUtils = require('../common/lib/eventutils.js');
-const app = require('../server/app');
+const app = require('../server/modelimpl/app');
 
-const Event = function (modelServer, model) {
+const Event = function (model) {
     const eventUtils = new EventUtils();
 
     model.scores = async function (id) {
@@ -543,11 +543,10 @@ const Event = function (modelServer, model) {
     };
 
     // expose the create, read, update methods from this model
-    modelServer.addCrudMethods(model);
+    model.addCrudMethods();
 
     // add any additional entry points here
-    modelServer.method(
-        model,
+    model.method(
         '/:id/scores',
         'GET',
         {
@@ -569,8 +568,7 @@ const Event = function (modelServer, model) {
         model.scores
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/weather',
         'GET',
         {
@@ -592,8 +590,7 @@ const Event = function (modelServer, model) {
         model.weather
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/deep',
         'GET',
         {
@@ -615,8 +612,7 @@ const Event = function (modelServer, model) {
         model.deepGet
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/newsfeed',
         'GET',
         {
@@ -638,8 +634,7 @@ const Event = function (modelServer, model) {
         model.newsfeed
     );
 
-    modelServer.method(
-        model,
+    model.method(
         '/:id/leaders',
         'GET',
         {

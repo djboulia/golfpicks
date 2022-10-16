@@ -96,29 +96,37 @@ const ReactServer = function (clientDirStatic) {
     /**
      * Add an endpoint for exploring the server side APIs
      * 
+     * options parameter can contain:
+     * {
+     *      protocols: Array - an array of one or both of ['http', 'https'] 
+     *                         supported by this server for API calls 
+     * }
+     * 
      * @param {String} path the path that the explorer will be accessed from
      * @param {String} swaggerDoc the json swagger doc
+     * @param {Object} options see above
      */
-    this.explorer = function (path, swaggerDoc) {
-        var options = {
-            explorer: false
+    this.explorer = function (path, swaggerDoc, options) {
+        var swaggerOptions = {
+            explorer: false,    // no explorer search bar
+            customCss: '.swagger-ui .topbar { display: none }' // don't show the smartbear logo
         };
 
         app.use(path,
             function (req, res, next) {                 
                 // dynamically set the host, http/https for the swagger doc
-                // if SWAGGER_PROTOCOL is specified, that overrides the default
-                const protocol = process.env.SWAGGER_PROTOCOL || req.protocol;
-                
+                // if options are specified, they override the default
+                const protocols = options.protocols || [req.protocol];
+
                 swaggerDoc.host = req.get('host');
-                swaggerDoc.schemes = [protocol];
+                swaggerDoc.schemes = protocols;
 
                 req.swaggerDoc = swaggerDoc;
 
                 next();
             },
-            swaggerUi.serveFiles(swaggerDoc, options),
-            swaggerUi.setup());
+            swaggerUi.serveFiles(swaggerDoc, swaggerOptions),
+            swaggerUi.setup(null, swaggerOptions));
     }
 
     /**
