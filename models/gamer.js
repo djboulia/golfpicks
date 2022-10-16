@@ -5,7 +5,7 @@
  */
 
 const GameUtils = require('../common/lib/gameutils.js');
-const app = require('../server/modelimpl/app');
+const app = require('@apiserver/modelserver');
 
 const Gamer = function (model) {
 

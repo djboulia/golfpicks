@@ -6,7 +6,7 @@
 
 const scores = require('../common/lib/scores.js');
 const EventUtils = require('../common/lib/eventutils.js');
-const app = require('../server/modelimpl/app');
+const app = require('@apiserver/modelserver');
 
 const Event = function (model) {
     const eventUtils = new EventUtils();

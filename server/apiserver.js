@@ -4,16 +4,15 @@
  *
  */
 
-const DynamoDb = require('./modelimpl/db/dynamodb');
+const DynamoDb = require('@apiserver/db-dynamo');
+const DbModel = require('@apiserver/model-db');
+const app = require('@apiserver/modelserver');
 
 const Gamer = require('../models/gamer');
 const Game = require('../models/game');
 const Event = require('../models/event');
 const Course = require('../models/course');
 const Log = require('../models/log');
-
-const app = require('./modelimpl/app');
-const DbModel = require('./modelimpl/dbmodel');
 
 const ApiServer = function (clientDir) {
 

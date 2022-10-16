@@ -5,7 +5,7 @@
  */
 
 const EventUtils = require('../common/lib/eventutils.js');
-const app = require('../server/modelimpl/app')
+const app = require('@apiserver/modelserver');
 
 const Game = function (model) {
     const eventUtils = new EventUtils();
