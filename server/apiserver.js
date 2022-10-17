@@ -42,6 +42,23 @@ const ApiServer = function (clientDir) {
         app.addModel(new DbModel(dbCourse, 'Course'), Course);
         app.addModel(new DbModel(dbGame, 'Log'), Log);
 
+        const gamer = app.getModel('Gamer');
+
+        /**
+         * set a global authorization function for the app 
+         * we check to make sure a valid gamer has logged in
+         * 
+         * @param {Object} context 
+         */
+        app.auth(async function (context) {
+            const session = context.session;
+
+            const result = await gamer.currentUser(session);
+            console.log('auth function called :', result);
+
+            return result != null;
+        });
+
         console.log('loaded models: ', app.getModels());
 
         // start the server on the specified port

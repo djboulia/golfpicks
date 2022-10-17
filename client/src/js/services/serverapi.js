@@ -404,6 +404,24 @@ angular.module('GolfPicks.serverApi', [])
 
             },
 
+            currentUser: function (obj, success, err) {
+                console.debug("Gamer.currentUser");
+
+                var loginPath = path + '/currentUser';
+
+                $http.get(loginPath).then(
+                    function successCallback(response) {
+                        console.log("got currentUser", response.data);
+                        success(response.data);
+                    },
+                    function errorCallback(response) {
+                        console.log("currentUser failed");
+                        err(response);
+                    }
+                );
+
+            },
+
             games: function (obj, success, err) {
                 const id = obj.id;
                 console.debug("Gamer.games: " + id);

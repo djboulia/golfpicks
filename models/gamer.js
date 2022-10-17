@@ -11,7 +11,7 @@ const Gamer = function (model) {
 
     const gameUtils = new GameUtils();
 
-    model.login = async function (credentials) {
+    model.login = async function (session, credentials) {
         const user = credentials.user;
         const password = credentials.password;
 
@@ -36,8 +36,12 @@ const Gamer = function (model) {
             }
 
             if (match) {
+                console.log('logged in user ' + user);
+                session.user = user;
+
                 return match;
             } else {
+                session.user = undefined;
                 throw new Error("Invalid login");
             }
 
@@ -45,6 +49,15 @@ const Gamer = function (model) {
             throw new Error(err);
         }
     };
+
+    model.currentUser = async function (session) {
+        if (session.user) {
+            return session.user;
+        } else {
+            return null;
+        }
+    };
+
 
     /**
      * get all games this gamer has participated in
@@ -126,6 +139,16 @@ const Gamer = function (model) {
         return gameHistory;
     }
 
+    /**
+     * define a pass through auth function for methods that can be called with
+     * no authenticated user. (e.g. login, currentUser)
+     * 
+     * @param {Object} context 
+     */
+    const noAuth = async function (context) {
+        return true;
+    }
+
     // add our additional entry points here
     // order is important since this is how the methods will be displayed
     // in the API explorer, so we add the login method first
@@ -147,6 +170,11 @@ const Gamer = function (model) {
             ],
             params: [
                 {
+                    name: 'session',
+                    source: 'session',
+                    type: 'object'
+                },
+                {
                     name: 'credentials',
                     source: 'body',
                     type: 'object',
@@ -166,7 +194,31 @@ const Gamer = function (model) {
                 }
             ]
         },
-        model.login
+        model.login,
+        noAuth
+    );
+
+    model.method(
+        '/currentUser',
+        'GET',
+        {
+            description: "See if there is a current Gamer logged in",
+            responses: [
+                {
+                    code: 200,
+                    description: "Successful login returns this gamer's id"
+                }
+            ],
+            params: [
+                {
+                    name: 'session',
+                    source: 'session',
+                    type: 'object'
+                }
+            ]
+        },
+        model.currentUser,
+        noAuth
     );
 
     // expose the create, read, update methods from this model

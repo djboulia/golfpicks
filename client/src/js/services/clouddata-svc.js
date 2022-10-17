@@ -262,7 +262,7 @@ angular.module('GolfPicks.cloud', [])
                     _setCurrentUser(_deserialize(cookie));
                 }
             }
-
+            
             return _currentUser;
         };
 
@@ -321,15 +321,31 @@ angular.module('GolfPicks.cloud', [])
         // convenience functions for logging in, out current user
         return {
             isLoggedIn: function () {
-                return (_getCurrentUser()) ? true : false;
+                var deferred = $q.defer();
+
+                Gamer.currentUser({},
+                    function (result) {
+                        deferred.resolve(result);
+                    },
+                    function (err) {
+                        console.error("error calling currentUser. err: " + JSON.stringify(err));
+
+                        deferred.reject({
+                            "err": err
+                        });
+                    });
+
+                return deferred.promise;
             },
 
             logIn: function (user, pass) {
                 var deferred = $q.defer();
 
+                
                 Gamer.login({ user: user, password: pass },
                     function (result) {
                         if (result) {
+                            console.log("in login");
                             var gamer = result;
 
                             // save our result as a cookie so we stay logged in across pages/reloads
@@ -357,7 +373,7 @@ angular.module('GolfPicks.cloud', [])
             },
 
             logOut: function () {
-                if (this.isLoggedIn()) {
+                if (_getCurrentUser()) {
                     // unset the cookie to show we're logged out
                     _setCookie(_cookieName, "");
 
@@ -369,6 +385,9 @@ angular.module('GolfPicks.cloud', [])
 
             getDisplayName: function () {
                 var current = _getCurrentUser();
+
+
+                console.log('current user ', current);
 
                 if (current && current.attributes) {
                     return current.attributes.name;
