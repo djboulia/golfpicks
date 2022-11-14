@@ -204,14 +204,39 @@ const Event = function (model) {
         return validrounds;
     };
 
+    const sortByRank = function (records) {
+
+        records.sort(function (a, b) {
+            // djb [09/04/2022] handles ties in rankings
+            var aRank = (a.rank.startsWith('T')) ? a.rank.substr(1) : a.rank;
+            var bRank = (b.rank.startsWith('T')) ? b.rank.substr(1) : b.rank;
+
+            // if unranked supply a sufficiently high numbrer
+            aRank = (aRank == "-") ? 1000 : aRank;
+            bRank = (bRank == "-") ? 1000 : bRank;
+
+            return aRank - bRank
+        });
+
+        return records;
+    };
+
+
     /**
      * Do a deep get for this event where we fill in player and 
      * course information
      * 
      * @param {String} id event id
+     * @param {String} playerSort optional - valid values: ranking
      * @returns 
      */
-    model.deepGet = async function (id) {
+    model.deepGet = async function (id, playerSort) {
+
+        // default sort is by tournament position.  if playerSort is
+        // equal to 'ranking', we will sort based on world golf ranking
+        // for the players in the field
+        const sortByRanking = (playerSort && playerSort.toLowerCase() === 'ranking') ? true : false;
+        console.log('sortByRanking = ', sortByRanking);
 
         const eventrecord = await model.findById(id)
             .catch((e) => {
@@ -261,6 +286,15 @@ const Event = function (model) {
 
             event.golfers = tournament.scores;
             event.courseInfo = courseInfo;
+
+            if (sortByRanking) {
+                sortByRank(event.golfers);
+
+                for (var i = 0; i < event.golfers.length; i++) {
+                    event.golfers[i].index = i + 1;
+                }
+
+            }
 
         } else {
             // match up scores and players
@@ -606,6 +640,12 @@ const Event = function (model) {
                     name: 'id',
                     source: 'param',
                     type: 'string'
+                },
+                {
+                    name: 'playerSort',
+                    source: 'query',
+                    type: 'string',
+                    optional: true
                 },
             ]
         },
