@@ -51,8 +51,10 @@ function GameCtrl($scope, $stateParams, $uibModal, cloudDataGame, cloudDataEvent
     var findCourse = function (event, courses) {
         var course = undefined;
 
+        console.log('event.rounds ', event.rounds);
+
         if (event.rounds.length > 0) {
-            var courseid = event.rounds[0].course._id;
+            var courseid = event.rounds[0].course.id;
 
             console.log("looking for courseid " + JSON.stringify(courseid));
 
@@ -61,6 +63,7 @@ function GameCtrl($scope, $stateParams, $uibModal, cloudDataGame, cloudDataEvent
 
                 if (courses[i]._id == courseid) {
                     course = courses[i];
+                    console.log('found course: ', course)
                     break;
                 }
             }
@@ -102,9 +105,9 @@ function GameCtrl($scope, $stateParams, $uibModal, cloudDataGame, cloudDataEvent
                 $scope.end = new Date(existingGame.end);
                 $scope.existingGame = true;
 
-                console.log("getting event info for id " + existingGame.event);
+                console.log("getting event info for id " + existingGame.eventid);
 
-                return cloudDataEvent.get(existingGame.eventid); // promise
+                return cloudDataEvent.deepGet(existingGame.eventid); // promise
             })
             .then(function (event) {
 
