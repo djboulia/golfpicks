@@ -11,6 +11,7 @@ function GamePlayersCtrl($scope, $stateParams, gameData) {
             .then(function (result) {
                     const game = result;
                     const gamers = game.gamers;
+                    const notPlaying = game.notplaying;
 
                     // see which gamers have made their picks
                     const picks = [];
@@ -24,6 +25,14 @@ function GamePlayersCtrl($scope, $stateParams, gameData) {
                         } else {
                             nopicks.push(gamer);
                         }
+                    }
+
+                    // any gamers who are not yet playing in
+                    // this event should be in the "nopicks" list
+                    for (var i=0; i<notPlaying.length;i++) {
+                        const gamer = notPlaying[i];
+
+                        nopicks.push(gamer);
                     }
 
                     console.log("picks: " + JSON.stringify(picks));

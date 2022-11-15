@@ -47,12 +47,25 @@ const Game = function (model) {
                     gamer.picks = gamerpicks[i].picks;
 
                     mergedPicks.push(gamer);
+
+                    // remove this gamer from the gamers array
+                    gamers.splice(j, 1);
                     break;
                 }
             }
         }
 
+        // the remaining gamers from the original gamers list are
+        // those that are not playing in this game at present
+        const notPlaying = [];
+        for (let i=0; i<gamers.length; i++) {
+            const gamer = gamers[i].attributes;
+            gamer.user = gamers[i].id;
+            notPlaying.push(gamer);
+        }
+
         game.gamers = mergedPicks;
+        game.notplaying = notPlaying;
 
         return game;
     }
