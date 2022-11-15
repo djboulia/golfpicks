@@ -5,6 +5,7 @@
  */
 
 const scores = require('../common/lib/scores.js');
+const TourData = require('../common/lib/pgascores/tourdata');
 const EventUtils = require('../common/lib/eventutils.js');
 const app = require('@apiserver/modelserver');
 
@@ -333,11 +334,11 @@ const Event = function (model) {
 
         if (currentRound > 0) {
 
-            var totalPar = 0;
+            // var totalPar = 0;
 
-            for (var i = 0; i < currentRound; i++) {
-                totalPar += courseInfo[i].par;
-            }
+            // for (var i = 0; i < currentRound; i++) {
+            //     totalPar += courseInfo[i].par;
+            // }
 
             // console.debug("total par: " + totalPar + ", currentRound: " + currentRound);
             // console.debug(JSON.stringify(golfers));
@@ -576,6 +577,39 @@ const Event = function (model) {
         };
     };
 
+    model.tourSchedule = async function(year) {
+        console.log('found year ', year);
+        const tourData = new TourData(year);
+        const result = await tourData.getSchedule();
+
+        const schedule = result.schedule;
+
+        // console.log('found schedule', schedule);
+
+        const events = [];
+
+        for (let i=0; i<schedule.length; i++) {
+            const event = schedule[i];
+
+            console.log(' found event ', event);
+
+            // should be in the format /{year}/tour/pga/event/{id}
+            const hrefParts = event.link.href.split('/');
+
+            events.push({
+                name: event.tournament,
+                start: event.startDate,
+                end : event.endDate,
+                courses : event.courses,
+                provider: 'tourData',
+                year : hrefParts[1],
+                tournament_id: hrefParts[5]
+            });
+        }
+
+        return events;
+    }
+
     // expose the create, read, update methods from this model
     model.addCrudMethods();
 
@@ -694,6 +728,28 @@ const Event = function (model) {
             ]
         },
         model.leaders
+    );
+
+    model.method(
+        '/tour/pga/:year',
+        'GET',
+        {
+            description: "Get the PGA tour schedule for this year",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'year',
+                    source: 'param',
+                    type: 'number'
+                },
+            ]
+        },
+        model.tourSchedule
     );
 }
 

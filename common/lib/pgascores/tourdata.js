@@ -26,6 +26,11 @@ var TourData = function (year) {
         return url;
     };
 
+    var getScheduleUrl = function (year) {
+        var url = getBaseUrl() + "/tournaments/search?tour=pga&year=" + year;
+        return url;
+    };
+
     this.getRankings = function () {
         var url = getRankingsUrl(year);
         console.log("url : " + url);
@@ -47,6 +52,25 @@ var TourData = function (year) {
 
     this.getEvent = function (id) {
         var url = getEventUrl(year, id);
+        console.log("url : " + url);
+
+        var request = new JsonRequest(url);
+
+        return new Promise((resolve, reject) => {
+            request.get()
+                .then(json => {
+                    resolve(json);
+                })
+                .catch((e) => {
+                    console.log("Error retrieving url " + url);
+                    reject(e);
+                });
+        });
+
+    };
+
+    this.getSchedule = function () {
+        var url = getScheduleUrl(year);
         console.log("url : " + url);
 
         var request = new JsonRequest(url);
