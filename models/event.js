@@ -294,7 +294,6 @@ const Event = function (model) {
                 for (var i = 0; i < event.golfers.length; i++) {
                     event.golfers[i].index = i + 1;
                 }
-
             }
 
         } else {

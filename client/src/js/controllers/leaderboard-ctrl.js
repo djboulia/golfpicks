@@ -197,7 +197,7 @@ function LeaderboardCtrl($scope, $stateParams, $location, gameData, gameUtils, e
                                 }
                             } else {
                                 console.error("No players for the current game.");
-                                $scope.statusMessage = "No players for the current game.";
+                                $scope.errorMessage = "No players for the current game.";
                             }
 
                         },

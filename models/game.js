@@ -596,7 +596,7 @@ const Game = function (model) {
         const golfers = event.golfers;
         const courseInfo = event.courseInfo;
 
-        console.log('loadLeaderboard: ', courseInfo);
+        // console.log('loadLeaderboard: ', courseInfo);
 
         let gamers = game.gamers;
         const leaderboard = {
@@ -605,7 +605,7 @@ const Game = function (model) {
             gamers: null
         };
 
-        if (gamers) {
+        if (gamers && gamers.length > 0) {
             const roundStatus = eventUtils.roundStatus(golfers, event.rounds.length);
             console.log("Rounds started: " + JSON.stringify(roundStatus));
 
