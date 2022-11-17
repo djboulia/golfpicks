@@ -29,10 +29,12 @@ const ApiServer = function (clientDir) {
 
     const BASE_URL = '/api';
     const protocols = (process.env.SWAGGER_PROTOCOL) ? [process.env.SWAGGER_PROTOCOL] : undefined;
+    const corsSites = (process.env.CORS_CLIENT) ? [process.env.CORS_CLIENT] : undefined;
 
     this.start = function (port) {
+        console.log('corsSites: ', corsSites);
 
-        app.path(BASE_URL, clientDir);
+        app.path(BASE_URL, clientDir, corsSites);
 
         app.explorer("Golfpicks", '/explorer', protocols);
 
