@@ -263,6 +263,12 @@ const Event = function (model) {
             });
 
         const courseInfo = eventUtils.courses(event);
+        const roundInfo = {
+            currentRound : eventUtils.getCurrentRound(courseInfo),
+            roundTitles : eventUtils.getRoundTitles(courseInfo, 'Day')    
+        }
+
+        console.log('roundInfo ', roundInfo);
 
         // console.debug("entering loadEventData courseInfo :" + JSON.stringify(courseInfo));
 
@@ -287,6 +293,7 @@ const Event = function (model) {
 
             event.golfers = tournament.scores;
             event.courseInfo = courseInfo;
+            event.roundInfo = roundInfo;
 
             if (sortByRanking) {
                 sortByRank(event.golfers);
@@ -302,6 +309,7 @@ const Event = function (model) {
 
             event.golfers = golfers;
             event.courseInfo = courseInfo;
+            event.roundInfo = roundInfo;
         }
 
         return event;

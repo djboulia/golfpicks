@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-body">
+
+                <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
+                    {{errorMessage}}
+                </ngb-alert>
+
+                <h4 *ngIf="isLoaded" class="card-title">{{event.name}}</h4>
+
+                <div *ngIf="isLoaded" class="table-responsive">
+
+                    <table class="table align-middle text-nowrap">
+                        <thead class="scorecard hole">
+                            <th>
+                                Pos
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                R1
+                            </th>
+                            <th>
+                                R2
+                            </th>
+                            <th>
+                                R3
+                            </th>
+                            <th>
+                                R4
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let golfer of event.golfers; let i = index'>
+                                <td>
+                                    {{i+1}}
+                                </td>
+                                <td>
+                                    {{golfer.name}}
+                                </td>
+                                <td>
+                                    {{golfer.total}}
+                                </td>
+                                <td *ngFor='let roundNumber of event.roundNumbers'>
+                                    <div [ngClass]="{'golf-round-leader': event.lowRounds[roundNumber] == golfer[roundNumber]}">{{golfer[roundNumber]}}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="text-align:center;">View Tournament <a [attr.href]='eventUrl + "/id/" + id'>overview</a></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

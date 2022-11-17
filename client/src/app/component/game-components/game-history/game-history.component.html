@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 *ngIf="isLoaded" class="card-title">Games for {{user.attributes.name}}</h4>
+
+                <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
+                    {{errorMessage}}
+                </ngb-alert>
+
+                <div *ngIf="isLoaded" class="table-responsive">
+                    <h5 style="text-align:center">Next Tournament</h5>
+
+                    <table class="table align-middle text-nowrap">
+                        <tbody>
+                            <tr *ngIf="games.active.event">
+                                <td class="text-center"><b>{{games.active.event}}</b>
+                                </td>
+                                <td *ngIf="games.active.inProgress" class="text-center"><a
+                                        [attr.href]="leaderboardUrl + '/id/' + games.active.eventid">Leaderboard</a>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="text-center" colspan="2">
+                                    <div class="status" [innerHtml]="statusMessage"></div>
+                                </td>
+                            </tr>
+
+
+                            <!-- <tr *ngFor='let user of users'>
+                                <td>
+                                    {{user.attributes.name}}
+                                </td>
+                                <td class="fs-4">
+                                    {{user.attributes.username}}
+                                </td>
+                                <td>
+                                    <a [attr.href]="baseUrl + '/id/' + user.id">Edit</a>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+
+                    <h5 style="text-align:center">Game History</h5>
+
+                    <table class="table align-middle text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Game</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor='let game of games.history'>
+                                <td>{{game.event}}</td>
+                                <td><a [attr.href]="leaderboardUrl + '/id/' + game.eventid">View</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

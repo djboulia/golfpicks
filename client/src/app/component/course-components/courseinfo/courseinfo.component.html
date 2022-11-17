@@ -1,0 +1,147 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-body">
+
+                <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
+                    {{errorMessage}}
+                </ngb-alert>
+
+                <h4 *ngIf="isLoaded" class="card-title">{{course.attributes.name}}</h4>
+                <form *ngIf="isLoaded" name="form" role="form">
+
+                    <div class="table-responsive">
+                        <table class="table align-middle text-nowrap">
+                            <thead>
+                                <th></th>
+                                <th>
+                                    <div style="text-align:right;"><a [attr.href]="baseUrl + '/id/' + id"
+                                            class="btn btn-rounded btn-success">Edit</a></div>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            Tee: {{course.attributes.tee}}
+                                        </div>
+                                        <div *ngIf="course.attributes.rating > 0">
+                                            Rating: {{course.attributes.rating}}
+                                        </div>
+                                        <div *ngIf="course.attributes.slope > 0">
+                                            Slope: {{course.attributes.slope}}
+                                        </div>
+                                    </td>
+                                    <td class="fs-4">
+                                        <div>
+                                            Current Conditions:
+                                        </div>
+                                        <div *ngIf="weather">
+                                            {{weather.temp}}&deg; F/{{weather.metric.temp}}&deg; C
+                                        </div>
+                                        <div *ngIf="weather">
+                                            {{weather.wind}} MPH <img [attr.src]="weather.icon"
+                                                style="width:50px;height:40px;padding-left:10px;text-align: right;">
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div *ngIf="isLoaded" class="map">
+                        <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
+                            <map-marker [position]="mapCenter"
+                                [label]="course.attributes.name"></map-marker>
+                        </google-map>
+                    </div>
+
+                    <div *ngIf="frontNine.holes.length > 0" class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr class="scorecard hole">
+                                    <th>Hole</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                    <th>8</th>
+                                    <th>9</th>
+                                    <th>OUT</th>
+                                    <th class="scorecard hole-hide">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="scorecard yardage">
+                                    <td>Yardage</td>
+                                    <td *ngFor='let hole of frontNine.holes'>{{hole.yardage}}</td>
+                                    <td>{{frontNine.yardage}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="scorecard handicap">
+                                    <td>Handicap</td>
+                                    <td *ngFor='let hole of frontNine.holes'>{{hole.handicap}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr class="scorecard par">
+                                    <td>Par</td>
+                                    <td *ngFor='let hole of frontNine.holes'>{{hole.par}}</td>
+                                    <td>{{frontNine.par}}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div *ngIf="backNine.holes.length > 0" class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr class="scorecard hole">
+                                    <th>Hole</th>
+                                    <th>10</th>
+                                    <th>11</th>
+                                    <th>12</th>
+                                    <th>13</th>
+                                    <th>14</th>
+                                    <th>15</th>
+                                    <th>16</th>
+                                    <th>17</th>
+                                    <th>18</th>
+                                    <th>OUT</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="scorecard yardage">
+                                    <td>Yardage</td>
+                                    <td *ngFor='let hole of backNine.holes'>{{hole.yardage}}</td>
+                                    <td>{{backNine.yardage}}</td>
+                                    <td class="text-center">{{course.attributes.yardage}}</td>
+                                </tr>
+                                <tr class="scorecard handicap">
+                                    <td>Handicap</td>
+                                    <td *ngFor='let hole of backNine.holes'>{{hole.handicap}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr class="scorecard par">
+                                    <td>Par</td>
+                                    <td *ngFor='let hole of backNine.holes'>{{hole.par}}</td>
+                                    <td>{{backNine.par}}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

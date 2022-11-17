@@ -595,6 +595,7 @@ const Game = function (model) {
 
         const golfers = event.golfers;
         const courseInfo = event.courseInfo;
+        const roundInfo = event.roundInfo;
 
         // console.log('loadLeaderboard: ', courseInfo);
 
@@ -602,6 +603,7 @@ const Game = function (model) {
         const leaderboard = {
             name: event.name,
             courseInfo: courseInfo,
+            roundInfo: roundInfo,
             gamers: null
         };
 

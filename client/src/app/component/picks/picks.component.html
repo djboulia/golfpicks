@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-body">
+
+                <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
+                    {{errorMessage}}
+                </ngb-alert>
+
+                <div *ngIf="isLoaded">
+                    <h4 class="card-title">Picks for {{currentUser.attributes.name}}</h4>
+                </div>
+
+                <div *ngIf="isLoaded" class="table-responsive">
+                    <div class="instructions">
+                        <h3><div>{{event.name}}</div></h3>
+                        <b>Game Rules:</b>
+                        <ul>
+                            <li>Select {{NUM_SELECTIONS}} players from the list.</li>
+                            <li>Only {{NUM_TOP_ALLOWED}} players from the <span class="toppick">top {{NUM_TOP_RANK}} ranked players</span> in the field are allowed.</li>
+                        </ul>
+                        <div>Press 'Save Picks' at the bottom when finished.</div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Player</th>
+                                    <th class="text-center">Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let golfer of golfers">
+                                    <td class="text-center">
+                                        <input type="checkbox" [disabled]="!golfer.selectable" [ngModel]="golfer.selected" (click)="onUpdatePlayer(golfer);"/>
+                                    </td>
+                                    <td>
+                                        <div [ngClass]="{'toppick': golfer.index<=NUM_TOP_RANK, 'disabled':!golfer.selectable}">{{golfer.name}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="text-center" [ngClass]="{'toppick': golfer.index<=NUM_TOP_RANK, 'disabled':!golfer.selectable}">{{golfer.rank}}</div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center" colspan="3">
+                                        <div style="text-align: center;">
+                                            <button (click)="onSubmit()" [disabled]="!canSubmit" class="btn btn-rounded btn-info">Save Picks</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr> 
+                                    <td class="text-center" colspan="3">
+                                        <div class="status" [innerHtml]="picksMessage"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
