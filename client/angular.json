@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/ngx-spinner/animations/ball-spin.css",
               "src/assets/scss/style.scss",
               "src/styles.scss"
             ],

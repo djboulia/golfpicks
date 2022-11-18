@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { TemplateRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 import { Course, CourseAttributes } from 'src/app/shared/services/backend/course.interface';
@@ -28,6 +31,7 @@ export class CourseComponent implements OnInit {
   isLoaded = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
@@ -37,6 +41,8 @@ export class CourseComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
+
+    this.loading();
 
     if (this.id) {
       // edit an existing user
@@ -53,24 +59,22 @@ export class CourseComponent implements OnInit {
             console.log('data ', data);
 
             if (!data) {
-              self.errorMessage = "Error loading course!";
-              self.isLoaded = false;  
+              self.error("Error loading course!");
             } else {
               self.course = data;
-              self.isLoaded = true;
+              self.loaded();
             }
           },
           error(msg) {
             console.log('error getting course!! ', msg);
 
-            self.errorMessage = "Error loading course!";
-            self.isLoaded = false;
+            self.error("Error loading course!");
           }
         });
     } else {
       // create a new user
       this.course = this.courseApi.newModel();
-      this.isLoaded = true;
+      this.loaded();
     }
 
   }
@@ -118,7 +122,7 @@ export class CourseComponent implements OnInit {
         },
         error(msg) {
           console.log('error deleting course! ', msg);
-          self.errorMessage = `Error deleting course ${self.course.attributes.name}!`;
+          self.error(`Error deleting course ${self.course.attributes.name}!`);
         }
       });
   }
@@ -157,7 +161,7 @@ export class CourseComponent implements OnInit {
         },
         error(msg) {
           console.log('error saving data! ', msg);
-          self.errorMessage = "Error saving course data!";
+          self.error("Error saving course data!");
         }
       });
   }
@@ -178,8 +182,28 @@ export class CourseComponent implements OnInit {
         },
         error(msg) {
           console.log('error creating course! ', msg);
-          self.errorMessage = "Error creating course!";
+          self.error("Error creating course!");
         }
       });
   }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
+  }
+
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { EventService } from 'src/app/shared/services/backend/event.service';
 
 @Component({
@@ -12,17 +15,20 @@ export class EventLeadersComponent implements OnInit {
   id: any = null;
   event: any = null;
 
-  errorMessage: any = null;
   eventUrl = '/component/event';
 
+  errorMessage: any = null;
   isLoaded = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private eventApi: EventService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
+
+    this.loading();
 
     if (this.id) {
       // edit an existing user
@@ -35,28 +41,43 @@ export class EventLeadersComponent implements OnInit {
             console.log('data ', data);
 
             if (!data) {
-              self.errorMessage = "Error loading scores!";
-              self.isLoaded = false;  
+              self.error("Error loading scores!");
             } else {
               self.event = data;
 
               const rounds = data.rounds;
 
-              self.isLoaded = true;
+              self.loaded();
             }
           },
           error(msg) {
-            console.log('error getting scores!! ', msg);
+            console.log('error loading scores!! ', msg);
 
-            self.errorMessage = "Error loading scores!";
-            self.isLoaded = false;
+            self.error("Error loading scores!");
           }
         });
     } else {
-      console.log('error getting scores!! ');
-
-      this.errorMessage = "Error loading scores!";
-      this.isLoaded = false;
+      this.error("Error loading scores!");
     }
   }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
+  }
+
 }

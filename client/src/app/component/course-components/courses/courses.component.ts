@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 
 @Component({
@@ -15,15 +17,17 @@ export class CoursesComponent implements OnInit {
   baseUrlInfo = '/component/courseinfo';
 
   errorMessage: any = null;
-
   isLoaded = false;
 
-  constructor(private courseApi: CourseService) { }
+  constructor(
+    private spinner: NgxSpinnerService,
+    private courseApi: CourseService
+  ) { }
 
   ngOnInit(): void {
     const self = this;
 
-    this.errorMessage = null;
+    this.loading();
 
     this.courseApi.getAll()
       .subscribe({
@@ -31,14 +35,31 @@ export class CoursesComponent implements OnInit {
           console.log('data ', data);
 
           self.courses = data;
-          self.isLoaded = true;
+          self.loaded();
         },
         error(msg) {
           console.log('error getting courses!! ', msg);
-          self.errorMessage = "Error loading courses!";
-          self.isLoaded = false;
+          self.error("Error loading courses!");
         }
       });
   }
 
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
+  }
 }

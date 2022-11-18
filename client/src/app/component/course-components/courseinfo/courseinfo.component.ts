@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 
 @Component({
@@ -20,17 +23,15 @@ export class CourseinfoComponent implements OnInit {
   parentUrl = '/component/courses';
   baseUrl = '/component/course'
 
-  mapCenter: google.maps.LatLngLiteral = {lat: 24, lng: 12};
+  mapCenter: google.maps.LatLngLiteral = { lat: 24, lng: 12 };
   mapZoom = 9;
 
-  constructor(private route: ActivatedRoute, private router: Router, private courseApi: CourseService) { }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.isLoaded = false;
-  }
+  constructor(
+    private spinner: NgxSpinnerService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private courseApi: CourseService
+  ) { }
 
   /**
    * slope and rating aren't always included.  if they're
@@ -81,13 +82,13 @@ export class CourseinfoComponent implements OnInit {
     const holes = data.attributes.holes;
     if (holes) {
       for (var i = 9; i < 18; i++) {
-          var hole = holes[i];
+        var hole = holes[i];
 
-          backNine.yardage += parseInt(hole.yardage);
-          backNine.par += parseInt(hole.par);
-          backNine.holes.push(hole);
+        backNine.yardage += parseInt(hole.yardage);
+        backNine.par += parseInt(hole.par);
+        backNine.holes.push(hole);
       }
-  }
+    }
 
     return backNine;
   }
@@ -104,6 +105,8 @@ export class CourseinfoComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
 
+    this.loading();
+
     if (this.id) {
       // edit an existing user
       const self = this;
@@ -118,10 +121,10 @@ export class CourseinfoComponent implements OnInit {
             self.frontNine = self.frontNineData(data);
             self.backNine = self.backNineData(data);
 
-            self.mapCenter.lat = Number.parseFloat(self.course.attributes.location.lat);            
+            self.mapCenter.lat = Number.parseFloat(self.course.attributes.location.lat);
             self.mapCenter.lng = Number.parseFloat(self.course.attributes.location.lng);
- 
-            self.isLoaded = true;
+
+            self.loaded();
           },
           error(msg) {
             self.error('Error loading course!')
@@ -144,6 +147,25 @@ export class CourseinfoComponent implements OnInit {
       this.router.navigate([this.parentUrl]);
     }
 
+  }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
   }
 
 }

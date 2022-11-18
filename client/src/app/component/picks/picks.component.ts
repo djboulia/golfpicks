@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
@@ -33,6 +35,7 @@ export class PicksComponent implements OnInit {
   picksMessage: string = '';
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
     private eventApi: EventService,
@@ -44,8 +47,10 @@ export class PicksComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
 
+    this.loading();
+
     if (!this.id) {
-      this.errorMessage = "No game found!";
+      this.error("No game found!");
       return;
     }
 
@@ -80,7 +85,7 @@ export class PicksComponent implements OnInit {
         mergeMap((data) => this.gamerApi.currentUser()),
         map((data) => this.currentUser = data),
 
-        catchError(err => this.error('Error loading picks!', err))
+        catchError(err => this.loadingError('Error loading picks!', err))
       )
       .subscribe((data) => {
 
@@ -110,7 +115,7 @@ export class PicksComponent implements OnInit {
           this.loadSavedPicks(this.golfers, picks);
         }
 
-        this.isLoaded = true;
+        this.loaded();
       });
   }
 
@@ -216,14 +221,14 @@ export class PicksComponent implements OnInit {
       gameDetails.start,
       gameDetails.end)
     ) {
-      this.errorMessage = "Tournament is in progress, picks can no longer be made.";
+      this.error("Tournament is in progress, picks can no longer be made.");
       return false;
     }
     else if (this.gameDay.tournamentComplete(
       gameDetails.start,
       gameDetails.end)
     ) {
-      this.errorMessage = "This tournament has already ended, picks can no longer be made.";
+      this.error("This tournament has already ended, picks can no longer be made.");
       return false;
     }
 
@@ -279,7 +284,7 @@ export class PicksComponent implements OnInit {
 
     this.gameApi.savePicks(this.id, this.currentUser.id, picks)
       .pipe(
-        catchError(err => this.error('Error saving picks!', err))
+        catchError(err => this.loadingError('Error saving picks!', err))
       )
       .subscribe((data) => {
         this.picksMessage = "Picks saved.";
@@ -287,13 +292,31 @@ export class PicksComponent implements OnInit {
       });
   }
 
-  private error(msg: string, err: any) {
+  private loadingError(msg: string, err: any) {
+    console.log(msg);
+
+    this.error(msg);
+
+    return throwError(() => new Error(err));
+  }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
     console.log(msg);
 
     this.errorMessage = msg;
+    this.spinner.hide();
     this.isLoaded = false;
+  }
 
-    return throwError(() => new Error(err));
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
   }
 
 }

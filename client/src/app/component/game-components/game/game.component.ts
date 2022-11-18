@@ -5,6 +5,9 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TemplateRef } from '@angular/core';
 import { Game } from 'src/app/shared/services/backend/game.interfaces';
 import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { CustomAdapter, CustomDateParserFormatter } from './datepicker.adapter';
 
 import { mergeMap, map, catchError, throwError } from 'rxjs';
@@ -35,17 +38,19 @@ export class GameComponent implements OnInit {
   selectedTourStop: any = null;
   selectedCourse: any = null;
 
-  errorMessage: any = null;
   parentUrl = '/component/games';
-  baseUrl = '/component/game';
+  baseUrl = '/component/';
+
+  errorMessage: any = null;
+  isLoaded = false;
 
   title = '';
   deleteButton = false;
   submitButton = '';
   confirmButton = 'Confirm';
-  isLoaded = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
@@ -56,6 +61,8 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
+
+    this.loading();
 
     if (this.id) {
       // edit an existing game
@@ -75,15 +82,6 @@ export class GameComponent implements OnInit {
       this.loadNewGame();
     }
 
-  }
-
-  loadingError(msg: string, err: any) {
-    console.log(msg, err);
-
-    this.errorMessage = msg;
-    this.isLoaded = false;
-
-    return throwError(() => new Error(err));
   }
 
   loadExistingGame() {
@@ -114,7 +112,7 @@ export class GameComponent implements OnInit {
         this.selectedCourse = this.findCourse(this.event, this.courses);
         this.selectedTourStop = this.findTourStop(this.event, this.schedule);
 
-        this.isLoaded = true;
+        this.loaded();
       });
   }
 
@@ -142,7 +140,7 @@ export class GameComponent implements OnInit {
         this.selectedTourStop = this.schedule[0];
         this.OnTourStopChanged(this.selectedTourStop);
 
-        this.isLoaded = true;
+        this.loaded();
       });
   }
 
@@ -255,7 +253,7 @@ export class GameComponent implements OnInit {
 
         catchError(err => {
           console.log('error deleting game! ', err);
-          this.errorMessage = `Error deleting game ${this.game.attributes.name}!`;
+          this.error(`Error deleting game ${this.game.attributes.name}!`);
 
           return throwError(() => new Error(err));
         })
@@ -351,7 +349,7 @@ export class GameComponent implements OnInit {
 
         catchError(err => {
           console.log('error updating data! ', err);
-          this.errorMessage = `Error updating game data`;
+          this.error(`Error updating game data`);
 
           return throwError(() => new Error(err));
         })
@@ -387,7 +385,7 @@ export class GameComponent implements OnInit {
 
         catchError(err => {
           console.log('error creating data! ', err);
-          this.errorMessage = `Error creating game data`;
+          this.error(`Error creating game data`);
 
           return throwError(() => new Error(err));
         })
@@ -396,6 +394,33 @@ export class GameComponent implements OnInit {
         this.router.navigate([this.parentUrl]);
       })
 
+  }
+
+  loadingError(msg: string, err: any) {
+    console.log(msg, err);
+
+    this.error(msg);
+
+    return throwError(() => new Error(err));
+  }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
   }
 
 }

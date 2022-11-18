@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
 
@@ -22,6 +25,7 @@ export class EventComponent implements OnInit {
   mapCenter: google.maps.LatLngLiteral = {lat: 24, lng: 12};
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private eventApi: EventService,
     public dateFormatter: DateFormatterService) { }
@@ -29,6 +33,8 @@ export class EventComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
+
+    this.loading();
 
     if (this.id) {
       // edit an existing user
@@ -41,8 +47,7 @@ export class EventComponent implements OnInit {
             console.log('data ', data);
 
             if (!data) {
-              self.errorMessage = "Error loading tournament!";
-              self.isLoaded = false;  
+              self.error("Error loading tournament!");
             } else {
               self.event = data;
 
@@ -50,21 +55,19 @@ export class EventComponent implements OnInit {
 
               self.mapCenter = self.formatPosition(rounds[0].course.location);
   
-              self.isLoaded = true;
+              self.loaded();
             }
           },
           error(msg) {
             console.log('error getting tournament!! ', msg);
 
-            self.errorMessage = "Error loading tournament!";
-            self.isLoaded = false;
+            self.error("Error loading tournament!");
           }
         });
     } else {
       console.log('error getting tournament!! ');
 
-      this.errorMessage = "Error loading tournament!";
-      this.isLoaded = false;
+      this.error("Error loading tournament!");
     }
 
   }
@@ -74,6 +77,25 @@ export class EventComponent implements OnInit {
       lat: Number.parseFloat(location.lat),
       lng: Number.parseFloat(location.lng)
     }
+  }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
   }
 
 }

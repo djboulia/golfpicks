@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
@@ -41,12 +43,13 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   eventLeaderUrl = '/component/eventleaders';
   courseUrl = '/component/courseinfo';
 
-  reloadTimerId : any = null;
+  reloadTimerId: any = null;
 
-  isLoaded = false;
   errorMessage: any = null;
+  isLoaded = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
     private eventApi: EventService,
@@ -57,8 +60,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
 
+    this.loading();
+
     if (!this.id) {
-      this.errorMessage = "No game found!";
+      this.error("No game found!");
       return;
     }
 
@@ -75,7 +80,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       })
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
     // code here
     console.log('onDestroy called');
     if (this.reloadTimerId) {
@@ -98,7 +103,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         map((data) => this.leaderboard = data),
         // map((data) => { console.log('found event ', data); return data; }),
 
-        catchError(err => this.error('Error loading game!', err))
+        catchError(err => this.loadError('Error loading game!', err))
       )
       .subscribe((data) => {
 
@@ -118,12 +123,11 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         this.courseInfo = courseInfo[this.currentRound - 1];;
 
         if (!this.gamers) {
-          this.errorMessage = "No players for the current game."
-          console.log(this.errorMessage);
+          this.error("No players for the current game.");
           return;
         }
 
-        this.isLoaded = true;
+        this.loaded();
 
         this.setLastUpdate();
 
@@ -165,8 +169,11 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     var start = gameDetails.start;
     var eventname = gameDetails.event;
 
-    this.errorMessage = "'" + eventname + "' has not yet started. Check back again on " +
-      this.gameDay.dateString(start) + ".";
+    this.spinner.hide();
+
+    this.error("'" + eventname +
+      "' has not yet started. Check back again on " +
+      this.gameDay.dateString(start) + ".");
   }
 
   /**
@@ -186,7 +193,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       .pipe(
         map((data) => this.weather = this.formatWeatherData(data)),
 
-        catchError(err => this.error('Error loading weather!', err))
+        catchError(err => this.loadError('Error loading weather!', err))
       )
       .subscribe((data) => {
       });
@@ -198,7 +205,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       .pipe(
         map((data) => this.newsFeed = this.formatNewsFeed(data)),
 
-        catchError(err => this.error('Error loading weather!', err))
+        catchError(err => this.loadError('Error loading weather!', err))
       )
       .subscribe((data) => {
       });
@@ -229,11 +236,27 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     return data;
   }
 
-  private error(msg: string, err: any) {
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
     console.log(msg);
 
     this.errorMessage = msg;
+    this.spinner.hide();
     this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
+  }
+
+  private loadError(msg: string, err: any) {
+    this.error(msg);
 
     return throwError(() => new Error(err));
   }

@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { TemplateRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { Gamer, GamerAttributes } from 'src/app/shared/services/backend/gamer.interfaces';
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
@@ -16,7 +19,6 @@ export class UserComponent implements OnInit {
   id: any = null;
   user: any = null;
 
-  errorMessage: any = null;
   parentUrl = '/component/users';
   baseUrl = '/component/user';
 
@@ -24,10 +26,13 @@ export class UserComponent implements OnInit {
   confirmButton = 'Confirm';
   deleteButton = false;
   submitButton = 'Create';
+
+  errorMessage: any = null;
   isLoaded = false;
 
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
@@ -37,6 +42,8 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
     console.log(`id: ${this.id}`);
+
+    this.loading();
 
     if (this.id) {
       // edit an existing user
@@ -53,19 +60,18 @@ export class UserComponent implements OnInit {
             console.log('data ', data);
 
             self.user = data;
-            self.isLoaded = true;
+            self.loaded();
           },
           error(msg) {
             console.log('error getting user!! ', msg);
 
-            self.errorMessage = "Error loading user!";
-            self.isLoaded = false;
+            self.error("Error loading user!");
           }
         });
     } else {
       // create a new user
       this.user = this.gamerApi.newModel();
-      this.isLoaded = true;
+      this.loaded();
     }
 
   }
@@ -115,7 +121,7 @@ export class UserComponent implements OnInit {
         },
         error(msg) {
           console.log('error deleting user! ', msg);
-          self.errorMessage = `Error deleting player ${self.user.attributes.name}!`;
+          self.error(`Error deleting player ${self.user.attributes.name}!`);
         }
       });
   }
@@ -150,7 +156,7 @@ export class UserComponent implements OnInit {
         },
         error(msg) {
           console.log('error saving data! ', msg);
-          self.errorMessage = "Error saving player data!";
+          self.error("Error saving player data!");
         }
       });
   }
@@ -169,8 +175,27 @@ export class UserComponent implements OnInit {
         },
         error(msg) {
           console.log('error creating user! ', msg);
-          self.errorMessage = "Error creating player!";
+          self.error("Error creating player!");
         }
       });
+  }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
   }
 }

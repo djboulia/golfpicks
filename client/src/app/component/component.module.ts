@@ -20,7 +20,6 @@ import { GameplayerComponent } from './game-components/gameplayer/gameplayer.com
 import { GameHistoryComponent } from './game-components/game-history/game-history.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { PicksComponent } from './picks/picks.component';
-import { LoadingComponent } from '../shared/loading.component';
 
 @NgModule({
   imports: [
@@ -32,7 +31,6 @@ import { LoadingComponent } from '../shared/loading.component';
     GoogleMapsModule
   ],
   declarations: [
-    LoadingComponent,
     UsersComponent,
     UserComponent,
     CoursesComponent,

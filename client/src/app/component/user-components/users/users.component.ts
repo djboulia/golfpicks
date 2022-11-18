@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
 @Component({
@@ -13,15 +16,17 @@ export class UsersComponent implements OnInit {
   baseUrl = '/component/user';
 
   errorMessage: any = null;
-
   isLoaded = false;
 
-  constructor(private gamerApi: GamerService) { }
+  constructor(
+    private spinner: NgxSpinnerService,
+    private gamerApi: GamerService
+    ) { }
 
   ngOnInit(): void {
     const self = this;
 
-    this.errorMessage = null;
+    this.loading();
 
     this.gamerApi.getAll()
       .subscribe({
@@ -29,14 +34,31 @@ export class UsersComponent implements OnInit {
           console.log('data ', data);
 
           self.users = data;
-          self.isLoaded = true;
+          self.loaded();
         },
         error(msg) {
           console.log('error getting users!! ', msg);
-          self.errorMessage = "Error loading users!";
-          self.isLoaded = false;
+          self.error("Error loading users!");
         }
       });
   }
 
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
+  }
 }

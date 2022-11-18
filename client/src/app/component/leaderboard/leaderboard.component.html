@@ -2,10 +2,7 @@
     <div class="col-12">
         <div class="card">
 
-            <div class="card-body">
-
-                <app-loading *ngIf="!isLoaded && !errorMessage"></app-loading>
-
+            <div class="card-body">                
                 <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
                     {{errorMessage}}
                 </ngb-alert>

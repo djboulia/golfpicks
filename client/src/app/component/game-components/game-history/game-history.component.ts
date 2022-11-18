@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
 @Component({
@@ -18,12 +20,13 @@ export class GameHistoryComponent implements OnInit {
   picksUrl = "/component/picks";
 
   statusMessage: any = "";
-  errorMessage: any = null;
   infoMessage: any = null;
 
+  errorMessage: any = null;
   isLoaded = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gamerApi: GamerService
   ) { }
@@ -31,8 +34,9 @@ export class GameHistoryComponent implements OnInit {
   ngOnInit(): void {
     const self = this;
 
-    this.errorMessage = null;
     this.infoMessage = null;
+
+    this.loading();
 
     this.route.queryParams
       .subscribe(params => {
@@ -57,26 +61,24 @@ export class GameHistoryComponent implements OnInit {
 
                     self.statusMessage = self.activeTournamentMessage(data);
 
-                    self.isLoaded = true;
+                    self.loaded();
                   },
                   error(msg) {
                     console.log('error getting current user!! ', msg);
-                    self.errorMessage = "Error getting current user!";
-                    self.isLoaded = false;
+                    self.error("Error getting current user!");
                   }
                 });
 
             },
             error(msg) {
               console.log('error getting current user!! ', msg);
-              self.errorMessage = "Error getting current user!";
-              self.isLoaded = false;
+              self.error("Error getting current user!");
             }
           });
       })
   }
 
-  activeTournamentMessage(games: any) : string {
+  activeTournamentMessage(games: any): string {
     let statusMessage = "";
 
     if (!this.testingMode && games.active.inProgress) {
@@ -93,8 +95,27 @@ export class GameHistoryComponent implements OnInit {
       } else {
         statusMessage = 'No upcoming tournament.';
       }
-    }    
+    }
 
     return statusMessage;
+  }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
   }
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import { NgxSpinnerService } from "ngx-spinner";
+
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
 
@@ -14,17 +17,17 @@ export class EventsComponent implements OnInit {
   baseUrl = '/component/event';
 
   errorMessage: any = null;
-
   isLoaded = false;
 
   constructor(
+    private spinner: NgxSpinnerService,
     private eventApi: EventService,
     public dateFormatter: DateFormatterService) { }
 
   ngOnInit(): void {
     const self = this;
 
-    this.errorMessage = null;
+    this.loading();
 
     this.eventApi.getAll()
       .subscribe({
@@ -41,13 +44,32 @@ export class EventsComponent implements OnInit {
 
 
           self.events = data;
-          self.isLoaded = true;
+          self.loaded();
         },
         error(msg) {
           console.log('error getting tournaments!! ', msg);
-          self.errorMessage = "Error loading tournaments!";
-          self.isLoaded = false;
+          self.error( "Error loading tournaments!");
         }
       });
   }
+
+  private loading() {
+    this.errorMessage = null;
+    this.spinner.show();
+    this.isLoaded = false;
+  }
+
+  private error(msg: string) {
+    console.log(msg);
+
+    this.errorMessage = msg;
+    this.spinner.hide();
+    this.isLoaded = false;
+  }
+
+  private loaded() {
+    this.spinner.hide();
+    this.isLoaded = true;
+  }
+
 }
