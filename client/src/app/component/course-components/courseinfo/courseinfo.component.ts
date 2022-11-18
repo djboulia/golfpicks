@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 
@@ -11,15 +12,14 @@ import { CourseService } from 'src/app/shared/services/backend/course.service';
   templateUrl: './courseinfo.component.html',
   styleUrls: ['./courseinfo.component.scss']
 })
-export class CourseinfoComponent implements OnInit {
+export class CourseinfoComponent extends BaseLoadingComponent implements OnInit {
 
   id: any;
   course: any;
   frontNine: any;
   backNine: any;
   weather: any;
-  isLoaded = false;
-  errorMessage: any = null;
+
   parentUrl = '/component/courses';
   baseUrl = '/component/course'
 
@@ -31,7 +31,9 @@ export class CourseinfoComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private courseApi: CourseService
-  ) { }
+  ) {
+    super(spinner);
+  }
 
   /**
    * slope and rating aren't always included.  if they're
@@ -148,24 +150,4 @@ export class CourseinfoComponent implements OnInit {
     }
 
   }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
-
 }

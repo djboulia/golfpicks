@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 
@@ -9,20 +10,19 @@ import { CourseService } from 'src/app/shared/services/backend/course.service';
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
-export class CoursesComponent implements OnInit {
+export class CoursesComponent extends BaseLoadingComponent implements OnInit {
 
   courses: any = null;
 
   baseUrl = '/component/course';
   baseUrlInfo = '/component/courseinfo';
 
-  errorMessage: any = null;
-  isLoaded = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private courseApi: CourseService
-  ) { }
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     const self = this;
@@ -44,22 +44,4 @@ export class CoursesComponent implements OnInit {
       });
   }
 
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
 }

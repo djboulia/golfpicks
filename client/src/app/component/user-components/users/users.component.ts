@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { NgxSpinnerService } from "ngx-spinner";
 
@@ -9,21 +10,20 @@ import { GamerService } from 'src/app/shared/services/backend/gamer.service';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent extends BaseLoadingComponent implements OnInit {
 
   users: any = null;
 
   baseUrl = '/component/user';
 
-  errorMessage: any = null;
-  isLoaded = false;
-
   constructor(
-    private spinner: NgxSpinnerService,
-    private gamerApi: GamerService
-    ) { }
+    public spinner: NgxSpinnerService,
+    private gamerApi: GamerService,
+    ) { 
+      super(spinner);
+    }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     const self = this;
 
     this.loading();
@@ -43,22 +43,5 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
 
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
 }

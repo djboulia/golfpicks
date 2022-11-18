@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { EventService } from 'src/app/shared/services/backend/event.service';
 
@@ -10,20 +11,20 @@ import { EventService } from 'src/app/shared/services/backend/event.service';
   templateUrl: './eventleaders.component.html',
   styleUrls: ['./eventleaders.component.scss']
 })
-export class EventLeadersComponent implements OnInit {
+export class EventLeadersComponent extends BaseLoadingComponent implements OnInit {
 
   id: any = null;
   event: any = null;
 
   eventUrl = '/component/event';
 
-  errorMessage: any = null;
-  isLoaded = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
-    private eventApi: EventService) { }
+    private eventApi: EventService
+    ) { 
+      super(spinner);
+    }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -60,24 +61,4 @@ export class EventLeadersComponent implements OnInit {
       this.error("Error loading scores!");
     }
   }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
-
 }

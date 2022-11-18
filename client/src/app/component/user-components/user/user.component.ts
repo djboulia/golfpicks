@@ -5,6 +5,7 @@ import { TemplateRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { Gamer, GamerAttributes } from 'src/app/shared/services/backend/gamer.interfaces';
@@ -15,7 +16,7 @@ import { GamerService } from 'src/app/shared/services/backend/gamer.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
   user: any = null;
 
@@ -27,17 +28,15 @@ export class UserComponent implements OnInit {
   deleteButton = false;
   submitButton = 'Create';
 
-  errorMessage: any = null;
-  isLoaded = false;
-
-
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
     private auth: AuthService,
-    private gamerApi: GamerService) { }
+    private gamerApi: GamerService) { 
+      super(spinner);
+    }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -178,24 +177,5 @@ export class UserComponent implements OnInit {
           self.error("Error creating player!");
         }
       });
-  }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
   }
 }

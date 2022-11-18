@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { GameService } from 'src/app/shared/services/backend/game.service';
 
@@ -9,21 +10,20 @@ import { GameService } from 'src/app/shared/services/backend/game.service';
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.scss']
 })
-export class GamesComponent implements OnInit {
-
+export class GamesComponent extends BaseLoadingComponent implements OnInit {
 
   games: any = null;
 
   basePlayersUrl = '/component/gameplayer';
   baseUrl = '/component/game';
-
-  errorMessage: any = null;
-  isLoaded = false;
+  ;
 
   constructor(
     private spinner: NgxSpinnerService,
     private gameApi: GameService
-  ) { }
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     const self = this;
@@ -43,24 +43,5 @@ export class GamesComponent implements OnInit {
           self.error("Error loading games!");
         }
       });
-  }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
   }
 }

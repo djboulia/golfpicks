@@ -7,6 +7,7 @@ import { Game } from 'src/app/shared/services/backend/game.interfaces';
 import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { CustomAdapter, CustomDateParserFormatter } from './datepicker.adapter';
 
@@ -29,7 +30,7 @@ import { EventAttributes } from 'src/app/shared/services/backend/event.interface
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
   ],
 })
-export class GameComponent implements OnInit {
+export class GameComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
   game: any = null;
   event: any = null;
@@ -40,9 +41,6 @@ export class GameComponent implements OnInit {
 
   parentUrl = '/component/games';
   baseUrl = '/component/';
-
-  errorMessage: any = null;
-  isLoaded = false;
 
   title = '';
   deleteButton = false;
@@ -56,7 +54,10 @@ export class GameComponent implements OnInit {
     private modalService: NgbModal,
     private gameApi: GameService,
     private courseApi: CourseService,
-    private eventApi: EventService) { }
+    private eventApi: EventService
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -403,24 +404,4 @@ export class GameComponent implements OnInit {
 
     return throwError(() => new Error(err));
   }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
-
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../base.loading.component';
 
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
@@ -14,7 +15,7 @@ import { GamerService } from 'src/app/shared/services/backend/gamer.service';
   templateUrl: './picks.component.html',
   styleUrls: ['./picks.component.scss']
 })
-export class PicksComponent implements OnInit {
+export class PicksComponent extends BaseLoadingComponent implements OnInit {
   readonly NUM_SELECTIONS = 10;
   readonly NUM_TOP_ALLOWED = 2;
   readonly NUM_TOP_RANK = 10;
@@ -30,8 +31,6 @@ export class PicksComponent implements OnInit {
   testingMode = false;
   debugMode = false;
 
-  isLoaded = false;
-  errorMessage: any = null;
   picksMessage: string = '';
 
   constructor(
@@ -41,7 +40,9 @@ export class PicksComponent implements OnInit {
     private eventApi: EventService,
     private gameDay: GameDayService,
     private gamerApi: GamerService
-  ) { }
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -298,25 +299,6 @@ export class PicksComponent implements OnInit {
     this.error(msg);
 
     return throwError(() => new Error(err));
-  }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
   }
 
 }

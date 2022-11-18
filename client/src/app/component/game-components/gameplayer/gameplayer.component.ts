@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
@@ -11,21 +12,20 @@ import { DateFormatterService } from 'src/app/shared/services/date/date-formatte
   templateUrl: './gameplayer.component.html',
   styleUrls: ['./gameplayer.component.scss']
 })
-export class GameplayerComponent implements OnInit {
+export class GameplayerComponent extends BaseLoadingComponent implements OnInit {
 
   id: any = null;
   game: any = null;
   picks: any = [];
   nopicks: any = [];
 
-  errorMessage: any = null;
-  isLoaded = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
-    public dateFormatter: DateFormatterService) { }
+    public dateFormatter: DateFormatterService) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -77,24 +77,5 @@ export class GameplayerComponent implements OnInit {
           self.error("Error loading game!");
         }
       });
-  }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
   }
 }

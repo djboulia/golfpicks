@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
@@ -10,7 +11,7 @@ import { GamerService } from 'src/app/shared/services/backend/gamer.service';
   templateUrl: './game-history.component.html',
   styleUrls: ['./game-history.component.scss']
 })
-export class GameHistoryComponent implements OnInit {
+export class GameHistoryComponent extends BaseLoadingComponent implements OnInit {
 
   user: any;
   games: any;
@@ -22,14 +23,13 @@ export class GameHistoryComponent implements OnInit {
   statusMessage: any = "";
   infoMessage: any = null;
 
-  errorMessage: any = null;
-  isLoaded = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gamerApi: GamerService
-  ) { }
+  ) { 
+    super(spinner);
+  }
 
   ngOnInit(): void {
     const self = this;
@@ -98,24 +98,5 @@ export class GameHistoryComponent implements OnInit {
     }
 
     return statusMessage;
-  }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
   }
 }

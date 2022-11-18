@@ -5,6 +5,7 @@ import { TemplateRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CourseService } from 'src/app/shared/services/backend/course.service';
@@ -16,11 +17,10 @@ import { Course, CourseAttributes } from 'src/app/shared/services/backend/course
   templateUrl: './course.component.html',
   styleUrls: ['./course.component.scss']
 })
-export class CourseComponent implements OnInit {
+export class CourseComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
   course: any = null;
 
-  errorMessage: any = null;
   parentUrl = '/component/courses';
   baseUrl = '/component/course';
 
@@ -28,7 +28,6 @@ export class CourseComponent implements OnInit {
   confirmButton = 'Confirm';
   deleteButton = false;
   submitButton = 'Create';
-  isLoaded = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -36,7 +35,10 @@ export class CourseComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private auth: AuthService,
-    private courseApi: CourseService) { }
+    private courseApi: CourseService
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -149,9 +151,9 @@ export class CourseComponent implements OnInit {
           console.log('Course data saved: ', data);
 
           const attributes = course.attributes;
-          attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());            
+          attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());
           attributes.location.lng = Number.parseFloat(attributes.location.lng.toString());
-      
+
           // update could have been to logged in user, so refresh the auth state
           self.auth.refresh()
             .subscribe(() => {
@@ -170,7 +172,7 @@ export class CourseComponent implements OnInit {
     const self = this;
 
     console.log('creating course ', attributes);
-    attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());            
+    attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());
     attributes.location.lng = Number.parseFloat(attributes.location.lng.toString());
 
     this.courseApi.post(attributes)
@@ -186,24 +188,4 @@ export class CourseComponent implements OnInit {
         }
       });
   }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
-
 }

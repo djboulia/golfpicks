@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../base.loading.component';
+
 
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
@@ -13,7 +15,7 @@ import { GameDayService } from 'src/app/shared/services/gameday/game-day.service
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss']
 })
-export class LeaderboardComponent implements OnInit, OnDestroy {
+export class LeaderboardComponent extends BaseLoadingComponent implements OnInit, OnDestroy {
 
   id: any = null;
   game: any = null;
@@ -45,16 +47,15 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
   reloadTimerId: any = null;
 
-  errorMessage: any = null;
-  isLoaded = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
     private eventApi: EventService,
     private gameDay: GameDayService
-  ) { }
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -234,25 +235,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     data.metric.temp = Math.round(data.metric.temp);
 
     return data;
-  }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
   }
 
   private loadError(msg: string, err: any) {

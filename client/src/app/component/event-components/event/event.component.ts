@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgxSpinnerService } from "ngx-spinner";
+import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
@@ -11,24 +12,23 @@ import { DateFormatterService } from 'src/app/shared/services/date/date-formatte
   templateUrl: './event.component.html',
   styleUrls: ['./event.component.scss']
 })
-export class EventComponent implements OnInit {
+export class EventComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
   event: any = null;
 
-  errorMessage: any = null;
-
   scoresUrl = '/component/eventleaders';
 
-  isLoaded = false;
-
   mapZoom = 9;
-  mapCenter: google.maps.LatLngLiteral = {lat: 24, lng: 12};
+  mapCenter: google.maps.LatLngLiteral = { lat: 24, lng: 12 };
 
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private eventApi: EventService,
-    public dateFormatter: DateFormatterService) { }
+    public dateFormatter: DateFormatterService
+  ) {
+    super(spinner);
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')
@@ -54,7 +54,7 @@ export class EventComponent implements OnInit {
               const rounds = data.rounds;
 
               self.mapCenter = self.formatPosition(rounds[0].course.location);
-  
+
               self.loaded();
             }
           },
@@ -72,31 +72,11 @@ export class EventComponent implements OnInit {
 
   }
 
-  formatPosition(location:any) {
+  formatPosition(location: any) {
     return {
       lat: Number.parseFloat(location.lat),
       lng: Number.parseFloat(location.lng)
     }
   }
-
-  private loading() {
-    this.errorMessage = null;
-    this.spinner.show();
-    this.isLoaded = false;
-  }
-
-  private error(msg: string) {
-    console.log(msg);
-
-    this.errorMessage = msg;
-    this.spinner.hide();
-    this.isLoaded = false;
-  }
-
-  private loaded() {
-    this.spinner.hide();
-    this.isLoaded = true;
-  }
-
 }
 
