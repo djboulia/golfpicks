@@ -23,7 +23,7 @@ import { NgxSpinnerService } from "ngx-spinner";
  * instance variables to determine the current loading/error state
  */
 export class BaseLoadingComponent {
-    errorMessage: any = null;
+    errorMessage: string | null = null;
     isLoaded = false;
 
     constructor(
