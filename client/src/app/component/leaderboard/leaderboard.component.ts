@@ -5,10 +5,10 @@ import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../base.loading.component';
 
-
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
+import { DateHelperService } from 'src/app/shared/services/date/date-helper.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -51,8 +51,7 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
-    private eventApi: EventService,
-    private gameDay: GameDayService
+    private eventApi: EventService
   ) {
     super(spinner);
   }
@@ -107,11 +106,10 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
         catchError(err => this.loadError('Error loading game!', err))
       )
       .subscribe((data) => {
+        const gameDay = new GameDayService(this.game);
 
-        const gameDetails = this.gameDay.getGameDetails(this.game);
-
-        if (this.hasNotStarted(gameDetails)) {
-          this.tooEarlyMessage(gameDetails);
+        if (this.hasNotStarted(gameDay)) {
+          this.tooEarlyMessage(gameDay);
           return;
         }
 
@@ -141,24 +139,21 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
   }
 
   private setLastUpdate() {
-    const now = Date.now();
+    const date = new DateHelperService(Date.now());
 
     this.lastUpdate = "Last Update: " +
-      this.gameDay.dayOfWeekString(now) + ", " +
-      this.gameDay.timeString(now);
+      date.dayOfWeekString() + ", " +
+      date.timeString();
   }
 
-  private hasNotStarted(gameDetails: any) {
-    const start = gameDetails.start;
-    const end = gameDetails.end;
-
+  private hasNotStarted(gameDay: GameDayService) {
     // by pass this check in testing mode
     if (this.testingMode) {
       return false;
     }
 
-    if (!this.gameDay.tournamentInProgress(start, end) &&
-      !this.gameDay.tournamentComplete(start, end)) {
+    if (!gameDay.tournamentInProgress() &&
+      !gameDay.tournamentComplete()) {
 
       return true;
     }
@@ -166,15 +161,16 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     return false;
   };
 
-  private tooEarlyMessage(gameDetails: any) {
-    var start = gameDetails.start;
-    var eventname = gameDetails.event;
+  private tooEarlyMessage(gameDay: GameDayService) {
+
+    const start = gameDay.getStart();
+    const name = gameDay.getName();
 
     this.spinner.hide();
 
-    this.error("'" + eventname +
+    this.error("'" + name +
       "' has not yet started. Check back again on " +
-      this.gameDay.dateString(start) + ".");
+      start + ".");
   }
 
   /**

@@ -38,7 +38,6 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     private route: ActivatedRoute,
     private gameApi: GameService,
     private eventApi: EventService,
-    private gameDay: GameDayService,
     private gamerApi: GamerService
   ) {
     super(spinner);
@@ -209,25 +208,20 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
    */
   private pageCanLoad() {
 
-    let gameDetails: any = this.gameDay.getGameDetails(this.game);
+    const gameDay = new GameDayService(this.game);
 
     // always allow the page to load in testing mode
     if (this.testingMode) return true;
 
     // give players a 10 hr grace period
     // (10AM on day of tournament) to complete picks
-    gameDetails = this.gameDay.addGracePeriod(gameDetails, 10);
+    gameDay.addGracePeriod(10);
 
-    if (this.gameDay.tournamentInProgress(
-      gameDetails.start,
-      gameDetails.end)
-    ) {
+    if (gameDay.tournamentInProgress()) {
       this.error("Tournament is in progress, picks can no longer be made.");
       return false;
     }
-    else if (this.gameDay.tournamentComplete(
-      gameDetails.start,
-      gameDetails.end)
+    else if (gameDay.tournamentComplete()
     ) {
       this.error("This tournament has already ended, picks can no longer be made.");
       return false;
