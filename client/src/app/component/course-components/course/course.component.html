@@ -3,6 +3,8 @@
         <div class="card">
 
             <div class="card-body">
+                <app-loading *ngIf="!isLoaded && !errorMessage"></app-loading>
+
                 <ng-template #content let-modal>
                     <div class="modal-header">
                         <h4 class="modal-title">Confirm Removing Course</h4>

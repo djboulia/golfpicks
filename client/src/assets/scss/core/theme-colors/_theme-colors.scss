@@ -28,27 +28,33 @@
     /*This is for the sidebar bg*/
     .left-sidebar {
       &[data-sidebarbg="skin6"] {
-        background: $skin6;
+        // background: $skin6;
+        background-image: url(../../../images/turf.jpg);
         .sidebar-nav {
           ul {
-            background: $skin6;
+            // background-image: url(../../../images/turf.jpg);
             .sidebar-item {
               &.active {
                 > .sidebar-link {
-                  color: $primary;
+                  background-color: $sidebar-active-bg;
+                  color: $sidebar-text;
+                  // opacity: 0.6;
                   i {
-                    color: $primary;
+                    color: $sidebar-text;
                   }
                 }
               }
               .sidebar-link {
                 color: $sidebar-text-dark;
+                // background-color: $sidebar-active-bg;
                 .feather {
                   fill: rgba(41, 98, 255, 0.1);
                 }
                 &:hover {
-                  .feather {
-                    color: $primary;
+                background-color: $sidebar-hover-bg;
+                // opacity: 1;
+                .feather {
+                    color: $sidebar-text;
                   }
                 }
                 i {

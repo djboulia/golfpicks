@@ -4,6 +4,8 @@
 
             <div class="card-body">
 
+                <app-loading *ngIf="!isLoaded && !errorMessage"></app-loading>
+
                 <div *ngIf="isLoaded">
                     <h4 class="card-title">{{game.name}}</h4>
                     <div> {{dateFormatter.formatDateRange(game.start, game.end)}}</div>

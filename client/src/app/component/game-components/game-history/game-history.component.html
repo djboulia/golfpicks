@@ -1,7 +1,10 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
+
             <div class="card-body">
+                <app-loading *ngIf="!isLoaded && !errorMessage"></app-loading>
+
                 <h4 *ngIf="isLoaded" class="card-title">Games for {{user.attributes.name}}</h4>
 
                 <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">

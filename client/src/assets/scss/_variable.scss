@@ -6,13 +6,13 @@
 // 
 // Theme Global setting colors
 // 
-$themecolor: #2962ff;
+$themecolor: #005500;
 $themecolor-dark: #028ee1;
 $themecolor-alt: #26c6da;
 $theme-light: #fff;
 $theme-dark: #212529;
 
-$skin1: #2962ff;
+$skin1: #005500;
 $skin2: #fe5419;
 $skin3: #00b0ff;
 $skin4: #6659f7;
@@ -36,9 +36,11 @@ $topbar-navbrand-padding: 0 10px 0 10px;
 
 $sidebar: $theme-light;
 $sidebar-text: #fff;
+$sidebar-active-bg: #026e02;
+$sidebar-hover-bg: #005500;
 $sidebar-icons: #fff;
-$sidebar-text-dark: #212529;
-$sidebar-icons-dark: #4f5467;
+$sidebar-text-dark: #fff;
+$sidebar-icons-dark: #fff;
 
 $sidebar-width-full: 250px;
 $sidebar-width-mini: 65px;
@@ -104,10 +106,10 @@ $colors: (
   "gray-dark": $gray-800,
 );
 
-$primary: $blue!default;
+$primary: #005500 !default;
 $secondary: $gray-600 !default;
-$success: $green !default;
-$info: #3699ff !default;
+$success: #005500 !default;
+$info: #005500 !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
@@ -115,29 +117,28 @@ $dark: $gray-800 !default;
 $muted: $gray-500 !default;
 $cyan: $cyan !default;
 $orange: $orange !default;
-$theme-colors: () !default;
+$theme-colors: (
+  ) !default;
 
-$theme-colors: map-merge(
-  (
-    "primary": $primary,
-    "secondary": $secondary,
-    "success": $success,
-    "info": $info,
-    "warning": $warning,
-    "danger": $danger,
-    "light": $light,
-    "dark": $dark,
-    "muted": $muted,
-    "cyan": $cyan,
-    "orange": $orange,
-    "purple": $purple,
-    "light-primary": $light-primary,
-    "light-info": $light-info,
-    "light-warning": $light-warning,
-    "light-danger": $light-danger,
-    "light-success": $light-success,
-  ),
-  $theme-colors
+$theme-colors: map-merge(("primary": $primary,
+      "secondary": $secondary,
+      "success": $success,
+      "info": $info,
+      "warning": $warning,
+      "danger": $danger,
+      "light": $light,
+      "dark": $dark,
+      "muted": $muted,
+      "cyan": $cyan,
+      "orange": $orange,
+      "purple": $purple,
+      "light-primary": $light-primary,
+      "light-info": $light-info,
+      "light-warning": $light-warning,
+      "light-danger": $light-danger,
+      "light-success": $light-success,
+    ),
+    $theme-colors
 );
 
 // 
@@ -198,8 +199,7 @@ $display-font-sizes: (
   4: 3.5rem,
   5: 3rem,
   6: 2.5rem,
-  7: 2rem
-) !default;
+  7: 2rem) !default;
 
 // 
 // Cards
@@ -218,7 +218,7 @@ $btn-border-radius-sm: 4px !default;
 $btn-border-radius-lg: 4px !default;
 $btn-box-shadow: none !default;
 $btn-focus-box-shadow: none !default;
-$btn-close-focus-shadow:     none !default;
+$btn-close-focus-shadow: none !default;
 
 // 
 // Progressbar
@@ -283,7 +283,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1600px,
-) !default;
+  ) !default;
 
 // 
 // Navbar

@@ -4,6 +4,8 @@
 
             <div class="card-body">
 
+                <app-loading *ngIf="!isLoaded && !errorMessage"></app-loading>
+
                 <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
                     {{errorMessage}}
                 </ngb-alert>
@@ -71,7 +73,7 @@
                         </div>
                     </div>
 
-                    <marquee direction="left" scrolldelay="200" behavior="loop" [innerHtml]='newsFeed'>
+                    <marquee style='padding: 10px;' direction="left" scrolldelay="200" behavior="loop" [innerHtml]='newsFeed'>
                     </marquee>
 
                     <div class="leaderboard">

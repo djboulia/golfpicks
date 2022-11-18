@@ -2,6 +2,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+                <app-loading *ngIf="!isLoaded && !errorMessage"></app-loading>
+
                 <h4 class="card-title">Players</h4>
 
                 <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
