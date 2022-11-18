@@ -115,11 +115,14 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   private deleteUser() {
     const self = this;
 
+    this.loading();
+
     this.courseApi.delete(this.id)
       .subscribe({
         next(data) {
           console.log('course deleted: ', data);
 
+          self.loaded();
           self.router.navigate([self.parentUrl]);
         },
         error(msg) {
@@ -145,6 +148,8 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   private updateCourse(course: Course) {
     const self = this;
 
+    this.loading();
+
     this.courseApi.put(course)
       .subscribe({
         next(data) {
@@ -158,6 +163,8 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
           self.auth.refresh()
             .subscribe(() => {
               console.log('refreshed course info');
+
+              self.loaded();
               self.router.navigate([self.parentUrl]);
             })
         },
@@ -171,6 +178,8 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   private createCourse(attributes: CourseAttributes) {
     const self = this;
 
+    this.loading();
+
     console.log('creating course ', attributes);
     attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());
     attributes.location.lng = Number.parseFloat(attributes.location.lng.toString());
@@ -180,6 +189,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
         next(data) {
           console.log('course data created: ', data);
 
+          self.loaded();
           self.router.navigate([self.parentUrl]);
         },
         error(msg) {

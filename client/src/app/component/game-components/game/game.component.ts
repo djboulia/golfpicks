@@ -244,6 +244,8 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
   private deleteGame() {
     const eventid = this.game.attributes.event;
 
+    this.loading();
+
     this.eventApi.delete(eventid)
       .pipe(
         map((data) => console.log(`event ${eventid} deleted`)),
@@ -252,15 +254,10 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
         mergeMap(() => this.gameApi.delete(this.game.id)),
         map((data) => console.log(`game ${this.game.id} deleted`)),
 
-        catchError(err => {
-          console.log('error deleting game! ', err);
-          this.error(`Error deleting game ${this.game.attributes.name}!`);
-
-          return throwError(() => new Error(err));
-        })
-
+        catchError(err => this.loadingError(`Error deleting game ${this.game.attributes.name}!`, err))
       )
       .subscribe((data) => {
+        this.loaded();
         this.router.navigate([this.parentUrl]);
       })
   }
@@ -335,6 +332,8 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
    */
   private updateGame(game: Game, event: EventAttributes) {
 
+    this.loading();
+
     // get the event data, then update it
     this.eventApi.get(game.attributes.event)
       .pipe(
@@ -348,14 +347,11 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
         mergeMap(() => this.gameApi.put(game)),
         map((data) => console.log('updated game ', data)),
 
-        catchError(err => {
-          console.log('error updating data! ', err);
-          this.error(`Error updating game data`);
-
-          return throwError(() => new Error(err));
-        })
+        catchError(err => this.loadingError('error updating data! ', err))
       )
       .subscribe(() => {
+        this.loaded();
+
         this.router.navigate([this.parentUrl]);
       })
   }
@@ -363,10 +359,10 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
   private createGame(game: Game, event: EventAttributes) {
 
     console.log('creating game ', game.attributes);
+    this.loading();
 
     const eventAttributes = event;
     this.setEventAttributes(eventAttributes, game, event);
-
 
     // save event data
     this.eventApi.post(event)
@@ -384,14 +380,10 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
           return data;
         }),
 
-        catchError(err => {
-          console.log('error creating data! ', err);
-          this.error(`Error creating game data`);
-
-          return throwError(() => new Error(err));
-        })
+        catchError(err => this.loadingError('Error creating game data', err))
       )
       .subscribe(() => {
+        this.loaded();
         this.router.navigate([this.parentUrl]);
       })
 

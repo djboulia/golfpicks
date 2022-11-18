@@ -270,6 +270,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
   onSubmit() {
     this.picksMessage = "Saving picks...";
+    this.loading();
 
     // update this person's picks in the game data
     const selections = this.getSelections(this.golfers);
@@ -290,6 +291,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
       .subscribe((data) => {
         this.picksMessage = "Picks saved.";
         this.changed = false;
+        this.loaded();
       });
   }
 

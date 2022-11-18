@@ -111,11 +111,14 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
   private deleteUser() {
     const self = this;
 
+    this.loading();
+
     this.gamerApi.delete(this.id)
       .subscribe({
         next(data) {
           console.log('user deleted: ', data);
 
+          self.loaded();
           self.router.navigate([self.parentUrl]);
         },
         error(msg) {
@@ -141,6 +144,8 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
   private updateGamer(gamer: Gamer) {
     const self = this;
 
+    this.loading();
+
     this.gamerApi.put(gamer)
       .subscribe({
         next(data) {
@@ -150,6 +155,8 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
           self.auth.refresh()
             .subscribe(() => {
               console.log('refreshed user info');
+
+              self.loaded();
               self.router.navigate([self.parentUrl]);
             })
         },
@@ -163,6 +170,8 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
   private createGamer(attributes: GamerAttributes) {
     const self = this;
 
+    this.loading();
+
     console.log('creating player ', attributes);
 
     this.gamerApi.post(attributes)
@@ -170,6 +179,7 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
         next(data) {
           console.log('user data created: ', data);
 
+          self.loaded();
           self.router.navigate([self.parentUrl]);
         },
         error(msg) {
