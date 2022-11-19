@@ -20,7 +20,14 @@
                             <li>Select {{NUM_SELECTIONS}} players from the list.</li>
                             <li>Only {{NUM_TOP_ALLOWED}} players from the <span class="toppick">top {{NUM_TOP_RANK}} ranked players</span> in the field are allowed.</li>
                         </ul>
-                        <div>Press 'Save Picks' at the bottom when finished.</div>
+                    </div>
+
+                    <div> 
+                        <div style="text-align: center; padding:10px;">
+                            <button (click)="onSubmit()" [disabled]="!canSubmit" class="btn btn-rounded btn-info">Save Picks</button>
+                        </div>
+
+                        <div class="status" [innerHtml]="picksMessage"></div>
                     </div>
 
                     <div class="table-responsive">
