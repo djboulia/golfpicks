@@ -17,7 +17,7 @@
  
          console.log("logging in user " + user);
  
-         const gamers = await model.findAll()
+         const gamers = await model.findByFields( { username : user })
              .catch((err) => {
                  throw new Error(err);
              })
