@@ -3,54 +3,46 @@ import { DateHelperService } from "../date/date-helper.service";
 
 export class GameDayService {
 
-  private gameDetails: any = null;
+  private start: DateHelperService ;
+  private end: DateHelperService;
 
   constructor(private game: any) {
-    this.gameDetails = this.getGameDetails(this.game);
-  }
+    const startDate = (game.attributes.start) ? Date.parse(game.attributes.start) : null;
+    const endDate = (game.attributes.end) ? Date.parse(game.attributes.end) : null;
 
-  // getGameDetails
-  // build out relevent game information
-  //
-  // gameDetails = 
-  // 		event   : name of the tournament
-  // 		eventid : unique identifier for this tournamnent
-  // 		start   : tournament start time 
-  // 		end	    : tournament end time
-  //
-  //
-  private getGameDetails(game: any) {
-    const start = (game.attributes.start) ? Date.parse(game.attributes.start) : null;
-    const end = (game.attributes.end) ? Date.parse(game.attributes.end) : null;
-
-    const gameDetails = {
-      event: game.attributes.name,
-      eventid: game.id,
-      start: new DateHelperService(start),
-      end: new DateHelperService(end)
-    };
-
-    return gameDetails;
+  
+    this.start = new DateHelperService(startDate);
+    this.end = new DateHelperService(endDate);
   }
 
   getName(): string {
-    return this.gameDetails.event;
+    return this.game.attributes.name;
+  }
+
+  getId(): string {
+    return this.game.id;
   }
 
   getStart(): string {
-    const start = this.gameDetails.start;
-    return start.dateString();
+    return this.start.dateString();
   }
 
   getEnd(): string {
-    const end = this.gameDetails.end;
-    return end.dateString();
+    return this.end.dateString();
+  }
+
+  getEventId() : string {
+    return this.game.attributes.event;
+  }
+
+  getGamers() : any[] {
+    return this.game.attributes.gamers;
   }
 
   tournamentComplete(): boolean {
 
-    const end = this.gameDetails.end;
-    const start = this.gameDetails.start;
+    const end = this.end;
+    const start = this.start;
 
     // set "end" to be the end of the current day before we do a
     // comparison.  this will give us a grace period for the
@@ -63,8 +55,8 @@ export class GameDayService {
   }
 
   tournamentInProgress(): boolean {
-    const end = this.gameDetails.end;
-    const start = this.gameDetails.start;
+    const end = this.end;
+    const start = this.start;
 
     console.log(`start: ${start.dateTimeString()}, end: ${end.dateTimeString()}`);
 
@@ -83,9 +75,9 @@ export class GameDayService {
   // add the specified number of hours to the event start time
   // add a grace period of 10 hours, e.g. 10AM EDT of the following day
   addGracePeriod(hours: number) {
-    const start = this.gameDetails.start;
+    const start = this.start;
     const graceperiod = 1000 * 60 * 60 * hours; // hours in milliseconds
 
-    this.gameDetails.start = new DateHelperService(start.get() + graceperiod);
+    this.start = new DateHelperService(start.get() + graceperiod);
   }
 }

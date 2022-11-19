@@ -19,6 +19,7 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
 
   id: any = null;
   game: any = null;
+  gameDay: any = null;
   gamers: any = null;
   leaderboard: any = null;
   courseInfo: any = null;
@@ -95,21 +96,22 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     // go get our game information from multiple sources
     this.gameApi.get(this.id)
       .pipe(
-        map((data) => this.game = data),
+        map((game) => this.game = game),
         // map((data) => { console.log('found game ', data); return data; }),
 
+        map((game) => this.gameDay = new GameDayService(this.game)),
+
         // get event that corresponds to this game
-        mergeMap((data) => this.gameApi.leaderboard(data.id)),
-        map((data) => this.leaderboard = data),
+        mergeMap((gameDay) => this.gameApi.leaderboard(gameDay.getId())),
+        map((leaderboard) => this.leaderboard = leaderboard),
         // map((data) => { console.log('found event ', data); return data; }),
 
         catchError(err => this.loadError('Error loading game!', err))
       )
-      .subscribe((data) => {
-        const gameDay = new GameDayService(this.game);
+      .subscribe(() => {
 
-        if (this.hasNotStarted(gameDay)) {
-          this.tooEarlyMessage(gameDay);
+        if (this.hasNotStarted(this.gameDay)) {
+          this.tooEarlyMessage(this.gameDay);
           return;
         }
 
@@ -130,16 +132,16 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
 
         this.setLastUpdate();
 
-        this.loadWeather();
+        this.loadWeather(this.gameDay.getEventId());
 
-        this.loadNewsFeed();
+        this.loadNewsFeed(this.gameDay.getEventId());
 
         this.reloadTimer();
       });
   }
 
   private setLastUpdate() {
-    const date = new DateHelperService(Date.now());
+    const date = new DateHelperService();
 
     this.lastUpdate = "Last Update: " +
       date.dayOfWeekString() + ", " +
@@ -166,11 +168,7 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     const start = gameDay.getStart();
     const name = gameDay.getName();
 
-    this.spinner.hide();
-
-    this.error("'" + name +
-      "' has not yet started. Check back again on " +
-      start + ".");
+    this.error(`'${name}' has not yet started. Check back again on ${start}`);
   }
 
   /**
@@ -184,9 +182,9 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     }, RELOAD_INTERVAL);
   }
 
-  private loadWeather() {
+  private loadWeather(eventId : string) {
     // get weather details for this game
-    this.eventApi.weather(this.game.attributes.event)
+    this.eventApi.weather(eventId)
       .pipe(
         map((data) => this.weather = this.formatWeatherData(data)),
 
@@ -196,9 +194,9 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
       });
   }
 
-  private loadNewsFeed() {
+  private loadNewsFeed(eventId : string) {
     // get news ticker data for this game
-    this.eventApi.newsFeed(this.game.attributes.event)
+    this.eventApi.newsFeed(eventId)
       .pipe(
         map((data) => this.newsFeed = this.formatNewsFeed(data)),
 

@@ -23,6 +23,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
   currentUser: any = null;
   game: any = null;
+  gameDay: GameDayService | null = null;
   event: any = null;
   golfers: any = null;
   changed = false;
@@ -73,17 +74,19 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     // go get our game information from multiple sources
     this.gameApi.get(this.id)
       .pipe(
-        map((data) => this.game = data),
+        map((game) => this.game = game),
         // map((data) => { console.log('found game ', data); return data; }),
+        
+        map((game) => this.gameDay = new GameDayService(game)),
 
         // get event that corresponds to this game
-        mergeMap((data) => this.eventApi.deep(data.attributes.event, true)),
-        map((data) => this.event = data),
-        map((data) => this.golfers = data.golfers),
+        mergeMap((gameDay) => this.eventApi.deep(gameDay.getEventId(), true)),
+        map((event) => this.event = event),
+        map((event) => this.golfers = event.golfers),
         // map((data) => { console.log('found event ', data); return data; }),
 
-        mergeMap((data) => this.gamerApi.currentUser()),
-        map((data) => this.currentUser = data),
+        mergeMap(() => this.gamerApi.currentUser()),
+        map((gamer) => this.currentUser = gamer),
 
         catchError(err => this.loadingError('Error loading picks!', err))
       )
@@ -93,17 +96,11 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
           return;
         }
 
-        if (!this.game.attributes.gamers) {
+        const gamers = this.gameDay?.getGamers();
 
-          this.game.gamers = [{
-            "user": this.currentUser.id,
-            "picks": []
-          }];
-
-        } else {
+        if (gamers) {
           // might have previously stored picks
           var picks = [];
-          var gamers = this.game.attributes.gamers;
 
           for (var i = 0; i < gamers.length; i++) {
             var gamer = gamers[i];
@@ -112,7 +109,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
             }
           }
 
-          this.loadSavedPicks(this.golfers, picks);
+          this.initPriorPicks(this.golfers, picks);
         }
 
         this.loaded();
@@ -179,7 +176,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     return selections;
   };
 
-  private loadSavedPicks(players: any[], picks: any) {
+  private initPriorPicks(players: any[], picks: any) {
     // for each pick we find, move it from scores to selections
     for (let i = 0; i < picks.length; i++) {
       const ndx = this.findPlayerIndex(players, picks[i].id);
