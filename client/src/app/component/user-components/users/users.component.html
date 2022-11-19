@@ -23,10 +23,10 @@
                         <tbody>
                             <tr *ngFor='let user of users'>
                                 <td>
-                                    {{user.attributes.name}}
+                                    {{user.name}}
                                 </td>
                                 <td class="fs-4">
-                                    {{user.attributes.username}}
+                                    {{user.username}}
                                 </td>
                                 <td>
                                     <a [attr.href]="baseUrl + '/id/' + user.id">Edit</a>

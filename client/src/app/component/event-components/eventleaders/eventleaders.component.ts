@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
+import { Event } from 'src/app/shared/services/backend/event.interfaces';
 import { EventService } from 'src/app/shared/services/backend/event.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { EventService } from 'src/app/shared/services/backend/event.service';
 })
 export class EventLeadersComponent extends BaseLoadingComponent implements OnInit {
 
-  id: any = null;
+  id: string | null = null;
   event: any = null;
 
   eventUrl = '/component/event';

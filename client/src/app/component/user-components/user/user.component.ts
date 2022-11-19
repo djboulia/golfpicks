@@ -8,7 +8,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { Gamer, GamerAttributes } from 'src/app/shared/services/backend/gamer.interfaces';
+import { Gamer } from 'src/app/shared/services/backend/gamer.interfaces';
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
 @Component({
@@ -18,7 +18,7 @@ import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 })
 export class UserComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
-  user: any = null;
+  user: Gamer;
 
   parentUrl = '/component/users';
   baseUrl = '/component/user';
@@ -36,6 +36,8 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
     private auth: AuthService,
     private gamerApi: GamerService) { 
       super(spinner);
+
+      this.user = gamerApi.newModel();  // initialize until we load
     }
 
   ngOnInit(): void {
@@ -55,10 +57,10 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
       // go get this user's record
       this.gamerApi.get(this.id)
         .subscribe({
-          next(data) {
-            console.log('data ', data);
+          next(gamer) {
+            console.log('data ', gamer);
 
-            self.user = data;
+            self.user = gamer;
             self.loaded();
           },
           error(msg) {
@@ -93,7 +95,7 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
   }
 
   onAdmin() {
-    this.user.attributes.admin = !this.user.attributes.admin;
+    this.user.admin = !this.user.admin;
   }
 
   onSubmit() {
@@ -104,7 +106,7 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
       this.updateGamer(this.user);
     } else {
       // new gamer, only send the attributes
-      this.createGamer(this.user.attributes);
+      this.createGamer(this.user);
     }
   }
 
@@ -123,7 +125,7 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
         },
         error(msg) {
           console.log('error deleting user! ', msg);
-          self.error(`Error deleting player ${self.user.attributes.name}!`);
+          self.error(`Error deleting player ${self.user.name}!`);
         }
       });
   }
@@ -167,14 +169,14 @@ export class UserComponent extends BaseLoadingComponent implements OnInit {
       });
   }
 
-  private createGamer(attributes: GamerAttributes) {
+  private createGamer(gamer: Gamer) {
     const self = this;
 
     this.loading();
 
-    console.log('creating player ', attributes);
+    console.log('creating player ', gamer);
 
-    this.gamerApi.post(attributes)
+    this.gamerApi.post(gamer)
       .subscribe({
         next(data) {
           console.log('user data created: ', data);

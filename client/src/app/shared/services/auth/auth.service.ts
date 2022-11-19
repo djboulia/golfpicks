@@ -12,7 +12,9 @@ export class AuthService {
   // we emit a change event when the auth data or status changes
   @Output() authChange = new EventEmitter<any>();
 
-  constructor(private gamerService: GamerService) { }
+  constructor(
+    private gamerApi: GamerService
+  ) { }
 
   isAdmin(): boolean {
     return this.isLoggedIn() ? localStorage.getItem('admin') === 'true' : false;
@@ -27,12 +29,12 @@ export class AuthService {
   }
 
   private updateData(data: Gamer) {
-    const userid = data.attributes.username;
-    const name = data.attributes.name;
-    const admin = data.attributes.admin;
+    const username = data.username;
+    const name = data.name;
+    const admin = data.admin;
 
     localStorage.setItem('isLoggedin', 'true');
-    localStorage.setItem('userid', userid);
+    localStorage.setItem('username', username);
     localStorage.setItem('name', name);
 
     if (admin) {
@@ -51,12 +53,12 @@ export class AuthService {
 
       const self = this;
 
-      this.gamerService.login(userid, password)
+      this.gamerApi.login(userid, password)
         .subscribe({
-          next(data) {
-            console.log('logged in! ', data);
+          next(gamer) {
+            console.log('logged in! ', gamer);
 
-            self.updateData(data);
+            self.updateData(gamer);
 
             observer.next(true);
           },
@@ -80,12 +82,12 @@ export class AuthService {
     const self = this;
 
     return new Observable((observer) => {
-      this.gamerService.currentUser()
+      this.gamerApi.currentUser()
         .subscribe({
-          next(data) {
-            console.log('refresh found user: ', data);
+          next(gamer) {
+            console.log('refresh found user: ', gamer);
 
-            self.updateData(data);
+            self.updateData(gamer);
 
             observer.next(true);
           },

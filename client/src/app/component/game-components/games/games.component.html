@@ -23,7 +23,7 @@
                         <tbody>
                             <tr *ngFor='let game of games'>
                                 <td>
-                                    {{game.attributes.name}}
+                                    {{game.name}}
                                 </td>
                                 <td class="fs-4">
                                     <a [attr.href]="basePlayersUrl + '/id/' + game.id">View Players</a>

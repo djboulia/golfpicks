@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
+import { Course } from 'src/app/shared/services/backend/course.interface';
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 
 @Component({
@@ -14,8 +15,8 @@ import { CourseService } from 'src/app/shared/services/backend/course.service';
 })
 export class CourseinfoComponent extends BaseLoadingComponent implements OnInit {
 
-  id: any;
-  course: any;
+  id: string | null = null;
+  course: Course;
   frontNine: any;
   backNine: any;
   weather: any;
@@ -33,6 +34,8 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
     private courseApi: CourseService
   ) {
     super(spinner);
+
+    this.course = courseApi.newModel();
   }
 
   /**
@@ -43,11 +46,11 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
    * @returns 
    */
   private fixCourseData(data: any) {
-    if (!data.attributes.slope) {
-      data.attributes.slope = 0;
+    if (!data.slope) {
+      data.slope = 0;
     }
-    if (!data.attributes.rating) {
-      data.attributes.rating = 0;
+    if (!data.rating) {
+      data.rating = 0;
     }
 
     return data;
@@ -60,7 +63,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
       holes: <any>[]
     }
 
-    const holes = data.attributes.holes;
+    const holes = data.holes;
     if (holes) {
       for (var i = 0; i < 9; i++) {
         var hole = holes[i];
@@ -81,7 +84,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
       holes: <any>[]
     }
 
-    const holes = data.attributes.holes;
+    const holes = data.holes;
     if (holes) {
       for (var i = 9; i < 18; i++) {
         var hole = holes[i];
@@ -123,8 +126,8 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
             self.frontNine = self.frontNineData(data);
             self.backNine = self.backNineData(data);
 
-            self.mapCenter.lat = Number.parseFloat(self.course.attributes.location.lat);
-            self.mapCenter.lng = Number.parseFloat(self.course.attributes.location.lng);
+            self.mapCenter.lat = self.course.location.lat;
+            self.mapCenter.lng = self.course.location.lng;
 
             self.loaded();
           },

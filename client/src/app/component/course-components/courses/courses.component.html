@@ -25,13 +25,13 @@
                         <tbody>
                             <tr *ngFor='let course of courses'>
                                 <td>
-                                    <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{course.attributes.name}}</a>
+                                    <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{course.name}}</a>
                                 </td>
                                 <td class="fs-4">
-                                    {{course.attributes.par}}
+                                    {{course.par}}
                                 </td>
                                 <td class="fs-4">
-                                    {{course.attributes.yardage}}
+                                    {{course.yardage}}
                                 </td>
                                 <td>
                                     <a [attr.href]="baseUrl + '/id/' + course.id">Edit</a>

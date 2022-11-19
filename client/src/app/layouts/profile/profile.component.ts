@@ -11,20 +11,20 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  user: any;
-
-  form: any = {
-    name: null,
-    userid: null,
-    password: null
-  }
+  user: Gamer;
 
   errorMessage: any = null;
   infoMessage: any = null;
 
   isLoaded = false;
 
-  constructor(private api: GamerService, private auth: AuthService, private router: Router) { }
+  constructor(
+    private apiGamer: GamerService,
+    private auth: AuthService,
+    private router: Router
+  ) {
+    this.user = apiGamer.newModel();  // initialize with empty gamer until we load
+  }
 
   ngOnInit(): void {
     const self = this;
@@ -32,16 +32,13 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = null;
     this.infoMessage = null;
 
-    this.api.currentUser()
+    this.apiGamer.currentUser()
       .subscribe({
-        next(data) {
-          console.log('data ', data);
+        next(gamer) {
+          console.log('data ', gamer);
 
-          self.user = data;
+          self.user = gamer;
 
-          self.form.name = data.attributes.name;
-          self.form.userid = data.attributes.username;
-          self.form.password = data.attributes.password;
           self.isLoaded = true;
         },
         error(msg) {
@@ -58,16 +55,13 @@ export class ProfileComponent implements OnInit {
 
     const gamer: Gamer = {
       id: this.user.id,
-      className: this.user.className,
-      attributes: {
-        admin: this.user.attributes.admin,
-        name: this.form.name,
-        username: this.form.userid,
-        password: this.form.password
-      }
+      admin: this.user.admin,
+      name: this.user.name,
+      username: this.user.username,
+      password: this.user.password
     }
 
-    this.api.put(gamer)
+    this.apiGamer.put(gamer)
       .subscribe({
         next(data) {
           console.log('user data saved: ', data);

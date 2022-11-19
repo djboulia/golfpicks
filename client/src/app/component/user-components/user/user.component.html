@@ -11,7 +11,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>This will permanently remove player {{user.attributes.name}}. Are you sure?</p>
+                        <p>This will permanently remove player {{user.name}}. Are you sure?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-rounded btn-info"
@@ -41,7 +41,7 @@
                                     </td>
                                     <td class="fs-4">
                                         <div class="form-group">
-                                            <input placeholder="Name" name="name" [(ngModel)]="user.attributes.name"
+                                            <input placeholder="Name" name="name" [(ngModel)]="user.name"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -53,7 +53,7 @@
                                     <td class="fs-4">
                                         <div class="form-group">
                                             <input placeholder="Email" name="userid"
-                                                [(ngModel)]="user.attributes.username"
+                                                [(ngModel)]="user.username"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -65,7 +65,7 @@
                                     <td class="fs-4">
                                         <div class="form-group">
                                             <input placeholder="Password" name="password"
-                                                [(ngModel)]="user.attributes.password"
+                                                [(ngModel)]="user.password"
                                                 class="form-control input-underline input-lg" type="password" />
                                         </div>
                                     </td>
@@ -81,11 +81,11 @@
                                               class="form-check-input"
                                               type="checkbox"
                                               id="flexSwitchCheckChecked"
-                                              [checked]=user.attributes.admin
+                                              [checked]=user.admin
                                               (click)="onAdmin()"
                                             />
                                             <label class="form-check-label" for="flexSwitchCheckChecked"
-                                              >{{ user.attributes.admin ? 'Yes' : 'No'}}</label
+                                              >{{ user.admin ? 'Yes' : 'No'}}</label
                                             >
                                         </div>                                      
                                     </td>

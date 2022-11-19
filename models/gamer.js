@@ -28,11 +28,9 @@
              for (var i = 0; i < gamers.length; i++) {
                  var gamer = gamers[i];
  
-                 if (gamer.attributes) {
-                     if (gamer.attributes.username == user && gamer.attributes.password == password) {
-                         match = gamer;
-                     }
-                 }
+                    if (gamer.username == user && gamer.password == password) {
+                        match = gamer;
+                    }
              }
  
              if (match) {
@@ -91,7 +89,7 @@
  
          games.forEach(function (gamerecord) {
              const gameid = gamerecord.id;
-             const game = gamerecord.attributes;
+             const game = gamerecord;
  
              const gameDetails = gameUtils.getGameDetails(game, gameid);
              gameUtils.addGracePeriod(gameDetails, 10);

@@ -1,6 +1,7 @@
 // interfaces for our backend
 
-export interface EventAttributes {
+export interface Event {
+    id: string,
     name: string,
     start: string,
     end: string,
@@ -9,12 +10,6 @@ export interface EventAttributes {
     scoreType: string,
     tournament_id: string,
     rounds: []
-}
-
-export interface Event {
-    className: string,
-    id: string,
-    attributes: EventAttributes
 }
 
 export interface Schedule {

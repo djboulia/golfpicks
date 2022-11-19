@@ -12,7 +12,7 @@
                         {{lastUpdate}}
                     </div>
 
-                    <h4 class="card-title">{{game.attributes.name}}</h4>
+                    <h4 class="card-title">{{game.name}}</h4>
                 </div>
 
                 <div *ngIf="isLoaded" class="table-responsive">
@@ -20,10 +20,10 @@
                         <div class="coursedetails">
                             <div style="float:right; padding-right:10px;">
                                 <div>View tournament <a
-                                        href="{{eventOverviewUrl + '/id/' + game.attributes.event}}">overview</a>
+                                        href="{{eventOverviewUrl + '/id/' + game.event}}">overview</a>
                                 </div>
                                 <div>View tournament <a
-                                        href="{{eventLeaderUrl + '/id/' + game.attributes.event}}">scores</a>
+                                        href="{{eventLeaderUrl + '/id/' + game.event}}">scores</a>
                                 </div>
                             </div>
 

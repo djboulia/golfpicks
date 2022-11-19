@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
+import { Gamer, GamerHistory } from 'src/app/shared/services/backend/gamer.interfaces';
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
 @Component({
@@ -13,8 +15,8 @@ import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 })
 export class GameHistoryComponent extends BaseLoadingComponent implements OnInit {
 
-  user: any;
-  games: any;
+  user: Gamer;
+  games: GamerHistory ;
   testingMode = false;
 
   leaderboardUrl = '/component/leaderboard';
@@ -29,6 +31,9 @@ export class GameHistoryComponent extends BaseLoadingComponent implements OnInit
     private gamerApi: GamerService
   ) { 
     super(spinner);
+
+    this.user = gamerApi.newModel();
+    this.games = gamerApi.newHistory();
   }
 
   ngOnInit(): void {
@@ -44,6 +49,25 @@ export class GameHistoryComponent extends BaseLoadingComponent implements OnInit
         self.testingMode = (params['testingMode'] && params['testingMode'] === 'true') ? true : false;
         console.log('testingMode: ', self.testingMode);
 
+        this.gamerApi.currentUser()
+        .pipe(
+          map((user) => this.user = user),
+          // map((data) => { console.log('found game ', data); return data; }),
+    
+          // get history for this user
+          mergeMap((user) => this.gamerApi.gameHistory(user.id)),
+          map((games) => this.games = games),
+  
+          catchError(err => this.loadError('Error loading game!', err))
+        )
+        .subscribe(() => {
+          console.log('games ', this.games);
+
+          this.statusMessage = self.activeTournamentMessage(this.games);
+
+          this.loaded();
+        });
+
         self.gamerApi.currentUser()
           .subscribe({
             next(data) {
@@ -55,13 +79,6 @@ export class GameHistoryComponent extends BaseLoadingComponent implements OnInit
               self.gamerApi.gameHistory(data.id)
                 .subscribe({
                   next(data) {
-                    console.log('data ', data);
-
-                    self.games = data;
-
-                    self.statusMessage = self.activeTournamentMessage(data);
-
-                    self.loaded();
                   },
                   error(msg) {
                     console.log('error getting current user!! ', msg);
@@ -99,4 +116,11 @@ export class GameHistoryComponent extends BaseLoadingComponent implements OnInit
 
     return statusMessage;
   }
+
+  private loadError(msg: string, err: any) {
+    this.error(msg);
+
+    return throwError(() => new Error(err));
+  }
+
 }

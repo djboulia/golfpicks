@@ -17,7 +17,7 @@ const Event = function (model) {
 
         const Course = app.getModel('Course');
 
-        const eventrecord = await model.findById(id)
+        const event = await model.findById(id)
             .catch((e) => {
                 var str = "Could not find event id " + id;
                 console.error(str);
@@ -26,7 +26,6 @@ const Event = function (model) {
 
         console.log("called showScore for id " + id);
 
-        var event = eventrecord.attributes;
         var courseid;
 
         if (event.rounds && event.rounds.length > 0) {
@@ -63,7 +62,7 @@ const Event = function (model) {
 
         const Course = app.getModel('Course');
 
-        const eventrecord = await model.findById(id)
+        const event = await model.findById(id)
             .catch((e) => {
                 var str = "Could not find event id " + id;
                 console.error(str);
@@ -72,7 +71,6 @@ const Event = function (model) {
 
         console.log("found id " + id);
 
-        const event = eventrecord.attributes;
         var courseid;
 
         if (event.rounds && event.rounds.length > 0) {
@@ -135,8 +133,7 @@ const Event = function (model) {
 
             for (var i = 0; i < objs.length; i++) {
                 var obj = objs[i];
-                obj.attributes.id = obj.id;
-                playermap[obj.id] = obj.attributes;
+                playermap[obj.id] = obj;
             }
 
             var validplayers = [];
@@ -183,8 +180,7 @@ const Event = function (model) {
 
         for (let i = 0; i < objs.length; i++) {
             const obj = objs[i];
-            obj.attributes.id = obj.id;
-            roundmap[obj.id] = obj.attributes;
+            roundmap[obj.id] = obj;
         }
 
         const validrounds = [];
@@ -239,7 +235,7 @@ const Event = function (model) {
         const sortByRanking = (playerSort && playerSort.toLowerCase() === 'ranking') ? true : false;
         console.log('sortByRanking = ', sortByRanking);
 
-        const eventrecord = await model.findById(id)
+        const event = await model.findById(id)
             .catch((e) => {
                 var str = "Could not find event id " + id;
                 console.error(str);
@@ -247,8 +243,6 @@ const Event = function (model) {
             });
 
         console.log("found id " + id);
-
-        const event = eventrecord.attributes;
 
         // do a deep get for player info
         event.players = await getPlayers(event)

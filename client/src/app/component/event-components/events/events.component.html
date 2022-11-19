@@ -22,16 +22,16 @@
                         <tbody>
                             <tr *ngFor='let event of events'>
                                 <td>
-                                    <a [attr.href]="baseUrl + '/id/' + event.id">{{event.attributes.name}}</a>
+                                    <a [attr.href]="baseUrl + '/id/' + event.id">{{event.name}}</a>
                                 </td>
                                 <td class="fs-4">
-                                    {{event.attributes.rounds.length}}
+                                    {{event.rounds.length}}
                                 </td>
                                 <td class="fs-4">
-                                    {{dateFormatter.formatDate(event.attributes.start)}}
+                                    {{dateFormatter.formatDate(event.start)}}
                                 </td>
                                 <td class="fs-4">
-                                    {{dateFormatter.formatDate(event.attributes.end)}}
+                                    {{dateFormatter.formatDate(event.end)}}
                                 </td>
                             </tr>
                         </tbody>

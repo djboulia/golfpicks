@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
+import { Course } from 'src/app/shared/services/backend/course.interface';
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { CourseService } from 'src/app/shared/services/backend/course.service';
 })
 export class CoursesComponent extends BaseLoadingComponent implements OnInit {
 
-  courses: any = null;
+  courses: Course[] = [];
 
   baseUrl = '/component/course';
   baseUrlInfo = '/component/courseinfo';

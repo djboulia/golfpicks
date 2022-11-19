@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
+import { Game } from 'src/app/shared/services/backend/game.interfaces';
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
 
@@ -23,8 +24,11 @@ export class GameplayerComponent extends BaseLoadingComponent implements OnInit 
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
-    public dateFormatter: DateFormatterService) {
+    public dateFormatter: DateFormatterService
+  ) {
     super(spinner);
+
+    this.game = gameApi.newModel();
   }
 
   ngOnInit(): void {

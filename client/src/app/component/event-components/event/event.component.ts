@@ -13,7 +13,7 @@ import { DateFormatterService } from 'src/app/shared/services/date/date-formatte
   styleUrls: ['./event.component.scss']
 })
 export class EventComponent extends BaseLoadingComponent implements OnInit {
-  id: any = null;
+  id: string | null = null;
   event: any = null;
 
   scoresUrl = '/component/eventleaders';

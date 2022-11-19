@@ -3,7 +3,7 @@
         <div class="card">
 
             <div class="card-body">
-                <h4 *ngIf="isLoaded" class="card-title">Games for {{user.attributes.name}}</h4>
+                <h4 *ngIf="isLoaded" class="card-title">Games for {{user.name}}</h4>
 
                 <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
                     {{errorMessage}}
@@ -32,10 +32,10 @@
 
                             <!-- <tr *ngFor='let user of users'>
                                 <td>
-                                    {{user.attributes.name}}
+                                    {{user.name}}
                                 </td>
                                 <td class="fs-4">
-                                    {{user.attributes.username}}
+                                    {{user.username}}
                                 </td>
                                 <td>
                                     <a [attr.href]="baseUrl + '/id/' + user.id">Edit</a>

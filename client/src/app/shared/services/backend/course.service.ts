@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ConfigBaseUrl } from './backend.config';
-import { Course, CourseAttributes, Weather } from './course.interface';
+import { Course, Weather } from './course.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,31 +13,28 @@ export class CourseService {
   constructor(private http: HttpClient) { }
 
   newModel(): Course {
-    const course: any = {
+    const course: Course = {
       id: '',
-      className: 'Course',
-      attributes: {
-        name: '',
-        par: undefined,
-        yardage: undefined,
-        location: {
-          lat: undefined,
-          lng: undefined
-        },
-        tee: '',
-        rating: undefined,
-        slope: undefined,
-        holes: []
-      }
+      name: '',
+      par: 0,
+      yardage: 0,
+      location: {
+        lat: 0,
+        lng: 0
+      },
+      tee: '',
+      rating: 0,
+      slope: 0,
+      holes: []
     }
 
     // initialize 18 holes
-    for (let i=1; i<19; i++) {
-      const hole : any = {
+    for (let i = 1; i < 19; i++) {
+      const hole: any = {
         number: i
       }
 
-      course.attributes.holes.push(hole);
+      course.holes.push(hole);
     }
 
     return course;
@@ -65,10 +62,10 @@ export class CourseService {
       methodUrl, obj, { withCredentials: true });
   }
 
-  post(obj: CourseAttributes) {
+  post(obj: Course) {
     const methodUrl = this.configUrl;
 
-    return this.http.post<CourseAttributes>(
+    return this.http.post<Course>(
       methodUrl, obj, { withCredentials: true });
   }
 

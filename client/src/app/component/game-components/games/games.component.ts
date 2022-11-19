@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
+import { Game } from 'src/app/shared/services/backend/game.interfaces';
 import { GameService } from 'src/app/shared/services/backend/game.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { GameService } from 'src/app/shared/services/backend/game.service';
 })
 export class GamesComponent extends BaseLoadingComponent implements OnInit {
 
-  games: any = null;
+  games: Game[] = [];
 
   basePlayersUrl = '/component/gameplayer';
   baseUrl = '/component/game';

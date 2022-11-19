@@ -9,7 +9,8 @@ import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { CourseService } from 'src/app/shared/services/backend/course.service';
-import { Course, CourseAttributes } from 'src/app/shared/services/backend/course.interface';
+import { Event } from 'src/app/shared/services/backend/event.interfaces';
+import { Course } from 'src/app/shared/services/backend/course.interface';
 
 
 @Component({
@@ -18,8 +19,8 @@ import { Course, CourseAttributes } from 'src/app/shared/services/backend/course
   styleUrls: ['./course.component.scss']
 })
 export class CourseComponent extends BaseLoadingComponent implements OnInit {
-  id: any = null;
-  course: any = null;
+  id: string | null = null;
+  course: Course ;
 
   parentUrl = '/component/courses';
   baseUrl = '/component/course';
@@ -38,6 +39,8 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
     private courseApi: CourseService
   ) {
     super(spinner);
+
+    this.course = courseApi.newModel();
   }
 
   ngOnInit(): void {
@@ -101,14 +104,12 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   onSubmit() {
     console.log('submit pressed!');
 
-    const attributes: CourseAttributes = this.course.attributes;
-
     if (this.id) {
       // existing gamer, update all fields
       this.updateCourse(this.course);
     } else {
       // new gamer, only send the attributes
-      this.createCourse(attributes);
+      this.createCourse(this.course);
     }
   }
 
@@ -116,6 +117,11 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
     const self = this;
 
     this.loading();
+
+    if (!this.id) {
+      this.error('Invalid id!');
+      return;
+    }
 
     this.courseApi.delete(this.id)
       .subscribe({
@@ -127,7 +133,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
         },
         error(msg) {
           console.log('error deleting course! ', msg);
-          self.error(`Error deleting course ${self.course.attributes.name}!`);
+          self.error(`Error deleting course ${self.course.name}!`);
         }
       });
   }
@@ -155,9 +161,8 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
         next(data) {
           console.log('Course data saved: ', data);
 
-          const attributes = course.attributes;
-          attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());
-          attributes.location.lng = Number.parseFloat(attributes.location.lng.toString());
+          course.location.lat = Number.parseFloat(course.location.lat.toString());
+          course.location.lng = Number.parseFloat(course.location.lng.toString());
 
           // update could have been to logged in user, so refresh the auth state
           self.auth.refresh()
@@ -175,16 +180,16 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
       });
   }
 
-  private createCourse(attributes: CourseAttributes) {
+  private createCourse(course: Course) {
     const self = this;
 
     this.loading();
 
-    console.log('creating course ', attributes);
-    attributes.location.lat = Number.parseFloat(attributes.location.lat.toString());
-    attributes.location.lng = Number.parseFloat(attributes.location.lng.toString());
+    console.log('creating course ', course);
+    course.location.lat = Number.parseFloat(course.location.lat.toString());
+    course.location.lng = Number.parseFloat(course.location.lng.toString());
 
-    this.courseApi.post(attributes)
+    this.courseApi.post(course)
       .subscribe({
         next(data) {
           console.log('course data created: ', data);

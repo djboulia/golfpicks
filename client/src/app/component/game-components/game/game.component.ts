@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TemplateRef } from '@angular/core';
-import { Game } from 'src/app/shared/services/backend/game.interfaces';
 import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgxSpinnerService } from "ngx-spinner";
@@ -16,7 +15,10 @@ import { mergeMap, map, catchError, throwError } from 'rxjs';
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { CourseService } from 'src/app/shared/services/backend/course.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
-import { EventAttributes } from 'src/app/shared/services/backend/event.interfaces';
+
+import { Game } from 'src/app/shared/services/backend/game.interfaces';
+import { Course } from 'src/app/shared/services/backend/course.interface';
+import { Event } from 'src/app/shared/services/backend/event.interfaces';
 
 @Component({
   selector: 'app-game',
@@ -32,9 +34,9 @@ import { EventAttributes } from 'src/app/shared/services/backend/event.interface
 })
 export class GameComponent extends BaseLoadingComponent implements OnInit {
   id: any = null;
-  game: any = null;
+  game: Game;
   event: any = null;
-  courses: any = null;
+  courses: Course[] =[];
   schedule: any = null;
   selectedTourStop: any = null;
   selectedCourse: any = null;
@@ -57,6 +59,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
     private eventApi: EventService
   ) {
     super(spinner);
+    this.game = gameApi.newModel();
   }
 
   ngOnInit(): void {
@@ -89,22 +92,22 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
     // go get our game information from multiple sources
     this.gameApi.get(this.id)
       .pipe(
-        map((data) => this.game = data),
+        map((game) => this.game = game),
         // map((data) => { console.log('found game ', data); return data; }),
 
         // get event that corresponds to this game
-        mergeMap((data) => this.eventApi.deep(data.attributes.event, false)),
-        map((data) => this.event = data),
+        mergeMap((game) => this.eventApi.deep(game.event, false)),
+        map((event) => this.event = event),
         // map((data) => { console.log('found event ', data); return data; }),
 
         // get tour schedule for the appropriate season
-        mergeMap((data) => this.eventApi.tourSchedule(data.season)),
-        map((data) => this.schedule = data),
+        mergeMap((event) => this.eventApi.tourSchedule(event.season)),
+        map((schedule) => this.schedule = schedule),
         // map((data) => { console.log('found tour schedule ', data); return data; }),
 
         // get the list of courses to choose from for this game
         mergeMap(() => this.courseApi.getAll()),
-        map((data) => this.courses = data),
+        map((courses) => this.courses = courses),
         // map((data) => { console.log('found courses ', data); return data; }),
 
         catchError(err => this.loadingError('Error loading game!', err))
@@ -120,7 +123,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
   loadNewGame() {
     // create a new game
     this.game = this.gameApi.newModel();
-    this.event = this.eventApi.newModelAttributes();
+    this.event = this.eventApi.newModel();
 
     // get the list of courses to choose from for this game
     this.courseApi.getAll()
@@ -200,8 +203,8 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
    */
   OnTourStopChanged(tourstop: any) {
     // console.log('tourstop ', tourstop);
-    this.game.attributes.start = tourstop.start;
-    this.game.attributes.end = tourstop.end;
+    this.game.start = tourstop.start;
+    this.game.end = tourstop.end;
   }
 
   /**
@@ -232,7 +235,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
       // existing gamer, update all fields
       this.updateGame(this.game, this.event);
     } else {
-      // new gamer, only send the attributes
+      // new gamer
       this.createGame(this.game, this.event);
     }
   }
@@ -242,7 +245,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
    * event object associated with this game.
    */
   private deleteGame() {
-    const eventid = this.game.attributes.event;
+    const eventid = this.game.event;
 
     this.loading();
 
@@ -254,7 +257,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
         mergeMap(() => this.gameApi.delete(this.game.id)),
         map((data) => console.log(`game ${this.game.id} deleted`)),
 
-        catchError(err => this.loadingError(`Error deleting game ${this.game.attributes.name}!`, err))
+        catchError(err => this.loadingError(`Error deleting game ${this.game.name}!`, err))
       )
       .subscribe((data) => {
         this.loaded();
@@ -304,23 +307,23 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
     return rounds;
   }
 
-  private setEventAttributes(attributes: any, game: any, event: any): any {
-    const start = game.attributes.start;
-    const end = game.attributes.end;
+  private updateEvent(newEvent: Event, game: Game, event: Event): any {
+    const start = game.start;
+    const end = game.end;
     const courseid = this.selectedCourse.id;
 
-    attributes.name = game.attributes.name;
-    attributes.start = start;
-    attributes.end = end;
-    attributes.provider = event.provider;
-    attributes.scoreType = event.scoreType;
-    attributes.season = event.season;
-    attributes.tournament_id = this.selectedTourStop.tournament_id;
-    attributes.rounds = this.getRounds(new Date(start), new Date(end), courseid);
+    newEvent.name = game.name;
+    newEvent.start = start;
+    newEvent.end = end;
+    newEvent.provider = event.provider;
+    newEvent.scoreType = event.scoreType;
+    newEvent.season = event.season;
+    newEvent.tournament_id = this.selectedTourStop.tournament_id;
+    newEvent.rounds = this.getRounds(new Date(start), new Date(end), courseid);
 
-    console.log('attributes: ', attributes);
+    console.log('newEvent: ', newEvent);
 
-    return attributes;
+    return newEvent;
   }
 
   /**
@@ -330,18 +333,18 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
    * @param gamer 
    * @param event 
    */
-  private updateGame(game: Game, event: EventAttributes) {
+  private updateGame(game: Game, event: Event) {
 
     this.loading();
 
     // get the event data, then update it
-    this.eventApi.get(game.attributes.event)
+    this.eventApi.get(game.event)
       .pipe(
-        map((data) => { this.setEventAttributes(data.attributes, game, event); return data; }),
+        map((newEvent) => { this.updateEvent(newEvent, game, event); return newEvent; }),
 
         // save event data first
-        mergeMap((data) => this.eventApi.put(data)),
-        map((data) => game.attributes.event = data.id),
+        mergeMap((newEvent) => this.eventApi.put(newEvent)),
+        map((data) => game.event = data.id),
 
         // then save game data
         mergeMap(() => this.gameApi.put(game)),
@@ -356,25 +359,25 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
       })
   }
 
-  private createGame(game: Game, event: EventAttributes) {
+  private createGame(game: Game, event: Event) {
 
-    console.log('creating game ', game.attributes);
+    console.log('creating game ', game);
     this.loading();
 
     const eventAttributes = event;
-    this.setEventAttributes(eventAttributes, game, event);
+    this.updateEvent(eventAttributes, game, event);
 
     // save event data
     this.eventApi.post(event)
       .pipe(
         map((data) => {
           console.log('event data with id created: ', data.id);
-          this.game.attributes.event = data.id;
+          this.game.event = data.id;
           return data;
         }),
 
         // save game data
-        mergeMap((data) => this.gameApi.post(game.attributes)),
+        mergeMap((data) => this.gameApi.post(game)),
         map((data) => {
           console.log('game data with id created: ', data.id);
           return data;

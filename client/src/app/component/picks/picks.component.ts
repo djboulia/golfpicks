@@ -10,6 +10,9 @@ import { EventService } from 'src/app/shared/services/backend/event.service';
 import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
+import { Game } from 'src/app/shared/services/backend/game.interfaces';
+import { Gamer } from 'src/app/shared/services/backend/gamer.interfaces';
+
 @Component({
   selector: 'app-picks',
   templateUrl: './picks.component.html',
@@ -20,9 +23,9 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   readonly NUM_TOP_ALLOWED = 2;
   readonly NUM_TOP_RANK = 10;
 
-  id: any = null;
-  currentUser: any = null;
-  game: any = null;
+  id: string | null = null;
+  currentUser: Gamer;
+  game: Game;
   gameDay: GameDayService | null = null;
   event: any = null;
   golfers: any = null;
@@ -42,6 +45,9 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     private gamerApi: GamerService
   ) {
     super(spinner);
+
+    this.currentUser = gamerApi.newModel();
+    this.game = gameApi.newModel();
   }
 
   ngOnInit(): void {
@@ -70,6 +76,11 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
   private loadPicks() {
     console.log('loading picks');
+
+    if (!this.id) {
+      this.error("No game found!");
+      return;
+    }
 
     // go get our game information from multiple sources
     this.gameApi.get(this.id)
@@ -262,6 +273,11 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   onSubmit() {
     this.picksMessage = "Saving picks...";
     this.loading();
+
+    if (!this.id) {
+      this.error('No game found!');
+      return;
+    }
 
     // update this person's picks in the game data
     const selections = this.getSelections(this.golfers);

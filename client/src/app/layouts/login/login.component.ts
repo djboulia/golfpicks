@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 
 export class LoginComponent implements OnInit {
 
-  form: any = {
-    userid: null,
-    password: null
+  form = {
+    username: '',
+    password: ''
   }
 
   errorMessage : any = null;
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   onLoggedin() {
     const self = this;
 
-    this.auth.login(this.form.userid, this.form.password)
+    this.auth.login(this.form.username, this.form.password)
       .subscribe((data) => {
           if (data) {
             console.log('logged in, redirecting to main: ', data);

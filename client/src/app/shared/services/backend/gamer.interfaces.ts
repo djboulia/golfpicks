@@ -1,15 +1,26 @@
 // interfaces for our backend
 
-export interface GamerAttributes {
+export interface Gamer {
+    id: string,
     admin: boolean,
     username: string,
     password: string,
     name: string
 }
 
+export interface GamerHistoryGame {
+    event: string,
+    eventid: string,
+    start: number,
+    end: number
+}
 
-export interface Gamer {
-    className: string,
-    id: string,
-    attributes: GamerAttributes
+export interface GamerHistory {
+    active : {
+        inProgress : boolean,
+        joined : boolean,
+        event : string,
+        eventid : string
+    }
+    history : GamerHistoryGame[]
 }

@@ -8,7 +8,7 @@
                     {{errorMessage}}
                 </ngb-alert>
 
-                <h4 *ngIf="isLoaded" class="card-title">{{course.attributes.name}}</h4>
+                <h4 *ngIf="isLoaded" class="card-title">{{course.name}}</h4>
                 <form *ngIf="isLoaded" name="form" role="form">
 
                     <div class="table-responsive">
@@ -24,13 +24,13 @@
                                 <tr>
                                     <td>
                                         <div>
-                                            Tee: {{course.attributes.tee}}
+                                            Tee: {{course.tee}}
                                         </div>
-                                        <div *ngIf="course.attributes.rating > 0">
-                                            Rating: {{course.attributes.rating}}
+                                        <div *ngIf="course.rating > 0">
+                                            Rating: {{course.rating}}
                                         </div>
-                                        <div *ngIf="course.attributes.slope > 0">
-                                            Slope: {{course.attributes.slope}}
+                                        <div *ngIf="course.slope > 0">
+                                            Slope: {{course.slope}}
                                         </div>
                                     </td>
                                     <td class="fs-4">
@@ -54,7 +54,7 @@
                     <div *ngIf="isLoaded" class="map">
                         <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
                             <map-marker [position]="mapCenter"
-                                [label]="course.attributes.name"></map-marker>
+                                [label]="course.name"></map-marker>
                         </google-map>
                     </div>
 
@@ -122,7 +122,7 @@
                                     <td>Yardage</td>
                                     <td *ngFor='let hole of backNine.holes'>{{hole.yardage}}</td>
                                     <td>{{backNine.yardage}}</td>
-                                    <td class="text-center">{{course.attributes.yardage}}</td>
+                                    <td class="text-center">{{course.yardage}}</td>
                                 </tr>
                                 <tr class="scorecard handicap">
                                     <td>Handicap</td>

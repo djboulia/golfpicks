@@ -12,7 +12,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>This will permanently remove course {{course.attributes.name}}. Are you sure?</p>
+                        <p>This will permanently remove course {{course.name}}. Are you sure?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-rounded btn-info"
@@ -44,7 +44,7 @@
                                     </td>
                                     <td class="fs-4" colspan="3">
                                         <div class="form-group">
-                                            <input placeholder="Name" name="name" [(ngModel)]="course.attributes.name"
+                                            <input placeholder="Name" name="name" [(ngModel)]="course.name"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -55,7 +55,7 @@
                                     </td>
                                     <td class="fs-4" colspan="3">
                                         <div class="form-group">
-                                            <input placeholder="Tee" name="tee" [(ngModel)]="course.attributes.tee"
+                                            <input placeholder="Tee" name="tee" [(ngModel)]="course.tee"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -67,7 +67,7 @@
                                     <td class="fs-4">
                                         <div class="form-group">
                                             <input placeholder="Slope" name="slope"
-                                                [(ngModel)]="course.attributes.slope"
+                                                [(ngModel)]="course.slope"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -77,7 +77,7 @@
                                     <td class="fs-4">
                                         <div class="form-group">
                                             <input placeholder="Rating" name="rating"
-                                                [(ngModel)]="course.attributes.rating"
+                                                [(ngModel)]="course.rating"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -89,7 +89,7 @@
                                     <td class="fs-4">
                                         <div class="form-group">
                                             <input placeholder="Lat" name="lat"
-                                                [(ngModel)]="course.attributes.location.lat"
+                                                [(ngModel)]="course.location.lat"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -99,7 +99,7 @@
                                     <td class="fs-4">
                                         <div class="form-group">
                                             <input placeholder="Lng" name="lng"
-                                                [(ngModel)]="course.attributes.location.lng"
+                                                [(ngModel)]="course.location.lng"
                                                 class="form-control input-underline input-lg" type="text" />
                                         </div>
                                     </td>
@@ -124,7 +124,7 @@
                                                         Par
                                                     </th>
                                                 </thead>
-                                                <tr *ngFor="let hole of course.attributes.holes">
+                                                <tr *ngFor="let hole of course.holes">
                                                     <td>
                                                         {{hole.number}}
                                                     </td>

@@ -22,7 +22,8 @@ export interface Weather {
     }
 }
 
-export interface CourseAttributes {
+export interface Course {
+    id: string,
     name: string,
     par: number,
     yardage: number,
@@ -31,10 +32,4 @@ export interface CourseAttributes {
     rating: number,
     slope: number,
     holes: Hole[],
-}
-
-export interface Course {
-    className: string,
-    id: string,
-    attributes: CourseAttributes
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Game, GameAttributes } from './game.interfaces';
+import { Game } from './game.interfaces';
 import { ConfigBaseUrl } from './backend.config';
 
 
@@ -17,14 +17,11 @@ export class GameService {
   newModel(): Game {
     return {
       id: '',
-      className: 'Gamer',
-      attributes: {
-        name: '',
-        start: '',
-        end: '',
-        event: '',
-        gamers: []
-      }
+      name: '',
+      start: '',
+      end: '',
+      event: '',
+      gamers: []
     };
   }
 
@@ -42,7 +39,7 @@ export class GameService {
       methodUrl, obj, { withCredentials: true });
   }
 
-  post(obj: GameAttributes) {
+  post(obj: Game) {
     const methodUrl = this.configUrl;
 
     return this.http.post<Game>(
@@ -69,8 +66,8 @@ export class GameService {
 
             // sort the games by date
             games.sort(function (a, b) {
-              const aDate = Date.parse(a.attributes.start);
-              const bDate = Date.parse(b.attributes.start);
+              const aDate = Date.parse(a.start);
+              const bDate = Date.parse(b.start);
 
               // console.log(`aDate: ${aDate}, bDate: ${bDate}`);
 
@@ -110,7 +107,7 @@ export class GameService {
       methodUrl, { withCredentials: true });
   }
 
-  savePicks(id: string, gamerid : string, picks : any[]) {
+  savePicks(id: string, gamerid: string, picks: any[]) {
     const methodUrl = this.configUrl + '/' + id + '/Gamers/' + gamerid + '/picks';
 
     return this.http.post<Game>(

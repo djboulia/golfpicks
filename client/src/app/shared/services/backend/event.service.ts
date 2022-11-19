@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ConfigBaseUrl } from './backend.config';
-import { Event, EventAttributes, Schedule } from './event.interfaces';
+import { Event, Schedule } from './event.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,9 @@ export class EventService {
     return today.getFullYear().toString();
   }
 
-  newModelAttributes(): EventAttributes {
+  newModel(): Event {
     return {
+      id: '',
       name: '',
       start: '',
       end: '',
@@ -37,15 +38,6 @@ export class EventService {
       rounds: []
     };
   }
-
-  newModel(): Event {
-    return {
-      id: '',
-      className: 'Event',
-      attributes: this.newModelAttributes()
-    };
-  }
-
 
   get(id: string) {
     const methodUrl = this.configUrl + '/' + id;
@@ -61,7 +53,7 @@ export class EventService {
       methodUrl, obj, {withCredentials: true});
   }
 
-  post(obj : EventAttributes) {
+  post(obj : Event) {
     const methodUrl = this.configUrl;
 
     return this.http.post<Event>(
