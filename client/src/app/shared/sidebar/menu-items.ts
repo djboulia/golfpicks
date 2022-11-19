@@ -20,7 +20,7 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
     },
     {
       path: '/about',
-      title: 'About Golfpicks',
+      title: 'About GolfPicks',
       icon: 'bi bi-info-circle',
       class: '',
       extralink: false,
