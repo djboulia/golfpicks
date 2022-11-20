@@ -6,14 +6,14 @@ const GameUtils = function () {
         var eod = new Date(timems);
 
         eod.setHours(23, 59, 59, 999);
-        
+
         return eod.getTime();
     };
 
     var dayOfWeekString = function (theDate) {
         // return day of Week
         var days = ["Sunday", "Monday", "Tuesday", "Wednesday",
-                    "Thursday", "Friday", "Saturday"];
+            "Thursday", "Friday", "Saturday"];
         var dateObj = new Date(theDate);
 
         return days[dateObj.getDay()];
@@ -21,8 +21,8 @@ const GameUtils = function () {
 
     var dateString = function (theDate) {
         var months = ["January", "February", "March", "April",
-                      "May", "June", "July", "August", "September",
-                      "October", "November", "December"];
+            "May", "June", "July", "August", "September",
+            "October", "November", "December"];
 
         var dateObj = new Date(theDate);
         return dayOfWeekString(theDate) + ", " +
@@ -47,7 +47,7 @@ const GameUtils = function () {
     var dateTimeString = function (theDate) {
         return dateString(theDate) + " " + timeString(theDate);
     };
-    
+
     // getGameDetails
     // build out relevent game information
     //
@@ -87,15 +87,19 @@ const GameUtils = function () {
         return gameDetails;
     };
 
-    this.tournamentComplete =function (start, end) {
+    this.tournamentComplete = function (start, end) {
+        const now = Date.now();
+
         // set "end" to be the end of the current day before we do a
         // comparison.  this will give us a grace period for the
         // ending of tournament to be at midnight of the final day
         end = endOfDay(end);
 
-        console.debug("tournamentComplete: start " + start + ", ending " + end);
+        console.debug("tournamentComplete: start " + dateTimeString(start)
+            + ", ending " + dateTimeString(end)
+            + ", now " + dateTimeString(now));
 
-        return end < Date.now();
+        return end < now;
     };
 
     this.tournamentInProgress = function (start, end) {

@@ -20,6 +20,8 @@ import { Game } from 'src/app/shared/services/backend/game.interfaces';
 import { Course } from 'src/app/shared/services/backend/course.interface';
 import { Event } from 'src/app/shared/services/backend/event.interfaces';
 
+import { DateHelperService } from 'src/app/shared/services/date/date-helper.service';
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -202,9 +204,24 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
    * @param tourstop 
    */
   OnTourStopChanged(tourstop: any) {
-    // console.log('tourstop ', tourstop);
-    this.game.start = tourstop.start;
-    this.game.end = tourstop.end;
+
+    // tourstop is stored in UTC time, adjust for local time
+    const startDate = new Date(tourstop.start);
+    // console.log('tz offset ', startDate.getTimezoneOffset());
+    const startTimeOffset = startDate.getTime() + (startDate.getTimezoneOffset() * 60 * 1000);
+
+    const endDate = new Date(tourstop.end);
+    // console.log('tz offset ', endDate.getTimezoneOffset());
+    const endTImeOffset = endDate.getTime() + (endDate.getTimezoneOffset() * 60 * 1000);
+
+    const start = new DateHelperService(startTimeOffset);
+    const end = new DateHelperService(endTImeOffset);
+
+    console.log('tourstop start: ' + tourstop.start + ' , ' + start.dateTimeString());
+    console.log('tourstop end: ' + tourstop.end + ' , ' +  end.dateTimeString());
+
+    this.game.start = new Date(start.get()).toUTCString();
+    this.game.end = new Date(end.get()).toUTCString();
   }
 
   /**
