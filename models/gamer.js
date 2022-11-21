@@ -12,7 +12,7 @@
      const gameUtils = new GameUtils();
  
      model.login = async function (session, credentials) {
-         const user = credentials.user;
+         const user = credentials.username;
          const password = credentials.password;
  
          console.log("logging in user " + user);
@@ -184,7 +184,7 @@
                      schema: {
                          "name": 'Credentials',
                          "properties": {
-                             "user": {
+                             "username": {
                                  "required": true,
                                  "type": 'string'
                              },
