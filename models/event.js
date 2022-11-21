@@ -663,7 +663,7 @@ const Event = function (model) {
         '/:id/deep',
         'GET',
         {
-            description: "Perform a deep get for this event",
+            description: "Perform a deep get for this event, pulling in game and course details",
             responses: [
                 {
                     code: 200,

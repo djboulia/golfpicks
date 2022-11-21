@@ -10,7 +10,7 @@ const app = require('@apiserver/modelserver');
 const Game = function (model) {
     const eventUtils = new EventUtils();
 
-    model.gamerDetail = async function (gameid) {
+    model.gamerDetails = async function (gameid) {
         console.log("getting gamer map for game " + gameid);
 
         const game = await model.findById(gameid)
@@ -675,7 +675,7 @@ const Game = function (model) {
     );
 
     model.method(
-        '/:id/withGamerDetail',
+        '/:id/gamerDetails',
         'GET',
         {
             description: "Get the specified game with gamer details included",
@@ -693,7 +693,7 @@ const Game = function (model) {
                 },
             ],
         },
-        model.gamerDetail
+        model.gamerDetails
     );
 
 

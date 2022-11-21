@@ -93,8 +93,8 @@ export class GameService {
     });
   }
 
-  getWithGamerDetail(id: string): Observable<any> {
-    const methodUrl = this.configUrl + '/' + id + '/withGamerDetail';
+  gamerDetails(id: string): Observable<any> {
+    const methodUrl = this.configUrl + '/' + id + '/gamerDetails';
 
     return this.httpAuth.get(
       methodUrl, { withCredentials: true });

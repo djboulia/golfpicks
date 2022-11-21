@@ -39,7 +39,7 @@ export class GameplayerComponent extends BaseLoadingComponent implements OnInit 
 
     this.loading();
 
-    this.gameApi.getWithGamerDetail(this.id)
+    this.gameApi.gamerDetails(this.id)
       .subscribe({
         next(data) {
           console.log('game ', data);
