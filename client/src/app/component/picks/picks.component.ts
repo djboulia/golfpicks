@@ -235,6 +235,11 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
       return false;
     }
 
+    if (!this.golfers || this.golfers.length===0) {
+      this.error("The field has not yet been set for this tournament.  Check back later.");
+      return false;
+    }
+
     return true;
   }
 
