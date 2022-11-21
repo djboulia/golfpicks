@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpAuthService } from '../httpauth/http-auth.service';
 import { Observable } from 'rxjs';
 
-import { Game } from './game.interfaces';
+import { Game, GameDay } from './game.interfaces';
 import { ConfigBaseUrl } from './backend.config';
 
 
@@ -25,6 +25,20 @@ export class GameService {
     };
   }
 
+  newGameDayModel(): GameDay {
+    return {
+      id: '',
+      name: '',
+      start: '',
+      end: '',
+      event: '',
+      gamers: [],
+      gameDay : {
+        inProgress: false,
+        complete: false
+      }
+    };
+  }
   get(id: string): Observable<Game> {
     const methodUrl = this.configUrl + '/' + id;
 
@@ -112,6 +126,13 @@ export class GameService {
 
     return this.httpAuth.post(
       methodUrl, picks, { withCredentials: true });
+  }
+
+  gameDay(id: string): Observable<GameDay> {
+    const methodUrl = this.configUrl + '/' + id + '/gameDay';
+
+    return this.httpAuth.get(
+      methodUrl, { withCredentials: true });
   }
 
 }

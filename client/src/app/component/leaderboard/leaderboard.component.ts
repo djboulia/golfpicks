@@ -5,6 +5,7 @@ import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../base.loading.component';
 
+import { GameDay } from 'src/app/shared/services/backend/game.interfaces';
 import { GameService } from 'src/app/shared/services/backend/game.service';
 import { EventService } from 'src/app/shared/services/backend/event.service';
 import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
@@ -18,7 +19,7 @@ import { DateHelperService } from 'src/app/shared/services/date/date-helper.serv
 export class LeaderboardComponent extends BaseLoadingComponent implements OnInit, OnDestroy {
 
   id: any = null;
-  game: any = null;
+  game: GameDay;
   gameDay: any = null;
   gamers: any = null;
   leaderboard: any = null;
@@ -55,6 +56,8 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     private eventApi: EventService
   ) {
     super(spinner);
+
+    this.game = gameApi.newGameDayModel();
   }
 
   ngOnInit(): void {
@@ -94,12 +97,12 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
     console.log('loading leaderboard data');
 
     // go get our game information from multiple sources
-    this.gameApi.get(this.id)
+    this.gameApi.gameDay(this.id)
       .pipe(
         map((game) => this.game = game),
         // map((data) => { console.log('found game ', data); return data; }),
 
-        map((game) => this.gameDay = new GameDayService(this.game)),
+        map((game) => this.gameDay = new GameDayService(game)),
 
         // get event that corresponds to this game
         mergeMap((gameDay) => this.gameApi.leaderboard(gameDay.getId())),

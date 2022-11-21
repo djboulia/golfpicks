@@ -10,7 +10,7 @@ import { EventService } from 'src/app/shared/services/backend/event.service';
 import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
 import { GamerService } from 'src/app/shared/services/backend/gamer.service';
 
-import { Game } from 'src/app/shared/services/backend/game.interfaces';
+import { GameDay } from 'src/app/shared/services/backend/game.interfaces';
 import { Gamer } from 'src/app/shared/services/backend/gamer.interfaces';
 
 @Component({
@@ -25,7 +25,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
   id: string | null = null;
   currentUser: Gamer;
-  game: Game;
+  game: GameDay;
   gameDay: GameDayService | null = null;
   event: any = null;
   golfers: any = null;
@@ -47,7 +47,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     super(spinner);
 
     this.currentUser = gamerApi.newModel();
-    this.game = gameApi.newModel();
+    this.game = gameApi.newGameDayModel();
   }
 
   ngOnInit(): void {
@@ -83,7 +83,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     }
 
     // go get our game information from multiple sources
-    this.gameApi.get(this.id)
+    this.gameApi.gameDay(this.id)
       .pipe(
         map((game) => this.game = game),
         // map((data) => { console.log('found game ', data); return data; }),
@@ -220,10 +220,6 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
     // always allow the page to load in testing mode
     if (this.testingMode) return true;
-
-    // give players a 10 hr grace period
-    // (10AM on day of tournament) to complete picks
-    gameDay.addGracePeriod(10);
 
     if (gameDay.tournamentInProgress()) {
       this.error("Tournament is in progress, picks can no longer be made.");

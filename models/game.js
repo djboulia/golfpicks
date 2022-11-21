@@ -6,9 +6,11 @@
 
 const EventUtils = require('../common/lib/eventutils.js');
 const app = require('@apiserver/modelserver');
+const GameUtils = require('../common/lib/gameutils.js');
 
 const Game = function (model) {
     const eventUtils = new EventUtils();
+    const gameUtils = new GameUtils();
 
     model.gamerDetails = async function (gameid) {
         console.log("getting gamer map for game " + gameid);
@@ -57,7 +59,7 @@ const Game = function (model) {
         // the remaining gamers from the original gamers list are
         // those that are not playing in this game at present
         const notPlaying = [];
-        for (let i=0; i<gamers.length; i++) {
+        for (let i = 0; i < gamers.length; i++) {
             const gamer = gamers[i];
             gamer.user = gamers[i].id;
             notPlaying.push(gamer);
@@ -265,7 +267,7 @@ const Game = function (model) {
     //
     var getRoundNetTotals = function (courseInfo, roundStartedData, pick, isLiveScoring) {
 
-        console.debug("getRoundTotals: isLiveScoring=" + isLiveScoring);
+        // console.debug("getRoundTotals: isLiveScoring=" + isLiveScoring);
 
         var rounds = [],
             par = [],
@@ -294,7 +296,7 @@ const Game = function (model) {
         var roundtotal = 0;
         var j;
 
-        console.debug("getRoundTotals: todayIndex=" + todayIndex);
+        // console.debug("getRoundTotals: todayIndex=" + todayIndex);
 
         for (j = 0; j < rounds.length; j++) {
 
@@ -338,8 +340,8 @@ const Game = function (model) {
 
         }
 
-        console.debug("getRoundNetTotals: pick " + JSON.stringify(pick) +
-            " roundtotals = " + JSON.stringify(roundtotals));
+        // console.debug("getRoundNetTotals: pick " + JSON.stringify(pick) +
+        //     " roundtotals = " + JSON.stringify(roundtotals));
 
         return roundtotals;
     };
@@ -608,7 +610,7 @@ const Game = function (model) {
             if (!gamers) console.error("processLeaderboardData: invalid gamers object!");
 
             gamers.forEach(function (gamer) {
-                console.debug("picks: " + JSON.stringify(gamer.picks));
+                // console.debug("picks: " + JSON.stringify(gamer.picks));
                 gamer.picks = expandPicks(gamer.picks, golfers);
                 gamer_ids.push(gamer.user);
             });
@@ -648,6 +650,34 @@ const Game = function (model) {
         return leaderboard;
     };
 
+    /**
+     * add game day specific information to the game record
+     * 
+     * @param {string} id gameid
+     */
+    model.gameDay = async function (id) {
+        console.log()
+        const game = await model.findById(id)
+            .catch((e) => {
+                var str = "Could not find game id " + id;
+                console.error(str);
+                throw new Error(str);
+            });
+
+        const gameDetails = gameUtils.getGameDetails(game, id);
+        gameUtils.addGracePeriod(gameDetails, 10);
+
+        // add tournament complete/inprogress stats
+        const gameDay = {
+            inProgress: gameUtils.tournamentInProgress(gameDetails.start, gameDetails.end),
+            complete: gameUtils.tournamentComplete(gameDetails.start, gameDetails.end)
+        }
+
+        game.gameDay = gameDay;
+
+        return game;
+    }
+
     // expose the create, read, update methods from this model
     model.addCrudMethods();
 
@@ -673,29 +703,6 @@ const Game = function (model) {
         },
         model.gamers
     );
-
-    model.method(
-        '/:id/gamerDetails',
-        'GET',
-        {
-            description: "Get the specified game with gamer details included",
-            responses: [
-                {
-                    code: 200,
-                    description: ""
-                }
-            ],
-            params: [
-                {
-                    name: 'id',
-                    source: 'param',
-                    type: 'string'
-                },
-            ],
-        },
-        model.gamerDetails
-    );
-
 
     model.method(
         '/:id/Gamers/:gamerid/picks',
@@ -757,6 +764,28 @@ const Game = function (model) {
     );
 
     model.method(
+        '/:id/gamerDetails',
+        'GET',
+        {
+            description: "Get the specified game with gamer details included",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ],
+        },
+        model.gamerDetails
+    );
+
+    model.method(
         '/:id/leaderboard',
         'GET',
         {
@@ -776,6 +805,28 @@ const Game = function (model) {
             ]
         },
         model.leaderboard
+    );
+
+    model.method(
+        '/:id/gameDay',
+        'GET',
+        {
+            description: "Add details such as tournament in progress or complete to the game record",
+            responses: [
+                {
+                    code: 200,
+                    description: ""
+                }
+            ],
+            params: [
+                {
+                    name: 'id',
+                    source: 'param',
+                    type: 'string'
+                },
+            ]
+        },
+        model.gameDay
     );
 }
 

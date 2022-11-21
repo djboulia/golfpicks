@@ -151,7 +151,7 @@ const Event = function (model) {
                 }
             }
 
-            console.log("setting players " + JSON.stringify(validplayers));
+            // console.log("setting players " + JSON.stringify(validplayers));
 
             return validplayers;
         };
@@ -262,7 +262,7 @@ const Event = function (model) {
             roundTitles : eventUtils.getRoundTitles(courseInfo, 'Day')    
         }
 
-        console.log('roundInfo ', roundInfo);
+        // console.log('roundInfo ', roundInfo);
 
         // console.debug("entering loadEventData courseInfo :" + JSON.stringify(courseInfo));
 

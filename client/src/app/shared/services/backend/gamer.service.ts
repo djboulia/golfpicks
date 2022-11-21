@@ -38,7 +38,7 @@ export class GamerService {
     }
   }
 
-  login(userid: String, password: String) {
+  login(username: String, password: String) {
     const methodUrl = this.configUrl + '/login';
 
     // login is the special case where we don't need
@@ -46,7 +46,7 @@ export class GamerService {
     // logs the user in and creates a new session
     return this.http.post<Gamer>(
       methodUrl,
-      { "user": userid, "password": password },
+      { "username": username, "password": password },
       { withCredentials: true });
   }
 
