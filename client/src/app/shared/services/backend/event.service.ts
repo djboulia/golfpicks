@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpAuthService } from '../httpauth/http-auth.service';
 import { ConfigBaseUrl } from './backend.config';
 import { Event, Schedule } from './event.interfaces';
+import { Weather } from './course.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { Event, Schedule } from './event.interfaces';
 export class EventService {
   private configUrl = ConfigBaseUrl() + '/Events';
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpAuth: HttpAuthService) { }
 
   private currentSeason(): string {
     const SEPTEMBER = 8; // zero based month index
@@ -39,73 +41,73 @@ export class EventService {
     };
   }
 
-  get(id: string) {
+  get(id: string): Observable<Event> {
     const methodUrl = this.configUrl + '/' + id;
 
-    return this.http.get<Event>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  put(obj : Event) {
+  put(obj: Event): Observable<Event> {
     const methodUrl = this.configUrl;
 
-    return this.http.put<Event>(
-      methodUrl, obj, {withCredentials: true});
+    return this.httpAuth.put(
+      methodUrl, obj, { withCredentials: true });
   }
 
-  post(obj : Event) {
+  post(obj: Event): Observable<Event> {
     const methodUrl = this.configUrl;
 
-    return this.http.post<Event>(
-      methodUrl, obj, {withCredentials: true});
+    return this.httpAuth.post(
+      methodUrl, obj, { withCredentials: true });
   }
 
-  delete(id : string) {
+  delete(id: string): Observable<boolean> {
     const methodUrl = this.configUrl + '/' + id;
 
-    return this.http.delete<boolean>(
-      methodUrl, {withCredentials: true});
+    return this.httpAuth.delete(
+      methodUrl, { withCredentials: true });
   }
-  getAll() {
+  getAll(): Observable<Event[]> {
     const methodUrl = this.configUrl;
 
-    return this.http.get<Event[]>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  deep(id: string, sortByRanking: boolean) {
+  deep(id: string, sortByRanking: boolean): Observable<any> {
     const queryParameters = (sortByRanking) ? '?playerSort=ranking' : '';
     const methodUrl = this.configUrl + '/' + id + '/deep' + queryParameters;
 
-    return this.http.get<any>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  leaders(id: string) {
+  leaders(id: string): Observable<any> {
     const methodUrl = this.configUrl + '/' + id + '/leaders';
 
-    return this.http.get<any>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  weather(id: string) {
+  weather(id: string): Observable<Weather> {
     const methodUrl = this.configUrl + '/' + id + '/weather';
 
-    return this.http.get<any>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  tourSchedule(year: number) {
+  tourSchedule(year: number): Observable<Schedule[]> {
     const methodUrl = this.configUrl + '/tour/pga/' + year;
 
-    return this.http.get<Schedule[]>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  newsFeed(id: string) {
+  newsFeed(id: string): Observable<any> {
     const methodUrl = this.configUrl + '/' + id + '/newsfeed';
 
-    return this.http.get<any>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 

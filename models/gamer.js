@@ -56,7 +56,8 @@
                  })
              return gamer;
          } else {
-             throw new Error("Not logged in!");
+            // not logged in, send back a 401
+            throw app.serverError(401, "Authorization failed!");
          }
      };
  

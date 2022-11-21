@@ -3,7 +3,8 @@ import { ROUTES } from './menu-items';
 import { RouteInfo } from './sidebar.metadata';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AuthService } from '../services/auth/auth.service';
+import { AuthSessionService } from '../services/auth/auth-session.service';
+
 //declare var $: any;
 
 @Component({
@@ -27,11 +28,11 @@ export class SidebarComponent implements OnInit {
     private modalService: NgbModal,
     private router: Router,
     private route: ActivatedRoute,
-    private auth: AuthService
+    private authSession: AuthSessionService
   ) {}
 
   // End open close
   ngOnInit() {
-    this.sidebarnavItems = ROUTES(this.auth.isAdmin()).filter(sidebarnavItem => sidebarnavItem);
+    this.sidebarnavItems = ROUTES(this.authSession.isAdmin()).filter(sidebarnavItem => sidebarnavItem);
   }
 }

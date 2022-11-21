@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import { Output } from '@angular/core';
 
+import { AuthSessionService } from './auth-session.service';
 import { Gamer } from '../backend/gamer.interfaces';
 import { GamerService } from '../backend/gamer.service';
 
@@ -13,39 +14,19 @@ export class AuthService {
   @Output() authChange = new EventEmitter<any>();
 
   constructor(
-    private gamerApi: GamerService
+    private gamerApi: GamerService,
+    private authSession : AuthSessionService
   ) { }
 
-  isAdmin(): boolean {
-    return this.isLoggedIn() ? localStorage.getItem('admin') === 'true' : false;
-  }
-
-  getUserid(): string {
-    return this.isLoggedIn() ? (localStorage.getItem('userid') as string) : '';
-  }
-
-  getName(): string {
-    return this.isLoggedIn() ? (localStorage.getItem('name') as string) : '';
-  }
-
   private updateData(data: Gamer) {
-    const username = data.username;
     const name = data.name;
+    const username = data.username;
     const admin = data.admin;
 
-    localStorage.setItem('isLoggedin', 'true');
-    localStorage.setItem('username', username);
-    localStorage.setItem('name', name);
-
-    if (admin) {
-      localStorage.setItem('admin', 'true')
-    } else {
-      localStorage.removeItem('admin')
-    }
+    this.authSession.init(name, username, admin);
 
     this.authChange.emit(data);
   }
-
 
   login(userid: string, password: string): Observable<boolean> {
     return new Observable((observer) => {
@@ -102,15 +83,9 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('isLoggedin');
-    localStorage.removeItem('admin');
-    localStorage.removeItem('userid');
-    localStorage.removeItem('name');
+    this.authSession.destroy();
 
     this.authChange.emit(null);
   }
 
-  isLoggedIn(): boolean {
-    return localStorage.getItem('isLoggedin') === 'true';
-  }
 }

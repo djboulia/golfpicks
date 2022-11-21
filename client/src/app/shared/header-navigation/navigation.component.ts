@@ -1,10 +1,7 @@
 import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service';
-
-declare var $: any;
+import { AuthSessionService } from '../services/auth/auth-session.service';
 
 @Component({
   selector: 'app-navigation',
@@ -17,24 +14,27 @@ export class NavigationComponent implements AfterViewInit {
 
   public showSearch = false;
 
-  public name : string;
+  public name: string;
 
-  constructor(private router: Router, private auth: AuthService, private modalService: NgbModal) {
-    this.name = auth.getName();
+  constructor(
+    private router: Router,
+    private authSession: AuthSessionService,
+  ) {
+    this.name = authSession.getName();
 
     // add a listener to update for any changes
-    auth.authChange
-      .subscribe((data) => {
-        this.name = auth.getName();
+    authSession.authChange
+      .subscribe(() => {
+        this.name = authSession.getName();
       });
   }
 
   ngAfterViewInit() {
-   }
+  }
 
   onLoggedOut() {
     console.log('logging out...');
-    this.auth.logout();
+    this.authSession.destroy();
 
     this.router.navigate(['/login']);
   }

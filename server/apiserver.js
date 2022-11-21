@@ -55,9 +55,14 @@ const ApiServer = function (clientDir) {
         app.auth(async function (context) {
             const session = context.session;
 
-            const result = await gamer.currentUser(session);
-            console.log('auth function called :', result);
+            console.log('auth function called :');
+            const result = await gamer.currentUser(session)
+                .catch((err) => {
+                    console.log('auth failed!');
+                    return null;    // null means currentUser failed
+                });
 
+            console.log('auth function result :', result);
             return result != null;
         });
 

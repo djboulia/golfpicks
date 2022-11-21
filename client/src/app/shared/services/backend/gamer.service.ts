@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpAuthService } from '../httpauth/http-auth.service';
 
 import { ConfigBaseUrl } from './backend.config';
 import { Gamer, GamerHistory } from './gamer.interfaces';
@@ -9,7 +11,10 @@ export class GamerService {
 
   private configUrl = ConfigBaseUrl() + '/Gamers';
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private httpAuth: HttpAuthService
+  ) { }
 
   newModel(): Gamer {
     return {
@@ -21,73 +26,76 @@ export class GamerService {
     };
   }
 
-  newHistory() : GamerHistory {
+  newHistory(): GamerHistory {
     return {
-      active : {
-        inProgress : false,
-        joined : false,
-        event : '',
-        eventid : ''
+      active: {
+        inProgress: false,
+        joined: false,
+        event: '',
+        eventid: ''
       },
-      history : []
+      history: []
     }
   }
 
   login(userid: String, password: String) {
     const methodUrl = this.configUrl + '/login';
 
+    // login is the special case where we don't need
+    // the auth handler since this function actually
+    // logs the user in and creates a new session
     return this.http.post<Gamer>(
       methodUrl,
       { "user": userid, "password": password },
       { withCredentials: true });
   }
 
-  currentUser() {
+  currentUser(): Observable<Gamer> {
     const methodUrl = this.configUrl + '/currentUser';
 
-    return this.http.get<Gamer>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  get(id: string) {
+  get(id: string): Observable<Gamer> {
     const methodUrl = this.configUrl + '/' + id;
 
-    return this.http.get<Gamer>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  put(obj: Gamer) {
+  put(obj: Gamer): Observable<Gamer> {
     const methodUrl = this.configUrl;
 
-    return this.http.put<Gamer>(
+    return this.httpAuth.put(
       methodUrl, obj, { withCredentials: true });
   }
 
-  post(obj: Gamer) {
+  post(obj: Gamer): Observable<Gamer> {
     const methodUrl = this.configUrl;
 
-    return this.http.post<Gamer>(
+    return this.httpAuth.post(
       methodUrl, obj, { withCredentials: true });
   }
 
-  delete(id: string) {
+  delete(id: string): Observable<boolean> {
     const methodUrl = this.configUrl + '/' + id;
 
-    return this.http.delete<boolean>(
+    return this.httpAuth.delete(
       methodUrl, { withCredentials: true });
   }
 
-  getAll() {
+  getAll(): Observable<Gamer[]> {
     const methodUrl = this.configUrl;
 
-    return this.http.get<Gamer[]>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
-  gameHistory(id: string) {
+  gameHistory(id: string): Observable<any> {
     const methodUrl = this.configUrl + '/' + id + '/Games';
 
-    return this.http.get<any>(
+    return this.httpAuth.get(
       methodUrl, { withCredentials: true });
   }
 
