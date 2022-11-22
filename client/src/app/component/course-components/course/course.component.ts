@@ -7,10 +7,9 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { CourseService } from 'src/app/shared/services/backend/course.service';
-import { Event } from 'src/app/shared/services/backend/event.interfaces';
-import { Course } from 'src/app/shared/services/backend/course.interface';
+import { AuthService } from '../../../shared/services/auth/auth.service';
+import { CourseService } from '../../../shared/services/backend/course.service';
+import { Course } from '../../../shared/services/backend/course.interface';
 
 
 @Component({

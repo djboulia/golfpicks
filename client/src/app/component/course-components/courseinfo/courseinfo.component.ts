@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { Course } from 'src/app/shared/services/backend/course.interface';
-import { CourseService } from 'src/app/shared/services/backend/course.service';
+import { Course } from '../../../shared/services/backend/course.interface';
+import { CourseService } from '../../../shared/services/backend/course.service';
 
 @Component({
   selector: 'app-courseinfo',

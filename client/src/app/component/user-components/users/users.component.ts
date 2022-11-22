@@ -3,7 +3,7 @@ import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { NgxSpinnerService } from "ngx-spinner";
 
-import { GamerService } from 'src/app/shared/services/backend/gamer.service';
+import { GamerService } from '../../../shared/services/backend/gamer.service';
 
 @Component({
   selector: 'app-users',

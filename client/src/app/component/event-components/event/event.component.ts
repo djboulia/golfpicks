@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { EventService } from 'src/app/shared/services/backend/event.service';
-import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
+import { EventService } from '../../../shared/services/backend/event.service';
+import { DateFormatterService } from '../../../shared/services/date/date-formatter.service';
 
 @Component({
   selector: 'app-event',

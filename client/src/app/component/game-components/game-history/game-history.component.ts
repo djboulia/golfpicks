@@ -5,8 +5,8 @@ import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { Gamer, GamerHistory } from 'src/app/shared/services/backend/gamer.interfaces';
-import { GamerService } from 'src/app/shared/services/backend/gamer.service';
+import { Gamer, GamerHistory } from '../../../shared/services/backend/gamer.interfaces';
+import { GamerService } from '../../../shared/services/backend/gamer.service';
 
 @Component({
   selector: 'app-game-history',

@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { Event } from 'src/app/shared/services/backend/event.interfaces';
-import { EventService } from 'src/app/shared/services/backend/event.service';
-import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
+import { Event } from '../../../shared/services/backend/event.interfaces';
+import { EventService } from '../../../shared/services/backend/event.service';
+import { DateFormatterService } from '../../../shared/services/date/date-formatter.service';
 
 @Component({
   selector: 'app-events',

@@ -12,15 +12,15 @@ import { CustomAdapter, CustomDateParserFormatter } from './datepicker.adapter';
 
 import { mergeMap, map, catchError, throwError } from 'rxjs';
 
-import { GameService } from 'src/app/shared/services/backend/game.service';
-import { CourseService } from 'src/app/shared/services/backend/course.service';
-import { EventService } from 'src/app/shared/services/backend/event.service';
+import { GameService } from '../../../shared/services/backend/game.service';
+import { CourseService } from '../../../shared/services/backend/course.service';
+import { EventService } from '../../../shared/services/backend/event.service';
 
-import { Game } from 'src/app/shared/services/backend/game.interfaces';
-import { Course } from 'src/app/shared/services/backend/course.interface';
-import { Event } from 'src/app/shared/services/backend/event.interfaces';
+import { Game } from '../../../shared/services/backend/game.interfaces';
+import { Course } from '../../../shared/services/backend/course.interface';
+import { Event } from '../../../shared/services/backend/event.interfaces';
 
-import { DateHelperService } from 'src/app/shared/services/date/date-helper.service';
+import { DateHelperService } from '../../../shared/services/date/date-helper.service';
 
 @Component({
   selector: 'app-game',

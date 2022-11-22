@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { Game } from 'src/app/shared/services/backend/game.interfaces';
-import { GameService } from 'src/app/shared/services/backend/game.service';
+import { Game } from '../../../shared/services/backend/game.interfaces';
+import { GameService } from '../../../shared/services/backend/game.service';
 
 @Component({
   selector: 'app-games',

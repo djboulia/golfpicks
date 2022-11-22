@@ -5,11 +5,11 @@ import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../base.loading.component';
 
-import { GameDay } from 'src/app/shared/services/backend/game.interfaces';
-import { GameService } from 'src/app/shared/services/backend/game.service';
-import { EventService } from 'src/app/shared/services/backend/event.service';
-import { GameDayService } from 'src/app/shared/services/gameday/game-day.service';
-import { DateHelperService } from 'src/app/shared/services/date/date-helper.service';
+import { GameDay } from '../../shared/services/backend/game.interfaces';
+import { GameService } from '../../shared/services/backend/game.service';
+import { EventService } from '../../shared/services/backend/event.service';
+import { GameDayService } from '../../shared/services/gameday/game-day.service';
+import { DateHelperService } from '../../shared/services/date/date-helper.service';
 
 @Component({
   selector: 'app-leaderboard',

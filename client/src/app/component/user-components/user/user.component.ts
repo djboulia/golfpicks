@@ -7,9 +7,9 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { Gamer } from 'src/app/shared/services/backend/gamer.interfaces';
-import { GamerService } from 'src/app/shared/services/backend/gamer.service';
+import { AuthService } from '../../../shared/services/auth/auth.service';
+import { Gamer } from '../../../shared/services/backend/gamer.interfaces';
+import { GamerService } from '../../../shared/services/backend/gamer.service';
 
 @Component({
   selector: 'app-user',

@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { Event } from 'src/app/shared/services/backend/event.interfaces';
-import { EventService } from 'src/app/shared/services/backend/event.service';
+import { EventService } from '../../../shared/services/backend/event.service';
 
 @Component({
   selector: 'app-eventleaders',

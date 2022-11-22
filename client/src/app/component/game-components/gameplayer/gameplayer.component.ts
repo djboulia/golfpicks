@@ -4,9 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { BaseLoadingComponent } from '../../base.loading.component';
 
-import { Game } from 'src/app/shared/services/backend/game.interfaces';
-import { GameService } from 'src/app/shared/services/backend/game.service';
-import { DateFormatterService } from 'src/app/shared/services/date/date-formatter.service';
+import { GameService } from '../../../shared/services/backend/game.service';
+import { DateFormatterService } from '../../../shared/services/date/date-formatter.service';
 
 @Component({
   selector: 'app-gameplayer',
