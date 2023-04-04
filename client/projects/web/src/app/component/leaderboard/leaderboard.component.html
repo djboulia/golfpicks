@@ -1,177 +1,239 @@
 <div class="row">
-    <div class="col-12">
-        <div class="card">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <ngb-alert
+          *ngIf="errorMessage"
+          type="danger"
+          [dismissible]="false"
+          class="customize-alert fs-5"
+          style="text-align: center"
+        >
+          {{ errorMessage }}
+        </ngb-alert>
 
-            <div class="card-body">                
-                <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
-                    {{errorMessage}}
-                </ngb-alert>
+        <div *ngIf="isLoaded">
+          <div class="last-update">
+            {{ lastUpdate }}
+          </div>
 
-                <div *ngIf="isLoaded">
-                    <div style="float:right; font-size:80%; font-style:italic; padding-right:10px;">
-                        {{lastUpdate}}
-                    </div>
+          <h4 class="card-title">{{ game.name }}</h4>
+        </div>
 
-                    <h4 class="card-title">{{game.name}}</h4>
+        <div *ngIf="isLoaded" class="table-responsive">
+          <div>
+            <div>
+              <div class="coursedetails">
+                <div>
+                  View tournament
+                  <a href="{{ eventOverviewUrl + '/id/' + game.event }}"
+                    >overview</a
+                  >
                 </div>
-
-                <div *ngIf="isLoaded" class="table-responsive">
-                    <div>
-                        <div class="coursedetails">
-                            <div style="float:right; padding-right:10px;">
-                                <div>View tournament <a
-                                        href="{{eventOverviewUrl + '/id/' + game.event}}">overview</a>
-                                </div>
-                                <div>View tournament <a
-                                        href="{{eventLeaderUrl + '/id/' + game.event}}">scores</a>
-                                </div>
-                            </div>
-
-                            <div style="display:inline-block; vertical-align:bottom; min-height:55px;">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2" id="coursename">Day {{currentRound}}:</td>
-                                            <td colspan="2"> <a
-                                                    href="#/{{courseUrl}}/id/{{courseInfo.id}}">{{courseInfo.name}}</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-right: 10px;"><i>Par:</i>
-                                            </td>
-                                            <td style="padding-right: 10px;" id="par">
-                                                {{courseInfo.par}}</td>
-                                            <td style="padding-right: 10px; text-align: right;"><i>Yardage:</i>
-                                            </td>
-                                            <td id="yardage" style="text-align: right;">{{courseInfo.yardage}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div style="display:inline-block; vertical-align:bottom; min-height:55px;">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding-left: 40px;">{{weather.temp}}&deg;
-                                                F/{{weather.metric.temp}}&deg; C</td>
-                                            <td rowspan="2">
-                                                <img [attr.src]="weather.icon"
-                                                    style="width:50px;height:40px;padding-left:10px;">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 40px;">{{weather.wind}} MPH</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                            <br />
-                        </div>
-                    </div>
-
-                    <marquee style='padding: 10px;' direction="left" scrolldelay="200" behavior="loop" [innerHtml]='newsFeed'>
-                    </marquee>
-
-                    <div class="leaderboard">
-                        <h3 class="leaderboard title">Game Leaderboard</h3>
-                        <div style="padding:15px; text-align: center;">
-                            <table cellpadding="4" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <td>
-                                            <div class="leaderboard-header" style="text-align:left;"><b>Name</b>
-                                            </div>
-                                        </td>
-                                        <td *ngFor="let title of roundTitles" style="text-align:right; border:none;">
-                                            <div class="leaderboard-header"><b>{{title}}</b>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </thead>
-                                <tbody id="leaderboard">
-                                    <tr *ngFor="let gamer of gamers">
-
-                                        <td class="leaderboard name" style="width:25%">{{gamer.name}}</td>
-
-                                        <td class="leaderboard score" *ngFor="let round of gamer.rounds"
-                                            [ngClass]="{leadercell: round.leader}">{{round.score}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="leaderboard title">
-                            <span class="leadercell">*</span>&nbsp;&nbsp;<span>Round Leader</span>
-                        </div>
-
-                    </div>
-
-                    <br />
-
-                    <h4>
-                        <div>Details</div>
-                    </h4>
-                    <div class="scores" id="tablesection" style="text-align: center;">
-                        <div *ngFor="let gamer of gamers">
-                            <div class="playerlist">
-
-                                <table style="margin-left: auto; margin-right: auto; border: 1px solid;" cellpadding="4"
-                                    cellspacing="0">
-
-                                    <thead>
-                                        <tr>
-                                            <td class="playerlist-header-th" [attr.colspan]="roundTitles.length+1"
-                                                style="text-align: center;">
-
-                                                <div id="playername"><b>Picks for {{gamer.name}}</b>
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="playerlist-subheader-th"></td>
-                                            <td class="playerlist-subheader-th" *ngFor="let title of roundTitles"
-                                                style="text-align:right;">{{title}}</td>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="tablebody">
-
-
-                                        <tr *ngFor="let pick of gamer.picks">
-                                            <td class="playerlist-td" style="text-align: left;">{{pick.name}}</td>
-
-                                            <td class="playerlist-td" *ngFor="let roundtotal of pick.rounds"
-                                                style="border:none; text-align: right;">{{roundtotal}}</td>
-                                        </tr>
-
-                                        <tr class="playerlist-total">
-                                            <td class="playerlist-total-td" style="text-align:center;">Total</td>
-
-                                            <td class="playerlist-total-td" *ngFor="let total of gamer.totals"
-                                                style="text-align:right;">
-                                                {{total}}</td>
-                                        </tr>
-                                        <tr class="playerlist-top5">
-                                            <td class="playerlist-top5-td" style="text-align:center;">Top Five</td>
-                                            <td class="playerlist-top5-td" *ngFor="let score of gamer.scores"
-                                                style="text-align:right;">
-                                                <b>{{score}}</b>
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
+                <div>
+                  View tournament
+                  <a href="{{ eventLeaderUrl + '/id/' + game.event }}"
+                    >scores</a
+                  >
                 </div>
+              </div>
 
+              <div class="course">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td colspan="2" id="coursename">
+                        Day {{ currentRound }}:
+                      </td>
+                      <td colspan="2">
+                        <a href="#/{{ courseUrl }}/id/{{ courseInfo.id }}">{{
+                          courseInfo.name
+                        }}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding-right: 10px"><i>Par:</i></td>
+                      <td style="padding-right: 10px" id="par">
+                        {{ courseInfo.par }}
+                      </td>
+                      <td style="padding-right: 10px; text-align: right">
+                        <i>Yardage:</i>
+                      </td>
+                      <td id="yardage" style="text-align: right">
+                        {{ courseInfo.yardage }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center" class="weather">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="temp">
+                        {{ weather.temp }}
+                        &deg; F/{{ weather.metric.temp }}&deg; C
+                      </td>
+                      <td rowspan="2">
+                        <img
+                          [attr.src]="weather.icon"
+                          style="width: 50px; height: 40px; padding-left: 10px"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="temp">{{ weather.wind }} MPH</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <marquee
+            style="padding: 10px"
+            direction="left"
+            scrolldelay="200"
+            behavior="loop"
+            [innerHtml]="newsFeed"
+          >
+          </marquee>
+
+          <div class="leaderboard">
+            <h3 class="leaderboard title">Game Leaderboard</h3>
+            <div style="padding: 15px; text-align: center">
+              <table cellpadding="4" cellspacing="0">
+                <thead>
+                  <tr>
+                    <td class="leaderboard-header">
+                      <div style="text-align: left">
+                        <b>Name</b>
+                      </div>
+                    </td>
+                    <td
+                      *ngFor="let title of roundTitles"
+                      class="leaderboard-header"
+                    >
+                      <div style="text-align: right">
+                        <b>{{ title }}</b>
+                      </div>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody id="leaderboard">
+                  <tr *ngFor="let gamer of gamers">
+                    <td class="leaderboard name">{{ gamer.name }}</td>
+
+                    <td
+                      class="leaderboard score"
+                      *ngFor="let round of gamer.rounds"
+                      [ngClass]="{ leadercell: round.leader }"
+                    >
+                      {{ round.score }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
+            <div class="leaderboard title">
+              <span class="leadercell">*</span>&nbsp;&nbsp;<span
+                >Round Leader</span
+              >
+            </div>
+          </div>
+
+          <br />
+
+          <h4>
+            <div>Details</div>
+          </h4>
+          <div class="scores" id="tablesection" style="text-align: center">
+            <div *ngFor="let gamer of gamers">
+              <div class="playerlist">
+                <table
+                  style="
+                    margin-left: auto;
+                    margin-right: auto;
+                    border: 1px solid;
+                  "
+                  cellpadding="4"
+                  cellspacing="0"
+                >
+                  <thead>
+                    <tr>
+                      <td
+                        class="playerlist-header-th"
+                        [attr.colspan]="roundTitles.length + 1"
+                        style="text-align: center"
+                      >
+                        <div id="playername">
+                          <b>Picks for {{ gamer.name }}</b>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="playerlist-subheader-th"></td>
+                      <td
+                        class="playerlist-subheader-th"
+                        *ngFor="let title of roundTitles"
+                        style="text-align: right"
+                      >
+                        {{ title }}
+                      </td>
+                    </tr>
+                  </thead>
+
+                  <tbody id="tablebody">
+                    <tr *ngFor="let pick of gamer.picks">
+                      <td class="playerlist-td" style="text-align: left">
+                        {{ pick.name }}
+                      </td>
+
+                      <td
+                        class="playerlist-td"
+                        *ngFor="let roundtotal of pick.rounds"
+                        style="border: none; text-align: right"
+                      >
+                        {{ roundtotal }}
+                      </td>
+                    </tr>
+
+                    <tr class="playerlist-total">
+                      <td
+                        class="playerlist-total-td"
+                        style="text-align: center"
+                      >
+                        Total
+                      </td>
+
+                      <td
+                        class="playerlist-total-td"
+                        *ngFor="let total of gamer.totals"
+                        style="text-align: right"
+                      >
+                        {{ total }}
+                      </td>
+                    </tr>
+                    <tr class="playerlist-top5">
+                      <td class="playerlist-top5-td" style="text-align: center">
+                        Top Five
+                      </td>
+                      <td
+                        class="playerlist-top5-td"
+                        *ngFor="let score of gamer.scores"
+                        style="text-align: right"
+                      >
+                        <b>{{ score }}</b>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>

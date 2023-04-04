@@ -68,30 +68,6 @@ export class GameHistoryComponent extends BaseLoadingComponent implements OnInit
           this.loaded();
         });
 
-        self.gamerApi.currentUser()
-          .subscribe({
-            next(data) {
-              console.log('data ', data);
-
-              self.user = data;
-              console.log(self.user);
-
-              self.gamerApi.gameHistory(data.id)
-                .subscribe({
-                  next(data) {
-                  },
-                  error(msg) {
-                    console.log('error getting current user!! ', msg);
-                    self.error("Error getting current user!");
-                  }
-                });
-
-            },
-            error(msg) {
-              console.log('error getting current user!! ', msg);
-              self.error("Error getting current user!");
-            }
-          });
       })
   }
 

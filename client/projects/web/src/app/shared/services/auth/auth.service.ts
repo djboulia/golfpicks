@@ -7,7 +7,9 @@ import { AuthSessionService } from './auth-session.service';
 import { Gamer } from '../backend/gamer.interfaces';
 import { GamerService } from '../backend/gamer.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
 
   // we emit a change event when the auth data or status changes

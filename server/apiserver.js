@@ -14,6 +14,22 @@ const Event = require('../models/event');
 const Course = require('../models/course');
 const Log = require('../models/log');
 
+/**
+ * parse a comma delimited set of CORS sites
+ * 
+ * @param {String} str environment variable.
+ * @returns 
+ */
+const parseSites = function(str) {
+
+    if (str) {
+        sites = str.split(',');
+        return sites;
+    }
+
+    return undefined;
+}
+
 const ApiServer = function (clientDir) {
 
     var dbNameGame = 'golfpicks-pwcc';
@@ -29,7 +45,7 @@ const ApiServer = function (clientDir) {
 
     const BASE_URL = '/api';
     const protocols = (process.env.SWAGGER_PROTOCOL) ? [process.env.SWAGGER_PROTOCOL] : undefined;
-    const corsSites = (process.env.CORS_CLIENT) ? [process.env.CORS_CLIENT] : undefined;
+    const corsSites = parseSites(process.env.CORS_CLIENT);
 
     this.start = function (port) {
         console.log('corsSites: ', corsSites);

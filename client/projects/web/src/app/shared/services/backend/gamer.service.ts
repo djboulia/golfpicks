@@ -6,7 +6,9 @@ import { HttpAuthService } from '../httpauth/http-auth.service';
 import { ConfigBaseUrl } from './backend.config';
 import { Gamer, GamerHistory } from './gamer.interfaces';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GamerService {
 
   private configUrl = ConfigBaseUrl() + '/Gamers';

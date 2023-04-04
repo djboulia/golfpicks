@@ -1,4 +1,21 @@
 .status {
-    background-color: #dff0d8;
+  background-color: #dff0d8;
 }
 
+.text-center {
+  text-align: center;
+}
+
+.status-message {
+  padding: 15px;
+  margin: 20px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .card-title {
+    text-align: center;
+  }
+}
