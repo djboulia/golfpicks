@@ -41,14 +41,14 @@ angular.module('GolfPicks.cloud', [])
             for (var prop in fieldMap) {
                 var mappedProp = fieldMap[prop];
 
-                cloudObj.attributes[prop] = objData[mappedProp];
+                cloudObj[prop] = objData[mappedProp];
             }
 
         };
 
         var _newCloudObject = function (fieldMap, objData) {
             var cloudObj = {};
-            cloudObj.attributes = {};
+            cloudObj = {};
 
             _setProperties(cloudObj, fieldMap, objData);
 
@@ -63,7 +63,7 @@ angular.module('GolfPicks.cloud', [])
             for (var prop in fieldMap) {
                 var mappedProp = fieldMap[prop];
 
-                localObj[mappedProp] = cloudObj.attributes[prop];
+                localObj[mappedProp] = cloudObj[prop];
             }
 
             localObj._id = cloudObj.id;
@@ -262,7 +262,7 @@ angular.module('GolfPicks.cloud', [])
                     _setCurrentUser(_deserialize(cookie));
                 }
             }
-            
+
             return _currentUser;
         };
 
@@ -341,7 +341,7 @@ angular.module('GolfPicks.cloud', [])
             logIn: function (user, pass) {
                 var deferred = $q.defer();
 
-                
+
                 Gamer.login({ user: user, password: pass },
                     function (result) {
                         if (result) {
@@ -389,8 +389,8 @@ angular.module('GolfPicks.cloud', [])
 
                 console.log('current user ', current);
 
-                if (current && current.attributes) {
-                    return current.attributes.name;
+                if (current) {
+                    return current.name;
                 }
                 return null;
             },
@@ -398,8 +398,8 @@ angular.module('GolfPicks.cloud', [])
             isAdmin: function () {
                 var current = _getCurrentUser();
 
-                if (current && current.attributes) {
-                    if (current.attributes.admin) {
+                if (current) {
+                    if (current.admin) {
                         return true;
                     }
                 }

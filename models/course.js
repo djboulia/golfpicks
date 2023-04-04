@@ -1,7 +1,7 @@
 /**
  * Connect to our data source and expose API end points
  * for this model.
- * 
+ *
  */
 
 const Weather = require('../common/lib/weather.js');
@@ -14,7 +14,7 @@ const Course = function (model) {
 
         // find the course information
         const courserecord = await model.findById(id);
-        const course = courserecord.attributes;
+        const course = courserecord;
 
         // look for lat/long coordinates for this course
         if (course.location && course.location.lat && course.location.lng) {

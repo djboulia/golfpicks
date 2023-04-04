@@ -6,7 +6,7 @@ const GameUtils = function () {
         var eod = new Date(timems);
 
         eod.setHours(23, 59, 59, 999);
-        
+
         return eod.getTime();
     };
 
@@ -47,14 +47,14 @@ const GameUtils = function () {
     var dateTimeString = function (theDate) {
         return dateString(theDate) + " " + timeString(theDate);
     };
-    
+
     // getGameDetails
     // build out relevent game information
     //
-    // gameDetails = 
+    // gameDetails =
     // 		event   : name of the tournament
     // 		eventid : unique identifier for this tournamnent
-    // 		start   : tournament start time 
+    // 		start   : tournament start time
     // 		end	    : tournament end time
     //
     //

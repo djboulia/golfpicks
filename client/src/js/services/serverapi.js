@@ -7,7 +7,7 @@ angular.module('GolfPicks.serverApi', [])
             create: function (path, obj, success, err) {
                 // console.debug("Model.create: " + JSON.stringify(obj));
 
-                $http.post(path, obj.attributes).then(
+                $http.post(path, obj).then(
                     function successCallback(response) {
                         // console.log("Successfully created object ", response.data);
                         success(response.data);

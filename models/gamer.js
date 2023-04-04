@@ -1,7 +1,7 @@
 /**
  * Connect to our data source and expose API end points
  * for this model.
- * 
+ *
  */
 
 const GameUtils = require('../common/lib/gameutils.js');
@@ -28,8 +28,8 @@ const Gamer = function (model) {
             for (var i = 0; i < gamers.length; i++) {
                 var gamer = gamers[i];
 
-                if (gamer.attributes) {
-                    if (gamer.attributes.username == user && gamer.attributes.password == password) {
+                if (gamer) {
+                    if (gamer.username === user && gamer.password === password) {
                         match = gamer;
                     }
                 }
@@ -61,7 +61,7 @@ const Gamer = function (model) {
 
     /**
      * get all games this gamer has participated in
-     * 
+     *
      * @param {String} id gamer id
      * @returns a list of games this gamer has played in
      */
@@ -87,7 +87,7 @@ const Gamer = function (model) {
 
         games.forEach(function (gamerecord) {
             const gameid = gamerecord.id;
-            const game = gamerecord.attributes;
+            const game = gamerecord;
 
             const gameDetails = gameUtils.getGameDetails(game, gameid);
             gameUtils.addGracePeriod(gameDetails, 10);
@@ -142,8 +142,8 @@ const Gamer = function (model) {
     /**
      * define a pass through auth function for methods that can be called with
      * no authenticated user. (e.g. login, currentUser)
-     * 
-     * @param {Object} context 
+     *
+     * @param {Object} context
      */
     const noAuth = async function (context) {
         return true;

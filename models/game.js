@@ -1,7 +1,7 @@
 /**
  * Connect to our data source and expose API end points
  * for this model.
- * 
+ *
  */
 
 const EventUtils = require('../common/lib/eventutils.js');
@@ -20,7 +20,7 @@ const Game = function (model) {
                 throw new Error(str);
             });
 
-        const game = eventrecord.attributes;
+        const game = eventrecord;
 
         // now get all the player ids
         const gamerpicks = game.gamers;
@@ -42,7 +42,7 @@ const Game = function (model) {
         for (let i = 0; i < gamerpicks.length; i++) {
             for (let j = 0; j < gamers.length; j++) {
                 if (gamerpicks[i].user === gamers[j].id) {
-                    const gamer = gamers[j].attributes;
+                    const gamer = gamers[j];
                     gamer.user = gamerpicks[i].user;
                     gamer.picks = gamerpicks[i].picks;
 
@@ -59,7 +59,7 @@ const Game = function (model) {
         // those that are not playing in this game at present
         const notPlaying = [];
         for (let i=0; i<gamers.length; i++) {
-            const gamer = gamers[i].attributes;
+            const gamer = gamers[i];
             gamer.user = gamers[i].id;
             notPlaying.push(gamer);
         }
@@ -80,7 +80,7 @@ const Game = function (model) {
                 throw new Error(str);
             });
 
-        var game = eventrecord.attributes;
+        var game = eventrecord;
 
         if (!game.gamers) {
             var str = "No gamers found in this game object!";
@@ -104,7 +104,7 @@ const Game = function (model) {
                 throw new Error(str);
             });
 
-        var game = eventrecord.attributes;
+        var game = eventrecord;
 
         if (!game.gamers) {
             var str = "No picks found in this game object!";
@@ -144,7 +144,7 @@ const Game = function (model) {
                 throw new Error(str);
             });
 
-        const game = eventrecord.attributes;
+        const game = eventrecord;
 
         if (!game.gamers) {
             game.gamers = [];
@@ -567,9 +567,9 @@ const Game = function (model) {
 
     /**
      * return the leaderboard information
-     * 
+     *
      * @param {String} id event id
-     * @returns 
+     * @returns
      */
     model.leaderboard = async function (id) {
         const gamerecord = await model.findById(id)
@@ -579,7 +579,7 @@ const Game = function (model) {
                 throw new Error(str);
             });
 
-        const game = gamerecord.attributes;
+        const game = gamerecord;
         const eventid = game.event;
         console.log(`found event ${eventid}for game ${id}`);
 
@@ -635,8 +635,7 @@ const Game = function (model) {
                 gamers.forEach(function (gamer) {
                     if (user.id == gamer.user) {
                         //			  		alert("found match for " + object.objectId);
-                        user.attributes.id = user.id;
-                        gamer.user = user.attributes;
+                        gamer.user = user;
 
                         // only keep those we can find a valid user object for...
                         validgamers.push(gamer);
