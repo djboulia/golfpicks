@@ -1,7 +1,7 @@
 /**
  * Connect to our data source and expose API end points
  * for this model.
- * 
+ *
  */
 
 const Weather = require('../common/lib/weather.js');

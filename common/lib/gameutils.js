@@ -51,10 +51,10 @@ const GameUtils = function () {
     // getGameDetails
     // build out relevent game information
     //
-    // gameDetails = 
+    // gameDetails =
     // 		event   : name of the tournament
     // 		eventid : unique identifier for this tournamnent
-    // 		start   : tournament start time 
+    // 		start   : tournament start time
     // 		end	    : tournament end time
     //
     //
