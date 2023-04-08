@@ -1,36 +1,27 @@
-# RDash rdash-angular
-## Responsive, bloat free, bootstrap powered admin style dashboard!
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/rdash/rdash-angular?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# GolfpicksClient
 
-rdash-angular is an AngularJS implementation of the RDash admin dashboard. The dashboard uses a small number of modules to get you started, along with some handy directives and controllers to speed up development using the dashboard.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
 
-Check out the live example!
+## Development server
 
-## Usage
-### Requirements
-* [NodeJS](http://nodejs.org/) (with [NPM](https://www.npmjs.org/))
-* [Bower](http://bower.io)
-* [Gulp](http://gulpjs.com)
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-### Installation
-1. Clone the repository: `git clone https://github.com/rdash/rdash-angular.git`
-2. Install the NodeJS dependencies: `sudo npm install`.
-3. Install the Bower dependencies: `bower install`.
-4. Run the gulp build task: `gulp build`.
-5. Run the gulp default task: `gulp`. This will build any changes made automatically, and also run a live reload server on [http://localhost:8888](http://localhost:8888).
+## Code scaffolding
 
-Ensure your preferred web server points towards the `dist` directory.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-### Development
-Continue developing the dashboard further by editing the `src` directory. With the `gulp` command, any file changes made will automatically be compiled into the specific location within the `dist` directory.
+## Build
 
-#### Modules & Packages
-By default, rdash-angular includes [`ui.bootstrap`](http://angular-ui.github.io/bootstrap/), [`ui.router`](https://github.com/angular-ui/ui-router) and [`ngCookies`](https://docs.angularjs.org/api/ngCookies). 
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-If you'd like to include any additional modules/packages not included with rdash-angular, add them to your `bower.json` file and then update the `src/index.html` file, to include them in the minified distribution output.
+## Running unit tests
 
-## Credits
-* [Elliot Hesp](https://github.com/Ehesp)
-* [Leonel Samayoa](https://github.com/lsamayoa)
-* [Mathew Goldsborough](https://github.com/mgoldsborough)
-* [Ricardo Pascua Jr](https://github.com/rdpascua)
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

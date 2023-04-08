@@ -1,0 +1,177 @@
+.last-update {
+  float: right;
+  font-size: 80%;
+  font-style: italic;
+  padding-right: 10px;
+}
+
+.coursedetails {
+  float: right;
+  padding-right: 10px;
+}
+
+.course {
+  display: inline-block;
+  vertical-align: bottom;
+  min-height: 55px;
+}
+
+.weather {
+  display: inline-block;
+  vertical-align: bottom;
+  min-height: 55px;
+}
+
+.temp {
+  padding-left: 40px;
+}
+
+.leaderboard {
+  width: 550px;
+  margin: 0 auto 0 auto;
+  padding: 5px;
+  border: 1px solid #cccccc;
+  color: #ffffff;
+  font-family: "Arial", Helvetica, sans-serif;
+  background: #005500;
+}
+
+.leaderboard.name {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.leaderboard.score {
+  text-align: right;
+}
+
+.leaderboard.title {
+  text-align: center;
+  background: none;
+  border: none;
+}
+
+.leaderboard-header {
+  border-bottom: 1px solid #ffffff;
+  color: #ffffff;
+  background: #005500;
+}
+
+.leadercell {
+  color: yellow;
+  background-color: #004400;
+}
+
+td.leaderboard {
+  padding: 0.4em 0.4em;
+  border: none;
+}
+
+.playerlist {
+  font-family: "Arial", Helvetica, sans-serif;
+  margin: 1em 1em 1em 0;
+  text-align: center;
+}
+
+td.playerlist-td {
+  padding: 0.4em 0.4em;
+  border: none;
+}
+
+.playerlist-header {
+  padding-left: 5px;
+  padding-right: 5px;
+  border: none;
+}
+
+td.playerlist-header-th {
+  padding: 0.4em 0.4em;
+  border: none;
+  color: white;
+  background-color: #2f5927;
+}
+
+td.playerlist-subheader-th {
+  padding: 0.4em 0.4em;
+  border: none;
+  background-color: #dff0d8;
+}
+
+.playerlist-total {
+  background-color: #dff0d8;
+  /* background-color: #3aafd2; */
+}
+
+td.playerlist-total-td {
+  padding: 0.4em 0.4em;
+  border: 1px solid #777;
+}
+
+.playerlist-top5 {
+  color: #fff;
+  background-color: #1e90ff;
+}
+
+td.playerlist-top5-td {
+  padding: 0.4em 0.4em;
+  border: 1px solid #777;
+}
+
+.text-box {
+  padding: 5px;
+}
+
+.leaders.header {
+  background-color: #2f5927;
+  color: #fff;
+  font-weight: bold;
+  border-bottom: 2px solid #005500;
+}
+
+.leaders.par {
+  background-color: #dff0d8;
+  font-weight: bold;
+  color: #000000;
+}
+
+.golf-round-leader {
+  color: #1e90ff;
+  font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+  .leaderboard {
+    width: 100%;
+  }
+
+  .leaderboard.name {
+    white-space: pre-wrap;
+  }
+
+  .last-update {
+    width: 100%;
+    float: none;
+    text-align: left;
+    font-size: 80%;
+    font-style: italic;
+    padding-right: 10px;
+  }
+
+  .coursedetails {
+    float: none;
+    padding: 10px 0;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  .course {
+    font-size: 12px;
+  }
+  .weather {
+    width: 100%;
+    font-size: 12px;
+  }
+  .temp {
+    padding-left: 0;
+  }
+}

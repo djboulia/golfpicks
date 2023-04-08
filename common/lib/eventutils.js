@@ -447,6 +447,61 @@ const EventUtils = function () {
 
         return golfers;
     };
+
+    this.getCurrentRound = function(courseInfo) {
+        // courseInfo is an array of courses for each round of the
+        // tournament.  each course has a date when that round will
+        // be played.
+        //
+        // figure out the current round based on today's date
+        // we do this to display the right course information.
+        // each day's course could be different
+    
+        let currentCourse = courseInfo[0];
+        let currentRound = 1;
+        const now = Date.now();
+        let i;
+    
+        console.debug("eventUtils.getCurrentRound: courseInfo " + JSON.stringify(courseInfo));
+    
+        for (i = 1; i < courseInfo.length; i++) {
+            var course = courseInfo[i];
+    
+            var delta1 = Date.parse(currentCourse.date) - now;
+            var delta2 = Date.parse(course.date) - now;
+    
+            console.debug("eventUtils.getCurrentRound: delta1 " + delta1 + ", delta2 " + delta2);
+    
+            if ((delta2 <= 0) && (Math.abs(delta2) < Math.abs(delta1))) {
+                currentCourse = course;
+                currentRound = i + 1; // first round starts at 1
+            }
+        }
+    
+        return currentRound;
+    }
+
+    this.getRoundTitles = function(courseinfo, text) {
+        // build an array of titles for each round
+        // the resulting array will consist of the supplied text plus
+        // the round number (1, 2, 3, etc.)
+        var roundTitles = [];
+        var i;
+    
+        if (!text) {
+            text = "";
+        } else {
+            text += " ";
+        }
+    
+        for (i = 0; i < courseinfo.length; i++) {
+            var roundNumber = i + 1;
+    
+            roundTitles.push(text + roundNumber.toString());
+        }
+    
+        return roundTitles;
+    }
 };
 
 module.exports = EventUtils;

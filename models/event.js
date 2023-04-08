@@ -1,7 +1,7 @@
 /**
  * Connect to our data source, extend the model if necessary
  * and expose API end points for this model.
- *
+ * 
  */
 
 const scores = require('../common/lib/scores.js');
@@ -17,7 +17,7 @@ const Event = function (model) {
 
         const Course = app.getModel('Course');
 
-        const eventrecord = await model.findById(id)
+        const event = await model.findById(id)
             .catch((e) => {
                 var str = "Could not find event id " + id;
                 console.error(str);
@@ -26,7 +26,6 @@ const Event = function (model) {
 
         console.log("called showScore for id " + id);
 
-        var event = eventrecord;
         var courseid;
 
         if (event.rounds && event.rounds.length > 0) {
@@ -63,7 +62,7 @@ const Event = function (model) {
 
         const Course = app.getModel('Course');
 
-        const eventrecord = await model.findById(id)
+        const event = await model.findById(id)
             .catch((e) => {
                 var str = "Could not find event id " + id;
                 console.error(str);
@@ -72,7 +71,6 @@ const Event = function (model) {
 
         console.log("found id " + id);
 
-        const event = eventrecord;
         var courseid;
 
         if (event.rounds && event.rounds.length > 0) {
@@ -153,7 +151,7 @@ const Event = function (model) {
                 }
             }
 
-            console.log("setting players " + JSON.stringify(validplayers));
+            // console.log("setting players " + JSON.stringify(validplayers));
 
             return validplayers;
         };
@@ -222,12 +220,12 @@ const Event = function (model) {
 
 
     /**
-     * Do a deep get for this event where we fill in player and
+     * Do a deep get for this event where we fill in player and 
      * course information
-     *
+     * 
      * @param {String} id event id
      * @param {String} playerSort optional - valid values: ranking
-     * @returns
+     * @returns 
      */
     model.deepGet = async function (id, playerSort) {
 
@@ -237,7 +235,7 @@ const Event = function (model) {
         const sortByRanking = (playerSort && playerSort.toLowerCase() === 'ranking') ? true : false;
         console.log('sortByRanking = ', sortByRanking);
 
-        const eventrecord = await model.findById(id)
+        const event = await model.findById(id)
             .catch((e) => {
                 var str = "Could not find event id " + id;
                 console.error(str);
@@ -245,8 +243,6 @@ const Event = function (model) {
             });
 
         console.log("found id " + id);
-
-        const event = eventrecord;
 
         // do a deep get for player info
         event.players = await getPlayers(event)
@@ -261,6 +257,12 @@ const Event = function (model) {
             });
 
         const courseInfo = eventUtils.courses(event);
+        const roundInfo = {
+            currentRound : eventUtils.getCurrentRound(courseInfo),
+            roundTitles : eventUtils.getRoundTitles(courseInfo, 'Day')    
+        }
+
+        // console.log('roundInfo ', roundInfo);
 
         // console.debug("entering loadEventData courseInfo :" + JSON.stringify(courseInfo));
 
@@ -285,6 +287,7 @@ const Event = function (model) {
 
             event.golfers = tournament.scores;
             event.courseInfo = courseInfo;
+            event.roundInfo = roundInfo;
 
             if (sortByRanking) {
                 sortByRank(event.golfers);
@@ -300,6 +303,7 @@ const Event = function (model) {
 
             event.golfers = golfers;
             event.courseInfo = courseInfo;
+            event.roundInfo = roundInfo;
         }
 
         return event;
@@ -308,9 +312,9 @@ const Event = function (model) {
     /**
      * Return a newsfeed for this event. Consists of the tournament leader
      * and any current round leaders
-     *
+     * 
      * @param {String} id event id
-     * @returns
+     * @returns 
      */
     model.newsfeed = async function (id) {
 
@@ -419,11 +423,11 @@ const Event = function (model) {
     };
 
     /**
-     * Return a sorted list of golfers for this event ordered
+     * Return a sorted list of golfers for this event ordered 
      * from the first to last.
-     *
+     * 
      * @param {String} id event id
-     * @returns
+     * @returns 
      */
     model.leaders = async function (id) {
 
@@ -659,7 +663,7 @@ const Event = function (model) {
         '/:id/deep',
         'GET',
         {
-            description: "Perform a deep get for this event",
+            description: "Perform a deep get for this event, pulling in game and course details",
             responses: [
                 {
                     code: 200,

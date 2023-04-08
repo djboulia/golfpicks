@@ -1,20 +1,35 @@
 # GolfPicks
 
-To build this project for the first time, you will need npm, node bower and gulp installed.  Once you have those, do this:
+To build this project for the first time, you will need npm, and angular cli (ng) installed. Once you have those, do this:
 
+To run the server in production mode:
 ```
-sudo npm install
-
-bower install
-
-gulp
+npm start
 ```
 
-For this project to run successfully, you will need to configure your cloudant database
-name and credentials in the file:
+To run the server in development mode:
+```
+npm run dev
+```
 
+Note that the .env file will be pulled for production, .env.dev when running in dev mode.
 
-server/datasources.json
+To run the client in development mode:
+To run the server in production mode:
+```
+cd client
+npm start
+```
+
+For this project to run successfully, you will need to configure your AWS credentials in a .env or .env.dev (when running in dev mode) file with the following fields:
+
+AWS_ACCESSKEYID=xxx
+AWS_SECRETACCESSKEY=xxx
+TOURDATA_URL=https://tourdata.boulia-nc.net/api
+
+additionaly if you are running in dev mode, you will need to add the CORS key pointing to the port the client is running on:
+CORS_CLIENT=http://localhost:4201
+
 
 ## What the app does
 
@@ -25,17 +40,14 @@ Each player will select 10 golfers.  Of those 10, you can only select 2 of the t
 ## Overall Design
 
 - There is a client side, Angular (https://angularjs.org) based app located under the /client directory.  /client/src/index.html is the main entry point
-- There is also a mobile optimized site under /client/src/mobile which uses the Ionic framework (http://ionicframework.com).
-- The server side is implemented in Node and uses StrongLoop (https://strongloop.com). It is located in the /server directory.  /server/server.js is the main entry point for the backend server.
+- The server side is implemented in Node and uses the ApiServer project (https://github.com/djboulia/apiserver) to implement the rest services.  /server/server.js is the main entry point for the backend server.
 - You can browse the server side API at the URL http://localhost:3000/explorer
-- For the most part, the server side API provides access to the game data, which is stored in a Cloudant database.  The one exception is scoring data, which comes from the various live scoring sites.
-- Live scoring data is implemented in /common/lib/scores.js.  There are two aspects to the scoring data:
-  1. The world rankings.  Given the game rules, world rankings control how golfers are chosen by the players of the game.
-  2. The tournament scores.  The scores for each round of the tournament are then used to determine who wins the game.
-
+- For the most part, the server side API provides access to the game data, which is stored in an Amazon DynamoDB database.  The one exception is scoring data, which comes from the various live scoring sites.
 
 
 ## Change History:
+November 17, 2022:
+Major overhaul to upgrade to Angular 14
 
 September 5, 2022:
 Major overhaul to remove loopback dependency 

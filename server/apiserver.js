@@ -14,6 +14,22 @@ const Event = require('../models/event');
 const Course = require('../models/course');
 const Log = require('../models/log');
 
+/**
+ * parse a comma delimited set of CORS sites
+ * 
+ * @param {String} str environment variable.
+ * @returns 
+ */
+const parseSites = function(str) {
+
+    if (str) {
+        sites = str.split(',');
+        return sites;
+    }
+
+    return undefined;
+}
+
 const ApiServer = function (clientDir) {
 
     var dbNameGame = 'golfpicks-pwcc';
@@ -29,10 +45,12 @@ const ApiServer = function (clientDir) {
 
     const BASE_URL = '/api';
     const protocols = (process.env.SWAGGER_PROTOCOL) ? [process.env.SWAGGER_PROTOCOL] : undefined;
+    const corsSites = parseSites(process.env.CORS_CLIENT);
 
     this.start = function (port) {
+        console.log('corsSites: ', corsSites);
 
-        app.path(BASE_URL, clientDir);
+        app.path(BASE_URL, clientDir, corsSites);
 
         app.explorer("Golfpicks", '/explorer', protocols);
 
@@ -53,9 +71,14 @@ const ApiServer = function (clientDir) {
         app.auth(async function (context) {
             const session = context.session;
 
-            const result = await gamer.currentUser(session);
-            console.log('auth function called :', result);
+            console.log('auth function called :');
+            const result = await gamer.currentUser(session)
+                .catch((err) => {
+                    console.log('auth failed!');
+                    return null;    // null means currentUser failed
+                });
 
+            console.log('auth function result :', result);
             return result != null;
         });
 

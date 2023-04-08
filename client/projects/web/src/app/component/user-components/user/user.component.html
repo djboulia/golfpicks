@@ -1,0 +1,110 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-body">
+                <ng-template #content let-modal>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Confirm Removing Player</h4>
+                        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This will permanently remove player {{user.name}}. Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-rounded btn-info"
+                            (click)="modal.dismiss(confirmButton)">{{confirmButton}}</button>
+                        <button type="button" class="btn btn-rounded btn-info"
+                            (click)="modal.dismiss('Cancel')">Cancel</button>
+                    </div>
+                </ng-template>
+
+
+                <h4 class="card-title">{{title}}</h4>
+                <form *ngIf="isLoaded" name="form" role="form">
+
+                    <div class="table-responsive">
+                        <table class="table align-middle text-nowrap">
+                            <thead>
+                                <th></th>
+                                <th>
+                                    <div *ngIf="deleteButton" style="text-align:right;"><a (click)="onDelete(content)"
+                                            class="btn btn-rounded btn-danger">Delete</a></div>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Name
+                                    </td>
+                                    <td class="fs-4">
+                                        <div class="form-group">
+                                            <input placeholder="Name" name="name" [(ngModel)]="user.name"
+                                                class="form-control input-underline input-lg" type="text" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Email
+                                    </td>
+                                    <td class="fs-4">
+                                        <div class="form-group">
+                                            <input placeholder="Email" name="userid"
+                                                [(ngModel)]="user.username"
+                                                class="form-control input-underline input-lg" type="text" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Password
+                                    </td>
+                                    <td class="fs-4">
+                                        <div class="form-group">
+                                            <input placeholder="Password" name="password"
+                                                [(ngModel)]="user.password"
+                                                class="form-control input-underline input-lg" type="password" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Admin
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input
+                                              mdbCheckbox
+                                              class="form-check-input"
+                                              type="checkbox"
+                                              id="flexSwitchCheckChecked"
+                                              [checked]=user.admin
+                                              (click)="onAdmin()"
+                                            />
+                                            <label class="form-check-label" for="flexSwitchCheckChecked"
+                                              >{{ user.admin ? 'Yes' : 'No'}}</label
+                                            >
+                                        </div>                                      
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <a (click)="onSubmit()" class="btn btn-rounded btn-info">{{submitButton}}</a>
+                    </div>
+
+                </form>
+            </div>
+
+            <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
+                {{errorMessage}}
+            </ngb-alert>
+
+        </div>
+    </div>
+</div>

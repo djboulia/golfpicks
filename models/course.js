@@ -13,8 +13,7 @@ const Course = function (model) {
         console.log("getting weather for course " + id);
 
         // find the course information
-        const courserecord = await model.findById(id);
-        const course = courserecord;
+        const course = await model.findById(id);
 
         // look for lat/long coordinates for this course
         if (course.location && course.location.lat && course.location.lng) {

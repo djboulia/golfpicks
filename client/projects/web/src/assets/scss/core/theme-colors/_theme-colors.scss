@@ -1,0 +1,70 @@
+// Theme colors
+#main-wrapper {
+  &[data-layout="vertical"]{
+    /*This is for the logo bg*/
+    .topbar .top-navbar .navbar-header {
+      &[data-logobg="skin6"] {
+        background: $skin6;
+        .navbar-brand {
+          .dark-logo {
+            display: inline;
+          }
+          .light-logo {
+            display: none;
+          }
+        }
+        .nav-toggler,
+        .topbartoggler {
+          color: $body-color;
+        }
+      }
+    }
+    .topbar .navbar-collapse,
+    .topbar {
+      &[data-navbarbg="skin1"] {
+        background: $skin1;
+      }
+    }
+    /*This is for the sidebar bg*/
+    .left-sidebar {
+      &[data-sidebarbg="skin6"] {
+        // background: $skin6;
+        background-image: url(../../../images/turf.jpg);
+        .sidebar-nav {
+          ul {
+            // background-image: url(../../../images/turf.jpg);
+            .sidebar-item {
+              &.active {
+                > .sidebar-link {
+                  background-color: $sidebar-active-bg;
+                  color: $sidebar-text;
+                  // opacity: 0.6;
+                  i {
+                    color: $sidebar-text;
+                  }
+                }
+              }
+              .sidebar-link {
+                color: $sidebar-text-dark;
+                // background-color: $sidebar-active-bg;
+                .feather {
+                  fill: rgba(41, 98, 255, 0.1);
+                }
+                &:hover {
+                background-color: $sidebar-hover-bg;
+                // opacity: 1;
+                .feather {
+                    color: $sidebar-text;
+                  }
+                }
+                i {
+                  color: $sidebar-icons-dark;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
