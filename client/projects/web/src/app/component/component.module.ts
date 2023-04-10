@@ -19,9 +19,10 @@ import { GameComponent } from './game-components/game/game.component';
 import { GamesComponent } from './game-components/games/games.component';
 import { GameplayerComponent } from './game-components/gameplayer/gameplayer.component';
 import { GameHistoryComponent } from './game-components/game-history/game-history.component';
-import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { LeaderboardComponent } from './leaderboard-components/leaderboard/leaderboard.component';
 import { PicksComponent } from './picks/picks.component';
-import { ScoreBoardComponent } from './score-board/score-board.component';
+import { ScoreBoardComponent } from './leaderboard-components/score-board/score-board.component';
+import { UserScoreBoardComponent } from './leaderboard-components/user-score-board/user-score-board.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ScoreBoardComponent } from './score-board/score-board.component';
     LeaderboardComponent,
     PicksComponent,
     ScoreBoardComponent,
+    UserScoreBoardComponent,
   ],
 })
 export class ComponentsModule {}
