@@ -3,7 +3,7 @@ const EventUtils = function () {
         return JSON.parse(JSON.stringify(obj));
     };
 
-    // 
+    //
     // return an array of course information (course name, par, etc.) for
     // each round in the tournament.
     //
@@ -39,7 +39,7 @@ const EventUtils = function () {
     // us to carry over prior day totals for players that haven't teed off yet
     //
     // as input, we expect an array of golfers (see golfers method below)
-    // 
+    //
     this.roundStatus = function (golfers, numberOfRounds) {
         var ROUND_STARTED = 1;
         var ROUND_NOT_STARTED = 0;
@@ -100,7 +100,7 @@ const EventUtils = function () {
     };
 
     this.getRoundNetScore = function (golfer, par, roundNumber, roundStatus) {
-        // find the net score for the given round. if the round we're looking for is the last played round, 
+        // find the net score for the given round. if the round we're looking for is the last played round,
         // we can use the "today" score since it represents the most recent score.  This will
         // allow us to display a meaningful "lowest" score relative to par when a round
         // is in progress
@@ -118,7 +118,7 @@ const EventUtils = function () {
     };
 
     /**
-     * 
+     *
      * find low net total score for the given round
      * uses golfer.total which should be in net score format (e.g. -1, E, +1)
      *
@@ -132,8 +132,8 @@ const EventUtils = function () {
 
             // djb [09/03/2022] instead of taking the first entry as the initial
             //                  low score, we instead keep going until we find a
-            //                  valid initial score. this fixes a bug where the 
-            //                  first golfer's score isn't valid (e.g. he was cut 
+            //                  valid initial score. this fixes a bug where the
+            //                  first golfer's score isn't valid (e.g. he was cut
             //                  or didn't finish the round.)
             if (!this.isNumber(lowScore)) {
                 lowScore = this.getRoundNetScore(golfer, par, roundNumber, roundStatus);
@@ -149,7 +149,7 @@ const EventUtils = function () {
         return lowScore;
     };
 
-    // 
+    //
     // returns an array of leaders for a given round
     //
     this.singleRoundLeaders = function (golfers, courseInfo, roundNumber, roundStatus) {
@@ -181,7 +181,7 @@ const EventUtils = function () {
     // returns an array of arrays of golfer records that represent each round
     // index of the top level array indicates the leaders for each round
     // the sub array is the list of leaders for that round
-    // 
+    //
     // returns an array or arrays with the leaders of each round
     //
     this.roundLeaders = function (golfers, courseInfo) {
@@ -196,7 +196,7 @@ const EventUtils = function () {
 
         for (var i = 0; i < roundStatus.length; i++) {
             if (roundStatus[i]) {
-                // for the rounds that have started, go get the leaders   
+                // for the rounds that have started, go get the leaders
                 console.log("getting single round leaders for round " + i);
                 leaders.push(this.singleRoundLeaders(golfers, courseInfo, i, roundStatus));
             } else {
@@ -233,7 +233,7 @@ const EventUtils = function () {
         return lowScore;
     };
 
-    // 
+    //
     // build a list of golfers leading the tournament
     //
     this.tournamentLeaders = function (golfers) {
@@ -330,7 +330,7 @@ const EventUtils = function () {
     // us to carry over prior day totals for players that haven't teed off yet
     //
     // as input, we expect an array of golfers (see golfers method below)
-    // 
+    //
     this.roundStatus = function (golfers, numberOfRounds) {
         var ROUND_STARTED = 1;
         var ROUND_NOT_STARTED = 0;
@@ -376,7 +376,7 @@ const EventUtils = function () {
         return statusData;
     };
 
-    // 
+    //
     // This is only used in NON PGA events with net (handicapped) players
     //
     // we want to create a data structure which flattens the rounds to look like
@@ -456,50 +456,50 @@ const EventUtils = function () {
         // figure out the current round based on today's date
         // we do this to display the right course information.
         // each day's course could be different
-    
+
         let currentCourse = courseInfo[0];
         let currentRound = 1;
         const now = Date.now();
         let i;
-    
+
         console.debug("eventUtils.getCurrentRound: courseInfo " + JSON.stringify(courseInfo));
-    
+
         for (i = 1; i < courseInfo.length; i++) {
             var course = courseInfo[i];
-    
+
             var delta1 = Date.parse(currentCourse.date) - now;
             var delta2 = Date.parse(course.date) - now;
-    
+
             console.debug("eventUtils.getCurrentRound: delta1 " + delta1 + ", delta2 " + delta2);
-    
+
             if ((delta2 <= 0) && (Math.abs(delta2) < Math.abs(delta1))) {
                 currentCourse = course;
                 currentRound = i + 1; // first round starts at 1
             }
         }
-    
+
         return currentRound;
     }
 
-    this.getRoundTitles = function(courseinfo, text) {
+    /**
+     * [djb 04/10/2023] only return round numbers
+     *
+     * @param {*} courseinfo
+     * @returns an array of titles for each round
+     */
+    this.getRoundTitles = function(courseinfo) {
         // build an array of titles for each round
         // the resulting array will consist of the supplied text plus
         // the round number (1, 2, 3, etc.)
         var roundTitles = [];
         var i;
-    
-        if (!text) {
-            text = "";
-        } else {
-            text += " ";
-        }
-    
+
         for (i = 0; i < courseinfo.length; i++) {
             var roundNumber = i + 1;
-    
-            roundTitles.push(text + roundNumber.toString());
+
+            roundTitles.push(roundNumber.toString());
         }
-    
+
         return roundTitles;
     }
 };

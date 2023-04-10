@@ -1,7 +1,7 @@
 /**
  * Connect to our data source, extend the model if necessary
  * and expose API end points for this model.
- * 
+ *
  */
 
 const scores = require('../common/lib/scores.js');
@@ -220,12 +220,12 @@ const Event = function (model) {
 
 
     /**
-     * Do a deep get for this event where we fill in player and 
+     * Do a deep get for this event where we fill in player and
      * course information
-     * 
+     *
      * @param {String} id event id
      * @param {String} playerSort optional - valid values: ranking
-     * @returns 
+     * @returns
      */
     model.deepGet = async function (id, playerSort) {
 
@@ -259,7 +259,7 @@ const Event = function (model) {
         const courseInfo = eventUtils.courses(event);
         const roundInfo = {
             currentRound : eventUtils.getCurrentRound(courseInfo),
-            roundTitles : eventUtils.getRoundTitles(courseInfo, 'Day')    
+            roundTitles : eventUtils.getRoundTitles(courseInfo)
         }
 
         // console.log('roundInfo ', roundInfo);
@@ -312,9 +312,9 @@ const Event = function (model) {
     /**
      * Return a newsfeed for this event. Consists of the tournament leader
      * and any current round leaders
-     * 
+     *
      * @param {String} id event id
-     * @returns 
+     * @returns
      */
     model.newsfeed = async function (id) {
 
@@ -423,11 +423,11 @@ const Event = function (model) {
     };
 
     /**
-     * Return a sorted list of golfers for this event ordered 
+     * Return a sorted list of golfers for this event ordered
      * from the first to last.
-     * 
+     *
      * @param {String} id event id
-     * @returns 
+     * @returns
      */
     model.leaders = async function (id) {
 
