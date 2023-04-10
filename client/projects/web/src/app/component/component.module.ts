@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,15 +21,17 @@ import { GameplayerComponent } from './game-components/gameplayer/gameplayer.com
 import { GameHistoryComponent } from './game-components/game-history/game-history.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { PicksComponent } from './picks/picks.component';
+import { ScoreBoardComponent } from './score-board/score-board.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    FlexLayoutModule,
     RouterModule.forChild(ComponentsRoutes),
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    GoogleMapsModule
+    GoogleMapsModule,
   ],
   declarations: [
     UsersComponent,
@@ -44,7 +47,8 @@ import { PicksComponent } from './picks/picks.component';
     GameplayerComponent,
     GameHistoryComponent,
     LeaderboardComponent,
-    PicksComponent
-  ]
+    PicksComponent,
+    ScoreBoardComponent,
+  ],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

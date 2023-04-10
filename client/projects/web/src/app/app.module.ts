@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   CommonModule,
   LocationStrategy,
-  PathLocationStrategy
+  PathLocationStrategy,
 } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -26,33 +26,32 @@ import { GamerService } from './shared/services/backend/gamer.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 1,
   wheelPropagation: true,
-  minScrollbarLength: 20
+  minScrollbarLength: 20,
 };
-
 
 @NgModule({
   declarations: [
     AppComponent,
     FullComponent,
     NavigationComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   imports: [
-    CommonModule,
-    BrowserModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule,
+    CommonModule,
     FormsModule,
     HttpClientModule,
     PerfectScrollbarModule,
     NgbModule,
     NgxSpinnerModule,
-    AppRoutingModule
   ],
   providers: [
     AuthGuard,
@@ -60,14 +59,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     GamerService,
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy
+      useClass: PathLocationStrategy,
     },
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    },
   ],
   // schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

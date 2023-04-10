@@ -99,49 +99,8 @@
           >
           </marquee>
 
-          <div class="leaderboard">
-            <h3 class="leaderboard title">Game Leaderboard</h3>
-            <div style="padding: 15px; text-align: center">
-              <table cellpadding="4" cellspacing="0">
-                <thead>
-                  <tr>
-                    <td class="leaderboard-header">
-                      <div style="text-align: left">
-                        <b>Name</b>
-                      </div>
-                    </td>
-                    <td
-                      *ngFor="let title of roundTitles"
-                      class="leaderboard-header"
-                    >
-                      <div style="text-align: right">
-                        <b>{{ title }}</b>
-                      </div>
-                    </td>
-                  </tr>
-                </thead>
-                <tbody id="leaderboard">
-                  <tr *ngFor="let gamer of gamers">
-                    <td class="leaderboard name">{{ gamer.name }}</td>
-
-                    <td
-                      class="leaderboard score"
-                      *ngFor="let round of gamer.rounds"
-                      [ngClass]="{ leadercell: round.leader }"
-                    >
-                      {{ round.score }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="leaderboard title">
-              <span class="leadercell">*</span>&nbsp;&nbsp;<span
-                >Round Leader</span
-              >
-            </div>
-          </div>
+          <app-score-board [roundTitles]="roundTitles" [gamers]="gamers">
+          </app-score-board>
 
           <br />
 

@@ -26,47 +26,6 @@
   padding-left: 40px;
 }
 
-.leaderboard {
-  width: 550px;
-  margin: 0 auto 0 auto;
-  padding: 5px;
-  border: 1px solid #cccccc;
-  color: #ffffff;
-  font-family: "Arial", Helvetica, sans-serif;
-  background: #005500;
-}
-
-.leaderboard.name {
-  text-align: left;
-  white-space: nowrap;
-}
-
-.leaderboard.score {
-  text-align: right;
-}
-
-.leaderboard.title {
-  text-align: center;
-  background: none;
-  border: none;
-}
-
-.leaderboard-header {
-  border-bottom: 1px solid #ffffff;
-  color: #ffffff;
-  background: #005500;
-}
-
-.leadercell {
-  color: yellow;
-  background-color: #004400;
-}
-
-td.leaderboard {
-  padding: 0.4em 0.4em;
-  border: none;
-}
-
 .playerlist {
   font-family: "Arial", Helvetica, sans-serif;
   margin: 1em 1em 1em 0;
@@ -140,14 +99,6 @@ td.playerlist-top5-td {
 }
 
 @media (max-width: 1024px) {
-  .leaderboard {
-    width: 100%;
-  }
-
-  .leaderboard.name {
-    white-space: pre-wrap;
-  }
-
   .last-update {
     width: 100%;
     float: none;
