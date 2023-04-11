@@ -1,0 +1,30 @@
+<div>
+  <div>
+    <div class="course">
+      <table>
+        <tbody>
+          <tr>
+            <td colspan="2" id="coursename">Day {{ currentRound }}:</td>
+            <td colspan="2">
+              <a href="{{ courseUrl }}/id/{{ courseInfo.id }}">{{
+                courseInfo.name
+              }}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-right: 10px"><i>Par:</i></td>
+            <td style="padding-right: 10px" id="par">
+              {{ courseInfo.par }}
+            </td>
+            <td style="padding-right: 10px; text-align: right">
+              <i>Yardage:</i>
+            </td>
+            <td id="yardage" style="text-align: right">
+              {{ courseInfo.yardage }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

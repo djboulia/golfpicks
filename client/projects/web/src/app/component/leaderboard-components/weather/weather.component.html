@@ -1,0 +1,21 @@
+<div fxLayout="row" class="weather">
+  <div fxLayout="column" class="weather">
+    <div fxLayout="row">
+      <div class="temp">
+        {{ weather.temp }}
+        &deg; F/{{ weather.metric.temp }}&deg; C
+      </div>
+    </div>
+
+    <div fxLayout="row">
+      <div class="temp">{{ weather.wind }} MPH</div>
+    </div>
+  </div>
+
+  <div>
+    <img
+      [attr.src]="weather.icon"
+      style="width: 50px; height: 40px; padding-left: 10px"
+    />
+  </div>
+</div>

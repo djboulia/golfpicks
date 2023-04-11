@@ -13,16 +13,27 @@
         </ngb-alert>
 
         <div *ngIf="isLoaded">
-          <div class="last-update">
+          <div fxLayout="row" fxLayoutAlign="end" class="last-update">
             {{ lastUpdate }}
           </div>
 
           <h4 class="card-title">{{ game.name }}</h4>
-        </div>
 
-        <div *ngIf="isLoaded" class="table-responsive">
-          <div>
-            <div>
+          <!-- large screen layout -->
+          <div class="info-lg">
+            <div
+              fxLayout="row"
+              fxLayoutGap="20px"
+              fxLayoutAlign="space-between"
+            >
+              <app-course-info
+                [currentRound]="currentRound"
+                [courseUrl]="courseUrl"
+                [courseInfo]="courseInfo"
+              ></app-course-info>
+
+              <app-weather [weather]="weather"></app-weather>
+
               <div class="coursedetails">
                 <div>
                   View tournament
@@ -37,55 +48,39 @@
                   >
                 </div>
               </div>
+            </div>
+          </div>
 
-              <div class="course">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td colspan="2" id="coursename">
-                        Day {{ currentRound }}:
-                      </td>
-                      <td colspan="2">
-                        <a href="#/{{ courseUrl }}/id/{{ courseInfo.id }}">{{
-                          courseInfo.name
-                        }}</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding-right: 10px"><i>Par:</i></td>
-                      <td style="padding-right: 10px" id="par">
-                        {{ courseInfo.par }}
-                      </td>
-                      <td style="padding-right: 10px; text-align: right">
-                        <i>Yardage:</i>
-                      </td>
-                      <td id="yardage" style="text-align: right">
-                        {{ courseInfo.yardage }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+          <!-- small screen layout -->
+          <div class="info-sm">
+            <div fxLayout="column">
+              <div
+                fxLayout="row"
+                fxLayoutGap="20px"
+                fxLayoutAlign="space-between"
+              >
+                <app-course-info
+                  [currentRound]="currentRound"
+                  [courseUrl]="courseUrl"
+                  [courseInfo]="courseInfo"
+                ></app-course-info>
+
+                <app-weather [weather]="weather"></app-weather>
               </div>
-              <div fxLayout="row" fxLayoutAlign="center" class="weather">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td class="temp">
-                        {{ weather.temp }}
-                        &deg; F/{{ weather.metric.temp }}&deg; C
-                      </td>
-                      <td rowspan="2">
-                        <img
-                          [attr.src]="weather.icon"
-                          style="width: 50px; height: 40px; padding-left: 10px"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="temp">{{ weather.wind }} MPH</td>
-                    </tr>
-                  </tbody>
-                </table>
+
+              <div class="coursedetails">
+                <div>
+                  View tournament
+                  <a href="{{ eventOverviewUrl + '/id/' + game.event }}"
+                    >overview</a
+                  >
+                </div>
+                <div>
+                  View tournament
+                  <a href="{{ eventLeaderUrl + '/id/' + game.event }}"
+                    >scores</a
+                  >
+                </div>
               </div>
             </div>
           </div>

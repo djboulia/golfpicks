@@ -23,6 +23,8 @@ import { LeaderboardComponent } from './leaderboard-components/leaderboard/leade
 import { PicksComponent } from './picks/picks.component';
 import { ScoreBoardComponent } from './leaderboard-components/score-board/score-board.component';
 import { UserScoreBoardComponent } from './leaderboard-components/user-score-board/user-score-board.component';
+import { WeatherComponent } from './leaderboard-components/weather/weather.component';
+import { CourseOverviewComponent } from './leaderboard-components/course-overview/course-overview.component';
 
 @NgModule({
   imports: [
@@ -51,6 +53,8 @@ import { UserScoreBoardComponent } from './leaderboard-components/user-score-boa
     PicksComponent,
     ScoreBoardComponent,
     UserScoreBoardComponent,
+    WeatherComponent,
+    CourseOverviewComponent,
   ],
 })
 export class ComponentsModule {}

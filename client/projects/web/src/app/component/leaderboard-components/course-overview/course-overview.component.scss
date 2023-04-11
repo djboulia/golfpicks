@@ -1,0 +1,11 @@
+.course {
+  display: inline-block;
+  vertical-align: bottom;
+  min-height: 55px;
+}
+
+@media (max-width: 1024px) {
+  .course {
+    font-size: 12px;
+  }
+}

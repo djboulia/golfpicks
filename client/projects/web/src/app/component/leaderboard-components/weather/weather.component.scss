@@ -1,0 +1,12 @@
+.weather {
+  display: inline-block;
+  vertical-align: bottom;
+  min-height: 55px;
+}
+
+@media (max-width: 1024px) {
+  .weather {
+    width: 100%;
+    font-size: 12px;
+  }
+}

@@ -1,29 +1,19 @@
+.info-lg {
+  display: block;
+}
+
+.info-sm {
+  display: none;
+}
+
 .last-update {
-  float: right;
   font-size: 80%;
   font-style: italic;
   padding-right: 10px;
 }
 
 .coursedetails {
-  float: right;
   padding-right: 10px;
-}
-
-.course {
-  display: inline-block;
-  vertical-align: bottom;
-  min-height: 55px;
-}
-
-.weather {
-  display: inline-block;
-  vertical-align: bottom;
-  min-height: 55px;
-}
-
-.temp {
-  padding-left: 40px;
 }
 
 .playerlist {
@@ -37,6 +27,14 @@
 }
 
 @media (max-width: 1024px) {
+  .info-lg {
+    display: none;
+  }
+
+  .info-sm {
+    display: block;
+  }
+
   .last-update {
     width: 100%;
     float: none;
@@ -51,16 +49,5 @@
     padding: 10px 0;
     text-align: left;
     font-size: 12px;
-  }
-
-  .course {
-    font-size: 12px;
-  }
-  .weather {
-    width: 100%;
-    font-size: 12px;
-  }
-  .temp {
-    padding-left: 0;
   }
 }
