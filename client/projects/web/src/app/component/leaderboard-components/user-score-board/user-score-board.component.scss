@@ -1,65 +1,67 @@
-td.playerlist-td {
-  padding: 0.4em 0.4em;
-  border: none;
+.playerlist {
+  width: 325px;
+  margin: 0 auto 0 auto;
+  border: 1px solid #777;
 }
 
-.playerlist-header {
-  padding-left: 5px;
-  padding-right: 5px;
-  border: none;
-}
-
-td.playerlist-header-th {
+.header {
   padding: 0.4em 0.4em;
   border: none;
   color: white;
   background-color: #2f5927;
 }
 
-td.playerlist-subheader-th {
+.sub-header {
   padding: 0.4em 0.4em;
   border: none;
   background-color: #dff0d8;
+
+  &.name {
+    color: #dff0d8;
+  }
 }
 
-.playerlist-total {
+.playerlist-name {
+  width: 163px;
+  padding: 7px 7px;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  border: none;
+}
+
+.playerlist-header {
+  padding: 0 5px;
+  border: none;
+}
+
+.playerlist-score {
+  width: 40px;
+  padding: 7px 0;
+  border: none;
+}
+
+.totals {
+  padding: 7px 0;
   background-color: #dff0d8;
-  /* background-color: #3aafd2; */
+  border-top: 1px solid #777;
+  border-left: 1px solid #777;
+
+  &.title {
+    border-left: none;
+  }
 }
 
-td.playerlist-total-td {
-  padding: 0.4em 0.4em;
-  border: 1px solid #777;
-}
-
-.playerlist-top5 {
+.top5 {
+  padding: 7px 0;
   color: #fff;
+  font-weight: bold;
   background-color: #1e90ff;
-}
+  border-top: 1px solid #777;
+  border-left: 1px solid #777;
 
-td.playerlist-top5-td {
-  padding: 0.4em 0.4em;
-  border: 1px solid #777;
-}
-
-.text-box {
-  padding: 5px;
-}
-
-.leaders.header {
-  background-color: #2f5927;
-  color: #fff;
-  font-weight: bold;
-  border-bottom: 2px solid #005500;
-}
-
-.leaders.par {
-  background-color: #dff0d8;
-  font-weight: bold;
-  color: #000000;
-}
-
-.golf-round-leader {
-  color: #1e90ff;
-  font-weight: bold;
+  &.title {
+    border-left: none;
+  }
 }
