@@ -1,9 +1,8 @@
-import { Component, } from '@angular/core';
+import { Component } from '@angular/core';
 @Component({
-  templateUrl: './about.component.html'
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent {
-  constructor() {
-  }
-
+  constructor() {}
 }
