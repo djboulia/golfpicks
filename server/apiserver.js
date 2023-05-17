@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * Backend API for this app
  *
  */
@@ -16,9 +16,9 @@ const Log = require('../models/log');
 
 /**
  * parse a comma delimited set of CORS sites
- * 
+ *
  * @param {String} str environment variable.
- * @returns 
+ * @returns
  */
 const parseSites = function(str) {
 
@@ -63,10 +63,10 @@ const ApiServer = function (clientDir) {
         const gamer = app.getModel('Gamer');
 
         /**
-         * set a global authorization function for the app 
+         * set a global authorization function for the app
          * we check to make sure a valid gamer has logged in
-         * 
-         * @param {Object} context 
+         *
+         * @param {Object} context
          */
         app.auth(async function (context) {
             const session = context.session;
@@ -78,7 +78,11 @@ const ApiServer = function (clientDir) {
                     return null;    // null means currentUser failed
                 });
 
-            console.log('auth function result :', result);
+            if (result) {
+                console.log(`auth function logged in user : ${result.name}, id: ${result.id}`);
+            } else {
+                console.log('auth function result :', result);
+            }
             return result != null;
         });
 
