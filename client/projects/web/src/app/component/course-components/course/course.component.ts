@@ -85,7 +85,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
 
   /**
    * confirm the delete with a modal before processing.
-   * 
+   *
    * @param content TemplateRef for modal
    */
   onDelete(content: TemplateRef<any>) {
@@ -102,6 +102,9 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
 
   onSubmit() {
     console.log('submit pressed!');
+
+    this.updatePar(this.course);
+    this.updateYardage(this.course);
 
     if (this.id) {
       // existing gamer, update all fields
@@ -201,5 +204,27 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
           self.error("Error creating course!");
         }
       });
+  }
+
+  private updatePar(course: Course) {
+    if (course.holes.length >= 0) {
+      course.par = 0;
+
+      for (let i = 0; i < course.holes.length; i++) {
+        console.log(`course hole: ${i} par: ${course.holes[i].par}`);
+        course.par += +course.holes[i].par;
+        console.log(`course par: ${course.par}`)
+      }
+    }
+  }
+
+  private updateYardage(course: Course) {
+    if (course.holes.length >= 0) {
+      course.yardage = 0;
+
+      for (let i = 0; i < course.holes.length; i++) {
+        course.yardage += +course.holes[i].yardage;
+      }
+    }
   }
 }
