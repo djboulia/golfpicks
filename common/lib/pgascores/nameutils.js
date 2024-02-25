@@ -17,20 +17,19 @@
  *	@str 		: the string with the player's name
  *  @returns	: the normalized string
  */
-exports.normalize = function( str ) {
-	str = str.replace( /,/g, '');	// remove any commas
-	str = str.replace( /\./g, '');	// remove any periods
-	str = str.replace( /-/g, '_');	// replace hyphens with underscores
-	str = str.replace( /\s/g, '_');	// spaces with underscores
-	str = str.toLowerCase();
-	return str;
+exports.normalize = function (str) {
+  str = str.replace(/,/g, ''); // remove any commas
+  str = str.replace(/\./g, ''); // remove any periods
+  str = str.replace(/-/g, '_'); // replace hyphens with underscores
+  str = str.replace(/\s/g, '_'); // spaces with underscores
+  str = str.toLowerCase();
+  return str;
 };
 
 /**
  * expects Last,<sp>First format and will return First<sp>Last
  **/
-exports.reverseName = function( str ) {
-    var parts = str.split(",");
-    return parts[1].trim() + " " + parts[0].trim();
-}
-
+exports.reverseName = function (str) {
+  var parts = str.split(',');
+  return parts[1].trim() + ' ' + parts[0].trim();
+};

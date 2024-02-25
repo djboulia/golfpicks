@@ -34,7 +34,7 @@ Footer
 Vertical layout
 *******************/
 
-#main-wrapper[data-layout="vertical"] {
+#main-wrapper[data-layout='vertical'] {
   /*Vertical*/
   .topbar .top-navbar .navbar-header {
     //width: $sidebar-width-full;
@@ -42,7 +42,7 @@ Vertical layout
   }
 
   /*sidebar type*/
-  &[data-sidebartype="full"] {
+  &[data-sidebartype='full'] {
     .page-wrapper {
       margin-left: $sidebar-width-full;
     }
@@ -54,26 +54,26 @@ Vertical responsive layout
 *******************/
 
 @include media-breakpoint-up(md) {
-  #main-wrapper[data-layout="vertical"] {
+  #main-wrapper[data-layout='vertical'] {
     /*Vertical*/
-    &[data-sidebartype="full"] {
+    &[data-sidebartype='full'] {
       .topbar .top-navbar .navbar-header {
         width: $sidebar-width-full;
       }
     }
     /*Sidebar position*/
-    &[data-sidebar-position="fixed"][data-sidebartype="full"] {
+    &[data-sidebar-position='fixed'][data-sidebartype='full'] {
       .topbar .top-navbar .navbar-collapse {
         margin-left: $sidebar-width-full;
       }
     }
-    &[data-sidebar-position="fixed"][data-sidebartype="mini-sidebar"] {
+    &[data-sidebar-position='fixed'][data-sidebartype='mini-sidebar'] {
       .topbar .top-navbar .navbar-collapse {
         margin-left: $sidebar-width-mini;
       }
     }
     /*Vertical with mini-sidebar*/
-    &[data-sidebartype="mini-sidebar"] {
+    &[data-sidebartype='mini-sidebar'] {
       .topbar .top-navbar .navbar-header {
         width: $sidebar-width-mini;
         .logo-text {
@@ -92,13 +92,13 @@ Vertical responsive layout
 
 @media (max-width: 991px) {
   #main-wrapper {
-    &[data-layout="vertical"][data-sidebartype="full"] {
+    &[data-layout='vertical'][data-sidebartype='full'] {
       .page-wrapper {
         margin-left: 0;
       }
     }
 
-    &[data-sidebartype="full"] {
+    &[data-sidebartype='full'] {
       .left-sidebar {
         left: -$sidebar-width-full;
       }
@@ -108,7 +108,7 @@ Vertical responsive layout
         left: 0;
       }
     }
-    &[data-layout="vertical"][data-sidebar-position="fixed"] {
+    &[data-layout='vertical'][data-sidebar-position='fixed'] {
       .topbar .top-navbar {
         .navbar-collapse {
           position: relative;
@@ -117,7 +117,7 @@ Vertical responsive layout
       }
     }
     /*Header position*/
-    &[data-layout="vertical"][data-header-position="fixed"][data-sidebar-position="fixed"] {
+    &[data-layout='vertical'][data-header-position='fixed'][data-sidebar-position='fixed'] {
       .topbar .top-navbar {
         .navbar-collapse {
           position: relative;

@@ -23,10 +23,7 @@
             "polyfills": "projects/web/src/polyfills.ts",
             "tsConfig": "projects/web/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/web/src/favicon.ico",
-              "projects/web/src/assets"
-            ],
+            "assets": ["projects/web/src/favicon.ico", "projects/web/src/assets"],
             "styles": [
               "node_modules/ngx-spinner/animations/ball-spin.css",
               "projects/web/src/assets/scss/style.scss",
@@ -93,13 +90,8 @@
             "tsConfig": "projects/web/tsconfig.spec.json",
             "karmaConfig": "projects/web/karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/web/src/favicon.ico",
-              "projects/web/src/assets"
-            ],
-            "styles": [
-              "projects/web/src/styles.scss"
-            ],
+            "assets": ["projects/web/src/favicon.ico", "projects/web/src/assets"],
+            "styles": ["projects/web/src/styles.scss"],
             "scripts": []
           }
         }

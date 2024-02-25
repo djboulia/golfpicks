@@ -44,15 +44,12 @@
               <div fxLayout="column">
                 <div class="header">R{{ roundNumber }}</div>
 
-                <ng-container
-                  *ngFor="let golfer of event.golfers; let i = index"
-                >
+                <ng-container *ngFor="let golfer of event.golfers; let i = index">
                   <div fxLayout="column">
                     <div
                       class="scores"
                       [ngClass]="{
-                        'golf-round-leader':
-                          event.lowRounds[roundNumber] === golfer[roundNumber]
+                        'golf-round-leader': event.lowRounds[roundNumber] === golfer[roundNumber]
                       }"
                     >
                       {{ golfer[roundNumber] }}

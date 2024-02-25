@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { Course } from '../../../shared/services/backend/course.interface';
@@ -11,10 +11,9 @@ import { CourseService } from '../../../shared/services/backend/course.service';
 @Component({
   selector: 'app-courseinfo',
   templateUrl: './courseinfo.component.html',
-  styleUrls: ['./courseinfo.component.scss']
+  styleUrls: ['./courseinfo.component.scss'],
 })
 export class CourseinfoComponent extends BaseLoadingComponent implements OnInit {
-
   id: string | null = null;
   course: Course;
   frontNine: any;
@@ -22,7 +21,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
   weather: any;
 
   parentUrl = '/component/courses';
-  baseUrl = '/component/course'
+  baseUrl = '/component/course';
 
   mapCenter: google.maps.LatLngLiteral = { lat: 24, lng: 12 };
   mapZoom = 9;
@@ -31,7 +30,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
-    private courseApi: CourseService
+    private courseApi: CourseService,
   ) {
     super(spinner);
 
@@ -41,9 +40,9 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
   /**
    * slope and rating aren't always included.  if they're
    * missing, we plug in zero values for both
-   * 
-   * @param data 
-   * @returns 
+   *
+   * @param data
+   * @returns
    */
   private fixCourseData(data: any) {
     if (!data.slope) {
@@ -60,8 +59,8 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
     const frontNine = {
       yardage: 0,
       par: 0,
-      holes: <any>[]
-    }
+      holes: <any>[],
+    };
 
     const holes = data.holes;
     if (holes) {
@@ -81,8 +80,8 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
     const backNine = {
       yardage: 0,
       par: 0,
-      holes: <any>[]
-    }
+      holes: <any>[],
+    };
 
     const holes = data.holes;
     if (holes) {
@@ -107,7 +106,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id')
+    this.id = this.route.snapshot.paramMap.get('id');
     console.log(`id: ${this.id}`);
 
     this.loading();
@@ -117,40 +116,37 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
       const self = this;
 
       // go get this user's record
-      this.courseApi.get(this.id)
-        .subscribe({
-          next(data) {
-            console.log('data ', data);
+      this.courseApi.get(this.id).subscribe({
+        next(data) {
+          console.log('data ', data);
 
-            self.course = self.fixCourseData(data);
-            self.frontNine = self.frontNineData(data);
-            self.backNine = self.backNineData(data);
+          self.course = self.fixCourseData(data);
+          self.frontNine = self.frontNineData(data);
+          self.backNine = self.backNineData(data);
 
-            self.mapCenter.lat = self.course.location.lat;
-            self.mapCenter.lng = self.course.location.lng;
+          self.mapCenter.lat = self.course.location.lat;
+          self.mapCenter.lng = self.course.location.lng;
 
-            self.loaded();
-          },
-          error(msg) {
-            self.error('Error loading course!')
-          }
-        });
+          self.loaded();
+        },
+        error(msg) {
+          self.error('Error loading course!');
+        },
+      });
 
-      this.courseApi.weather(this.id)
-        .subscribe({
-          next(data) {
-            console.log('data ', data);
+      this.courseApi.weather(this.id).subscribe({
+        next(data) {
+          console.log('data ', data);
 
-            self.weather = self.formatWeatherData(data);
-          },
-          error(msg) {
-            console.log('Error loading weather!')
-          }
-        });
+          self.weather = self.formatWeatherData(data);
+        },
+        error(msg) {
+          console.log('Error loading weather!');
+        },
+      });
     } else {
       // no id found, just route back to the parent URL
       this.router.navigate([this.parentUrl]);
     }
-
   }
 }

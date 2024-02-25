@@ -1,2 +1,2 @@
 applications:
-- name: golfpicks-pwcc
+  - name: golfpicks-pwcc

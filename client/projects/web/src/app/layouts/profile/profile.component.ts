@@ -7,10 +7,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-
   user: Gamer;
 
   errorMessage: any = null;
@@ -21,9 +20,9 @@ export class ProfileComponent implements OnInit {
   constructor(
     private apiGamer: GamerService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
   ) {
-    this.user = apiGamer.newModel();  // initialize with empty gamer until we load
+    this.user = apiGamer.newModel(); // initialize with empty gamer until we load
   }
 
   ngOnInit(): void {
@@ -32,25 +31,23 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = null;
     this.infoMessage = null;
 
-    this.apiGamer.currentUser()
-      .subscribe({
-        next(gamer) {
-          console.log('data ', gamer);
+    this.apiGamer.currentUser().subscribe({
+      next(gamer) {
+        console.log('data ', gamer);
 
-          self.user = gamer;
+        self.user = gamer;
 
-          self.isLoaded = true;
-        },
-        error(msg) {
-          console.log('error getting current user!! ', msg);
-          self.errorMessage = "Error getting current user!";
-          self.isLoaded = false;
-        }
-      });
+        self.isLoaded = true;
+      },
+      error(msg) {
+        console.log('error getting current user!! ', msg);
+        self.errorMessage = 'Error getting current user!';
+        self.isLoaded = false;
+      },
+    });
   }
 
   onSave() {
-
     const self = this;
 
     const gamer: Gamer = {
@@ -58,27 +55,24 @@ export class ProfileComponent implements OnInit {
       admin: this.user.admin,
       name: this.user.name,
       username: this.user.username,
-      password: this.user.password
-    }
+      password: this.user.password,
+    };
 
-    this.apiGamer.put(gamer)
-      .subscribe({
-        next(data) {
-          console.log('user data saved: ', data);
-          self.infoMessage = "User data saved.";
+    this.apiGamer.put(gamer).subscribe({
+      next(data) {
+        console.log('user data saved: ', data);
+        self.infoMessage = 'User data saved.';
 
-          // update the logged in user with the changes
-          self.auth.refresh()
-            .subscribe(() => {
-              console.log('refreshed user info');
-              // self.router.navigate(['/main']);        
-            })
-        },
-        error(msg) {
-          console.log('error saving data! ', msg);
-          self.errorMessage = "Error saving user data!";
-        }
-      });
+        // update the logged in user with the changes
+        self.auth.refresh().subscribe(() => {
+          console.log('refreshed user info');
+          // self.router.navigate(['/main']);
+        });
+      },
+      error(msg) {
+        console.log('error saving data! ', msg);
+        self.errorMessage = 'Error saving user data!';
+      },
+    });
   }
-
 }

@@ -21,9 +21,7 @@
               <b>{{ games.active.event }}</b>
             </div>
             <div *ngIf="games.active.inProgress" class="text-center">
-              <a [attr.href]="leaderboardUrl + '/id/' + games.active.eventid"
-                >Leaderboard</a
-              >
+              <a [attr.href]="leaderboardUrl + '/id/' + games.active.eventid">Leaderboard</a>
             </div>
           </div>
 
@@ -44,9 +42,7 @@
               <tr *ngFor="let game of games.history">
                 <td>{{ game.event }}</td>
                 <td>
-                  <a [attr.href]="leaderboardUrl + '/id/' + game.eventid"
-                    >View</a
-                  >
+                  <a [attr.href]="leaderboardUrl + '/id/' + game.eventid">View</a>
                 </td>
               </tr>
             </tbody>

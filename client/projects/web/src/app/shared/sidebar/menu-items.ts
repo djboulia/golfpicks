@@ -1,14 +1,14 @@
 import { RouteInfo } from './sidebar.metadata';
 
-export const ROUTES = (admin: boolean) : RouteInfo[] => {
-  const userTasks : RouteInfo[] = [
+export const ROUTES = (admin: boolean): RouteInfo[] => {
+  const userTasks: RouteInfo[] = [
     {
       path: '',
       title: 'Golfpicks',
       icon: 'bi bi-speedometer2',
       class: 'nav-small-cap',
       extralink: true,
-      submenu: []
+      submenu: [],
     },
     {
       path: '/component/gamehistory',
@@ -16,7 +16,7 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-person',
       class: '',
       extralink: false,
-      submenu: []
+      submenu: [],
     },
     {
       path: '/about',
@@ -24,8 +24,8 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-info-circle',
       class: '',
       extralink: false,
-      submenu: []
-    }
+      submenu: [],
+    },
   ];
 
   const adminTasks: RouteInfo[] = [
@@ -35,7 +35,7 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-bell',
       class: 'nav-small-cap',
       extralink: true,
-      submenu: []
+      submenu: [],
     },
     {
       path: '/component/games',
@@ -43,7 +43,7 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-trophy',
       class: '',
       extralink: false,
-      submenu: []
+      submenu: [],
     },
     {
       path: '/component/events',
@@ -51,7 +51,7 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-flag',
       class: '',
       extralink: false,
-      submenu: []
+      submenu: [],
     },
     {
       path: '/component/courses',
@@ -59,7 +59,7 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-geo-alt',
       class: '',
       extralink: false,
-      submenu: []
+      submenu: [],
     },
     {
       path: '/component/users',
@@ -67,10 +67,9 @@ export const ROUTES = (admin: boolean) : RouteInfo[] => {
       icon: 'bi bi-people',
       class: '',
       extralink: false,
-      submenu: []
-    }
+      submenu: [],
+    },
   ];
 
-  return admin ? userTasks.concat(adminTasks) : userTasks ;
-}
-
+  return admin ? userTasks.concat(adminTasks) : userTasks;
+};

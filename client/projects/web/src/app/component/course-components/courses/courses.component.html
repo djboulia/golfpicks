@@ -1,46 +1,51 @@
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Courses</h4>
 
-                <h4 class="card-title">Courses</h4>
+        <ngb-alert
+          *ngIf="errorMessage"
+          type="danger"
+          [dismissible]="false"
+          class="customize-alert fs-5"
+        >
+          {{ errorMessage }}
+        </ngb-alert>
 
-                <ngb-alert *ngIf="errorMessage" type="danger" [dismissible]="false" class="customize-alert fs-5">
-                    {{errorMessage}}
-                </ngb-alert>
-    
-                <div *ngIf="isLoaded" class="table-responsive">
-                    <table class="table align-middle text-nowrap">
-                        <thead>
-                            <tr>
-                                <th class="text-dark font-medium fs-4">Name</th>
-                                <th class="text-dark font-medium fs-4">Par</th>
-                                <th class="text-dark font-medium fs-4">Yardage</th>
-                                <th class="text-dark font-medium fs-4">
-                                    <div style="text-align: right;"><a [attr.href]="baseUrl"
-                                            class="btn btn-rounded btn-success">Add New Course</a></div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor='let course of courses'>
-                                <td>
-                                    <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{course.name}}</a>
-                                </td>
-                                <td class="fs-4">
-                                    {{course.par}}
-                                </td>
-                                <td class="fs-4">
-                                    {{course.yardage}}
-                                </td>
-                                <td>
-                                    <a [attr.href]="baseUrl + '/id/' + course.id">Edit</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div *ngIf="isLoaded" class="table-responsive">
+          <table class="table align-middle text-nowrap">
+            <thead>
+              <tr>
+                <th class="text-dark font-medium fs-4">Name</th>
+                <th class="text-dark font-medium fs-4">Par</th>
+                <th class="text-dark font-medium fs-4">Yardage</th>
+                <th class="text-dark font-medium fs-4">
+                  <div style="text-align: right">
+                    <a [attr.href]="baseUrl" class="btn btn-rounded btn-success">Add New Course</a>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let course of courses">
+                <td>
+                  <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{ course.name }}</a>
+                </td>
+                <td class="fs-4">
+                  {{ course.par }}
+                </td>
+                <td class="fs-4">
+                  {{ course.yardage }}
+                </td>
+                <td>
+                  <a [attr.href]="baseUrl + '/id/' + course.id">Edit</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>

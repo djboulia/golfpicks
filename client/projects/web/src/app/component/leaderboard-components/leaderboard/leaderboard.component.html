@@ -21,11 +21,7 @@
 
           <!-- large screen layout -->
           <div class="info-lg">
-            <div
-              fxLayout="row"
-              fxLayoutGap="20px"
-              fxLayoutAlign="space-between"
-            >
+            <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between">
               <app-course-info
                 [currentRound]="currentRound"
                 [courseUrl]="courseUrl"
@@ -37,15 +33,11 @@
               <div class="coursedetails">
                 <div>
                   View tournament
-                  <a href="{{ eventOverviewUrl + '/id/' + game.event }}"
-                    >overview</a
-                  >
+                  <a href="{{ eventOverviewUrl + '/id/' + game.event }}">overview</a>
                 </div>
                 <div>
                   View tournament
-                  <a href="{{ eventLeaderUrl + '/id/' + game.event }}"
-                    >scores</a
-                  >
+                  <a href="{{ eventLeaderUrl + '/id/' + game.event }}">scores</a>
                 </div>
               </div>
             </div>
@@ -54,11 +46,7 @@
           <!-- small screen layout -->
           <div class="info-sm">
             <div fxLayout="column">
-              <div
-                fxLayout="row"
-                fxLayoutGap="20px"
-                fxLayoutAlign="space-between"
-              >
+              <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between">
                 <app-course-info
                   [currentRound]="currentRound"
                   [courseUrl]="courseUrl"
@@ -71,15 +59,11 @@
               <div class="coursedetails">
                 <div>
                   View tournament
-                  <a href="{{ eventOverviewUrl + '/id/' + game.event }}"
-                    >overview</a
-                  >
+                  <a href="{{ eventOverviewUrl + '/id/' + game.event }}">overview</a>
                 </div>
                 <div>
                   View tournament
-                  <a href="{{ eventLeaderUrl + '/id/' + game.event }}"
-                    >scores</a
-                  >
+                  <a href="{{ eventLeaderUrl + '/id/' + game.event }}">scores</a>
                 </div>
               </div>
             </div>
@@ -91,11 +75,9 @@
             scrolldelay="200"
             behavior="loop"
             [innerHtml]="newsFeed"
-          >
-          </marquee>
+          ></marquee>
 
-          <app-score-board [roundTitles]="roundTitles" [gamers]="gamers">
-          </app-score-board>
+          <app-score-board [roundTitles]="roundTitles" [gamers]="gamers"> </app-score-board>
 
           <br />
 

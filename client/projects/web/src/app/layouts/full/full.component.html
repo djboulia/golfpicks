@@ -17,11 +17,7 @@
   <!-- ============================================================== -->
   <header class="topbar" data-navbarbg="skin6">
     <nav class="d-flex top-navbar navbar-expand-lg navbar-dark">
-      <div
-        class="navbar-header"
-        [ngClass]="expandLogo ? 'expand-logo' : ''"
-        data-logobg="skin6"
-      >
+      <div class="navbar-header" [ngClass]="expandLogo ? 'expand-logo' : ''" data-logobg="skin6">
         <!-- This is for the sidebar toggle which is visible on mobile only -->
         <a
           (click)="showMobileMenu = !showMobileMenu"
@@ -35,19 +31,12 @@
           <b class="logo-icon">
             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
             <!-- Light Logo icon -->
-            <img
-              height="50px"
-              src="../../assets/images/golfpicks.png"
-              alt="homepage"
-            />
+            <img height="50px" src="../../assets/images/golfpicks.png" alt="homepage" />
           </b>
           <!-- Logo text -->
-          <span class="logo-text">
-            GolfPicks
-          </span>
+          <span class="logo-text"> GolfPicks </span>
           <!--End Logo icon -->
         </a>
-
 
         <!-- ============================================================== -->
         <!-- End Logo -->
@@ -78,23 +67,15 @@
         data-navbarbg="skin1"
         [ngbCollapse]="!isCollapsed"
       >
-        <app-navigation
-          (toggleSidebar)="toggleSidebarType()"
-          class="w-100"
-        ></app-navigation>
+        <app-navigation (toggleSidebar)="toggleSidebarType()" class="w-100"></app-navigation>
       </div>
     </nav>
   </header>
   <!-- ============================================================== -->
   <!-- Left Sidebar - style you can find in sidebar.scss  -->
   <!-- ============================================================== -->
-  <aside
-    class="left-sidebar"
-    data-sidebarbg="skin6"
-    (mouseover)="Logo()"
-    (mouseout)="Logo()"
-  >
-      <app-sidebar></app-sidebar>
+  <aside class="left-sidebar" data-sidebarbg="skin6" (mouseover)="Logo()" (mouseout)="Logo()">
+    <app-sidebar></app-sidebar>
   </aside>
   <!-- ============================================================== -->
   <!-- End Left Sidebar - style you can find in sidebar.scss  -->
@@ -121,9 +102,7 @@
     <!-- ============================================================== -->
     <!-- footer -->
     <!-- ============================================================== -->
-    <footer class="footer text-center">
-      Copyright &copy; Boulia Productions 2022.
-    </footer>
+    <footer class="footer text-center">Copyright &copy; Boulia Productions 2022.</footer>
     <!-- ============================================================== -->
     <!-- End footer -->
     <!-- ============================================================== -->

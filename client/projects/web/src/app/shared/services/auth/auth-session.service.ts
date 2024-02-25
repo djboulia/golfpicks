@@ -3,14 +3,13 @@ import { EventEmitter } from '@angular/core';
 import { Output } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthSessionService {
-
   // we emit a change event when the auth data or status changes
   @Output() authChange = new EventEmitter<any>();
 
-  constructor() { }
+  constructor() {}
 
   isAdmin(): boolean {
     return this.isLoggedIn() ? localStorage.getItem('admin') === 'true' : false;
@@ -30,27 +29,26 @@ export class AuthSessionService {
 
   /**
    * start a new session
-   * 
+   *
    * @param name Display name
-   * @param username email 
+   * @param username email
    * @param admin is this person an admin?
    */
   init(name: string, username: string, admin: boolean) {
-
     localStorage.setItem('isLoggedin', 'true');
     localStorage.setItem('username', username);
     localStorage.setItem('name', name);
 
     if (admin) {
-      localStorage.setItem('admin', 'true')
+      localStorage.setItem('admin', 'true');
     } else {
-      localStorage.removeItem('admin')
+      localStorage.removeItem('admin');
     }
 
     this.authChange.emit({
       name: name,
       username: username,
-      admin: admin
+      admin: admin,
     });
   }
 
@@ -65,5 +63,4 @@ export class AuthSessionService {
 
     this.authChange.emit(null);
   }
-
 }

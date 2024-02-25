@@ -12,28 +12,30 @@ const routes: Routes = [
       { path: '', redirectTo: '/component/gamehistory', pathMatch: 'full' },
       {
         path: 'about',
-        loadChildren: () => import('./layouts/about/about.module').then(m => m.AboutModule)
+        loadChildren: () => import('./layouts/about/about.module').then((m) => m.AboutModule),
       },
       {
         path: 'profile',
-        loadChildren: () => import('./layouts/profile/profile.module').then(m => m.ProfileModule)
+        loadChildren: () => import('./layouts/profile/profile.module').then((m) => m.ProfileModule),
       },
       {
         path: 'component',
-        loadChildren: () => import('./component/component.module').then(m => m.ComponentsModule)
-      }
-
-    ]
+        loadChildren: () => import('./component/component.module').then((m) => m.ComponentsModule),
+      },
+    ],
   },
-  { path: 'login', loadChildren: () => import('./layouts/login/login.module').then((m) => m.LoginModule) },
+  {
+    path: 'login',
+    loadChildren: () => import('./layouts/login/login.module').then((m) => m.LoginModule),
+  },
   {
     path: '**',
-    redirectTo: '/component/gamehistory'
-  }
+    redirectTo: '/component/gamehistory',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

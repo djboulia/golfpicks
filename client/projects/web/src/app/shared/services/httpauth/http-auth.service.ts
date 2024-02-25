@@ -11,18 +11,17 @@ import { AuthSessionService } from '../auth/auth-session.service';
  * the server session has expired.  we kill our local session data and
  * redirect to the login page when we detect this.
  */
- @Injectable({
-  providedIn: 'root'
+@Injectable({
+  providedIn: 'root',
 })
 export class HttpAuthService {
-
   constructor(
     private http: HttpClient,
     private authSession: AuthSessionService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
-  private handleError(observer: Subscriber <any>, res : HttpErrorResponse) {
+  private handleError(observer: Subscriber<any>, res: HttpErrorResponse) {
     const err = res.error;
     if (err.code === 401) {
       // backend login expired/not authorized
@@ -41,19 +40,17 @@ export class HttpAuthService {
     const self = this;
 
     return new Observable((observer) => {
-      this.http.get<any>(
-        url, options)
-        .subscribe({
-          next(data) {
-            // for successful calls, pass on to the observer
-            observer.next(data);
-          },
-          error(res: HttpErrorResponse) {
-            console.log('error during get ', res);
+      this.http.get<any>(url, options).subscribe({
+        next(data) {
+          // for successful calls, pass on to the observer
+          observer.next(data);
+        },
+        error(res: HttpErrorResponse) {
+          console.log('error during get ', res);
 
-            self.handleError(observer, res);
-          }
-        });
+          self.handleError(observer, res);
+        },
+      });
     });
   }
 
@@ -61,19 +58,17 @@ export class HttpAuthService {
     const self = this;
 
     return new Observable((observer) => {
-      this.http.put<any>(
-        url, obj, options)
-        .subscribe({
-          next(data) {
-            // for successful calls, pass on to the observer
-            observer.next(data);
-          },
-          error(res: HttpErrorResponse) {
-            console.log('error during put ', res);
+      this.http.put<any>(url, obj, options).subscribe({
+        next(data) {
+          // for successful calls, pass on to the observer
+          observer.next(data);
+        },
+        error(res: HttpErrorResponse) {
+          console.log('error during put ', res);
 
-            self.handleError(observer, res);
-          }
-        });
+          self.handleError(observer, res);
+        },
+      });
     });
   }
 
@@ -81,19 +76,17 @@ export class HttpAuthService {
     const self = this;
 
     return new Observable((observer) => {
-      this.http.post<any>(
-        url, obj, options)
-        .subscribe({
-          next(data) {
-            // for successful calls, pass on to the observer
-            observer.next(data);
-          },
-          error(res: HttpErrorResponse) {
-            console.log('error during post ', res);
+      this.http.post<any>(url, obj, options).subscribe({
+        next(data) {
+          // for successful calls, pass on to the observer
+          observer.next(data);
+        },
+        error(res: HttpErrorResponse) {
+          console.log('error during post ', res);
 
-            self.handleError(observer, res);
-          }
-        });
+          self.handleError(observer, res);
+        },
+      });
     });
   }
 
@@ -101,21 +94,17 @@ export class HttpAuthService {
     const self = this;
 
     return new Observable((observer) => {
-      this.http.delete<any>(
-        url, options)
-        .subscribe({
-          next(data) {
-            // for successful calls, pass on to the observer
-            observer.next(data);
-          },
-          error(res: HttpErrorResponse) {
-            console.log('error during delete ', res);
+      this.http.delete<any>(url, options).subscribe({
+        next(data) {
+          // for successful calls, pass on to the observer
+          observer.next(data);
+        },
+        error(res: HttpErrorResponse) {
+          console.log('error during delete ', res);
 
-            self.handleError(observer, res);
-          }
-        });
+          self.handleError(observer, res);
+        },
+      });
     });
   }
 }
-
-

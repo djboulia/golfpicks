@@ -16,10 +16,7 @@ import { DateHelperService } from '../../../shared/services/date/date-helper.ser
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
 })
-export class LeaderboardComponent
-  extends BaseLoadingComponent
-  implements OnInit, OnDestroy
-{
+export class LeaderboardComponent extends BaseLoadingComponent implements OnInit, OnDestroy {
   id: any = null;
   game: GameDay;
   gameDay: any = null;
@@ -55,7 +52,7 @@ export class LeaderboardComponent
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private gameApi: GameService,
-    private eventApi: EventService
+    private eventApi: EventService,
   ) {
     super(spinner);
 
@@ -75,15 +72,11 @@ export class LeaderboardComponent
 
     this.route.queryParams.subscribe((params) => {
       console.log(params);
-      this.testingMode =
-        params['testingMode'] && params['testingMode'] === 'true'
-          ? true
-          : false;
+      this.testingMode = params['testingMode'] && params['testingMode'] === 'true' ? true : false;
       console.log('testingMode: ', this.testingMode);
 
       // if debugMode is a url parameter, write more info to the log
-      this.debugMode =
-        params['debugMode'] && params['debugMode'] === 'true' ? true : false;
+      this.debugMode = params['debugMode'] && params['debugMode'] === 'true' ? true : false;
 
       this.loadLeaderboard();
     });
@@ -115,7 +108,7 @@ export class LeaderboardComponent
         map((leaderboard) => (this.leaderboard = leaderboard)),
         // map((data) => { console.log('found event ', data); return data; }),
 
-        catchError((err) => this.loadError('Error loading game!', err))
+        catchError((err) => this.loadError('Error loading game!', err)),
       )
       .subscribe(() => {
         if (this.hasNotStarted(this.gameDay)) {
@@ -151,8 +144,7 @@ export class LeaderboardComponent
   private setLastUpdate() {
     const date = new DateHelperService();
 
-    this.lastUpdate =
-      'Last Update: ' + date.dayOfWeekString() + ', ' + date.timeString();
+    this.lastUpdate = 'Last Update: ' + date.dayOfWeekString() + ', ' + date.timeString();
   }
 
   private hasNotStarted(gameDay: GameDayService) {
@@ -193,7 +185,7 @@ export class LeaderboardComponent
       .pipe(
         map((data) => (this.weather = this.formatWeatherData(data))),
 
-        catchError((err) => this.loadError('Error loading weather!', err))
+        catchError((err) => this.loadError('Error loading weather!', err)),
       )
       .subscribe((data) => {});
   }
@@ -205,7 +197,7 @@ export class LeaderboardComponent
       .pipe(
         map((data) => (this.newsFeed = this.formatNewsFeed(data))),
 
-        catchError((err) => this.loadError('Error loading weather!', err))
+        catchError((err) => this.loadError('Error loading weather!', err)),
       )
       .subscribe((data) => {});
   }

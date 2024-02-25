@@ -20,10 +20,7 @@
             <b>{{ title }}</b>
           </div>
           <ng-container *ngFor="let gamer of gamers">
-            <div
-              class="leaderboard-score"
-              [class.leadercell]="gamer.rounds[i].leader"
-            >
+            <div class="leaderboard-score" [class.leadercell]="gamer.rounds[i].leader">
               {{ gamer.rounds[i].score }}
             </div>
           </ng-container>

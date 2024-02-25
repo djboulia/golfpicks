@@ -5,9 +5,9 @@ import { AuthSessionService } from '../services/auth/auth-session.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private router: Router, 
-    private authSession:AuthSessionService
-    ) { }
+    private router: Router,
+    private authSession: AuthSessionService,
+  ) {}
 
   canActivate() {
     if (this.authSession.isLoggedIn()) {
@@ -19,5 +19,4 @@ export class AuthGuard implements CanActivate {
     this.router.navigate(['/login']);
     return false;
   }
-
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
 
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../base.loading.component';
 
 import { GameService } from '../../shared/services/backend/game.service';
@@ -16,7 +16,7 @@ import { Gamer } from '../../shared/services/backend/gamer.interfaces';
 @Component({
   selector: 'app-picks',
   templateUrl: './picks.component.html',
-  styleUrls: ['./picks.component.scss']
+  styleUrls: ['./picks.component.scss'],
 })
 export class PicksComponent extends BaseLoadingComponent implements OnInit {
   readonly NUM_SELECTIONS = 10;
@@ -42,7 +42,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     private route: ActivatedRoute,
     private gameApi: GameService,
     private eventApi: EventService,
-    private gamerApi: GamerService
+    private gamerApi: GamerService,
   ) {
     super(spinner);
 
@@ -51,58 +51,57 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id')
+    this.id = this.route.snapshot.paramMap.get('id');
     console.log(`id: ${this.id}`);
 
     this.loading();
 
     if (!this.id) {
-      this.error("No game found!");
+      this.error('No game found!');
       return;
     }
 
-    this.route.queryParams
-      .subscribe(params => {
-        console.log(params);
-        this.testingMode = (params['testingMode'] && params['testingMode'] === 'true') ? true : false;
-        console.log('testingMode: ', this.testingMode);
+    this.route.queryParams.subscribe((params) => {
+      console.log(params);
+      this.testingMode = params['testingMode'] && params['testingMode'] === 'true' ? true : false;
+      console.log('testingMode: ', this.testingMode);
 
-        // if debugMode is a url parameter, write more info to the log
-        this.debugMode = (params['debugMode'] && params['debugMode'] === 'true') ? true : false;
+      // if debugMode is a url parameter, write more info to the log
+      this.debugMode = params['debugMode'] && params['debugMode'] === 'true' ? true : false;
 
-        this.loadPicks();
-      })
+      this.loadPicks();
+    });
   }
 
   private loadPicks() {
     console.log('loading picks');
 
     if (!this.id) {
-      this.error("No game found!");
+      this.error('No game found!');
       return;
     }
 
     // go get our game information from multiple sources
-    this.gameApi.gameDay(this.id)
+    this.gameApi
+      .gameDay(this.id)
       .pipe(
-        map((game) => this.game = game),
+        map((game) => (this.game = game)),
         // map((data) => { console.log('found game ', data); return data; }),
-        
-        map((game) => this.gameDay = new GameDayService(game)),
+
+        map((game) => (this.gameDay = new GameDayService(game))),
 
         // get event that corresponds to this game
         mergeMap((gameDay) => this.eventApi.deep(gameDay.getEventId(), true)),
-        map((event) => this.event = event),
-        map((event) => this.golfers = event.golfers),
+        map((event) => (this.event = event)),
+        map((event) => (this.golfers = event.golfers)),
         // map((data) => { console.log('found event ', data); return data; }),
 
         mergeMap(() => this.gamerApi.currentUser()),
-        map((gamer) => this.currentUser = gamer),
+        map((gamer) => (this.currentUser = gamer)),
 
-        catchError(err => this.loadingError('Error loading picks!', err))
+        catchError((err) => this.loadingError('Error loading picks!', err)),
       )
       .subscribe((data) => {
-
         if (!this.pageCanLoad()) {
           return;
         }
@@ -129,7 +128,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
   private addPlayer(players: any[], ndx: number) {
     players[ndx].selected = true;
-  };
+  }
 
   private findPlayerIndex(players: any[], id: string) {
     // use a player id to find the index for this player in the scores list
@@ -140,7 +139,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     }
 
     return -1;
-  };
+  }
 
   private updateSelections(selections: any[], players: any[]) {
     const self = this;
@@ -156,7 +155,8 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     // now disable based on this
 
     players.forEach(function (player) {
-      if (player.selected) { // always enable any currently selected scores
+      if (player.selected) {
+        // always enable any currently selected scores
         player.selectable = true;
         //                    console.log("Selected : " + JSON.stringify(player));
       } else {
@@ -171,11 +171,10 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
       }
     });
 
-    console.log("selections = " + numSelections + ", topPicks = " + numTopPicks);
+    console.log('selections = ' + numSelections + ', topPicks = ' + numTopPicks);
 
     return numSelections;
-  };
-
+  }
 
   private getSelections(players: any[]) {
     const selections: any[] = [];
@@ -185,7 +184,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     });
 
     return selections;
-  };
+  }
 
   private initPriorPicks(players: any[], picks: any) {
     // for each pick we find, move it from scores to selections
@@ -193,7 +192,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
       const ndx = this.findPlayerIndex(players, picks[i].id);
 
       if (ndx < 0) {
-        console.error("invalid pick " + picks[i].id + " found!");
+        console.error('invalid pick ' + picks[i].id + ' found!');
       } else {
         this.addPlayer(players, ndx);
       }
@@ -206,33 +205,30 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
     const numSelections = this.updateSelections(selections, players);
     this.updateSubmitStatus(numSelections);
-  };
+  }
 
   /**
-   * check conditions for page to load.  in this case the tournament 
+   * check conditions for page to load.  in this case the tournament
    * can't be in progress or over if we are making picks
-   * 
+   *
    * @returns boolean - true if page can load, false otherwise
    */
   private pageCanLoad() {
-
     const gameDay = new GameDayService(this.game);
 
     // always allow the page to load in testing mode
     if (this.testingMode) return true;
 
     if (gameDay.tournamentInProgress()) {
-      this.error("Tournament is in progress, picks can no longer be made.");
+      this.error('Tournament is in progress, picks can no longer be made.');
       return false;
-    }
-    else if (gameDay.tournamentComplete()
-    ) {
-      this.error("This tournament has already ended, picks can no longer be made.");
+    } else if (gameDay.tournamentComplete()) {
+      this.error('This tournament has already ended, picks can no longer be made.');
       return false;
     }
 
-    if (!this.golfers || this.golfers.length===0) {
-      this.error("The field has not yet been set for this tournament.  Check back later.");
+    if (!this.golfers || this.golfers.length === 0) {
+      this.error('The field has not yet been set for this tournament.  Check back later.');
       return false;
     }
 
@@ -242,19 +238,19 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   updateSubmitStatus(numSelections: number) {
     if (numSelections >= this.NUM_SELECTIONS) {
       this.canSubmit = true;
-      this.picksMessage = "Press Save Picks to save.";
+      this.picksMessage = 'Press Save Picks to save.';
     } else {
       const remaining = this.NUM_SELECTIONS - numSelections;
-      const picks = (remaining > 1) ? "picks" : "pick";
+      const picks = remaining > 1 ? 'picks' : 'pick';
 
       this.canSubmit = false;
-      this.picksMessage = remaining + " " + picks + " remaining.";
+      this.picksMessage = remaining + ' ' + picks + ' remaining.';
     }
   }
 
   onUpdatePlayer(golfer: any) {
     //			console.log("item: " + JSON.stringify(item));
-    console.log("clicked on item " + golfer.name + " state is " + golfer.selected);
+    console.log('clicked on item ' + golfer.name + ' state is ' + golfer.selected);
 
     // change the state when the checkbox is clicked.
     golfer.selected = !golfer.selected;
@@ -272,7 +268,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   }
 
   onSubmit() {
-    this.picksMessage = "Saving picks...";
+    this.picksMessage = 'Saving picks...';
     this.loading();
 
     if (!this.id) {
@@ -286,18 +282,17 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     const picks: any[] = [];
     selections.forEach(function (selection) {
       picks.push({
-        "id": selection.player_id
+        id: selection.player_id,
       });
     });
 
-    console.log("saving picks: " + JSON.stringify(picks));
+    console.log('saving picks: ' + JSON.stringify(picks));
 
-    this.gameApi.savePicks(this.id, this.currentUser.id, picks)
-      .pipe(
-        catchError(err => this.loadingError('Error saving picks!', err))
-      )
+    this.gameApi
+      .savePicks(this.id, this.currentUser.id, picks)
+      .pipe(catchError((err) => this.loadingError('Error saving picks!', err)))
       .subscribe((data) => {
-        this.picksMessage = "Picks saved.";
+        this.picksMessage = 'Picks saved.';
         this.changed = false;
         this.loaded();
       });
@@ -310,5 +305,4 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
     return throwError(() => new Error(err));
   }
-
 }

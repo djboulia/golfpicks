@@ -8,17 +8,16 @@ import { Gamer } from '../backend/gamer.interfaces';
 import { GamerService } from '../backend/gamer.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   // we emit a change event when the auth data or status changes
   @Output() authChange = new EventEmitter<any>();
 
   constructor(
     private gamerApi: GamerService,
-    private authSession : AuthSessionService
-  ) { }
+    private authSession: AuthSessionService,
+  ) {}
 
   private updateData(data: Gamer) {
     const name = data.name;
@@ -36,51 +35,48 @@ export class AuthService {
 
       const self = this;
 
-      this.gamerApi.login(userid, password)
-        .subscribe({
-          next(gamer) {
-            console.log('logged in! ', gamer);
+      this.gamerApi.login(userid, password).subscribe({
+        next(gamer) {
+          console.log('logged in! ', gamer);
 
-            self.updateData(gamer);
+          self.updateData(gamer);
 
-            observer.next(true);
-          },
-          error(msg) {
-            console.log('error logging in! ', msg);
+          observer.next(true);
+        },
+        error(msg) {
+          console.log('error logging in! ', msg);
 
-            self.logout();
-            observer.next(false);
-          }
-        });
-
-    })
+          self.logout();
+          observer.next(false);
+        },
+      });
+    });
   }
 
   /**
    * Refresh the user's info from the backend server
-   * 
-   * @returns 
+   *
+   * @returns
    */
   refresh(): Observable<boolean> {
     const self = this;
 
     return new Observable((observer) => {
-      this.gamerApi.currentUser()
-        .subscribe({
-          next(gamer) {
-            console.log('refresh found user: ', gamer);
+      this.gamerApi.currentUser().subscribe({
+        next(gamer) {
+          console.log('refresh found user: ', gamer);
 
-            self.updateData(gamer);
+          self.updateData(gamer);
 
-            observer.next(true);
-          },
-          error(msg) {
-            console.log('error gettting current user! ', msg);
+          observer.next(true);
+        },
+        error(msg) {
+          console.log('error gettting current user! ', msg);
 
-            self.logout();
-            observer.next(false);
-          }
-        });
+          self.logout();
+          observer.next(false);
+        },
+      });
     });
   }
 
@@ -89,5 +85,4 @@ export class AuthService {
 
     this.authChange.emit(null);
   }
-
 }

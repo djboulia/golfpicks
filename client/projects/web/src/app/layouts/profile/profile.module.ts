@@ -5,28 +5,19 @@ import { ProfileComponent } from './profile.component';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-
 const routes: Routes = [
   {
     path: '',
     data: {
       title: 'Profile',
-      urls: [
-        { title: 'Profile', url: '/profile' },
-        { title: 'Profile' }
-      ]
+      urls: [{ title: 'Profile', url: '/profile' }, { title: 'Profile' }],
     },
-    component: ProfileComponent
-  }
+    component: ProfileComponent,
+  },
 ];
 
 @NgModule({
   declarations: [ProfileComponent],
-  imports: [
-    RouterModule.forChild(routes),
-    CommonModule,
-    FormsModule,
-    NgbModule
-  ]
+  imports: [RouterModule.forChild(routes), CommonModule, FormsModule, NgbModule],
 })
-export class ProfileModule { }
+export class ProfileModule {}

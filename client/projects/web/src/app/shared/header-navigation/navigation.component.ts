@@ -5,7 +5,7 @@ import { AuthSessionService } from '../services/auth/auth-session.service';
 
 @Component({
   selector: 'app-navigation',
-  templateUrl: './navigation.component.html'
+  templateUrl: './navigation.component.html',
 })
 export class NavigationComponent implements AfterViewInit {
   @Output() toggleSidebar = new EventEmitter<void>();
@@ -23,14 +23,12 @@ export class NavigationComponent implements AfterViewInit {
     this.name = authSession.getName();
 
     // add a listener to update for any changes
-    authSession.authChange
-      .subscribe(() => {
-        this.name = authSession.getName();
-      });
+    authSession.authChange.subscribe(() => {
+      this.name = authSession.getName();
+    });
   }
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   onLoggedOut() {
     console.log('logging out...');
@@ -38,5 +36,4 @@ export class NavigationComponent implements AfterViewInit {
 
     this.router.navigate(['/login']);
   }
-
 }

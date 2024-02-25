@@ -1,17 +1,14 @@
-
-import { DateHelperService } from "../date/date-helper.service";
-import { GameDay } from "../backend/game.interfaces";
+import { DateHelperService } from '../date/date-helper.service';
+import { GameDay } from '../backend/game.interfaces';
 
 export class GameDayService {
-
-  private start: DateHelperService ;
+  private start: DateHelperService;
   private end: DateHelperService;
 
   constructor(private game: GameDay) {
-    const startDate = (game.start) ? Date.parse(game.start) : null;
-    const endDate = (game.end) ? Date.parse(game.end) : null;
+    const startDate = game.start ? Date.parse(game.start) : null;
+    const endDate = game.end ? Date.parse(game.end) : null;
 
-  
     this.start = new DateHelperService(startDate);
     this.end = new DateHelperService(endDate);
   }
@@ -32,11 +29,11 @@ export class GameDayService {
     return this.end.dateString();
   }
 
-  getEventId() : string {
+  getEventId(): string {
     return this.game.event;
   }
 
-  getGamers() : any[] {
+  getGamers(): any[] {
     return this.game.gamers;
   }
 

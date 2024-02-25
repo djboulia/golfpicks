@@ -15,16 +15,12 @@
           <h4 class="card-title">{{ course.name }}</h4>
 
           <div fxLayout="row" fxLayoutAlign="end">
-            <a
-              [attr.href]="baseUrl + '/id/' + id"
-              class="btn btn-rounded btn-success"
-              >Edit</a
-            >
+            <a [attr.href]="baseUrl + '/id/' + id" class="btn btn-rounded btn-success">Edit</a>
           </div>
 
           <div class="header" fxLayout="row" fxLayoutAlign="space-between">
             <div fxLayout="column">
-              <div>Tee: {{ course.tee ? course.tee : "Championship" }}</div>
+              <div>Tee: {{ course.tee ? course.tee : 'Championship' }}</div>
               <div *ngIf="course.rating > 0">Rating: {{ course.rating }}</div>
               <div *ngIf="course.slope > 0">Slope: {{ course.slope }}</div>
             </div>
@@ -33,16 +29,8 @@
 
           <form name="form" role="form">
             <div class="map">
-              <google-map
-                height="400px"
-                width="max"
-                [center]="mapCenter"
-                [zoom]="mapZoom"
-              >
-                <map-marker
-                  [position]="mapCenter"
-                  [label]="course.name"
-                ></map-marker>
+              <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
+                <map-marker [position]="mapCenter" [label]="course.name"></map-marker>
               </google-map>
             </div>
 

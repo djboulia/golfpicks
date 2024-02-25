@@ -1,9 +1,9 @@
 // Theme colors
 #main-wrapper {
-  &[data-layout="vertical"]{
+  &[data-layout='vertical'] {
     /*This is for the logo bg*/
     .topbar .top-navbar .navbar-header {
-      &[data-logobg="skin6"] {
+      &[data-logobg='skin6'] {
         background: $skin6;
         .navbar-brand {
           .dark-logo {
@@ -21,13 +21,13 @@
     }
     .topbar .navbar-collapse,
     .topbar {
-      &[data-navbarbg="skin1"] {
+      &[data-navbarbg='skin1'] {
         background: $skin1;
       }
     }
     /*This is for the sidebar bg*/
     .left-sidebar {
-      &[data-sidebarbg="skin6"] {
+      &[data-sidebarbg='skin6'] {
         // background: $skin6;
         background-image: url(../../../images/turf.jpg);
         .sidebar-nav {
@@ -51,9 +51,9 @@
                   fill: rgba(41, 98, 255, 0.1);
                 }
                 &:hover {
-                background-color: $sidebar-hover-bg;
-                // opacity: 1;
-                .feather {
+                  background-color: $sidebar-hover-bg;
+                  // opacity: 1;
+                  .feather {
                     color: $sidebar-text;
                   }
                 }

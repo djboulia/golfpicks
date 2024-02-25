@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../../base.loading.component';
 
 import { Event } from '../../../shared/services/backend/event.interfaces';
@@ -10,10 +10,9 @@ import { DateFormatterService } from '../../../shared/services/date/date-formatt
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
-  styleUrls: ['./events.component.scss']
+  styleUrls: ['./events.component.scss'],
 })
 export class EventsComponent extends BaseLoadingComponent implements OnInit {
-
   events: Event[] = [];
 
   baseUrl = '/component/event';
@@ -21,7 +20,7 @@ export class EventsComponent extends BaseLoadingComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private eventApi: EventService,
-    public dateFormatter: DateFormatterService
+    public dateFormatter: DateFormatterService,
   ) {
     super(spinner);
   }
@@ -31,26 +30,25 @@ export class EventsComponent extends BaseLoadingComponent implements OnInit {
 
     this.loading();
 
-    this.eventApi.getAll()
-      .subscribe({
-        next(data) {
-          console.log('data ', data);
+    this.eventApi.getAll().subscribe({
+      next(data) {
+        console.log('data ', data);
 
-          data.sort(function (a: any, b: any) {
-            if (a.start == b.start) {
-              return 0;
-            } else {
-              return (a.start > b.start) ? -1 : 1;
-            }
-          });
+        data.sort(function (a: any, b: any) {
+          if (a.start == b.start) {
+            return 0;
+          } else {
+            return a.start > b.start ? -1 : 1;
+          }
+        });
 
-          self.events = data;
-          self.loaded();
-        },
-        error(msg) {
-          console.log('error getting tournaments!! ', msg);
-          self.error("Error loading tournaments!");
-        }
-      });
+        self.events = data;
+        self.loaded();
+      },
+      error(msg) {
+        console.log('error getting tournaments!! ', msg);
+        self.error('Error loading tournaments!');
+      },
+    });
   }
 }
