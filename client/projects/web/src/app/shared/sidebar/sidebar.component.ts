@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ROUTES } from './menu-items';
 import { RouteInfo } from './sidebar.metadata';
 import { Router, ActivatedRoute } from '@angular/router';

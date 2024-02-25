@@ -64,8 +64,8 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
 
     const holes = data.holes;
     if (holes) {
-      for (var i = 0; i < 9; i++) {
-        var hole = holes[i];
+      for (let i = 0; i < 9; i++) {
+        const hole = holes[i];
 
         frontNine.yardage += parseInt(hole.yardage);
         frontNine.par += parseInt(hole.par);
@@ -85,8 +85,8 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
 
     const holes = data.holes;
     if (holes) {
-      for (var i = 9; i < 18; i++) {
-        var hole = holes[i];
+      for (let i = 9; i < 18; i++) {
+        const hole = holes[i];
 
         backNine.yardage += parseInt(hole.yardage);
         backNine.par += parseInt(hole.par);
@@ -113,6 +113,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
 
     if (this.id) {
       // edit an existing user
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
       // go get this user's record
@@ -129,7 +130,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
 
           self.loaded();
         },
-        error(msg) {
+        error() {
           self.error('Error loading course!');
         },
       });
@@ -140,7 +141,7 @@ export class CourseinfoComponent extends BaseLoadingComponent implements OnInit 
 
           self.weather = self.formatWeatherData(data);
         },
-        error(msg) {
+        error() {
           console.log('Error loading weather!');
         },
       });

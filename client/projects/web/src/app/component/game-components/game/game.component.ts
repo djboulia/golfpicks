@@ -72,8 +72,6 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
 
     if (this.id) {
       // edit an existing game
-      const self = this;
-
       this.title = 'Update Game';
       this.deleteButton = true;
       this.submitButton = 'Save';
@@ -113,7 +111,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
 
         catchError((err) => this.loadingError('Error loading game!', err)),
       )
-      .subscribe((data) => {
+      .subscribe(() => {
         this.selectedCourse = this.findCourse(this.event, this.courses);
         this.selectedTourStop = this.findTourStop(this.event, this.schedule);
 
@@ -276,15 +274,15 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
     this.eventApi
       .delete(eventid)
       .pipe(
-        map((data) => console.log(`event ${eventid} deleted`)),
+        map(() => console.log(`event ${eventid} deleted`)),
 
         // now delete the associated game
         mergeMap(() => this.gameApi.delete(this.game.id)),
-        map((data) => console.log(`game ${this.game.id} deleted`)),
+        map(() => console.log(`game ${this.game.id} deleted`)),
 
         catchError((err) => this.loadingError(`Error deleting game ${this.game.name}!`, err)),
       )
-      .subscribe((data) => {
+      .subscribe(() => {
         this.loaded();
         this.router.navigate([this.parentUrl]);
       });
@@ -311,11 +309,11 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
 
     // put in the course id for each round of the tournament
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    var days = Math.round(Math.abs((start.getTime() - end.getTime()) / oneDay)) + 1;
+    const days = Math.round(Math.abs((start.getTime() - end.getTime()) / oneDay)) + 1;
 
     // console.log('days: ', days);
 
-    let currentDay = new Date(start.getTime());
+    const currentDay = new Date(start.getTime());
 
     for (let i = 0; i < days; i++) {
       const round = {
@@ -405,7 +403,7 @@ export class GameComponent extends BaseLoadingComponent implements OnInit {
         }),
 
         // save game data
-        mergeMap((data) => this.gameApi.post(game)),
+        mergeMap(() => this.gameApi.post(game)),
         map((data) => {
           console.log('game data with id created: ', data.id);
           return data;

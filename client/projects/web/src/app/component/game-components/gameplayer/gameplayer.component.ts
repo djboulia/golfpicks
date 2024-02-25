@@ -33,6 +33,7 @@ export class GameplayerComponent extends BaseLoadingComponent implements OnInit 
     this.id = this.route.snapshot.paramMap.get('id');
     console.log(`id: ${this.id}`);
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.loading();
@@ -50,8 +51,8 @@ export class GameplayerComponent extends BaseLoadingComponent implements OnInit 
         self.picks = [];
         self.nopicks = [];
 
-        for (var i = 0; i < gamers.length; i++) {
-          var gamer = gamers[i];
+        for (let i = 0; i < gamers.length; i++) {
+          const gamer = gamers[i];
 
           if (gamer.picks) {
             self.picks.push(gamer);
@@ -62,7 +63,7 @@ export class GameplayerComponent extends BaseLoadingComponent implements OnInit 
 
         // any gamers who are not yet playing in
         // this event should be in the "nopicks" list
-        for (var i = 0; i < notPlaying.length; i++) {
+        for (let i = 0; i < notPlaying.length; i++) {
           const gamer = notPlaying[i];
 
           self.nopicks.push(gamer);

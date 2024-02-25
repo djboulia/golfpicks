@@ -33,6 +33,7 @@ export class AuthService {
     return new Observable((observer) => {
       console.log(`login found ${userid} and ${password}`);
 
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
       this.gamerApi.login(userid, password).subscribe({
@@ -59,6 +60,7 @@ export class AuthService {
    * @returns
    */
   refresh(): Observable<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     return new Observable((observer) => {

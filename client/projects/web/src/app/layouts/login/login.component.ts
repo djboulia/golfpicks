@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   onLoggedin() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.auth.login(this.form.username, this.form.password).subscribe((data) => {

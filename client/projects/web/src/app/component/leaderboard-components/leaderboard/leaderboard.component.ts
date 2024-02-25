@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
+import { mergeMap, map, catchError, throwError } from 'rxjs';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../../base.loading.component';
@@ -187,7 +187,7 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
 
         catchError((err) => this.loadError('Error loading weather!', err)),
       )
-      .subscribe((data) => {});
+      .subscribe(() => {});
   }
 
   private loadNewsFeed(eventId: string) {
@@ -199,15 +199,15 @@ export class LeaderboardComponent extends BaseLoadingComponent implements OnInit
 
         catchError((err) => this.loadError('Error loading weather!', err)),
       )
-      .subscribe((data) => {});
+      .subscribe(() => {});
   }
 
   private formatNewsFeed(feedItems: any[]): string {
     // load each feed item into our ticker
     let feedString = '';
 
-    for (var i = 0; i < feedItems.length; i++) {
-      var feedItem = feedItems[i];
+    for (let i = 0; i < feedItems.length; i++) {
+      const feedItem = feedItems[i];
 
       if (feedString) {
         feedString += ' &nbsp;&nbsp~&nbsp;&nbsp; ' + feedItem;

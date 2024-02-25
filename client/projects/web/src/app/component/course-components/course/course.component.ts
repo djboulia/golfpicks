@@ -49,6 +49,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
 
     if (this.id) {
       // edit an existing user
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
       this.title = 'Update Course';
@@ -116,6 +117,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   }
 
   private deleteUser() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.loading();
@@ -153,6 +155,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   }
 
   private updateCourse(course: Course) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.loading();
@@ -180,6 +183,7 @@ export class CourseComponent extends BaseLoadingComponent implements OnInit {
   }
 
   private createCourse(course: Course) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.loading();

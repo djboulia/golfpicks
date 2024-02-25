@@ -38,6 +38,7 @@ export class EventComponent extends BaseLoadingComponent implements OnInit {
 
     if (this.id) {
       // edit an existing user
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
       // go get this user's record

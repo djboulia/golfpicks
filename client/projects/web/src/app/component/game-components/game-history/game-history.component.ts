@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
+import { mergeMap, map, catchError, throwError } from 'rxjs';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../../base.loading.component';
@@ -36,6 +36,7 @@ export class GameHistoryComponent extends BaseLoadingComponent implements OnInit
   }
 
   ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.infoMessage = null;

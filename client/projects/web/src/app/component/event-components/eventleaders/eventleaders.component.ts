@@ -32,6 +32,7 @@ export class EventLeadersComponent extends BaseLoadingComponent implements OnIni
 
     if (this.id) {
       // edit an existing user
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
       // go get this user's record
@@ -43,8 +44,6 @@ export class EventLeadersComponent extends BaseLoadingComponent implements OnIni
             self.error('Error loading scores!');
           } else {
             self.event = data;
-
-            const rounds = data.rounds;
 
             self.loaded();
           }

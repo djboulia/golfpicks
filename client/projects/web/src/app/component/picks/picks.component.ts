@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { mergeMap, map, catchError, throwError, TimeoutConfig } from 'rxjs';
+import { mergeMap, map, catchError, throwError } from 'rxjs';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../base.loading.component';
@@ -101,7 +101,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
         catchError((err) => this.loadingError('Error loading picks!', err)),
       )
-      .subscribe((data) => {
+      .subscribe(() => {
         if (!this.pageCanLoad()) {
           return;
         }
@@ -110,10 +110,10 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
         if (gamers) {
           // might have previously stored picks
-          var picks = [];
+          let picks = [];
 
-          for (var i = 0; i < gamers.length; i++) {
-            var gamer = gamers[i];
+          for (let i = 0; i < gamers.length; i++) {
+            const gamer = gamers[i];
             if (gamer.user === this.currentUser.id) {
               picks = gamer.picks;
             }
@@ -142,6 +142,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
   }
 
   private updateSelections(selections: any[], players: any[]) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     let numSelections = 0;
@@ -257,7 +258,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
 
     this.picksMessage = '';
 
-    var selections = this.getSelections(this.golfers);
+    const selections = this.getSelections(this.golfers);
 
     // enforce the game rules here
     // tell player how many more they can pick
@@ -291,7 +292,7 @@ export class PicksComponent extends BaseLoadingComponent implements OnInit {
     this.gameApi
       .savePicks(this.id, this.currentUser.id, picks)
       .pipe(catchError((err) => this.loadingError('Error saving picks!', err)))
-      .subscribe((data) => {
+      .subscribe(() => {
         this.picksMessage = 'Picks saved.';
         this.changed = false;
         this.loaded();

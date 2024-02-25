@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.errorMessage = null;
@@ -48,6 +49,7 @@ export class ProfileComponent implements OnInit {
   }
 
   onSave() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     const gamer: Gamer = {

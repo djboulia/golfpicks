@@ -61,7 +61,7 @@ export class DateHelperService {
     const dateObj = new Date(this.theDate);
 
     let hours = dateObj.getHours();
-    let minutes = dateObj.getMinutes();
+    const minutes = dateObj.getMinutes();
     const ampm = hours >= 12 ? 'pm' : 'am';
 
     hours = hours % 12;

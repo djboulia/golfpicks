@@ -39,7 +39,7 @@ export class GamerService {
     };
   }
 
-  login(username: String, password: String) {
+  login(username: string, password: string) {
     const methodUrl = this.configUrl + '/login';
 
     // login is the special case where we don't need

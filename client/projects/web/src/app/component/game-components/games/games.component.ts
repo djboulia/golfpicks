@@ -24,6 +24,7 @@ export class GamesComponent extends BaseLoadingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     this.loading();

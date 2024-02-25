@@ -64,7 +64,6 @@ export class GameService {
 
   getAll(): Observable<Game[]> {
     const methodUrl = this.configUrl;
-    const self = this;
 
     return new Observable((observer) => {
       this.httpAuth.get(methodUrl, { withCredentials: true }).subscribe({
