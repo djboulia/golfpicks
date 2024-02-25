@@ -15,7 +15,7 @@ const Game = function (model) {
   model.gamerDetails = async function (gameid) {
     console.log('getting gamer map for game ' + gameid);
 
-    const game = await model.findById(gameid).catch((e) => {
+    const game = await model.findById(gameid).catch(() => {
       const str = 'Could not find game id ' + gameid;
       console.error(str);
       throw new Error(str);
@@ -28,7 +28,7 @@ const Game = function (model) {
 
     const Gamer = app.getModel('Gamer');
 
-    const gamers = await Gamer.findAll().catch((e) => {
+    const gamers = await Gamer.findAll().catch(() => {
       const str = 'Could not find gamers';
       console.error(str);
       throw new Error(str);
@@ -72,14 +72,14 @@ const Game = function (model) {
   model.gamers = async function (id) {
     console.log('getting gamers for game ' + id);
 
-    const game = await model.findById(id).catch((e) => {
+    const game = await model.findById(id).catch(() => {
       const str = 'Could not find game id ' + id;
       console.error(str);
       throw new Error(str);
     });
 
     if (!game.gamers) {
-      var str = 'No gamers found in this game object!';
+      const str = 'No gamers found in this game object!';
 
       console.error(str);
       throw new Error(str);
@@ -93,14 +93,14 @@ const Game = function (model) {
   model.getGamerPicks = async function (id, gamerid) {
     console.log('getting picks for game ' + id + ' and gamer ' + gamerid);
 
-    const game = await model.findById(id).catch((e) => {
+    const game = await model.findById(id).catch(() => {
       const str = 'Could not find game id ' + id;
       console.error(str);
       throw new Error(str);
     });
 
     if (!game.gamers) {
-      var str = 'No picks found in this game object!';
+      const str = 'No picks found in this game object!';
 
       console.error(str);
       throw new Error(str);
@@ -129,7 +129,7 @@ const Game = function (model) {
     console.log('updateGamerPicks: getting picks for game ' + id + ' and gamer ' + gamerid);
     console.log('body contents: ' + JSON.stringify(picks));
 
-    const game = await model.findById(id).catch((e) => {
+    const game = await model.findById(id).catch(() => {
       const str = 'Could not find game id ' + id;
       console.error(str);
       throw new Error(str);
@@ -296,13 +296,13 @@ const Game = function (model) {
       // scores can include non numeric values, like "MC" for missed cut
       // so check the validity of the score before trying to use it
       if (todayIndex == j) {
-        var net = eventUtils.parseNetScore(todayScore);
+        const net = eventUtils.parseNetScore(todayScore);
 
         roundtotal += net;
 
         roundtotals[j] = roundtotal;
       } else if (eventUtils.isValidScore(rounds[j])) {
-        var net = parseInt(rounds[j]) - par[j];
+        const net = parseInt(rounds[j]) - par[j];
 
         roundtotal += net;
 
@@ -522,8 +522,6 @@ const Game = function (model) {
   // the round leader
   //
   var addRoundLeaders = function (gamers) {
-    var str = '';
-
     if (gamers.length > 0) {
       var roundmax = roundMax(gamers);
 
@@ -565,7 +563,7 @@ const Game = function (model) {
    * @returns
    */
   model.leaderboard = async function (id) {
-    const game = await model.findById(id).catch((e) => {
+    const game = await model.findById(id).catch(() => {
       var str = 'Could not find game id ' + id;
       console.error(str);
       throw new Error(str);
@@ -575,7 +573,7 @@ const Game = function (model) {
     console.log(`found event ${eventid}for game ${id}`);
 
     const Event = app.getModel('Event');
-    const event = await Event.deepGet(eventid).catch((e) => {
+    const event = await Event.deepGet(eventid).catch(() => {
       var str = 'Could not find event id ' + id;
       console.error(str);
       throw new Error(str);
@@ -614,7 +612,7 @@ const Game = function (model) {
       // now go load the user info for each of the gamers
       const Gamer = app.getModel('Gamer');
 
-      const users = await Gamer.findByIds(gamer_ids).catch((e) => {
+      const users = await Gamer.findByIds(gamer_ids).catch(() => {
         var str = 'Could not find gamer ids ' + JSON.stringify(gamer_ids);
         console.error(str);
         throw new Error(str);
@@ -652,7 +650,7 @@ const Game = function (model) {
    */
   model.gameDay = async function (id) {
     console.log();
-    const game = await model.findById(id).catch((e) => {
+    const game = await model.findById(id).catch(() => {
       var str = 'Could not find game id ' + id;
       console.error(str);
       throw new Error(str);

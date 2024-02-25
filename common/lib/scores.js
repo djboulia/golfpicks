@@ -1,6 +1,16 @@
 var TourData = require('./pgascores/tourdata.js');
 var NameUtils = require('./pgascores/nameutils.js');
 
+const hasNickname = function (name, nicknames) {
+  for (let i = 0; i < nicknames.length; i++) {
+    if (nicknames[i] == name) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 //
 // pick up common abbreviations for first names
 // e.g. Alex is an abbreviation of Alexander
@@ -22,17 +32,9 @@ var sameFirstName = function (firstName1, firstName2) {
     var nicknames = names[key];
 
     if (key == firstName1) {
-      for (var i = 0; i < nicknames.length; i++) {
-        if (nicknames[i] == firstName2) {
-          return true;
-        }
-      }
+      if  (hasNickname(firstName2, nicknames)) return true;
     } else if (key == firstName2) {
-      for (var i = 0; i < nicknames.length; i++) {
-        if (nicknames[i] == firstName1) {
-          return true;
-        }
-      }
+      if (hasNickname(firstName1, nicknames)) return true;
     }
   }
 
@@ -49,8 +51,8 @@ var sameFirstName = function (firstName1, firstName2) {
 //
 // to improve matching chances, we normalize case and remove punctuation
 var fuzzyMatch = function (name1, name2) {
-  name1 = name1.toLowerCase().replace(/[,\.\']/g, ''); // remove any punctuation
-  name2 = name2.toLowerCase().replace(/[,\.\']/g, ''); // remove any punctuation
+  name1 = name1.toLowerCase().replace(/[,.']/g, ''); // remove any punctuation
+  name2 = name2.toLowerCase().replace(/[,.']/g, ''); // remove any punctuation
 
   // convert whitespace into matchable space characters
   name1 = name1.replace(/\s/g, ' ');

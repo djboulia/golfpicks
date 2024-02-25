@@ -53,7 +53,7 @@ function dumpClasses(classes) {
     iterations.push(p);
   }
 
-  return Promise.all(iterations).then(function (output) {
+  return Promise.all(iterations).then(function () {
     return finalOutput;
   });
 }

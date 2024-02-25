@@ -49,15 +49,13 @@ const EventUtils = function () {
       statusData.push(ROUND_NOT_STARTED);
     }
 
-    var self = this;
-
-    golfers.forEach(function (golfer) {
+    for (const golfers of golfers) {
       for (i = 0; i < numberOfRounds; i++) {
         var round = i + 1;
 
         round = round.toString();
 
-        if (self.isValidScore(golfer[round])) {
+        if (this.isValidScore(golfer[round])) {
           // console.debug("found valid score for round " + round + ", golfer " +
           //     JSON.stringify(golfer));
           statusData[i] = ROUND_STARTED;
@@ -66,7 +64,7 @@ const EventUtils = function () {
           var thru = golfer['thru'];
           // console.debug("golfer " + golfer['name'] + " thru: " + thru);
 
-          if (self.isNumber(thru) && thru < 18) {
+          if (this.isNumber(thru) && thru < 18) {
             // console.debug("found in progress score for round " + round + ", golfer " +
             //     JSON.stringify(golfer) + " thru " + thru);
             statusData[i] = ROUND_STARTED;
@@ -76,7 +74,7 @@ const EventUtils = function () {
           break;
         }
       }
-    });
+    }
 
     return statusData;
   };
@@ -333,21 +331,18 @@ const EventUtils = function () {
     var ROUND_NOT_STARTED = 0;
 
     var statusData = [];
-    var i;
 
-    for (i = 0; i < numberOfRounds; i++) {
+    for (let i = 0; i < numberOfRounds; i++) {
       statusData.push(ROUND_NOT_STARTED);
     }
 
-    var self = this;
-
-    golfers.forEach(function (golfer) {
-      for (i = 0; i < numberOfRounds; i++) {
+    for (const golfer of golfers) {
+      for (let i = 0; i < numberOfRounds; i++) {
         var round = i + 1;
 
         round = round.toString();
 
-        if (self.isValidScore(golfer[round])) {
+        if (this.isValidScore(golfer[round])) {
           // console.debug("found valid score for round " + round + ", golfer " +
           //     JSON.stringify(golfer));
           statusData[i] = ROUND_STARTED;
@@ -356,7 +351,7 @@ const EventUtils = function () {
           var thru = golfer['thru'];
           // console.debug("golfer " + golfer['name'] + " thru: " + thru);
 
-          if (self.isNumber(thru) && thru < 18) {
+          if (this.isNumber(thru) && thru < 18) {
             // console.debug("found in progress score for round " + round + ", golfer " +
             //     JSON.stringify(golfer) + " thru " + thru);
             statusData[i] = ROUND_STARTED;
@@ -366,7 +361,7 @@ const EventUtils = function () {
           break;
         }
       }
-    });
+    }
 
     return statusData;
   };
@@ -425,13 +420,13 @@ const EventUtils = function () {
 
     if (currentRound >= 0) {
       for (i = 0; i < golfers.length; i++) {
-        var golfer = golfers[i];
+        const golfer = golfers[i];
 
         // sum up the scoring thus far
         golfer.total = 0;
 
         for (j = 0; j <= currentRound; j++) {
-          var roundNumber = new String(j + 1);
+          const roundNumber = new String(j + 1);
 
           golfer.total += parseInt(golfer[roundNumber]);
         }

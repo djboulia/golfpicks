@@ -70,7 +70,7 @@ const ApiServer = function (clientDir) {
       const session = context.session;
 
       console.log('auth function called :');
-      const result = await gamer.currentUser(session).catch((err) => {
+      const result = await gamer.currentUser(session).catch(() => {
         console.log('auth failed!');
         return null; // null means currentUser failed
       });

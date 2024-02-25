@@ -135,7 +135,7 @@ const Gamer = function (model) {
    *
    * @param {Object} context
    */
-  const noAuth = async function (context) {
+  const noAuth = async function () {
     return true;
   };
 

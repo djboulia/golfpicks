@@ -17,7 +17,7 @@ const Event = function (model) {
 
     const Course = app.getModel('Course');
 
-    const event = await model.findById(id).catch((e) => {
+    const event = await model.findById(id).catch(() => {
       var str = 'Could not find event id ' + id;
       console.error(str);
       throw new Error(str);
@@ -46,7 +46,7 @@ const Event = function (model) {
     });
 
     // call the scoring service
-    const result = await scores.get(event).catch((e) => {
+    const result = await scores.get(event).catch(() => {
       console.error('Error!' + JSON.stringify(err));
       throw new Error(err);
     });
@@ -59,7 +59,7 @@ const Event = function (model) {
 
     const Course = app.getModel('Course');
 
-    const event = await model.findById(id).catch((e) => {
+    const event = await model.findById(id).catch(() => {
       var str = 'Could not find event id ' + id;
       console.error(str);
       throw new Error(str);
@@ -82,7 +82,7 @@ const Event = function (model) {
     console.log('finding course ' + courseid);
 
     // find the course information
-    const result = await Course.weather(courseid).catch((e) => {
+    const result = await Course.weather(courseid).catch(() => {
       const str = 'No location info for course ' + courseid;
       console.error(str);
       throw new Error(str);
@@ -108,14 +108,14 @@ const Event = function (model) {
       var players = JSON.parse(JSON.stringify(event.players));
       var ids = [];
 
-      for (var i = 0; i < players.length; i++) {
-        var player = players[i];
+      for (let i = 0; i < players.length; i++) {
+        const player = players[i];
         ids.push(player.user);
       }
 
       const Gamer = app.getModel('Gamer');
 
-      const objs = await Gamer.findByIds(ids).catch((e) => {
+      const objs = await Gamer.findByIds(ids).catch(() => {
         const str = "Couldn't get player list " + JSON.stringify(ids);
         console.error(str);
         throw new Error(str);
@@ -124,16 +124,16 @@ const Event = function (model) {
       // fluff up the players object with player data
       var playermap = {};
 
-      for (var i = 0; i < objs.length; i++) {
-        var obj = objs[i];
+      for (let i = 0; i < objs.length; i++) {
+        const obj = objs[i];
         playermap[obj.id] = obj;
       }
 
       var validplayers = [];
 
-      for (var i = 0; i < players.length; i++) {
-        var player = players[i];
-        var playerdetails = playermap[player.user];
+      for (let i = 0; i < players.length; i++) {
+        const player = players[i];
+        const playerdetails = playermap[player.user];
 
         if (playerdetails) {
           player.user = playerdetails;
@@ -160,7 +160,7 @@ const Event = function (model) {
 
     const Course = app.getModel('Course');
 
-    const objs = await Course.findByIds(ids).catch((e) => {
+    const objs = await Course.findByIds(ids).catch(() => {
       const str = "Couldn't get course list " + JSON.stringify(ids);
       console.error(str);
       throw new Error(str);
@@ -223,7 +223,7 @@ const Event = function (model) {
     const sortByRanking = playerSort && playerSort.toLowerCase() === 'ranking' ? true : false;
     console.log('sortByRanking = ', sortByRanking);
 
-    const event = await model.findById(id).catch((e) => {
+    const event = await model.findById(id).catch(() => {
       var str = 'Could not find event id ' + id;
       console.error(str);
       throw new Error(str);
@@ -260,7 +260,7 @@ const Event = function (model) {
 
     if (event.scoreType == 'pga-live-scoring') {
       // go get the golfer scores from the remote service
-      const tournament = await model.scores(id).catch((e) => {
+      const tournament = await model.scores(id).catch(() => {
         var str = 'Could not get scores for event id ' + id;
         console.error(str);
         throw new Error(str);
@@ -299,7 +299,7 @@ const Event = function (model) {
    * @returns
    */
   model.newsfeed = async function (id) {
-    const event = await model.deepGet(id).catch((e) => {
+    const event = await model.deepGet(id).catch(() => {
       var str = 'Could not find event id ' + id;
       console.error(str);
       throw new Error(str);
@@ -328,29 +328,29 @@ const Event = function (model) {
         //                                    var score = golfers[0].strokes;
         //                                    var netScore = score - totalPar;
 
-        var leaders = eventUtils.tournamentLeaders(golfers);
-        var text = leaders.length > 1 ? 'Tournament leaders' : 'Tournament leader';
+        const leaders = eventUtils.tournamentLeaders(golfers);
+        const text = leaders.length > 1 ? 'Tournament leaders' : 'Tournament leader';
 
         feedItems.push(text);
 
-        for (var i = 0; i < leaders.length; i++) {
-          var leader = leaders[i];
+        for (let i = 0; i < leaders.length; i++) {
+          const leader = leaders[i];
 
           feedItems.push(leader.name + ' ' + leader.total);
         }
 
-        var roundLeaders = eventUtils.roundLeaders(golfers, courseInfo);
+        const roundLeaders = eventUtils.roundLeaders(golfers, courseInfo);
         console.log('roundLeaders: ' + JSON.stringify(roundLeaders));
 
         if (roundLeaders[currentRound - 1].length > 0) {
-          var leaders = roundLeaders[currentRound - 1];
+          const leaders = roundLeaders[currentRound - 1];
 
-          var text = 'Day ' + currentRound + ' low scores';
+          const text = 'Day ' + currentRound + ' low scores';
 
           feedItems.push(text);
 
-          for (var i = 0; i < leaders.length; i++) {
-            var leader = leaders[i];
+          for (let i = 0; i < leaders.length; i++) {
+            const leader = leaders[i];
 
             feedItems.push(leader.name + ' ' + leader.score);
           }
@@ -408,7 +408,7 @@ const Event = function (model) {
    * @returns
    */
   model.leaders = async function (id) {
-    const event = await model.deepGet(id).catch((e) => {
+    const event = await model.deepGet(id).catch(() => {
       var str = 'Could not find event id ' + id;
       console.error(str);
       throw new Error(str);
@@ -431,9 +431,9 @@ const Event = function (model) {
     console.log('roundStatus = ' + JSON.stringify(roundStatus, null, 2));
 
     // find last played round, walking backwards
-    var currentRound = -1;
+    let currentRound = -1;
 
-    for (var i = roundStatus.length - 1; i >= 0; i--) {
+    for (let i = roundStatus.length - 1; i >= 0; i--) {
       if (roundStatus[i]) {
         currentRound = i;
         break;
@@ -445,10 +445,10 @@ const Event = function (model) {
 
     if (currentRound >= 0) {
       // store low score for each round of the tournament
-      var leaders = eventUtils.roundLeaders(golfers, courseInfo);
+      const leaders = eventUtils.roundLeaders(golfers, courseInfo);
 
-      for (var i = 0; i <= currentRound; i++) {
-        var roundNumber = new String(i + 1);
+      for (let i = 0; i <= currentRound; i++) {
+        const roundNumber = new String(i + 1);
 
         if (i == currentRound) {
           lowRounds[roundNumber] = leaders[i][0] ? leaders[i][0].score : '-';
@@ -456,8 +456,8 @@ const Event = function (model) {
           // loop through the current day scores and convert to net par
           // this makes in progress rounds format more nicely
 
-          for (var g = 0; g < golfers.length; g++) {
-            var golfer = golfers[g];
+          for (let g = 0; g < golfers.length; g++) {
+            const golfer = golfers[g];
 
             if (golfer['today'] != '-') {
               golfer[roundNumber] = golfer['today'];
@@ -485,8 +485,6 @@ const Event = function (model) {
 
       //                            console.log("golfers after = " + JSON.stringify(golfers, null, 2));
 
-      var roundNumber = new String(currentRound + 1);
-
       // TODO: fix for non PGA case
       // modify totals to be relative to par
       var isPGA = true;
@@ -506,11 +504,11 @@ const Event = function (model) {
 
         var totalPar = 0;
 
-        for (var i = 0; i <= currentRound; i++) {
+        for (let i = 0; i <= currentRound; i++) {
           totalPar += courseInfo[i].par;
         }
 
-        for (var i = 0; i < golfers.length; i++) {
+        for (let i = 0; i < golfers.length; i++) {
           var golfer = golfers[i];
 
           golfer.total = eventUtils.formatNetScore(golfer.total - totalPar);

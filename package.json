@@ -9,8 +9,12 @@
     "pretest": "jshint .",
     "posttest": "nsp check",
     "format": "prettier --log-level warn --write .",
-    "lint": "npm run lint-js",
-    "lint-js": "eslint './**/*.js'"
+    "lint": "npm run lint-client && npm run lint-backups && npm run lint-common && npm run lint-models && npm run lint-server",
+    "lint-client": "eslint 'client/projects/web/src/**/*.ts'",
+    "lint-backups": "eslint 'backups/**/*.js'",
+    "lint-common": "eslint 'common/**/*.js'",
+    "lint-models": "eslint 'models/**/*.js'",
+    "lint-server": "eslint 'server/**/*.js'"
   },
   "dependencies": {
     "@apiserver/db-dynamo": "file:~/Development/bluemix/apiserver/db-dynamo",
