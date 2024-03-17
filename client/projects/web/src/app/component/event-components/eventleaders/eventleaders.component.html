@@ -52,7 +52,11 @@
                         'golf-round-leader': event.lowRounds[roundNumber] === golfer[roundNumber]
                       }"
                     >
-                      {{ golfer[roundNumber] }}
+                      {{
+                        golfer[roundNumber] && golfer[roundNumber].length > 0
+                          ? golfer[roundNumber]
+                          : '-'
+                      }}
                     </div>
                   </div>
                 </ng-container>

@@ -31,7 +31,6 @@ export class EventLeadersComponent extends BaseLoadingComponent implements OnIni
     this.loading();
 
     if (this.id) {
-      // edit an existing user
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
