@@ -7,6 +7,7 @@
 const EventUtils = require('../common/lib/eventutils.js');
 const app = require('@apiserver/modelserver');
 const GameUtils = require('../common/lib/gameutils.js');
+const compareScores = require('../common/lib/comparescores.js');
 
 const Game = function (model) {
   const eventUtils = new EventUtils();
@@ -636,6 +637,34 @@ const Game = function (model) {
 
       gamers = getScores(courseInfo, roundStatus, validgamers, event.scoreType);
       gamers = addRoundLeaders(gamers);
+
+      // sort the leaders by lowest score in current round
+      // if there are ties, sort by previous rounds
+      console.log('sorting gamers');
+      const currentRound = leaderboard?.roundInfo?.currentRound;
+      gamers?.sort((a, b) => {
+        for (let i = currentRound; i >= 0; i--) {
+          const result = compareScores(
+            a.rounds[currentRound - 1]?.score,
+            b.rounds[currentRound - 1]?.score,
+          );
+          if (result !== 0) return result;
+        }
+        return 0;
+      });
+
+      // sort each gamer's picks by lowest score in current round
+      for (const gamer of gamers) {
+        gamer.picks?.sort((a, b) => {
+          for (let i = currentRound; i >= 0; i--) {
+            const result = compareScores(a.rounds[i], b.rounds[i]);
+
+            if (result !== 0) return result;
+            // continue on looking at prior rounds if first round is a tie
+          }
+          return 0;
+        });
+      }
 
       leaderboard.gamers = gamers;
     }
