@@ -640,14 +640,11 @@ const Game = function (model) {
 
       // sort the leaders by lowest score in current round
       // if there are ties, sort by previous rounds
-      console.log('sorting gamers');
       const currentRound = leaderboard?.roundInfo?.currentRound;
+      console.log('sorting gamers for round ', currentRound);
       gamers?.sort((a, b) => {
         for (let i = currentRound; i >= 0; i--) {
-          const result = compareScores(
-            a.rounds[currentRound - 1]?.score,
-            b.rounds[currentRound - 1]?.score,
-          );
+          const result = compareScores(a.rounds[i]?.score, b.rounds[i]?.score);
           if (result !== 0) return result;
         }
         return 0;
