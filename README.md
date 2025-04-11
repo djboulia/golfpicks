@@ -8,7 +8,8 @@ npm start
 ```
 
 To run the server in development mode:
-```
+
+``` bash
 npm run dev
 ```
 
@@ -16,7 +17,8 @@ Note that the .env file will be pulled for production, .env.dev when running in 
 
 To run the client in development mode:
 To run the server in production mode:
-```
+
+``` bash
 cd client
 npm start
 ```

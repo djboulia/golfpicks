@@ -16,7 +16,7 @@
         <div fxLayout="column">
           <div class="header">Pos</div>
           <ng-container *ngFor="let golfer of event.golfers; let i = index">
-            <div class="pos">{{ i + 1 }}</div>
+            <div class="pos">{{ golfer.pos }}</div>
           </ng-container>
         </div>
 
@@ -35,11 +35,53 @@
               <div class="header">Total</div>
               <ng-container *ngFor="let golfer of event.golfers; let i = index">
                 <div fxLayout="column">
-                  <div class="scores">{{ golfer.total }}</div>
+                  <div
+                    class="scores"
+                    [ngClass]="{
+                      'golf-round-under-par': golfer.total < 0
+                    }"
+                  >
+                    {{ golfer.total }}
+                  </div>
                 </div>
               </ng-container>
             </div>
+          </div>
+        </div>
 
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <div fxLayout="column">
+              <div class="header">Thru</div>
+              <ng-container *ngFor="let golfer of event.golfers; let i = index">
+                <div fxLayout="column">
+                  <div class="scores">{{ golfer.thru }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <div fxLayout="column">
+              <div class="header">Today</div>
+              <ng-container *ngFor="let golfer of event.golfers; let i = index">
+                <div fxLayout="column">
+                  <div
+                    class="scores"
+                    [ngClass]="{
+                      'golf-round-under-par': golfer.today < 0
+                    }"
+                  >
+                    {{ golfer.today }}
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div fxLayout="column">
+              <div class="header-spacer">&nbsp;</div>
+            </div>
             <ng-container *ngFor="let roundNumber of event.roundNumbers">
               <div fxLayout="column">
                 <div class="header">R{{ roundNumber }}</div>
