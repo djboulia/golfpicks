@@ -3,19 +3,17 @@
     <b>Picks for {{ gamer.name }}</b>
   </div>
 
+  <!-- Top 5 players -->
   <div fxLayout="row">
     <!-- player name column -->
     <div fxLayout="column">
       <div class="sub-header name">Name</div>
 
-      <ng-container *ngFor="let pick of gamer.picks">
+      <ng-container *ngFor="let pick of top5">
         <div class="playerlist-name">
           {{ pick.name }}
         </div>
       </ng-container>
-
-      <div class="totals title">Total</div>
-      <div class="top5 title">Top Five</div>
     </div>
 
     <!-- player score columns -->
@@ -24,17 +22,51 @@
         <div class="sub-header">
           <b>{{ title }}</b>
         </div>
-        <ng-container *ngFor="let pick of gamer.picks">
+        <ng-container *ngFor="let pick of top5">
           <div class="playerlist-score">
             {{ pick.rounds[i] }}
           </div>
         </ng-container>
-        <div class="totals">
-          {{ gamer.totals[i] }}
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Top 5 cut line and score -->
+  <div fxLayout="row">
+    <!-- player name column -->
+    <div fxLayout="column">
+      <div class="top5 title">Top Five</div>
+    </div>
+
+    <!-- player score columns -->
+    <ng-container *ngFor="let title of roundTitles; let i = index">
+      <div fxLayout="column">
+        <div class="top5 score">
+          {{ scores[i] ? scores[i] : '&nbsp;' }}
         </div>
-        <div class="top5">
-          {{ gamer.scores[i] }}
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Bottom 5 players -->
+  <div fxLayout="row">
+    <!-- player name column -->
+    <div fxLayout="column">
+      <ng-container *ngFor="let pick of bottom5">
+        <div class="bottom5 playerlist-name">
+          {{ pick.name }}
         </div>
+      </ng-container>
+    </div>
+
+    <!-- player score columns -->
+    <ng-container *ngFor="let title of roundTitles; let i = index">
+      <div fxLayout="column">
+        <ng-container *ngFor="let pick of bottom5">
+          <div class="bottom5 playerlist-score">
+            {{ pick.rounds[i] }}
+          </div>
+        </ng-container>
       </div>
     </ng-container>
   </div>

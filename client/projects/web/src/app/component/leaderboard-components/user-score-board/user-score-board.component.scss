@@ -21,6 +21,10 @@
   }
 }
 
+.bottom5 {
+  background-color: #dff0d8;
+}
+
 .playerlist-name {
   width: 163px;
   padding: 7px 7px;
@@ -54,14 +58,21 @@
 }
 
 .top5 {
+  width: 40px;
   padding: 7px 0;
-  color: #fff;
+  color: #2f5927;
   font-weight: bold;
-  background-color: #1e90ff;
+  background-color: #fff;
   border-top: 1px solid #777;
   border-left: 1px solid #777;
+  border-bottom: 1px solid #777;
+
+  &.score {
+    border-left: none;
+  }
 
   &.title {
+    width: 163px;
     border-left: none;
   }
 }
