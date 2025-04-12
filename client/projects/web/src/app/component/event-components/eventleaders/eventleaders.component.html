@@ -55,7 +55,7 @@
               <div class="header">Thru</div>
               <ng-container *ngFor="let golfer of event.golfers; let i = index">
                 <div fxLayout="column">
-                  <div class="scores">{{ golfer.thru }}</div>
+                  <div class="scores">{{ golfer.thru ? golfer.thru : '-' }}</div>
                 </div>
               </ng-container>
             </div>
@@ -74,7 +74,7 @@
                       'golf-round-under-par': golfer.today < 0
                     }"
                   >
-                    {{ golfer.today }}
+                    {{ golfer.today ? golfer.today : '-' }}
                   </div>
                 </div>
               </ng-container>
