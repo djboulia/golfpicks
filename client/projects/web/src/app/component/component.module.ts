@@ -25,6 +25,7 @@ import { ScoreBoardComponent } from './leaderboard-components/score-board/score-
 import { UserScoreBoardComponent } from './leaderboard-components/user-score-board/user-score-board.component';
 import { WeatherComponent } from './shared/weather/weather.component';
 import { CourseOverviewComponent } from './leaderboard-components/course-overview/course-overview.component';
+import { EventLeaderDetailComponent } from './event-components/eventleader-detail/eventleader-detail.component';
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { CourseOverviewComponent } from './leaderboard-components/course-overvie
     EventsComponent,
     EventComponent,
     EventLeadersComponent,
+    EventLeaderDetailComponent,
     GameComponent,
     GamesComponent,
     GameplayerComponent,

@@ -22,7 +22,7 @@ var TourData = function (year) {
   };
 
   var getEventUrl = function (year, id) {
-    var url = getBaseUrl() + '/tournaments/' + year + '/tour/pga/event/' + id + '?details=false';
+    var url = getBaseUrl() + '/tournaments/' + year + '/tour/pga/event/' + id + '?details=true';
     return url;
   };
 
@@ -52,7 +52,7 @@ var TourData = function (year) {
 
   this.getEvent = function (id) {
     var url = getEventUrl(year, id);
-    console.log('url : ' + url);
+    console.log('event url : ' + url);
 
     var request = new JsonRequest(url);
 

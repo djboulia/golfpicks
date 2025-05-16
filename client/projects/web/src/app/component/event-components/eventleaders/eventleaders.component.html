@@ -1,4 +1,4 @@
-<div class="card">
+<div style="overflow-x: auto" class="card">
   <div class="card-body">
     <ngb-alert
       *ngIf="errorMessage"
@@ -10,107 +10,87 @@
     </ngb-alert>
 
     <ng-container *ngIf="isLoaded">
-      <h4 class="card-title">{{ event.name }}</h4>
+      <div fxFlex fxLayout="column">
+        <h4 class="card-title">{{ event.name }}</h4>
 
-      <div fxLayout="row" class="score-columns">
-        <div fxLayout="column">
-          <div class="header">Pos</div>
-          <ng-container *ngFor="let golfer of event.golfers; let i = index">
-            <div class="pos">{{ golfer.pos }}</div>
+        <div fxLayout="row" class="score-columns">
+          <div style="width: 60px" class="header">Pos</div>
+
+          <div style="width: 200px" class="header">Name</div>
+
+          <div style="width: 75px; text-align: right" class="header">Total</div>
+
+          <div style="width: 75px; text-align: right" class="header">Thru</div>
+
+          <div style="width: 75px; text-align: right" class="header">Today</div>
+
+          <div style="width: 20px" class="header-spacer">&nbsp;</div>
+          <ng-container *ngFor="let roundNumber of event.roundNumbers">
+            <div style="width: 50px" class="header">R{{ roundNumber }}</div>
           </ng-container>
         </div>
 
-        <div fxLayout="column">
-          <div class="header">Name</div>
-          <ng-container *ngFor="let golfer of event.golfers; let i = index">
-            <div fxLayout="column">
-              <div class="names">{{ golfer.name }}</div>
-            </div>
-          </ng-container>
-        </div>
+        <ng-container *ngFor="let golfer of event.golfers; let i = index">
+          <div fxLayout="row" class="score-columns">
+            <a [attr.id]="golfer.player_id"
+              ><div style="width: 60px" class="pos">{{ golfer.pos }}</div></a
+            >
 
-        <div fxLayout="column">
-          <div fxLayout="row">
-            <div fxLayout="column">
-              <div class="header">Total</div>
-              <ng-container *ngFor="let golfer of event.golfers; let i = index">
-                <div fxLayout="column">
-                  <div
-                    class="scores"
-                    [ngClass]="{
-                      'golf-round-under-par': golfer.total < 0
-                    }"
-                  >
-                    {{ golfer.total }}
-                  </div>
-                </div>
-              </ng-container>
-            </div>
-          </div>
-        </div>
+            <a [attr.href]="leadersUrl + '/id/' + id + '?playerDetail=' + golfer.player_id">
+              <div style="width: 200px" class="names">{{ golfer.name }}</div></a
+            >
 
-        <div fxLayout="column">
-          <div fxLayout="row">
-            <div fxLayout="column">
-              <div class="header">Thru</div>
-              <ng-container *ngFor="let golfer of event.golfers; let i = index">
-                <div fxLayout="column">
-                  <div class="scores">{{ golfer.thru ? golfer.thru : '-' }}</div>
-                </div>
-              </ng-container>
+            <div
+              style="width: 75px"
+              class="scores"
+              [ngClass]="{
+                'golf-round-under-par': golfer.total < 0
+              }"
+            >
+              {{ golfer.total }}
             </div>
-          </div>
-        </div>
 
-        <div fxLayout="column">
-          <div fxLayout="row">
-            <div fxLayout="column">
-              <div class="header">Today</div>
-              <ng-container *ngFor="let golfer of event.golfers; let i = index">
-                <div fxLayout="column">
-                  <div
-                    class="scores"
-                    [ngClass]="{
-                      'golf-round-under-par': golfer.today < 0
-                    }"
-                  >
-                    {{ golfer.today ? golfer.today : '-' }}
-                  </div>
-                </div>
-              </ng-container>
+            <div style="width: 75px" class="scores">{{ golfer.thru ? golfer.thru : '-' }}</div>
+
+            <div
+              style="width: 75px"
+              class="scores"
+              [ngClass]="{
+                'golf-round-under-par': golfer.today < 0
+              }"
+            >
+              {{ golfer.today ? golfer.today : '-' }}
             </div>
-            <div fxLayout="column">
-              <div class="header-spacer">&nbsp;</div>
-            </div>
+
+            <div style="width: 20px" class="spacer">&nbsp;</div>
+
             <ng-container *ngFor="let roundNumber of event.roundNumbers">
-              <div fxLayout="column">
-                <div class="header">R{{ roundNumber }}</div>
-
-                <ng-container *ngFor="let golfer of event.golfers; let i = index">
-                  <div fxLayout="column">
-                    <div
-                      class="scores"
-                      [ngClass]="{
-                        'golf-round-leader': event.lowRounds[roundNumber] === golfer[roundNumber]
-                      }"
-                    >
-                      {{
-                        golfer[roundNumber] && golfer[roundNumber].length > 0
-                          ? golfer[roundNumber]
-                          : '-'
-                      }}
-                    </div>
-                  </div>
-                </ng-container>
+              <div style="width: 50px">
+                <div
+                  class="scores"
+                  [ngClass]="{
+                    'golf-round-leader': event.lowRounds[roundNumber] === golfer[roundNumber]
+                  }"
+                >
+                  {{
+                    golfer[roundNumber] && golfer[roundNumber].length > 0
+                      ? golfer[roundNumber]
+                      : '-'
+                  }}
+                </div>
               </div>
             </ng-container>
           </div>
-        </div>
-      </div>
+          <ng-container *ngIf="playerDetail === golfer.player_id">
+            <app-eventleader-detail [golfer]="golfer" [eventUrl]="leadersUrl + '/id/' + id">
+            </app-eventleader-detail>
+          </ng-container>
+        </ng-container>
 
-      <div style="text-align: center">
-        Tournament
-        <a [attr.href]="eventUrl + '/id/' + id">overview</a>
+        <div style="text-align: center">
+          Tournament
+          <a [attr.href]="eventUrl + '/id/' + id">overview</a>
+        </div>
       </div>
     </ng-container>
   </div>
