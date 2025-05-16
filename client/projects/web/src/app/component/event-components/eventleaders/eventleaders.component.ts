@@ -75,4 +75,14 @@ export class EventLeadersComponent extends BaseLoadingComponent implements OnIni
       }
     });
   }
+
+  onPlayerClick(playerId: string) {
+    // toggle the player detail; if it's open, close it, otherwise open it
+    if (this.playerDetail === playerId) {
+      this.playerDetail = null;
+      return;
+    }
+
+    this.playerDetail = playerId;
+  }
 }
