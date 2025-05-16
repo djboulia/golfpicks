@@ -58,11 +58,11 @@ export class EventLeaderDetailComponent implements OnInit {
     });
 
     // first round in array is latest (current) round
-    console.log('rounds: ', rounds);
+    // console.log('rounds: ', rounds);
     this.roundNumber = parseInt(rounds[0], 10);
     const currentRound = roundDetails[rounds[0]];
 
-    console.log('currentRound: ', currentRound);
+    // console.log('currentRound: ', currentRound);
     if (currentRound) {
       const roundValues = currentRound.round_values;
       const roundParValues = currentRound.par_values;
@@ -88,7 +88,7 @@ export class EventLeaderDetailComponent implements OnInit {
         back9Par: getParTotal(roundParValues.slice(9, 18)),
       };
 
-      console.log('scores: ', this.scores);
+      // console.log('scores: ', this.scores);
     }
   }
 }
