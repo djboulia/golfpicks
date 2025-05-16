@@ -10,9 +10,11 @@
       <div class="sub-header name">Name</div>
 
       <ng-container *ngFor="let pick of top5">
-        <div class="playerlist-name">
-          {{ pick.name }}
-        </div>
+        <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+          <div class="playerlist-name">
+            {{ pick.name }}
+          </div>
+        </a>
       </ng-container>
     </div>
 
@@ -53,9 +55,11 @@
     <!-- player name column -->
     <div fxLayout="column">
       <ng-container *ngFor="let pick of bottom5">
-        <div class="bottom5 playerlist-name">
-          {{ pick.name }}
-        </div>
+        <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+          <div class="bottom5 playerlist-name">
+            {{ pick.name }}
+          </div>
+        </a>
       </ng-container>
     </div>
 

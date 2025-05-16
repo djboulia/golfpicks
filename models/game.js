@@ -424,6 +424,7 @@ const Game = function (model) {
       for (let i = 0; i < picks.length; i++) {
         var pickDetail = {};
 
+        pickDetail.player_id = picks[i].player_id;
         pickDetail.name = picks[i].name;
         pickDetail.rounds = [];
 

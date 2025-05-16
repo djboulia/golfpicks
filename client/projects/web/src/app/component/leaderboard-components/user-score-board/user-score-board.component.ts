@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class UserScoreBoardComponent implements OnInit {
   @Input() gamer: any;
   @Input() roundTitles: string[] = [];
+  @Input() eventLeaderUrl: string = '';
 
   top5: any = [];
   bottom5: any = [];
