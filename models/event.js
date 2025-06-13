@@ -514,7 +514,7 @@ const Event = function (model) {
           golfer.total = eventUtils.formatNetScore(golfer.total - totalPar);
         }
       } else {
-        console.debug('Golfers: ' + JSON.stringify(golfers));
+        // console.debug('Golfers: ' + JSON.stringify(golfers));
 
         // sort by position
         golfers.sort(function (a, b) {
