@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <ngb-alert
+          *ngIf="errorMessage"
+          type="danger"
+          [dismissible]="false"
+          class="customize-alert fs-5"
+          style="text-align: center"
+        >
+          {{ errorMessage }}
+        </ngb-alert>
+
+        <div *ngIf="isLoaded">
+          <h4 class="card-title">{{ game.name }}</h4>
+
+          <br />
+
+          <h4>
+            <div>Details</div>
+          </h4>
+          <div class="scores" id="tablesection" style="text-align: center">
+            <div class="user-score-board">
+              <app-user-score-board
+                [gamer]="gamer"
+                [roundTitles]="roundTitles"
+                [eventLeaderUrl]="eventLeaderUrl + '/id/' + game.event"
+                [showDetails]="true"
+              ></app-user-score-board>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

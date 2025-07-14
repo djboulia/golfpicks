@@ -1,77 +1,124 @@
-<div class="playerlist">
+<div *ngIf="!showDetails">
+  <div class="playerlist">
+    <div class="header">
+      <b>Picks for {{ gamer.name }}</b>
+    </div>
+
+    <!-- Top 5 players -->
+    <div fxLayout="row">
+      <!-- player name column -->
+      <div fxLayout="column">
+        <div class="sub-header name">Name</div>
+
+        <ng-container *ngFor="let pick of top5">
+          <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+            <div class="playerlist-name">
+              {{ pick.name }}
+            </div>
+          </a>
+        </ng-container>
+      </div>
+
+      <!-- player score columns -->
+      <ng-container *ngFor="let title of roundTitles; let i = index">
+        <div fxLayout="column">
+          <div class="sub-header">
+            <b>{{ title }}</b>
+          </div>
+          <ng-container *ngFor="let pick of top5">
+            <div class="playerlist-score">
+              {{ pick.rounds[i] }}
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Top 5 cut line and score -->
+    <div fxLayout="row">
+      <!-- player name column -->
+      <div fxLayout="column">
+        <div class="top5 title">Top Five</div>
+      </div>
+
+      <!-- player score columns -->
+      <ng-container *ngFor="let title of roundTitles; let i = index">
+        <div fxLayout="column">
+          <div class="top5 score">
+            {{ scores[i] ? scores[i] : '&nbsp;' }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Bottom 5 players -->
+    <div fxLayout="row">
+      <!-- player name column -->
+      <div fxLayout="column">
+        <ng-container *ngFor="let pick of bottom5">
+          <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+            <div class="bottom5 playerlist-name">
+              {{ pick.name }}
+            </div>
+          </a>
+        </ng-container>
+      </div>
+
+      <!-- player score columns -->
+      <ng-container *ngFor="let title of roundTitles; let i = index">
+        <div fxLayout="column">
+          <ng-container *ngFor="let pick of bottom5">
+            <div class="bottom5 playerlist-score">
+              {{ pick.rounds[i] }}
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showDetails">
   <div class="header">
     <b>Picks for {{ gamer.name }}</b>
   </div>
 
-  <!-- Top 5 players -->
-  <div fxLayout="row">
-    <!-- player name column -->
-    <div fxLayout="column">
-      <div class="sub-header name">Name</div>
+  <ng-container *ngFor="let pick of bottom5">
+    <div fxLayout="row" class="score-columns">
+      <div style="width: 200px" class="header">Name</div>
 
-      <ng-container *ngFor="let pick of top5">
-        <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
-          <div class="playerlist-name">
-            {{ pick.name }}
-          </div>
-        </a>
+      <div style="width: 75px; text-align: right" class="header">Total</div>
+
+      <div style="width: 75px; text-align: right" class="header">Thru</div>
+
+      <div style="width: 75px; text-align: right" class="header">Today</div>
+
+      <div style="width: 20px" class="header-spacer">&nbsp;</div>
+
+      <ng-container *ngFor="let roundNumber of roundTitles">
+        <div style="width: 50px" class="header">R{{ roundNumber }}</div>
       </ng-container>
     </div>
-
-    <!-- player score columns -->
-    <ng-container *ngFor="let title of roundTitles; let i = index">
-      <div fxLayout="column">
-        <div class="sub-header">
-          <b>{{ title }}</b>
-        </div>
-        <ng-container *ngFor="let pick of top5">
-          <div class="playerlist-score">
-            {{ pick.rounds[i] }}
-          </div>
-        </ng-container>
+    <div fxLayout="row" class="score-columns">
+      <div style="width: 200px" class="bottom5 playerlist-detail-score">{{ pick.name }}</div>
+      <div style="width: 75px; text-align: right" class="bottom5 playerlist-detail-score">
+        {{ pick.details.total }}
       </div>
-    </ng-container>
-  </div>
-
-  <!-- Top 5 cut line and score -->
-  <div fxLayout="row">
-    <!-- player name column -->
-    <div fxLayout="column">
-      <div class="top5 title">Top Five</div>
-    </div>
-
-    <!-- player score columns -->
-    <ng-container *ngFor="let title of roundTitles; let i = index">
-      <div fxLayout="column">
-        <div class="top5 score">
-          {{ scores[i] ? scores[i] : '&nbsp;' }}
-        </div>
+      <div style="width: 75px; text-align: right" class="bottom5 playerlist-detail-score">
+        {{ pick.details.thru }}
       </div>
-    </ng-container>
-  </div>
+      <div style="width: 75px; text-align: right" class="bottom5 playerlist-detail-score">
+        {{ pick.details.today }}
+      </div>
 
-  <!-- Bottom 5 players -->
-  <div fxLayout="row">
-    <!-- player name column -->
-    <div fxLayout="column">
-      <ng-container *ngFor="let pick of bottom5">
-        <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
-          <div class="bottom5 playerlist-name">
-            {{ pick.name }}
-          </div>
-        </a>
+      <div style="width: 20px" class="bottom5-spacer">&nbsp;</div>
+
+      <ng-container *ngFor="let title of roundTitles; let i = index">
+        <div style="width: 50px" class="bottom5 playerlist-detail-score">
+          {{ pick.rounds[i] }}
+        </div>
       </ng-container>
     </div>
-
-    <!-- player score columns -->
-    <ng-container *ngFor="let title of roundTitles; let i = index">
-      <div fxLayout="column">
-        <ng-container *ngFor="let pick of bottom5">
-          <div class="bottom5 playerlist-score">
-            {{ pick.rounds[i] }}
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
-  </div>
+    <app-eventleader-detail [golfer]="pick.details" [eventUrl]=""> </app-eventleader-detail>
+  </ng-container>
 </div>

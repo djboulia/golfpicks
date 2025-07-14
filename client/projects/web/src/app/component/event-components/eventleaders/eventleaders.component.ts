@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseLoadingComponent } from '../../base.loading.component';
@@ -22,7 +22,6 @@ export class EventLeadersComponent extends BaseLoadingComponent implements OnIni
   constructor(
     private spinner: NgxSpinnerService,
     private route: ActivatedRoute,
-    private router: Router,
     private eventApi: EventService,
   ) {
     super(spinner);
@@ -43,7 +42,7 @@ export class EventLeadersComponent extends BaseLoadingComponent implements OnIni
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
 
-        // go get this user's record
+        // go get the golfer scores for this event
         this.eventApi.leaders(this.id).subscribe({
           next(data) {
             console.log('event leaders ', data);

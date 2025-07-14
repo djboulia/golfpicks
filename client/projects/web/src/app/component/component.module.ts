@@ -23,6 +23,7 @@ import { LeaderboardComponent } from './leaderboard-components/leaderboard/leade
 import { PicksComponent } from './picks/picks.component';
 import { ScoreBoardComponent } from './leaderboard-components/score-board/score-board.component';
 import { UserScoreBoardComponent } from './leaderboard-components/user-score-board/user-score-board.component';
+import { UserScoreBoardDetailComponent } from './leaderboard-components/user-score-board-detail/user-score-board-detail.component';
 import { WeatherComponent } from './shared/weather/weather.component';
 import { CourseOverviewComponent } from './leaderboard-components/course-overview/course-overview.component';
 import { EventLeaderDetailComponent } from './event-components/eventleader-detail/eventleader-detail.component';
@@ -55,6 +56,7 @@ import { EventLeaderDetailComponent } from './event-components/eventleader-detai
     PicksComponent,
     ScoreBoardComponent,
     UserScoreBoardComponent,
+    UserScoreBoardDetailComponent,
     WeatherComponent,
     CourseOverviewComponent,
   ],

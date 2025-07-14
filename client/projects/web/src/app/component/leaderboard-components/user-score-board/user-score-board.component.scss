@@ -11,6 +11,14 @@
   background-color: #2f5927;
 }
 
+.header-spacer {
+  padding: 5px 20px;
+  background-color: #2f5927;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 2px solid #005500;
+}
+
 .sub-header {
   padding: 0.4em 0.4em;
   border: none;
@@ -46,6 +54,11 @@
   border: none;
 }
 
+.playerlist-detail-score {
+  padding: 7px 0;
+  border: none;
+}
+
 .totals {
   padding: 7px 0;
   background-color: #dff0d8;
@@ -75,4 +88,12 @@
     width: 163px;
     border-left: none;
   }
+}
+
+.bottom5-spacer {
+  padding: 5px 20px;
+  background-color: #dff0d8;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 2px solid #dff0d8;
 }

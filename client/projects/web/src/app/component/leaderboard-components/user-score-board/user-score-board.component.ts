@@ -9,6 +9,7 @@ export class UserScoreBoardComponent implements OnInit {
   @Input() gamer: any;
   @Input() roundTitles: string[] = [];
   @Input() eventLeaderUrl: string = '';
+  @Input() showDetails = false;
 
   top5: any = [];
   bottom5: any = [];

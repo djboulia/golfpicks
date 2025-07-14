@@ -13,6 +13,7 @@ import { GameplayerComponent } from './game-components/gameplayer/gameplayer.com
 import { GameHistoryComponent } from './game-components/game-history/game-history.component';
 import { LeaderboardComponent } from './leaderboard-components/leaderboard/leaderboard.component';
 import { PicksComponent } from './picks/picks.component';
+import { UserScoreBoardDetailComponent } from './leaderboard-components/user-score-board-detail/user-score-board-detail.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -81,6 +82,10 @@ export const ComponentsRoutes: Routes = [
       {
         path: 'leaderboard/id/:id',
         component: LeaderboardComponent,
+      },
+      {
+        path: 'leaderboard/id/:id/gamer/:gamerid',
+        component: UserScoreBoardDetailComponent,
       },
       {
         path: 'picks/id/:id',
