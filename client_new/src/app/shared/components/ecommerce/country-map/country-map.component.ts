@@ -42,7 +42,7 @@ export class CountryMapComponent {
       });
 
       polygonSeries.mapPolygons.template.states.create('hover', {
-        fill: am5.color(0x465fff),
+        fill: am5.color(0x277b27),
       });
 
       // Add blue dot markers

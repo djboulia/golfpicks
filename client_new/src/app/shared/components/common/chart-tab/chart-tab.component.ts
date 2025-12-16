@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
@@ -7,7 +6,7 @@ type TabOption = 'optionOne' | 'optionTwo' | 'optionThree';
 @Component({
   selector: 'app-chart-tab',
   imports: [CommonModule],
-  templateUrl: './chart-tab.component.html'
+  templateUrl: './chart-tab.component.html',
 })
 export class ChartTabComponent {
   selected: TabOption = 'optionOne';
@@ -18,7 +17,7 @@ export class ChartTabComponent {
 
   getButtonClass(option: TabOption): string {
     return this.selected === option
-      ? 'shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800'
+      ? 'shadow-theme-xs text-gray-900 dark:text-white bg-theme-light-highlight dark:bg-theme-dark-highlight'
       : 'text-gray-500 dark:text-gray-400';
   }
 }
