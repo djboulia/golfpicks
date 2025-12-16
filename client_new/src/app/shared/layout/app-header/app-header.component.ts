@@ -3,18 +3,11 @@ import { SidebarService } from '../../services/sidebar.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ThemeToggleButtonComponent } from '../../components/common/theme-toggle/theme-toggle-button.component';
-import { NotificationDropdownComponent } from '../../components/header/notification-dropdown/notification-dropdown.component';
 import { UserDropdownComponent } from '../../components/header/user-dropdown/user-dropdown.component';
 
 @Component({
   selector: 'app-header',
-  imports: [
-    CommonModule,
-    RouterModule,
-    ThemeToggleButtonComponent,
-    NotificationDropdownComponent,
-    UserDropdownComponent,
-  ],
+  imports: [CommonModule, RouterModule, ThemeToggleButtonComponent, UserDropdownComponent],
   templateUrl: './app-header.component.html',
 })
 export class AppHeaderComponent {
