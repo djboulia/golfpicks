@@ -4,8 +4,8 @@ import { EventEmitter } from '@angular/core';
 import { Output } from '@angular/core';
 
 import { AuthSessionService } from './auth-session.service';
-import { Gamer } from '../backend/gamer.interfaces';
-import { GamerService } from '../backend/gamer.service';
+import { Gamer } from '../golfpicks/gamer.interfaces';
+import { GamerService } from '../golfpicks/gamer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -38,14 +38,14 @@ export class AuthService {
 
       this.gamerApi.login(userid, password).subscribe({
         next(gamer) {
-          console.log('logged in! ', gamer);
+          console.log('AuthService: logged in! ', gamer);
 
           self.updateData(gamer);
 
           observer.next(true);
         },
         error(msg) {
-          console.log('error logging in! ', msg);
+          console.log('AuthService: error logging in! ', msg);
 
           self.logout();
           observer.next(false);
@@ -66,14 +66,14 @@ export class AuthService {
     return new Observable((observer) => {
       this.gamerApi.currentUser().subscribe({
         next(gamer) {
-          console.log('refresh found user: ', gamer);
+          console.log('AuthService: refresh found user: ', gamer);
 
           self.updateData(gamer);
 
           observer.next(true);
         },
         error(msg) {
-          console.log('error gettting current user! ', msg);
+          console.log('AuthService: error gettting current user! ', msg);
 
           self.logout();
           observer.next(false);

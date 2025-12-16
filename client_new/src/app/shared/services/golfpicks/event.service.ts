@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpAuthService } from '../http-auth.service';
-import { ConfigBaseUrl } from './backend.config';
 import { Event, Schedule } from './event.interfaces';
 import { Weather } from './course.interface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
-  private configUrl = ConfigBaseUrl() + '/Events';
+  private configUrl = environment.apiUrl + '/Events';
 
   constructor(private httpAuth: HttpAuthService) {}
 

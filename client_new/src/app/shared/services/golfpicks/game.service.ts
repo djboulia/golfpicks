@@ -3,13 +3,13 @@ import { HttpAuthService } from '../http-auth.service';
 import { Observable } from 'rxjs';
 
 import { Game, GameDay } from './game.interfaces';
-import { ConfigBaseUrl } from './backend.config';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  private configUrl = ConfigBaseUrl() + '/Games';
+  private configUrl = environment.apiUrl + '/Games';
 
   constructor(private httpAuth: HttpAuthService) {}
 

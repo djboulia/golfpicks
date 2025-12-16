@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpAuthService } from '../http-auth.service';
 
-import { ConfigBaseUrl } from './backend.config';
 import { Gamer, GamerHistory } from './gamer.interfaces';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GamerService {
-  private configUrl = ConfigBaseUrl() + '/Gamers';
+  private configUrl = environment.apiUrl + '/Gamers';
 
   constructor(
     private http: HttpClient,
