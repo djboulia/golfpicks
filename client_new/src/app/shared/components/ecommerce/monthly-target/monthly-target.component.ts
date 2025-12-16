@@ -6,7 +6,6 @@ import {
   ApexPlotOptions,
   ApexFill,
   ApexStroke,
-  ApexOptions,
   NgApexchartsModule,
 } from 'ng-apexcharts';
 import { DropdownComponent } from '../../ui/dropdown/dropdown.component';
@@ -14,12 +13,7 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
 
 @Component({
   selector: 'app-monthly-target',
-  imports: [
-    CommonModule,
-    NgApexchartsModule,
-    DropdownComponent,
-    DropdownItemComponent,
-  ],
+  imports: [CommonModule, NgApexchartsModule, DropdownComponent, DropdownItemComponent],
   templateUrl: './monthly-target.component.html',
 })
 export class MonthlyTargetComponent {
@@ -54,7 +48,7 @@ export class MonthlyTargetComponent {
   };
   public fill: ApexFill = {
     type: 'solid',
-    colors: ['#465FFF'],
+    colors: ['#277b27'],
   };
   public stroke: ApexStroke = {
     lineCap: 'round',
