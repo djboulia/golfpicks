@@ -40,3 +40,11 @@ Once logged, the user can access protected routes as defined in `app.routes.ts`.
 The login page under the `pages/auth-pages` uses the `LoginFormComponent` located in `/shared/components/auth/login-form` to handle user login. This component collects the user's email and password and calls the `AuthService` to perform the login operation.
 
 There is no logout page; instead, the logout functionality is handled directly by calling the `AuthService` to log the user out and then redirects them to the login page.
+
+## Theming
+
+The `styles.css` file located in the `src` folder contains the global styles for the application. This file includes the Tailwind CSS directives and custom styles for theming the application.  The app supports light and dark themes, which can be toggled by the user. The theme preference is stored in the browser's local storage and applied on app initialization. `--color-brand-xxx` specify the primary brand color (green in this case). The `--color-theme-light-xxx` and `--color-theme-dark-xxx` variables define the base palette for light and dark modes respectively. 
+
+## Layout
+
+The `layout` folder located in `src/app/shared/layout` contains the layout components for the application.  This includes the header and sidebar components.  These are responsive and adapt to different screen sizes. The sidebar can be toggled open and closed, and the header contains navigation links and user profile information.
