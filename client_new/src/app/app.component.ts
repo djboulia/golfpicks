@@ -9,5 +9,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'GolfPicks - Pick the Major Winners!';
+  title = 'GolfPicks - Pick your team for each golf major!';
 }
