@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^20.0.6",
     "@angular/router": "^20.0.6",
     "@fullcalendar/angular": "^6.1.19",
+    "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/daygrid": "^6.1.19",
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
