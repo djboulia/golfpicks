@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpAuthService } from '../http-auth.service';
 
-import { Gamer, GamerHistory } from './gamer.interfaces';
+import { Gamer, GamerHistory } from './gamer.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({

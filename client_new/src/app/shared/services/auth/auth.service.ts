@@ -4,7 +4,7 @@ import { EventEmitter } from '@angular/core';
 import { Output } from '@angular/core';
 
 import { AuthSessionService } from './auth-session.service';
-import { Gamer } from '../golfpicks/gamer.interfaces';
+import { Gamer } from '../golfpicks/gamer.model';
 import { GamerService } from '../golfpicks/gamer.service';
 
 @Injectable({

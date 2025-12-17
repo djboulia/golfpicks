@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpAuthService } from '../http-auth.service';
-import { Event, Schedule } from './event.interfaces';
-import { Weather } from './course.interface';
+import { Event, Schedule } from './event.model';
+import { Weather } from './course.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({

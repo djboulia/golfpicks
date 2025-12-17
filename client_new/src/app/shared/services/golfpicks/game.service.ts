@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpAuthService } from '../http-auth.service';
 import { Observable } from 'rxjs';
 
-import { Game, GameDay } from './game.interfaces';
+import { Game, GameDay } from './game.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
