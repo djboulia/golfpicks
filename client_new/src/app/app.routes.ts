@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { EcommerceComponent } from './pages/dashboard/ecommerce/ecommerce.component';
-import { ProfileComponent } from './pages/profile/profile.component';
+import { ProfileComponent } from './pages/auth-pages/profile/profile.component';
 import { FormElementsComponent } from './pages/forms/form-elements/form-elements.component';
 import { BasicTablesComponent } from './pages/tables/basic-tables/basic-tables.component';
 import { BlankComponent } from './pages/blank/blank.component';
