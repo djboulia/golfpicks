@@ -1,0 +1,26 @@
+<app-page-breadcrumb pageTitle="Games for {{ user.name }}" />
+<div
+  class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6"
+>
+  <div class="space-y-6">
+    <div class="grid grid-cols-12 gap-4 md:gap-6">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div *ngIf="errorMessage" class="text-error-500">
+                {{ errorMessage }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="space-y-6">
+      <app-game-next [games]="games" [testingMode]="testingMode"></app-game-next>
+    </div>
+    <div class="space-y-6">
+      <app-game-history [games]="games"></app-game-history>
+    </div>
+  </div>
+</div>

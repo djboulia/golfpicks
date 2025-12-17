@@ -18,6 +18,7 @@ import { VideosComponent } from './pages/ui-elements/videos/videos.component';
 import { LoginComponent } from './pages/auth-pages/login/login.component';
 import { CalenderComponent } from './pages/calender/calender.component';
 import { AuthGuard } from './app.guard';
+import { MainComponent } from './pages/main/main.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,11 @@ export const routes: Routes = [
         path: '',
         component: EcommerceComponent,
         pathMatch: 'full',
+        title: 'GolfPicks - Pick the Major Winners!',
+      },
+      {
+        path: 'main',
+        component: MainComponent,
         title: 'GolfPicks - Pick the Major Winners!',
       },
       {
