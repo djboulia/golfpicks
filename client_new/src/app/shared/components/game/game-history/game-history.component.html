@@ -8,16 +8,16 @@
   <div class="max-w-full overflow-x-auto">
     <table class="min-w-full">
       <thead
-        class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900"
+        class="px-6 py-3.5 border-t border-gray-100 border-y bg-theme-light-card dark:border-white/[0.05] dark:bg-theme-dark-card"
       >
         <tr>
           <th
-            class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start"
+            class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
           >
             Game
           </th>
           <th
-            class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start"
+            class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
           >
             Action
           </th>
@@ -26,11 +26,11 @@
       <tbody>
         @for (game of games?.history; track $index) {
           <tr>
-            <td class="px-4 sm:px-6 py-3.5">
+            <td class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text">
               {{ game.event }}
             </td>
 
-            <td class="px-4 sm:px-6 py-3.5">
+            <td class="px-4 sm:px-6 py-3.5 text-brand-500 dark:text-brand-300">
               <a [attr.href]="leaderboardUrl + '/id/' + game.eventid">View</a>
             </td>
           </tr>

@@ -3,14 +3,13 @@ import { Gamer, GamerHistory } from '../../shared/services/golfpicks/gamer.model
 import { ActivatedRoute } from '@angular/router';
 import { GamerService } from '../../shared/services/golfpicks/gamer.service';
 import { mergeMap, map, catchError, throwError } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { GameHistoryComponent } from '../../shared/components/game/game-history/game-history.component';
 import { GameNextComponent } from '../../shared/components/game/game-next/game-next.component';
+import { AlertComponent } from '../../shared/components/ui/alert/alert.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, PageBreadcrumbComponent, GameNextComponent, GameHistoryComponent],
+  imports: [GameNextComponent, GameHistoryComponent, AlertComponent],
   templateUrl: './main.component.html',
 })
 export class MainComponent {

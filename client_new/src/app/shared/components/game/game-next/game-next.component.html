@@ -2,10 +2,14 @@
   class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]"
 >
   <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row items-center justify-center">
-    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Next Tournament</h3>
+    <h3 class="text-lg font-semibold text-theme-light-heading dark:text-theme-dark-heading">
+      Next Tournament
+    </h3>
   </div>
 
-  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row items-center justify-center">
+  <div
+    class="flex flex-col gap-4 px-6 mb-4 sm:flex-row items-center justify-center text-theme-light-text dark:text-theme-dark-text"
+  >
     @if (games?.active?.event) {
       <div>
         <div class="text-center">

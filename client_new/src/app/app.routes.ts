@@ -28,13 +28,13 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: EcommerceComponent,
+        component: MainComponent,
         pathMatch: 'full',
         title: 'GolfPicks - Pick the Major Winners!',
       },
       {
-        path: 'main',
-        component: MainComponent,
+        path: 'ecommerce',
+        component: EcommerceComponent,
         title: 'GolfPicks - Pick the Major Winners!',
       },
       {

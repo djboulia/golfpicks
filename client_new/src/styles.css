@@ -46,11 +46,15 @@ layer(base);
   --color-theme-dark-body: #09160b;
   --color-theme-dark-card: #0d1f10;
   --color-theme-dark-highlight: #005500;
+  --color-theme-dark-heading: #ffffff;
+  --color-theme-dark-text: #d7dad6;
 
   --color-theme-light-base: #ffffff;
   --color-theme-light-body: #f9fbf9;
   --color-theme-light-card: #f3f7f2;
   --color-theme-light-highlight: #cee5c5;
+  --color-theme-light-heading: #000000;
+  --color-theme-light-text: #09160b;
 
   --color-brand-25: #f0ffea;
   --color-brand-50: #eaf0ea;
