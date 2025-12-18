@@ -5,11 +5,11 @@ import { GamerService } from '../../shared/services/golfpicks/gamer.service';
 import { mergeMap, map, catchError, throwError } from 'rxjs';
 import { GameHistoryComponent } from '../../shared/components/game/game-history/game-history.component';
 import { GameNextComponent } from '../../shared/components/game/game-next/game-next.component';
-import { AlertComponent } from '../../shared/components/ui/alert/alert.component';
+import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
 
 @Component({
   selector: 'app-main',
-  imports: [GameNextComponent, GameHistoryComponent, AlertComponent],
+  imports: [GameNextComponent, GameHistoryComponent, PageLoadComponent],
   templateUrl: './main.component.html',
 })
 export class MainComponent {
@@ -21,9 +21,7 @@ export class MainComponent {
   picksUrl = '/component/picks';
 
   loading = false;
-  statusMessage = '';
   errorMessage: string | null = null;
-  infoMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,14 +31,7 @@ export class MainComponent {
     this.games = gamerApi.newHistory();
   }
 
-  error(msg: string) {
-    this.infoMessage = msg;
-    this.loading = false;
-  }
-
   ngOnInit(): void {
-    this.infoMessage = null;
-
     this.loading = true;
 
     this.route.queryParams.subscribe((params) => {
@@ -58,46 +49,19 @@ export class MainComponent {
           mergeMap((user) => this.gamerApi.gameHistory(user.id)),
           map((games) => (this.games = games)),
 
-          catchError((err) => this.loadError('Error loading game!', err)),
+          catchError((err) => this.loadingError('Error loading game!', err)),
         )
         .subscribe(() => {
           console.log('games ', this.games);
-
-          this.statusMessage = this.activeTournamentMessage(this.games);
 
           this.loading = false;
         });
     });
   }
 
-  activeTournamentMessage(games: any): string {
-    let statusMessage = '';
-
-    if (!this.testingMode && games.active.inProgress) {
-      statusMessage = 'The tournament is currently in progress';
-    } else {
-      if (games.active.eventid) {
-        const picksUrl = this.picksUrl + '/id/' + games.active.eventid;
-
-        if (games.active.joined) {
-          statusMessage =
-            'The game has not yet started.  You can still update your <a href="' +
-            picksUrl +
-            '">picks</a>';
-        } else {
-          statusMessage =
-            'You have not yet joined this game. Make your <a href="' + picksUrl + '">picks</a>';
-        }
-      } else {
-        statusMessage = 'No upcoming tournament.';
-      }
-    }
-
-    return statusMessage;
-  }
-
-  private loadError(msg: string, err: any) {
-    this.error(msg);
+  private loadingError(msg: string, err: any) {
+    this.errorMessage = msg;
+    this.loading = false;
 
     return throwError(() => new Error(err));
   }
