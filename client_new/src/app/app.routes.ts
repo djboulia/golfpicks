@@ -19,6 +19,7 @@ import { LoginComponent } from './pages/auth-pages/login/login.component';
 import { CalenderComponent } from './pages/calender/calender.component';
 import { AuthGuard } from './app.guard';
 import { MainComponent } from './pages/main/main.component';
+import { AboutComponent } from './pages/about/about.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,11 @@ export const routes: Routes = [
         component: MainComponent,
         pathMatch: 'full',
         title: 'GolfPicks - Pick the Major Winners!',
+      },
+      {
+        path: 'about',
+        component: AboutComponent,
+        title: 'About this Application',
       },
       {
         path: 'ecommerce',
