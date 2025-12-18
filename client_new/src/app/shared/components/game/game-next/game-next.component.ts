@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { GamerHistory } from '../../../services/golfpicks/gamer.model';
+import { GAMEURLS } from '../../../../app.routes';
 
 @Component({
   selector: 'app-game-next',
@@ -12,8 +13,8 @@ export class GameNextComponent {
   @Input() testingMode? = false;
   @Input() games: GamerHistory | undefined;
 
-  leaderboardUrl = '/component/leaderboard';
-  picksUrl = '/component/picks';
+  leaderboardUrl = GAMEURLS.leaderboard;
+  picksUrl = GAMEURLS.picks;
 
   constructor() {
     this.games = undefined;

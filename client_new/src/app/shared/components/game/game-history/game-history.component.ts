@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { GamerHistory } from '../../../services/golfpicks/gamer.model';
+import { GAMEURLS } from '../../../../app.routes';
 
 @Component({
   selector: 'app-game-history',
@@ -9,11 +10,7 @@ import { GamerHistory } from '../../../services/golfpicks/gamer.model';
   styles: '',
 })
 export class GameHistoryComponent {
-  @Input() games: GamerHistory | undefined;
+  @Input() games: GamerHistory | undefined = undefined;
 
-  leaderboardUrl = '/component/leaderboard';
-
-  constructor() {
-    this.games = undefined;
-  }
+  leaderboardUrl = GAMEURLS.leaderboard;
 }

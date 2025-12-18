@@ -6,6 +6,7 @@ import { mergeMap, map, catchError, throwError } from 'rxjs';
 import { GameHistoryComponent } from '../../shared/components/game/game-history/game-history.component';
 import { GameNextComponent } from '../../shared/components/game/game-next/game-next.component';
 import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { LoaderService } from '../../shared/services/loader.service';
 
 @Component({
   selector: 'app-main',
@@ -13,26 +14,18 @@ import { PageLoadComponent } from '../../shared/components/common/page-load/page
   templateUrl: './main.component.html',
 })
 export class MainComponent {
-  user: Gamer;
-  games: GamerHistory;
+  user: Gamer | undefined = undefined;
+  games: GamerHistory | undefined = undefined;
   testingMode = false;
-
-  leaderboardUrl = '/component/leaderboard';
-  picksUrl = '/component/picks';
-
-  loading = false;
-  errorMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private gamerApi: GamerService,
-  ) {
-    this.user = gamerApi.newModel();
-    this.games = gamerApi.newHistory();
-  }
+    protected loader: LoaderService,
+  ) {}
 
   ngOnInit(): void {
-    this.loading = true;
+    this.loader.setLoading(true);
 
     this.route.queryParams.subscribe((params) => {
       console.log(params);
@@ -54,14 +47,13 @@ export class MainComponent {
         .subscribe(() => {
           console.log('games ', this.games);
 
-          this.loading = false;
+          this.loader.setLoading(false);
         });
     });
   }
 
   private loadingError(msg: string, err: any) {
-    this.errorMessage = msg;
-    this.loading = false;
+    this.loader.setErrorMessage(msg);
 
     return throwError(() => new Error(err));
   }

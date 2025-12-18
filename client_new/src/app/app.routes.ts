@@ -21,6 +21,18 @@ import { AuthGuard } from './app.guard';
 import { MainComponent } from './pages/main/main.component';
 import { AboutComponent } from './pages/about/about.component';
 
+export const GAMEURLS = {
+  main: '/',
+  history: '/',
+  about: '/about',
+  leaderboard: '/component/leaderboard',
+  picks: '/component/picks',
+};
+
+const makeRelativeUrl = (path: string) => {
+  return path.startsWith('/') ? path.substring(1) : path;
+};
+
 export const routes: Routes = [
   {
     path: '',
@@ -28,13 +40,13 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: '',
+        path: makeRelativeUrl(GAMEURLS.main),
         component: MainComponent,
         pathMatch: 'full',
         title: 'GolfPicks - Pick the Major Winners!',
       },
       {
-        path: 'about',
+        path: makeRelativeUrl(GAMEURLS.about),
         component: AboutComponent,
         title: 'About this Application',
       },

@@ -1,8 +1,4 @@
-<app-page-load
-  [pageTitle]="'Games for ' + user.name"
-  [errorMessage]="errorMessage"
-  [loading]="loading"
->
+<app-page-load [pageTitle]="user?.name ? 'Games for ' + user?.name : 'Games'" [loader]="loader">
   <div class="space-y-6">
     <app-game-next [games]="games" [testingMode]="testingMode"></app-game-next>
   </div>
