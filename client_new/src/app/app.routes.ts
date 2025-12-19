@@ -24,6 +24,8 @@ import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component'
 import { CourseInfoComponent } from './shared/components/course/course-info/course-info.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { CourseComponent } from './shared/components/course/course/course.component';
+import { TournamentComponent } from './pages/tournament/tournament.component';
+import { TournamentLeadersComponent } from './pages/tournament-leaders/tournament-leaders.component';
 
 export const GAMEURLS = {
   main: '/',
@@ -31,8 +33,8 @@ export const GAMEURLS = {
   about: '/about',
   leaderboard: '/leaderboard',
   picks: '/picks',
-  eventOverview: '/event',
-  eventLeader: '/eventleaders',
+  tournamentOverview: '/tournament',
+  tournamentLeaders: '/tournamentleaders',
   courses: '/courses',
   course: '/course',
   courseInfo: '/courseinfo',
@@ -83,6 +85,16 @@ export const routes: Routes = [
         path: makeRelativeUrl(GAMEURLS.courseInfo) + '/id/:id',
         component: CourseInfoComponent,
         title: 'Course Info - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.tournamentOverview) + '/id/:id',
+        component: TournamentComponent,
+        title: 'Tournament Overview - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.tournamentLeaders) + '/id/:id',
+        component: TournamentLeadersComponent,
+        title: 'Tournament Leaders - GolfPicks',
       },
       {
         path: 'ecommerce',

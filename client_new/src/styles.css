@@ -231,6 +231,91 @@ layer(base);
   @apply px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text;
 }
 
+@utility player-score {
+  @apply w-[60px] border-1 border-[#dddddd] text-center items-center p-[5px] bg-theme-light-base text-theme-light-text dark:bg-theme-light-body dark:text-theme-dark-text font-medium;
+}
+
+@utility player-score-header {
+  @apply bg-brand-500 text-theme-dark-text dark:bg-brand-700 font-semibold;
+}
+
+.golf-round-leader {
+  color: #1e90ff;
+  font-weight: bold;
+}
+
+.golf-round-under-par {
+  color: #af0000;
+  font-weight: 600;
+}
+
+.score-other-bogey {
+  color: #000000;
+  font-weight: 600;
+  width: 25px;
+  height: 25px;
+  border: 3px solid black;
+  margin: 0 auto;
+}
+
+.score-double-bogey {
+  color: #000000;
+  font-weight: 600;
+  width: 25px;
+  height: 25px;
+  border: 2px double black;
+  margin: 0 auto;
+}
+
+.score-bogey {
+  color: #000000;
+  font-weight: 600;
+  width: 25px;
+  height: 25px;
+  border: 1px solid black;
+  margin: 0 auto;
+}
+.score-par {
+  color: #006600;
+  font-weight: 600;
+}
+
+.score-albatross {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border: 3px solid #af0000;
+  text-align: center;
+  align-items: center;
+  color: #af0000;
+  font-weight: 600;
+  margin: 0 auto;
+}
+
+.score-eagle {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border: 2px double #af0000;
+  text-align: center;
+  align-items: center;
+  color: #af0000;
+  font-weight: 600;
+  margin: 0 auto;
+}
+
+.score-birdie {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #af0000;
+  text-align: center;
+  align-items: center;
+  color: #af0000;
+  font-weight: 600;
+  margin: 0 auto;
+}
+
 @utility menu-item {
   @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
 }

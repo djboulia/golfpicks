@@ -11,7 +11,7 @@ import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
 import { Weather, WeatherComponent } from '../../shared/components/weather/weather.component';
 import { CourseOverviewComponent } from '../../shared/components/course/course-overview/course-overview.component';
-import { TournamentInfoComponent } from '../../shared/components/tournament-info/tournament-info.component';
+import { TournamentInfoComponent } from '../../shared/components/tournament/tournament-info/tournament-info.component';
 import { ScoreBoardComponent } from '../../shared/components/scores/score-board/score-board.component';
 import { GAMEURLS } from '../../app.routes';
 import { UserScoreBoardComponent } from '../../shared/components/scores/user-score-board/user-score-board.component';
@@ -48,7 +48,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   debugMode = false;
 
   courseUrl = GAMEURLS.courseInfo;
-  eventLeaderUrl = GAMEURLS.eventLeader;
+  tournamentLeaderUrl = GAMEURLS.tournamentLeaders;
 
   reloadTimerId: any = null;
 

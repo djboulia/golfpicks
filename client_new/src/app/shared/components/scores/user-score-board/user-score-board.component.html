@@ -15,7 +15,7 @@
             <div class="rounded-tl-xl user-score-header font-bold">&nbsp;</div>
 
             @for (pick of top5; track $index; let i = $index) {
-              <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+              <a href="{{ tournamentLeaderUrl + '?playerDetail=' + pick.player_id }}">
                 <div class="w-[173px] user-score-top5 px-2">
                   {{ pick.name }}
                 </div>
@@ -65,7 +65,7 @@
           <!-- player name column -->
           <div class="flex flex-col text-left">
             @for (pick of bottom5; track $index) {
-              <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+              <a href="{{ tournamentLeaderUrl + '?playerDetail=' + pick.player_id }}">
                 <div class="w-[173px] user-score-bottom5 px-2">
                   {{ pick.name }}
                 </div>

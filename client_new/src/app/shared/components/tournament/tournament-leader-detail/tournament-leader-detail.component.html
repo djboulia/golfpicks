@@ -1,0 +1,72 @@
+<div>
+  <div
+    class="flex flex-row gap-20 py-2 font-semibold text-theme-light-text dark:text-theme-dark-text"
+  >
+    <div class="header">Round {{ roundNumber }}</div>
+    <div class="header">Today: {{ golfer.today ? golfer.today : '-' }}</div>
+  </div>
+
+  <div class="p-2">
+    <div class="flex flex-row">
+      @for (hole of scores.front9; track $index; let i = $index) {
+        <div class="player-score player-score-header">
+          {{ i + 1 }}
+        </div>
+      }
+      <div class="player-score player-score-header text-yellow-300!">{{ scores.front9Par }}</div>
+    </div>
+
+    <div class="flex flex-row">
+      @for (hole of scores.front9; track $index; let i = $index) {
+        <div class="player-score">
+          <div
+            [ngClass]="{
+              'score-albatross': hole.fromPar < -2,
+              'score-eagle': hole.fromPar === -2,
+              'score-birdie': hole.fromPar === -1,
+              'score-par': hole.fromPar === 0,
+              'score-bogey': hole.fromPar === 1,
+              'score-double-bogey': hole.fromPar === 2,
+              'score-other-bogey': hole.fromPar > 2
+            }"
+          >
+            {{ hole.score }}
+          </div>
+        </div>
+      }
+      <div class="player-score font-semibold">{{ scores.front9Total }}</div>
+    </div>
+  </div>
+
+  <div style="padding: 10px">
+    <div class="flex flex-row">
+      @for (hole of scores.back9; track $index; let i = $index) {
+        <div class="player-score player-score-header">
+          {{ i + 10 }}
+        </div>
+      }
+      <div class="player-score player-score-header text-yellow-300!">{{ scores.back9Par }}</div>
+    </div>
+
+    <div class="flex flex-row">
+      @for (hole of scores.back9; track $index; let i = $index) {
+        <div class="player-score">
+          <div
+            [ngClass]="{
+              'score-albatross': hole.fromPar < -2,
+              'score-eagle': hole.fromPar === -2,
+              'score-birdie': hole.fromPar === -1,
+              'score-par': hole.fromPar === 0,
+              'score-bogey': hole.fromPar === 1,
+              'score-double-bogey': hole.fromPar === 2,
+              'score-other-bogey': hole.fromPar > 2
+            }"
+          >
+            {{ hole.score }}
+          </div>
+        </div>
+      }
+      <div class="player-score font-semibold">{{ scores.back9Total }}</div>
+    </div>
+  </div>
+</div>

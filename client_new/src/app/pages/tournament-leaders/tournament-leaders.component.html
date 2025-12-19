@@ -1,0 +1,83 @@
+<app-page-load [pageTitle]="event.name" [loader]="loader">
+  <div class="flex flex-col">
+    <div class="flex flex-row table-header">
+      <div class="w-[60px] table-header-cell">Pos</div>
+
+      <div class="w-[200px] table-header-cell">Name</div>
+
+      <div class="w-[75px] table-header-cell text-right">Total</div>
+
+      <div class="w-[75px] table-header-cell text-right">Thru</div>
+
+      <div class="w-[75px] table-header-cell text-right">Today</div>
+
+      <div class="w-[20px] table-header-cell">&nbsp;</div>
+      @for (roundNumber of event.roundNumbers; track $index) {
+        <div class="w-[50px] table-header-cell">R{{ roundNumber }}</div>
+      }
+    </div>
+
+    @for (golfer of event.golfers; track $index; let i = $index) {
+      <div class="flex flex-row cursor-pointer px-6" (click)="onPlayerClick(golfer.player_id)">
+        <div class="w-[60px] table-cell">
+          <a class="link" [attr.id]="golfer.player_id">
+            {{ golfer.pos }}
+          </a>
+        </div>
+        <div class="w-[200px] table-cell cursor-pointer">{{ golfer.name }}</div>
+        <div
+          class="w-[75px] table-cell text-right"
+          [ngClass]="{
+            'golf-round-under-par': golfer.total < 0
+          }"
+        >
+          {{ golfer.total }}
+        </div>
+
+        <div class="w-[75px] table-cell text-right">{{ golfer.thru ? golfer.thru : '-' }}</div>
+
+        <div
+          class="w-[75px] table-cell text-right"
+          [ngClass]="{
+            'golf-round-under-par': golfer.today < 0
+          }"
+        >
+          {{ golfer.today ? golfer.today : '-' }}
+        </div>
+
+        <div class="w-[20px] table-cell">&nbsp;</div>
+
+        @for (roundNumber of event.roundNumbers; track $index) {
+          <div class="w-[50px]">
+            <div
+              class="text-center text-theme-light-text dark:text-theme-dark-text"
+              [ngClass]="{
+                'golf-round-leader': event.lowRounds[roundNumber] === golfer[roundNumber]
+              }"
+            >
+              {{
+                golfer[roundNumber] && golfer[roundNumber].length > 0 ? golfer[roundNumber] : '-'
+              }}
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- show player detail component if playerDetail is set -->
+      @if (playerDetail === golfer.player_id) {
+        <div class="border-l-4 border-theme-accent px-10">
+          <app-tournament-leader-detail
+            [golfer]="golfer"
+            [eventUrl]="leadersUrl + '/id/' + id"
+            (click)="playerDetail = ''"
+          />
+        </div>
+      }
+    }
+
+    <div class="text-center">
+      Tournament
+      <a class="link" [attr.href]="eventUrl + '/id/' + id">overview</a>
+    </div>
+  </div>
+</app-page-load>

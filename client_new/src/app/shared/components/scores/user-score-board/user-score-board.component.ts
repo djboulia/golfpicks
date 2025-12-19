@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 export class UserScoreBoardComponent implements OnInit {
   @Input() gamer: any;
   @Input() roundTitles: string[] = [];
-  @Input() eventLeaderUrl: string = '';
+  @Input() tournamentLeaderUrl: string = '';
   @Input() showDetails = false;
 
   top5: any = [];

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { GAMEURLS } from '../../../app.routes';
+import { GAMEURLS } from '../../../../app.routes';
 
 @Component({
   selector: 'app-tournament-info',
@@ -8,8 +8,8 @@ import { GAMEURLS } from '../../../app.routes';
 export class TournamentInfoComponent {
   @Input() id = '';
 
-  eventOverviewUrl = GAMEURLS.eventOverview;
-  eventLeaderUrl = GAMEURLS.eventLeader;
+  tournamentOverviewUrl = GAMEURLS.tournamentOverview;
+  tournamentLeaderUrl = GAMEURLS.tournamentLeaders;
 
   constructor() {}
 }
