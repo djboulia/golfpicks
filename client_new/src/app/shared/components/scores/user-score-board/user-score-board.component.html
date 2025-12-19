@@ -1,10 +1,10 @@
 @if (!showDetails) {
   <div class="flex flex-row justify-center">
     <div
-      class="overflow-hidden rounded-2xl w-[400px] border border-gray-200 bg-brand-500 dark:bg-brand-600 py-4 dark:border-white/[0.05] text-theme-dark-text"
+      class="overflow-hidden rounded-2xl w-[400px] border border-gray-200 bg-theme-light-card dark:bg-theme-dark-card py-4 dark:border-white/[0.05] text-theme-dark-text"
     >
       <div class="flex flex-col items-center">
-        <div class="text-theme-xl mb-4 text-theme-dark-heading">
+        <div class="text-theme-xl mb-4 text-theme-light-heading dark:text-theme-dark-heading">
           <b>Picks for {{ gamer.name }}</b>
         </div>
 
@@ -42,7 +42,9 @@
         </div>
 
         <!-- Top 5 cut line and score -->
-        <div class="flex flex-row border-t-1 border-b-1 border-theme-light-heading user-score-top5">
+        <div
+          class="flex flex-row border-t-1 border-b-1 border-theme-light-heading dark:border-theme-dark-heading user-score-top5"
+        >
           <!-- player name column -->
           <div class="flex flex-col text-left gap-2">
             <div class="font-bold w-[173px] px-12">Top Five</div>

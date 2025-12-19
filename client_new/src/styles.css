@@ -209,14 +209,14 @@ layer(base);
 }
 
 @utility user-score-header {
-  @apply text-theme-light-heading bg-brand-100 py-2;
+  @apply text-theme-light-heading dark:text-theme-dark-heading bg-theme-light-highlight dark:bg-theme-dark-highlight py-2;
 }
 
 @utility user-score-top5 {
-  @apply text-theme-light-text bg-white py-2;
+  @apply text-theme-light-text dark:text-theme-dark-text bg-theme-light-base dark:bg-theme-dark-base py-2;
 }
 @utility user-score-bottom5 {
-  @apply text-theme-light-text bg-brand-100 py-2;
+  @apply text-theme-light-text dark:text-theme-dark-text bg-theme-light-highlight dark:bg-theme-dark-highlight py-2;
 }
 
 @utility table-header {
