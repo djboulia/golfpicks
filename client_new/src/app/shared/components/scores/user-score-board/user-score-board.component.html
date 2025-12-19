@@ -1,0 +1,133 @@
+@if (!showDetails) {
+  <div class="flex flex-row justify-center">
+    <div
+      class="overflow-hidden rounded-2xl w-[400px] border border-gray-200 bg-brand-500 dark:bg-brand-600 py-4 dark:border-white/[0.05] text-theme-dark-text"
+    >
+      <div class="flex flex-col items-center">
+        <div class="text-theme-xl mb-4 text-theme-dark-heading">
+          <b>Picks for {{ gamer.name }}</b>
+        </div>
+
+        <!-- Top 5 players -->
+        <div class="flex flex-row justify-center w-full">
+          <!-- player name column -->
+          <div class="flex flex-col text-left w-[173px]">
+            <div class="rounded-tl-xl user-score-header font-bold">&nbsp;</div>
+
+            @for (pick of top5; track $index; let i = $index) {
+              <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+                <div class="w-[173px] user-score-top5 px-2">
+                  {{ pick.name }}
+                </div>
+              </a>
+            }
+          </div>
+
+          <!-- player score columns -->
+          @for (title of roundTitles; track $index; let i = $index) {
+            <div class="flex flex-col text-center w-[40px]">
+              <div
+                class="w-[40px] user-score-header"
+                [ngClass]="{ 'rounded-tr-xl': i === roundTitles.length - 1 }"
+              >
+                <b>{{ title }}</b>
+              </div>
+              @for (pick of top5; track $index) {
+                <div class="w-[40px] user-score-top5">
+                  {{ pick.rounds[i] }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Top 5 cut line and score -->
+        <div class="flex flex-row border-t-1 border-b-1 border-theme-light-heading user-score-top5">
+          <!-- player name column -->
+          <div class="flex flex-col text-left gap-2">
+            <div class="font-bold w-[173px] px-12">Top Five</div>
+          </div>
+
+          <!-- player score columns -->
+          <div class="flex flex-row">
+            @for (title of roundTitles; track $index; let i = $index) {
+              <div class="font-bold w-[40px]">
+                {{ scores[i] ? scores[i] : '&nbsp;' }}
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Bottom 5 players -->
+        <div class="flex flex-row">
+          <!-- player name column -->
+          <div class="flex flex-col text-left">
+            @for (pick of bottom5; track $index) {
+              <a href="{{ eventLeaderUrl + '?playerDetail=' + pick.player_id }}">
+                <div class="w-[173px] user-score-bottom5 px-2">
+                  {{ pick.name }}
+                </div>
+              </a>
+            }
+          </div>
+
+          <!-- player score columns -->
+          @for (title of roundTitles; track $index; let i = $index) {
+            <div class="flex flex-col text-center">
+              @for (pick of bottom5; track $index) {
+                <div class="w-[40px] user-score-bottom5">
+                  {{ pick.rounds[i] }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <!-- [djb 12/19/2025] is this still used? -->
+
+  <div class="header">
+    <b>Picks for {{ gamer.name }}</b>
+  </div>
+
+  @for (pick of bottom5; track $index) {
+    <div fxLayout="row" class="score-columns">
+      <div style="width: 200px" class="header">Name</div>
+
+      <div style="width: 75px; text-align: right" class="header">Total</div>
+
+      <div style="width: 75px; text-align: right" class="header">Thru</div>
+
+      <div style="width: 75px; text-align: right" class="header">Today</div>
+
+      <div style="width: 20px" class="header-spacer">&nbsp;</div>
+
+      @for (roundNumber of roundTitles; track $index) {
+        <div style="width: 50px" class="header">R{{ roundNumber }}</div>
+      }
+    </div>
+    <div class="flex flex-row">
+      <div style="width: 200px" class="bottom5 playerlist-detail-score">{{ pick.name }}</div>
+      <div style="width: 75px; text-align: right" class="bottom5 playerlist-detail-score">
+        {{ pick.details.total }}
+      </div>
+      <div style="width: 75px; text-align: right" class="bottom5 playerlist-detail-score">
+        {{ pick.details.thru }}
+      </div>
+      <div style="width: 75px; text-align: right" class="bottom5 playerlist-detail-score">
+        {{ pick.details.today }}
+      </div>
+
+      <div style="width: 20px" class="bottom5-spacer">&nbsp;</div>
+
+      @for (title of roundTitles; track $index; let i = $index) {
+        <div style="width: 50px" class="bottom5 playerlist-detail-score">
+          {{ pick.rounds[i] }}
+        </div>
+      }
+    </div>
+    <app-event-leader-detail [golfer]="pick.details" [eventUrl]="" />
+  }
+}

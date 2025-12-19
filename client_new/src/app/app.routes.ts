@@ -20,13 +20,17 @@ import { CalenderComponent } from './pages/calender/calender.component';
 import { AuthGuard } from './app.guard';
 import { MainComponent } from './pages/main/main.component';
 import { AboutComponent } from './pages/about/about.component';
+import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 
 export const GAMEURLS = {
   main: '/',
   history: '/',
   about: '/about',
-  leaderboard: '/component/leaderboard',
-  picks: '/component/picks',
+  leaderboard: '/leaderboard',
+  picks: '/picks',
+  eventOverview: '/event',
+  eventLeader: '/eventleaders',
+  course: '/courseinfo',
 };
 
 const makeRelativeUrl = (path: string) => {
@@ -49,6 +53,11 @@ export const routes: Routes = [
         path: makeRelativeUrl(GAMEURLS.about),
         component: AboutComponent,
         title: 'About this Application',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.leaderboard) + '/id/:id',
+        component: LeaderboardComponent,
+        title: 'Leaderboard - GolfPicks',
       },
       {
         path: 'ecommerce',
