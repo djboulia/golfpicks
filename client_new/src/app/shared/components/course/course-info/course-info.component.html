@@ -1,0 +1,322 @@
+<app-page-load [pageTitle]="course.name" [loader]="loader">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="flex flex-row justify-end py-4">
+            <a [attr.href]="baseUrl + '/id/' + id">
+              <app-button size="md" variant="primary"> Edit </app-button></a
+            >
+          </div>
+
+          <div class="flex flex-row justify-between py-4">
+            <div class="flex flex-col">
+              <div>Tee: {{ course.tee ? course.tee : 'Championship' }}</div>
+              @if (course.rating > 0) {
+                <div>Rating: {{ course.rating }}</div>
+              }
+              @if (course.slope > 0) {
+                <div>Slope: {{ course.slope }}</div>
+              }
+            </div>
+            <app-weather [weather]="weather"></app-weather>
+          </div>
+
+          <form name="form" role="form">
+            <div class="map">
+              <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
+                <map-marker [position]="mapCenter" [label]="course.name"></map-marker>
+              </google-map>
+            </div>
+
+            @if (frontNine.holes.length > 0) {
+              <div class="max-w-full overflow-x-auto py-4">
+                <table class="min-w-full">
+                  <thead
+                    class="px-6 py-3.5 border-t border-gray-100 border-y bg-theme-light-card dark:border-white/[0.05] dark:bg-theme-dark-card"
+                  >
+                    <tr>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        Hole
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        1
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        2
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        3
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        4
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        5
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        6
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        7
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        8
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        9
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        OUT
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        &nbsp;
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        Yardage
+                      </td>
+
+                      @for (hole of frontNine.holes; track $index) {
+                        <td
+                          class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                        >
+                          {{ hole.yardage }}
+                        </td>
+                      }
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        {{ frontNine.yardage }}
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                    </tr>
+
+                    <tr>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        Handicap
+                      </td>
+                      @for (hole of frontNine.holes; track $index) {
+                        <td
+                          class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                        >
+                          {{ hole.handicap }}
+                        </td>
+                      }
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        Par
+                      </td>
+
+                      @for (hole of frontNine.holes; track $index) {
+                        <td
+                          class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                        >
+                          {{ hole.par }}
+                        </td>
+                      }
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        {{ frontNine.par }}
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
+
+            @if (backNine.holes.length > 0) {
+              <div class="max-w-full overflow-x-auto py-4">
+                <table class="min-w-full">
+                  <thead
+                    class="px-6 py-3.5 border-t border-gray-100 border-y bg-theme-light-card dark:border-white/[0.05] dark:bg-theme-dark-card"
+                  >
+                    <tr>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        Hole
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        10
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        11
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        12
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        13
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        14
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        15
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        16
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        17
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        18
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        OUT
+                      </th>
+                      <th
+                        class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
+                      >
+                        TOTAL
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        Yardage
+                      </td>
+
+                      @for (hole of backNine.holes; track $index) {
+                        <td
+                          class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                        >
+                          {{ hole.yardage }}
+                        </td>
+                      }
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        {{ backNine.yardage }}
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        {{ course.yardage }}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        Handicap
+                      </td>
+                      @for (hole of frontNine.holes; track $index) {
+                        <td
+                          class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                        >
+                          {{ hole.handicap }}
+                        </td>
+                      }
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        Par
+                      </td>
+
+                      @for (hole of frontNine.holes; track $index) {
+                        <td
+                          class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                        >
+                          {{ hole.par }}
+                        </td>
+                      }
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      >
+                        {{ frontNine.par }}
+                      </td>
+                      <td
+                        class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text"
+                      ></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-load>

@@ -258,15 +258,15 @@
           </h2>
 
           <ul class="flex flex-col gap-1">
-            @for (nav of othersItems; track $index; let i = $index) {
+            @for (nav of adminItems; track $index; let i = $index) {
               <li>
                 @if (nav.subItems) {
                   <button
-                    (click)="toggleSubmenu('others', i)"
+                    (click)="toggleSubmenu('admin', i)"
                     class="menu-item group cursor-pointer"
                     [ngClass]="{
-                      'menu-item-active': openSubmenu === 'others-' + i,
-                      'menu-item-inactive': openSubmenu !== 'others-' + i,
+                      'menu-item-active': openSubmenu === 'admin-' + i,
+                      'menu-item-inactive': openSubmenu !== 'admin-' + i,
                       'xl:justify-center': !((isExpanded$ | async) || (isHovered$ | async)),
                       'xl:justify-start': (isExpanded$ | async) || (isHovered$ | async)
                     }"
@@ -274,8 +274,8 @@
                     <span
                       class="menu-item-icon-size"
                       [ngClass]="{
-                        'menu-item-icon-active': openSubmenu === 'others-' + i,
-                        'menu-item-icon-inactive': openSubmenu !== 'others-' + i
+                        'menu-item-icon-active': openSubmenu === 'admin-' + i,
+                        'menu-item-icon-inactive': openSubmenu !== 'admin-' + i
                       }"
                       [innerHTML]="nav.icon | safeHtml"
                     >

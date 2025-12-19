@@ -47,7 +47,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   testingMode = false;
   debugMode = false;
 
-  courseUrl = GAMEURLS.course;
+  courseUrl = GAMEURLS.courseInfo;
   eventLeaderUrl = GAMEURLS.eventLeader;
 
   reloadTimerId: any = null;

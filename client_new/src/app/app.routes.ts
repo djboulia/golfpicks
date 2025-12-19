@@ -21,6 +21,9 @@ import { AuthGuard } from './app.guard';
 import { MainComponent } from './pages/main/main.component';
 import { AboutComponent } from './pages/about/about.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
+import { CourseInfoComponent } from './shared/components/course/course-info/course-info.component';
+import { CoursesComponent } from './pages/courses/courses.component';
+import { CourseComponent } from './shared/components/course/course/course.component';
 
 export const GAMEURLS = {
   main: '/',
@@ -30,7 +33,9 @@ export const GAMEURLS = {
   picks: '/picks',
   eventOverview: '/event',
   eventLeader: '/eventleaders',
-  course: '/courseinfo',
+  courses: '/courses',
+  course: '/course',
+  courseInfo: '/courseinfo',
 };
 
 const makeRelativeUrl = (path: string) => {
@@ -58,6 +63,26 @@ export const routes: Routes = [
         path: makeRelativeUrl(GAMEURLS.leaderboard) + '/id/:id',
         component: LeaderboardComponent,
         title: 'Leaderboard - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.courses),
+        component: CoursesComponent,
+        title: 'Course Info - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.course),
+        component: CourseComponent,
+        title: 'Course Add - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.course) + '/id/:id',
+        component: CourseComponent,
+        title: 'Course Edit - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.courseInfo) + '/id/:id',
+        component: CourseInfoComponent,
+        title: 'Course Info - GolfPicks',
       },
       {
         path: 'ecommerce',
