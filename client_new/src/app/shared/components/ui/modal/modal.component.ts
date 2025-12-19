@@ -1,25 +1,13 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ElementRef,
-  OnInit,
-  OnDestroy,
-  HostListener
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   templateUrl: './modal.component.html',
-  styles: ``
+  styles: ``,
 })
 export class ModalComponent {
-
   @Input() isOpen = false;
   @Output() close = new EventEmitter<void>();
   @Input() className = '';
@@ -42,6 +30,7 @@ export class ModalComponent {
     document.body.style.overflow = this.isOpen ? 'hidden' : 'unset';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onBackdropClick(event: MouseEvent) {
     if (!this.isFullscreen) {
       this.close.emit();
@@ -53,7 +42,7 @@ export class ModalComponent {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  onEscape(event: KeyboardEvent) {
+  onEscape() {
     if (this.isOpen) {
       this.close.emit();
     }
