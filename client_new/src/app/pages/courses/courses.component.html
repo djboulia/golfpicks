@@ -7,45 +7,29 @@
 
   <div class="max-w-full overflow-x-auto">
     <table class="min-w-full">
-      <thead
-        class="px-6 py-3.5 border-t border-gray-100 border-y bg-theme-light-card dark:border-white/[0.05] dark:bg-theme-dark-card"
-      >
+      <thead class="table-header">
         <tr>
-          <th
-            class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
-          >
-            Name
-          </th>
-          <th
-            class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
-          >
-            Par
-          </th>
-          <th
-            class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
-          >
-            Yardage
-          </th>
-          <th
-            class="px-6 py-3 font-medium text-theme-light-text sm:px-6 text-theme-xs dark:text-theme-dark-text text-start"
-          ></th>
+          <th class="table-header-cell">Name</th>
+          <th class="table-header-cell">Par</th>
+          <th class="table-header-cell">Yardage</th>
+          <th class="table-header-cell"></th>
         </tr>
       </thead>
       <tbody>
         @for (course of courses; track $index) {
           <tr>
-            <td class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text">
+            <td class="table-cell">
               <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{ course.name }}</a>
             </td>
-            <td class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text">
+            <td class="table-cell">
               {{ course.par }}
             </td>
 
-            <td class="px-4 sm:px-6 py-3.5 text-theme-light-text dark:text-theme-dark-text">
+            <td class="table-cell">
               {{ course.yardage }}
             </td>
 
-            <td class="px-4 sm:px-6 py-3.5 text-brand-500 dark:text-brand-400">
+            <td class="table-cell text-brand-500 dark:text-brand-400">
               <a [attr.href]="baseUrl + '/id/' + course.id">Edit</a>
             </td>
           </tr>
