@@ -1,17 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ElementRef,
+  ViewChild,
+  SimpleChanges,
+} from '@angular/core';
 import flatpickr from 'flatpickr';
 import { LabelComponent } from '../label/label.component';
-import "flatpickr/dist/flatpickr.css";
+import 'flatpickr/dist/flatpickr.css';
 
 @Component({
   selector: 'app-date-picker',
-  imports: [CommonModule,LabelComponent],
+  imports: [CommonModule, LabelComponent],
   templateUrl: './date-picker.component.html',
-  styles: ``
+  styles: ``,
 })
 export class DatePickerComponent {
-
   @Input() id!: string;
   @Input() mode: 'single' | 'multiple' | 'range' | 'time' = 'single';
   @Input() defaultDate?: string | Date | string[] | Date[];
@@ -32,8 +39,19 @@ export class DatePickerComponent {
       defaultDate: this.defaultDate,
       onChange: (selectedDates, dateStr, instance) => {
         this.dateChange.emit({ selectedDates, dateStr, instance });
-      }
+      },
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['defaultDate']) {
+      // Check if the 'defaultDate' property specifically changed
+      const current = changes['defaultDate'].currentValue;
+      const previous = changes['defaultDate'].previousValue;
+      console.log(`Input 'defaultDate' changed from "${previous}" to "${current}"`);
+      // Add your custom logic here
+      this.flatpickrInstance?.setDate(current, false);
+    }
   }
 
   ngOnDestroy() {

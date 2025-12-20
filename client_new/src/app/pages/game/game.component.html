@@ -1,0 +1,99 @@
+<app-page-load [pageTitle]="title" [loader]="loader">
+  @if (game) {
+    <app-modal-confirm
+      [isOpen]="deleteModal.isOpen"
+      [title]="'Confirm Deleting Game'"
+      (close)="onCancel()"
+      (confirm)="onConfirm()"
+    >
+      <div>This will permanently remove the game:</div>
+      <div class="text-brand-500">{{ game.name }}</div>
+      <div>Are you sure?</div>
+    </app-modal-confirm>
+
+    <div>
+      @if (deleteButton) {
+        <div class="flex flex-row justify-end mb-4">
+          <a (click)="onDelete()"><app-button>Delete</app-button></a>
+        </div>
+      }
+
+      <form name="form" role="form">
+        <div class="flex flex-col">
+          <div class="flex flex-row py-2 items-center">
+            <div class="w-[100px]">Name</div>
+            <div class="w-full">
+              <app-input-field
+                type="text"
+                placeholder="Name"
+                name="name"
+                [value]="game.name"
+                class="form-input"
+                (valueChange)="game.name = $event.toString()"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row w-full py-2 items-center">
+            <div class="w-[100px]">Tournament</div>
+            <div class="w-full">
+              <app-select
+                [options]="getTourStops()"
+                placeholder="Select an option"
+                [value]="selectedTourStop?.tournament_id"
+                (valueChange)="onTourStopChanged($event)"
+                className="dark:bg-dark-900"
+              ></app-select>
+            </div>
+          </div>
+
+          <div class="flex flex-row w-full py-2 items-center">
+            <div class="w-[100px]">Course</div>
+            <div class="w-full">
+              <app-select
+                [options]="getCourses()"
+                placeholder="Select an option"
+                [value]="selectedCourse?.id"
+                (valueChange)="onCourseChanged($event)"
+                className="dark:bg-dark-900"
+              ></app-select>
+            </div>
+          </div>
+
+          <div class="flex flex-row w-full py-2 items-center">
+            <div class="w-[100px]">Start</div>
+            <div class="w-full">
+              <app-date-picker
+                id="date-picker-start"
+                label="Date Picker Input"
+                placeholder="Select start date"
+                defaultDate="{{ game.start }}"
+                (dateChange)="onStartDateChange($event)"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row w-full py-2 items-center">
+            <div class="w-[100px]">End</div>
+            <div class="w-full">
+              <app-date-picker
+                id="date-picker-end"
+                label="Date Picker Input"
+                placeholder="Select end date"
+                defaultDate="{{ game.end }}"
+                (dateChange)="onEndDateChange($event)"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-row justify-center mt-4">
+          <a (click)="onSubmit()">
+            <app-button>{{ submitButton }}</app-button>
+          </a>
+        </div>
+      </form>
+    </div>
+  }
+</app-page-load>

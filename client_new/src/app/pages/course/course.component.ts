@@ -7,18 +7,18 @@ import { AuthService } from '../../shared/services/auth/auth.service';
 import { CourseService } from '../../shared/services/golfpicks/course.service';
 import { Course } from '../../shared/services/golfpicks/course.model';
 import { LoaderService } from '../../shared/services/loader.service';
-import { ModalComponent } from '../../shared/components/ui/modal/modal.component';
 import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
 import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { InputFieldNumericComponent } from '../../shared/components/form/input/input-field-numeric.component';
 import { GAMEURLS } from '../../app.routes';
+import { ModalConfirmComponent } from '../../shared/components/common/modal-confirm/modal-confirm.component';
 
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
   imports: [
-    ModalComponent,
+    ModalConfirmComponent,
     PageLoadComponent,
     InputFieldComponent,
     ButtonComponent,
@@ -86,8 +86,6 @@ export class CourseComponent implements OnInit {
 
   /**
    * confirm the delete with a modal before processing.
-   *
-   * @param content TemplateRef for modal
    */
   onDelete() {
     console.log('delete clicked');

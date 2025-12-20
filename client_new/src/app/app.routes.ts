@@ -26,6 +26,9 @@ import { CoursesComponent } from './pages/courses/courses.component';
 import { CourseComponent } from './pages/course/course.component';
 import { TournamentComponent } from './pages/tournament/tournament.component';
 import { TournamentLeadersComponent } from './pages/tournament-leaders/tournament-leaders.component';
+import { GamesComponent } from './pages/games/games.component';
+import { GameComponent } from './pages/game/game.component';
+import { GamersComponent } from './pages/gamers/gamers.component';
 
 export const GAMEURLS = {
   main: '/',
@@ -38,6 +41,9 @@ export const GAMEURLS = {
   courses: '/courses',
   course: '/course',
   courseInfo: '/courseinfo',
+  games: '/games',
+  game: '/game',
+  gamers: '/gamers',
 };
 
 const makeRelativeUrl = (path: string) => {
@@ -96,6 +102,27 @@ export const routes: Routes = [
         component: TournamentLeadersComponent,
         title: 'Tournament Leaders - GolfPicks',
       },
+      {
+        path: makeRelativeUrl(GAMEURLS.games),
+        component: GamesComponent,
+        title: 'Games - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.game),
+        component: GameComponent,
+        title: 'Game Add - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.game + '/id/:id'),
+        component: GameComponent,
+        title: 'Game Edit - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.gamers + '/id/:id'),
+        component: GamersComponent,
+        title: 'Gamers - GolfPicks',
+      },
+
       {
         path: 'ecommerce',
         component: EcommerceComponent,
