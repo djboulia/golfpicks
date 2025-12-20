@@ -29,6 +29,7 @@ import { TournamentLeadersComponent } from './pages/tournament-leaders/tournamen
 import { GamesComponent } from './pages/games/games.component';
 import { GameComponent } from './pages/game/game.component';
 import { GamersComponent } from './pages/gamers/gamers.component';
+import { TournamentsComponent } from './pages/tournaments/tournaments.component';
 
 export const GAMEURLS = {
   main: '/',
@@ -36,6 +37,7 @@ export const GAMEURLS = {
   about: '/about',
   leaderboard: '/leaderboard',
   picks: '/picks',
+  tournaments: '/tournaments',
   tournamentOverview: '/tournament',
   tournamentLeaders: '/tournamentleaders',
   courses: '/courses',
@@ -91,6 +93,11 @@ export const routes: Routes = [
         path: makeRelativeUrl(GAMEURLS.courseInfo) + '/id/:id',
         component: CourseInfoComponent,
         title: 'Course Info - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.tournaments),
+        component: TournamentsComponent,
+        title: 'Tournaments - GolfPicks',
       },
       {
         path: makeRelativeUrl(GAMEURLS.tournamentOverview) + '/id/:id',

@@ -1,0 +1,33 @@
+<app-page-load [pageTitle]="'Tournaments'" [loader]="loader">
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="table-header">
+        <tr>
+          <th class="table-header-cell">Name</th>
+          <th class="table-header-cell">Rounds</th>
+          <th class="table-header-cell">Start</th>
+          <th class="table-header-cell">End</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (event of events; track $index) {
+          <tr>
+            <td class="table-cell">
+              <a class="link" [attr.href]="baseUrl + '/id/' + event.id">{{ event.name }}</a>
+            </td>
+            <td class="table-cell">
+              {{ event.rounds.length }}
+            </td>
+
+            <td class="table-cell">
+              {{ dateFormatter.formatDate(event.start) }}
+            </td>
+            <td class="table-cell">
+              {{ dateFormatter.formatDate(event.end) }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</app-page-load>
