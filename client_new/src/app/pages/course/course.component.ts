@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { ModalService } from '../../../services/modal.service';
+import { ModalService } from '../../shared/services/modal.service';
 
-import { AuthService } from '../../../services/auth/auth.service';
-import { CourseService } from '../../../services/golfpicks/course.service';
-import { Course } from '../../../services/golfpicks/course.model';
-import { LoaderService } from '../../../services/loader.service';
-import { ModalComponent } from '../../ui/modal/modal.component';
-import { PageLoadComponent } from '../../common/page-load/page-load.component';
-import { InputFieldComponent } from '../../form/input/input-field.component';
-import { ButtonComponent } from '../../ui/button/button.component';
-import { InputFieldNumericComponent } from '../../form/input/input-field-numeric.component';
-import { GAMEURLS } from '../../../../app.routes';
+import { AuthService } from '../../shared/services/auth/auth.service';
+import { CourseService } from '../../shared/services/golfpicks/course.service';
+import { Course } from '../../shared/services/golfpicks/course.model';
+import { LoaderService } from '../../shared/services/loader.service';
+import { ModalComponent } from '../../shared/components/ui/modal/modal.component';
+import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
+import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { InputFieldNumericComponent } from '../../shared/components/form/input/input-field-numeric.component';
+import { GAMEURLS } from '../../app.routes';
 
 @Component({
   selector: 'app-course',

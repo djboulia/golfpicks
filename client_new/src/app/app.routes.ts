@@ -23,7 +23,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 import { CourseInfoComponent } from './shared/components/course/course-info/course-info.component';
 import { CoursesComponent } from './pages/courses/courses.component';
-import { CourseComponent } from './shared/components/course/course/course.component';
+import { CourseComponent } from './pages/course/course.component';
 import { TournamentComponent } from './pages/tournament/tournament.component';
 import { TournamentLeadersComponent } from './pages/tournament-leaders/tournament-leaders.component';
 
