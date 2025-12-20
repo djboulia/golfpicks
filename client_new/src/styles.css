@@ -232,7 +232,7 @@ layer(base);
 }
 
 @utility player-score {
-  @apply w-[60px] border-1 border-[#dddddd] text-center items-center p-[5px] bg-theme-light-base text-theme-light-text dark:bg-theme-light-body dark:text-theme-dark-text font-medium;
+  @apply w-[60px] border-1 border-[#dddddd] text-center items-center p-[5px] bg-theme-light-base text-theme-light-text dark:bg-theme-light-card font-medium;
 }
 
 @utility player-score-header {
