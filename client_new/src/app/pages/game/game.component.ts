@@ -21,7 +21,6 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
 import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
 import { Option, SelectComponent } from '../../shared/components/form/select/select.component';
 import { DatePickerComponent } from '../../shared/components/form/date-picker/date-picker.component';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-game',
@@ -33,7 +32,6 @@ import { DatePipe } from '@angular/common';
     InputFieldComponent,
     SelectComponent,
     DatePickerComponent,
-    DatePipe,
   ],
 })
 export class GameComponent implements OnInit {
