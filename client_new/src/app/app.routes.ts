@@ -30,6 +30,8 @@ import { GamesComponent } from './pages/games/games.component';
 import { GameComponent } from './pages/game/game.component';
 import { GamersComponent } from './pages/gamers/gamers.component';
 import { TournamentsComponent } from './pages/tournaments/tournaments.component';
+import { PlayersComponent } from './pages/players/players.component';
+import { PlayerComponent } from './pages/player/player.component';
 
 export const GAMEURLS = {
   main: '/',
@@ -46,6 +48,8 @@ export const GAMEURLS = {
   games: '/games',
   game: '/game',
   gamers: '/gamers',
+  players: '/players',
+  player: '/player',
 };
 
 const makeRelativeUrl = (path: string) => {
@@ -129,7 +133,21 @@ export const routes: Routes = [
         component: GamersComponent,
         title: 'Gamers - GolfPicks',
       },
-
+      {
+        path: makeRelativeUrl(GAMEURLS.players),
+        component: PlayersComponent,
+        title: 'Players - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.player),
+        component: PlayerComponent,
+        title: 'Player - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.player + '/id/:id'),
+        component: PlayerComponent,
+        title: 'Player - GolfPicks',
+      },
       {
         path: 'ecommerce',
         component: EcommerceComponent,

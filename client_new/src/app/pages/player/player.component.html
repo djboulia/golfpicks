@@ -1,0 +1,88 @@
+<app-page-load [pageTitle]="title" [loader]="loader">
+  @if (user) {
+    <app-modal-confirm
+      [isOpen]="deleteModal.isOpen"
+      [title]="'Confirm Removing Player'"
+      (close)="onCancel()"
+      (confirm)="onConfirm()"
+    >
+      <div>This will permanently remove player:</div>
+      <div class="text-brand-500">{{ user.name }}.</div>
+      <div>Are you sure?</div>
+    </app-modal-confirm>
+
+    <div>
+      @if (deleteButton) {
+        <div class="flex flex-row justify-end mb-4">
+          <a (click)="onDelete()"><app-button>Delete</app-button></a>
+        </div>
+      }
+
+      <form name="form" role="form">
+        <div class="flex flex-col">
+          <div class="flex flex-row py-2 items-center">
+            <div class="w-[100px]">Name</div>
+            <div class="w-full">
+              <app-input-field
+                type="text"
+                placeholder="Name"
+                name="name"
+                [value]="user.name"
+                class="form-input"
+                (valueChange)="user.name = $event.toString()"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row py-2 items-center">
+            <div class="w-[100px]">Email</div>
+            <div class="w-full">
+              <app-input-field
+                type="text"
+                placeholder="Email"
+                name="email"
+                [value]="user.username"
+                class="form-input"
+                (valueChange)="user.username = $event.toString()"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row py-2 items-center">
+            <div class="w-[100px]">Password</div>
+            <div class="w-full">
+              <app-input-field
+                [type]="'password'"
+                placeholder="Password"
+                name="password"
+                [value]="user.password"
+                class="form-input"
+                (valueChange)="user.password = $event.toString()"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row py-2 items-center">
+            <div class="w-[100px]">Admin</div>
+            <div class="w-full">
+              <app-switch
+                label="Checked"
+                [defaultChecked]="user.admin"
+                (valueChange)="onAdmin()"
+              ></app-switch>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-row justify-center mt-4">
+          <a (click)="onSubmit()">
+            <app-button>{{ submitButton }}</app-button>
+          </a>
+        </div>
+      </form>
+    </div>
+  }
+</app-page-load>

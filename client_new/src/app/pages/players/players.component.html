@@ -1,0 +1,35 @@
+<app-page-load [pageTitle]="'Players'" [loader]="loader">
+  <div class="flex flex-row justify-end py-4">
+    <a [attr.href]="baseUrl">
+      <app-button size="md" variant="primary"> Add New Player </app-button></a
+    >
+  </div>
+
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="table-header">
+        <tr>
+          <th class="table-header-cell">Name</th>
+          <th class="table-header-cell">Email</th>
+          <th class="table-header-cell">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track $index) {
+          <tr>
+            <td class="table-cell">
+              {{ user.name }}
+            </td>
+            <td class="table-cell">
+              {{ user.username }}
+            </td>
+
+            <td class="table-cell">
+              <a class="link" [attr.href]="baseUrl + '/id/' + user.id">Edit</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</app-page-load>
