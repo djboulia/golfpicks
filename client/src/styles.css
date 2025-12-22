@@ -329,7 +329,7 @@ layer(base);
 }
 
 @utility menu-item-icon {
-  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+  @apply text-theme-light-text group-hover:text-theme-light-text dark:text-theme-dark-text dark:group-hover:text-theme-dark-text;
 }
 
 @utility menu-item-icon-active {
@@ -343,7 +343,7 @@ layer(base);
 }
 
 @utility menu-item-icon-inactive {
-  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+  @apply text-theme-light-text group-hover:text-gray-700 dark:text-theme-dark-text dark:group-hover:text-gray-300;
 }
 
 @utility menu-item-arrow {
