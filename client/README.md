@@ -1,27 +1,50 @@
-# GolfpicksClient
+# Golfpicks Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
+This project uses Angular v20 and was started with TailAdmin Angular.
 
-## Development server
+TailAdmin Angular comes with essential UI components and layouts for building **feature-rich, data-driven dashboards** and **admin panels**. TailAdmin Angular is built on:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+* **Angular 20+**
+* **TypeScript**
+* **Tailwind CSS v4**
 
-## Code scaffolding
+### Quick Links
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- ✨ [Visit Website](https://tailadmin.com/)
+- 🚀 [Angular Demo](https://angular-demo.tailadmin.com/)
+- 📄 [Documentation](https://tailadmin.com/docs)
+- ⬇️ [Download](https://tailadmin.com/download)
+- 🖌️ [Figma Design File (Free Edition)](https://www.figma.com/community/file/1463141366275764364)
+- ⚡ [Get PRO Version](https://tailadmin.com/pricing)
+---
 
-## Build
+## Installation
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm install
+npm start
+```
 
-## Running unit tests
+# Application details
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+This application started as an Angular v1 application back in 2016. The original implementation uses SCSS for styling and Bootstrap v3 for the UI framework. The application has been migrated to Angular v20 and now uses Tailwind CSS for styling.
 
-## Running end-to-end tests
+## Authentciation
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+This application defines an `AuthGuard` located in `app.guard.ts` that protects routes from unauthenticated access. The guard checks the backend via the `/shared/services/auth/auth-session.service.ts` to see if the user is logged in before allowing access to specific routes.  If not logged in, the user is redirected to the login page.
 
-## Further help
+The login page is located at `/login` and the logout page at `/logout`. These pages use the `LoginComponent` and `LogoutComponent` components located in `/pages/auth-pages` respectively.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Once logged, the user can access protected routes as defined in `app.routes.ts`.
+
+The login page under the `pages/auth-pages` uses the `LoginFormComponent` located in `/shared/components/auth/login-form` to handle user login. This component collects the user's email and password and calls the `AuthService` to perform the login operation.
+
+There is no logout page; instead, the logout functionality is handled directly by calling the `AuthService` to log the user out and then redirects them to the login page.
+
+## Theming
+
+The `styles.css` file located in the `src` folder contains the global styles for the application. This file includes the Tailwind CSS directives and custom styles for theming the application.  The app supports light and dark themes, which can be toggled by the user. The theme preference is stored in the browser's local storage and applied on app initialization. `--color-brand-xxx` specify the primary brand color (green in this case). The `--color-theme-light-xxx` and `--color-theme-dark-xxx` variables define the base palette for light and dark modes respectively. 
+
+## Layout
+
+The `layout` folder located in `src/app/shared/layout` contains the layout components for the application.  This includes the header and sidebar components.  These are responsive and adapt to different screen sizes. The sidebar can be toggled open and closed, and the header contains navigation links and user profile information.
