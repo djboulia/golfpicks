@@ -17,4 +17,6 @@ import { LoaderService } from '../../../services/loader.service';
 export class PageLoadComponent {
   @Input() pageTitle = '';
   @Input() loader: LoaderService | undefined = undefined;
+
+  currentYear: number = new Date().getFullYear();
 }

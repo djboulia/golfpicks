@@ -25,6 +25,11 @@
       </div>
     } @else {
       <ng-content></ng-content>
+      <div
+        class="absolute text-sm text-center text-theme-light-text -translate-x-1/2 bottom-6 left-1/2 dark:text-theme-dark-text"
+      >
+        &copy; {{ currentYear }} - Boulia Productions
+      </div>
     }
   </div>
 </div>
