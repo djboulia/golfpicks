@@ -8,7 +8,7 @@ import { EventService } from '../../shared/services/golfpicks/event.service';
 import { GameDayService } from '../../shared/services/golfpicks/game-day.service';
 import { DateHelperService } from '../../shared/services/date/date-helper.service';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { Weather, WeatherComponent } from '../../shared/components/weather/weather.component';
 import { CourseOverviewComponent } from '../../shared/components/course/course-overview/course-overview.component';
 import { TournamentInfoComponent } from '../../shared/components/tournament/tournament-info/tournament-info.component';
@@ -19,7 +19,7 @@ import { UserScoreBoardComponent } from '../../shared/components/scores/user-sco
 @Component({
   selector: 'app-leaderboard',
   imports: [
-    PageLoadComponent,
+    PageLoadCardComponent,
     CourseOverviewComponent,
     TournamentInfoComponent,
     WeatherComponent,

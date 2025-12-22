@@ -6,7 +6,7 @@ import { AuthGuard } from './app.guard';
 import { MainComponent } from './pages/main/main.component';
 import { AboutComponent } from './pages/about/about.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
-import { CourseInfoComponent } from './shared/components/course/course-info/course-info.component';
+import { CourseInfoComponent } from './pages/course-info/course-info.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { CourseComponent } from './pages/course/course.component';
 import { TournamentComponent } from './pages/tournament/tournament.component';

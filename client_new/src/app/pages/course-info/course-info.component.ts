@@ -4,18 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
-import { Course } from '../../../services/golfpicks/course.model';
-import { CourseService } from '../../../services/golfpicks/course.service';
-import { LoaderService } from '../../../services/loader.service';
-import { PageLoadComponent } from '../../common/page-load/page-load.component';
-import { WeatherComponent } from '../../weather/weather.component';
-import { ButtonComponent } from '../../ui/button/button.component';
-import { GAMEURLS } from '../../../../app.routes';
+import { Course } from '../../shared/services/golfpicks/course.model';
+import { CourseService } from '../../shared/services/golfpicks/course.service';
+import { LoaderService } from '../../shared/services/loader.service';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
+import { WeatherComponent } from '../../shared/components/weather/weather.component';
+import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { GAMEURLS } from '../../app.routes';
 
 @Component({
   selector: 'app-course-info',
   templateUrl: './course-info.component.html',
-  imports: [GoogleMapsModule, PageLoadComponent, WeatherComponent, ButtonComponent],
+  imports: [GoogleMapsModule, PageLoadCardComponent, WeatherComponent, ButtonComponent],
 })
 export class CourseInfoComponent implements OnInit {
   id: string | null = null;

@@ -4,14 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../shared/services/golfpicks/event.service';
 import { DateFormatterService } from '../../shared/services/date/date-formatter.service';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { GAMEURLS } from '../../app.routes';
 
 @Component({
   selector: 'app-tournament',
   templateUrl: './tournament.component.html',
-  imports: [PageLoadComponent, GoogleMapsModule],
+  imports: [PageLoadCardComponent, GoogleMapsModule],
 })
 export class TournamentComponent implements OnInit {
   id: string | null = null;

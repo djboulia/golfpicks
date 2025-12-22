@@ -3,14 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { Game } from '../../shared/services/golfpicks/game.model';
 import { GameService } from '../../shared/services/golfpicks/game.service';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { GAMEURLS } from '../../app.routes';
 
 @Component({
   selector: 'app-games',
   templateUrl: './games.component.html',
-  imports: [PageLoadComponent, ButtonComponent],
+  imports: [PageLoadCardComponent, ButtonComponent],
 })
 export class GamesComponent implements OnInit {
   games: Game[] = [];

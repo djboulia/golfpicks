@@ -7,7 +7,7 @@ import { Gamer } from '../../shared/services/golfpicks/gamer.model';
 import { GamerService } from '../../shared/services/golfpicks/gamer.service';
 import { ModalService } from '../../shared/services/modal.service';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { ModalConfirmComponent } from '../../shared/components/common/modal-confirm/modal-confirm.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
@@ -18,7 +18,7 @@ import { GAMEURLS } from '../../app.routes';
   selector: 'app-player',
   templateUrl: './player.component.html',
   imports: [
-    PageLoadComponent,
+    PageLoadCardComponent,
     ModalConfirmComponent,
     ButtonComponent,
     InputFieldComponent,

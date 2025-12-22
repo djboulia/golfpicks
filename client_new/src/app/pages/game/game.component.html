@@ -1,4 +1,4 @@
-<app-page-load [pageTitle]="title" [loader]="loader">
+<app-page-load-card [pageTitle]="title" [loader]="loader">
   @if (game) {
     <app-modal-confirm
       [isOpen]="deleteModal.isOpen"
@@ -11,7 +11,7 @@
       <div>Are you sure?</div>
     </app-modal-confirm>
 
-    <div>
+    <div class="text-theme-light-text dark:text-theme-dark-text">
       @if (deleteButton) {
         <div class="flex flex-row justify-end mb-4">
           <a (click)="onDelete()"><app-button>Delete</app-button></a>
@@ -96,4 +96,4 @@
       </form>
     </div>
   }
-</app-page-load>
+</app-page-load-card>

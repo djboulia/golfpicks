@@ -5,12 +5,12 @@ import { EventService } from '../../shared/services/golfpicks/event.service';
 import { DateFormatterService } from '../../shared/services/date/date-formatter.service';
 import { GAMEURLS } from '../../app.routes';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 
 @Component({
   selector: 'app-events',
   templateUrl: './tournaments.component.html',
-  imports: [PageLoadComponent],
+  imports: [PageLoadCardComponent],
 })
 export class TournamentsComponent implements OnInit {
   events: Event[] = [];

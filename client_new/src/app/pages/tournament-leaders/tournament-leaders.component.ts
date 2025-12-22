@@ -4,14 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../shared/services/golfpicks/event.service';
 import { GAMEURLS } from '../../app.routes';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { CommonModule } from '@angular/common';
 import { TournamentLeaderDetailComponent } from '../../shared/components/tournament/tournament-leader-detail/tournament-leader-detail.component';
 
 @Component({
   selector: 'app-tournament-leaders',
   templateUrl: './tournament-leaders.component.html',
-  imports: [CommonModule, PageLoadComponent, TournamentLeaderDetailComponent],
+  imports: [CommonModule, PageLoadCardComponent, TournamentLeaderDetailComponent],
 })
 export class TournamentLeadersComponent implements OnInit {
   id: string | null = null;

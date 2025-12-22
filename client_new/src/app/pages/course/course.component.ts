@@ -7,7 +7,7 @@ import { AuthService } from '../../shared/services/auth/auth.service';
 import { CourseService } from '../../shared/services/golfpicks/course.service';
 import { Course } from '../../shared/services/golfpicks/course.model';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { InputFieldNumericComponent } from '../../shared/components/form/input/input-field-numeric.component';
@@ -19,7 +19,7 @@ import { ModalConfirmComponent } from '../../shared/components/common/modal-conf
   templateUrl: './course.component.html',
   imports: [
     ModalConfirmComponent,
-    PageLoadComponent,
+    PageLoadCardComponent,
     InputFieldComponent,
     ButtonComponent,
     InputFieldNumericComponent,

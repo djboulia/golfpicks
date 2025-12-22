@@ -10,7 +10,7 @@ import { GamerService } from '../../shared/services/golfpicks/gamer.service';
 import { GameDay } from '../../shared/services/golfpicks/game.model';
 import { Gamer } from '../../shared/services/golfpicks/gamer.model';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { CheckboxComponent } from '../../shared/components/form/input/checkbox.component';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-picks',
   templateUrl: './picks.component.html',
-  imports: [CommonModule, PageLoadComponent, ButtonComponent, CheckboxComponent],
+  imports: [CommonModule, PageLoadCardComponent, ButtonComponent, CheckboxComponent],
 })
 export class PicksComponent implements OnInit {
   readonly NUM_SELECTIONS = 10;

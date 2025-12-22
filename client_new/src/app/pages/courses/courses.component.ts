@@ -4,13 +4,13 @@ import { Course } from '../../shared/services/golfpicks/course.model';
 import { CourseService } from '../../shared/services/golfpicks/course.service';
 import { LoaderService } from '../../shared/services/loader.service';
 import { GAMEURLS } from '../../app.routes';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
-  imports: [PageLoadComponent, ButtonComponent],
+  imports: [PageLoadCardComponent, ButtonComponent],
 })
 export class CoursesComponent implements OnInit {
   courses: Course[] = [];

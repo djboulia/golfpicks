@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { GamerService } from '../../shared/services/golfpicks/gamer.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { LoaderService } from '../../shared/services/loader.service';
 import { GAMEURLS } from '../../app.routes';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
@@ -9,7 +9,7 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
 @Component({
   selector: 'app-players',
   templateUrl: './players.component.html',
-  imports: [PageLoadComponent, ButtonComponent],
+  imports: [PageLoadCardComponent, ButtonComponent],
 })
 export class PlayersComponent implements OnInit {
   users: any = null;

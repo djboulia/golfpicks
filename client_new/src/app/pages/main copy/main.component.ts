@@ -5,8 +5,8 @@ import { GamerService } from '../../shared/services/golfpicks/gamer.service';
 import { mergeMap, map, catchError, throwError } from 'rxjs';
 import { GameHistoryComponent } from '../../shared/components/game/game-history/game-history.component';
 import { GameNextComponent } from '../../shared/components/game/game-next/game-next.component';
+import { PageLoadComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { LoaderService } from '../../shared/services/loader.service';
-import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
 
 @Component({
   selector: 'app-main',
