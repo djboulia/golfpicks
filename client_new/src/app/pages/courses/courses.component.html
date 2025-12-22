@@ -1,0 +1,40 @@
+<app-page-load-card [pageTitle]="'Courses'" [loader]="loader">
+  <div class="flex flex-row justify-end py-4">
+    <a [attr.href]="baseUrl">
+      <app-button size="md" variant="primary"> Add New Course </app-button></a
+    >
+  </div>
+
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="table-header">
+        <tr>
+          <th class="table-header-cell">Name</th>
+          <th class="table-header-cell">Par</th>
+          <th class="table-header-cell">Yardage</th>
+          <th class="table-header-cell"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (course of courses; track $index) {
+          <tr>
+            <td class="table-cell">
+              <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{ course.name }}</a>
+            </td>
+            <td class="table-cell">
+              {{ course.par }}
+            </td>
+
+            <td class="table-cell">
+              {{ course.yardage }}
+            </td>
+
+            <td class="table-cell text-brand-500 dark:text-brand-400">
+              <a [attr.href]="baseUrl + '/id/' + course.id">Edit</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</app-page-load-card>

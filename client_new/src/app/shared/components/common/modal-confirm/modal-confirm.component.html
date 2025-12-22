@@ -1,0 +1,23 @@
+<app-modal
+  className="max-w-[75%]"
+  [isOpen]="isOpen"
+  [showCloseButton]="false"
+  (close)="close.emit()"
+>
+  <div class="flex flex-row justify-center items-center">
+    <h4
+      class="text-theme-xl font-semibold text-theme-light-heading dark:text-theme-dark-heading p-2"
+    >
+      {{ title }}
+    </h4>
+  </div>
+  <div
+    class="flex flex-col gap-2 text-lg text-center my-2 mx-20 text-theme-light-text dark:text-theme-dark-text"
+  >
+    <ng-content></ng-content>
+  </div>
+  <div class="flex flex-row justify-center gap-4 py-4">
+    <app-button (click)="confirm.emit()">Confirm</app-button>
+    <app-button (click)="close.emit()">Cancel</app-button>
+  </div>
+</app-modal>

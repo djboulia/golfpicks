@@ -1,0 +1,165 @@
+<app-page-load-card [pageTitle]="title" [loader]="loader">
+  @if (course) {
+    <app-modal-confirm
+      [isOpen]="deleteModal.isOpen"
+      [title]="'Confirm Removing Course'"
+      (close)="onCancel()"
+      (confirm)="onConfirm()"
+    >
+      <div>This will permanently remove the course:</div>
+      <div class="text-brand-700">{{ course.name }}</div>
+      <div>Are you sure?</div>
+    </app-modal-confirm>
+
+    <div class="text-theme-light-text dark:text-theme-dark-text">
+      @if (deleteButton) {
+        <div class="flex flex-row justify-end mb-4">
+          <a (click)="onDelete()"><app-button>Delete</app-button></a>
+        </div>
+      }
+
+      <form name="form" role="form">
+        <div class="flex flex-col">
+          <div class="flex flex-row py-2 items-center">
+            <div class="w-[100px]">Name</div>
+            <div class="w-full">
+              <app-input-field
+                type="text"
+                placeholder="Name"
+                name="name"
+                [value]="course.name"
+                class="form-input"
+                (valueChange)="course.name = $event.toString()"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row w-full py-2 items-center">
+            <div class="w-[100px]">Tee</div>
+            <div class="w-full">
+              <app-input-field
+                type="text"
+                placeholder="Tee"
+                name="tee"
+                [value]="course.tee"
+                class="form-input"
+                (valueChange)="course.tee = $event.toString()"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-between gap-4 py-2">
+            <div class="flex flex-row items-center w-[50%]">
+              <div class="w-[100px]">Slope</div>
+              <div class="w-full">
+                <app-input-field-numeric
+                  placeholder="Slope"
+                  name="slope"
+                  [value]="course.slope"
+                  (valueChange)="course.slope = $event"
+                  class="form-input"
+                />
+              </div>
+            </div>
+
+            <div class="flex flex-row items-center w-[50%]">
+              <div class="w-[100px]">Rating</div>
+              <div class="w-full">
+                <app-input-field-numeric
+                  placeholder="Rating"
+                  name="rating"
+                  [value]="course.rating"
+                  (valueChange)="course.rating = $event"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-between gap-4 py-2">
+            <div class="flex flex-row w-[50%]">
+              <div class="w-[100px]">Latitude</div>
+              <div class="w-full">
+                <app-input-field-numeric
+                  placeholder="Lat"
+                  name="lat"
+                  [value]="course.location.lat"
+                  (valueChange)="course.location.lat = $event"
+                  class="form-input"
+                />
+              </div>
+            </div>
+            <div class="flex flex-row w-[50%]">
+              <div class="w-[100px]">Longitude</div>
+              <div class="w-full">
+                <app-input-field-numeric
+                  placeholder="Lng"
+                  name="lng"
+                  [value]="course.location.lng"
+                  (valueChange)="course.location.lng = $event"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </div>
+          @if (course.holes && course.holes.length > 0) {
+            <div class="max-w-full overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="table-header">
+                  <tr>
+                    <th class="table-header-cell">Hole</th>
+                    <th class="table-header-cell">Yards</th>
+                    <th class="table-header-cell">Handicap</th>
+                    <th class="table-header-cell">Par</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (hole of course.holes; track $index) {
+                    <tr>
+                      <td class="table-cell">
+                        {{ hole.number }}
+                      </td>
+                      <td class="table-cell">
+                        <app-input-field-numeric
+                          name="{{ 'yardage' + hole.number }}"
+                          [value]="hole.yardage"
+                          (valueChange)="hole.yardage = $event"
+                          class="form-input"
+                        />
+                      </td>
+                      <td class="table-cell">
+                        <app-input-field-numeric
+                          name="{{ 'handicap' + hole.number }}"
+                          [value]="hole.handicap"
+                          (valueChange)="hole.handicap = $event"
+                          class="form-input"
+                        />
+                      </td>
+
+                      <td class="table-cell">
+                        <app-input-field-numeric
+                          name="{{ 'par' + hole.number }}"
+                          [value]="hole.par"
+                          (valueChange)="hole.par = $event"
+                          class="form-input"
+                        />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-row justify-center mt-4">
+          <a (click)="onSubmit()">
+            <app-button>{{ submitButton }}</app-button>
+          </a>
+        </div>
+      </form>
+    </div>
+  }
+</app-page-load-card>

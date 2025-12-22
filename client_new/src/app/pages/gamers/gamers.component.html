@@ -1,0 +1,57 @@
+<app-page-load [pageTitle]="game.name" [loader]="loader">
+  <div>{{ dateFormatter.formatDateRange(game.start, game.end) }}</div>
+
+  <div class="flex flex-col md:flex-row gap-4">
+    <div
+      class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6 w-full"
+    >
+      <div class="max-w-full overflow-x-auto">
+        <table class="min-w-full">
+          <thead class="table-header">
+            <tr>
+              <th class="table-header-cell text-lg">Players who have made their picks</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (picks.length === 0) {
+              <tr>
+                <td class="table-cell">[ No players have made their picks ]</td>
+              </tr>
+            }
+            @for (pick of picks; track $index) {
+              <tr>
+                <td class="table-cell">{{ pick.name }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div
+      class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6 w-full"
+    >
+      <table class="min-w-full">
+        <thead class="table-header">
+          <tr>
+            <th class="table-header-cell text-lg">
+              Players who have <b class="text-error-500">NOT</b> made their picks
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (nopicks.length === 0) {
+            <tr>
+              <td class="table-cell">[ All players have made their picks ]</td>
+            </tr>
+          }
+          @for (nopick of nopicks; track $index) {
+            <tr>
+              <td class="table-cell">{{ nopick.name }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-page-load>

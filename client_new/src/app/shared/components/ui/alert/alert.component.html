@@ -1,0 +1,22 @@
+<div class="rounded-xl border p-4" [ngClass]="variantClasses.container">
+  <div class="flex items-start gap-3">
+    <div class="-mt-0.5" [ngClass]="variantClasses.icon" [innerHTML]="iconSvg | safeHtml"></div>
+
+    <div>
+      <h4 class="mb-1 text-sm font-semibold text-theme-light-heading dark:text-theme-dark-heading">
+        {{ title }}
+      </h4>
+
+      <p class="text-sm text-theme-light-text dark:text-theme-dark-text">{{ message }}</p>
+
+      @if (showLink) {
+        <a
+          [routerLink]="linkHref"
+          class="inline-block mt-3 text-sm font-medium text-theme-light-text underline dark:text-theme-dark-text"
+        >
+          {{ linkText }}
+        </a>
+      }
+    </div>
+  </div>
+</div>

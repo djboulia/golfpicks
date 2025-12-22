@@ -1,0 +1,163 @@
+<app-page-load-card [pageTitle]="course.name" [loader]="loader">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="flex flex-row justify-end py-4">
+            <a [attr.href]="baseUrl + '/id/' + id">
+              <app-button size="md" variant="primary"> Edit </app-button></a
+            >
+          </div>
+
+          <div class="flex flex-row justify-between py-4">
+            <div class="flex flex-col">
+              <div>Tee: {{ course.tee ? course.tee : 'Championship' }}</div>
+              @if (course.rating > 0) {
+                <div>Rating: {{ course.rating }}</div>
+              }
+              @if (course.slope > 0) {
+                <div>Slope: {{ course.slope }}</div>
+              }
+            </div>
+            <app-weather [weather]="weather"></app-weather>
+          </div>
+
+          <form name="form" role="form">
+            <div class="map">
+              <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
+                <map-marker [position]="mapCenter" [label]="course.name"></map-marker>
+              </google-map>
+            </div>
+
+            @if (frontNine.holes.length > 0) {
+              <div class="max-w-full overflow-x-auto py-4">
+                <table class="min-w-full">
+                  <thead class="table-header">
+                    <tr>
+                      <th class="table-header-cell">Hole</th>
+                      <th class="table-header-cell">1</th>
+                      <th class="table-header-cell">2</th>
+                      <th class="table-header-cell">3</th>
+                      <th class="table-header-cell">4</th>
+                      <th class="table-header-cell">5</th>
+                      <th class="table-header-cell">6</th>
+                      <th class="table-header-cell">7</th>
+                      <th class="table-header-cell">8</th>
+                      <th class="table-header-cell">9</th>
+                      <th class="table-header-cell">OUT</th>
+                      <th class="table-header-cell">&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="table-cell">Yardage</td>
+
+                      @for (hole of frontNine.holes; track $index) {
+                        <td class="table-cell">
+                          {{ hole.yardage }}
+                        </td>
+                      }
+                      <td class="table-cell">
+                        {{ frontNine.yardage }}
+                      </td>
+                      <td class="table-cell"></td>
+                    </tr>
+
+                    <tr>
+                      <td class="table-cell">Handicap</td>
+                      @for (hole of frontNine.holes; track $index) {
+                        <td class="table-cell">
+                          {{ hole.handicap }}
+                        </td>
+                      }
+                      <td class="table-cell"></td>
+                      <td class="table-cell"></td>
+                    </tr>
+                    <tr>
+                      <td class="table-cell">Par</td>
+
+                      @for (hole of frontNine.holes; track $index) {
+                        <td class="table-cell">
+                          {{ hole.par }}
+                        </td>
+                      }
+                      <td class="table-cell">
+                        {{ frontNine.par }}
+                      </td>
+                      <td class="table-cell"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
+
+            @if (backNine.holes.length > 0) {
+              <div class="max-w-full overflow-x-auto py-4">
+                <table class="min-w-full">
+                  <thead class="table-header">
+                    <tr>
+                      <th class="table-header-cell">Hole</th>
+                      <th class="table-header-cell">10</th>
+                      <th class="table-header-cell">11</th>
+                      <th class="table-header-cell">12</th>
+                      <th class="table-header-cell">13</th>
+                      <th class="table-header-cell">14</th>
+                      <th class="table-header-cell">15</th>
+                      <th class="table-header-cell">16</th>
+                      <th class="table-header-cell">17</th>
+                      <th class="table-header-cell">18</th>
+                      <th class="table-header-cell">OUT</th>
+                      <th class="table-header-cell">TOTAL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="table-cell">Yardage</td>
+
+                      @for (hole of backNine.holes; track $index) {
+                        <td class="table-cell">
+                          {{ hole.yardage }}
+                        </td>
+                      }
+                      <td class="table-cell">
+                        {{ backNine.yardage }}
+                      </td>
+                      <td class="table-cell">
+                        >
+                        {{ course.yardage }}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="table-cell">Handicap</td>
+                      @for (hole of frontNine.holes; track $index) {
+                        <td class="table-cell">
+                          {{ hole.handicap }}
+                        </td>
+                      }
+                      <td class="table-cell"></td>
+                      <td class="table-cell"></td>
+                    </tr>
+                    <tr>
+                      <td class="table-cell">Par</td>
+
+                      @for (hole of frontNine.holes; track $index) {
+                        <td class="table-cell">
+                          {{ hole.par }}
+                        </td>
+                      }
+                      <td class="table-cell">
+                        {{ frontNine.par }}
+                      </td>
+                      <td class="table-cell"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-load-card>

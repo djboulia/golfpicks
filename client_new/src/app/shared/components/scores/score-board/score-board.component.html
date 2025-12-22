@@ -1,0 +1,46 @@
+<div class="flex flex-row justify-center">
+  <div
+    class="overflow-hidden rounded-2xl w-[550px] border border-gray-200 bg-brand-500 dark:bg-brand-600 py-4 dark:border-white/[0.05] text-theme-dark-text"
+  >
+    <h3 class="font-bold text-2xl text-center pb-2">Game Leaderboard</h3>
+    <div class="flex flex-row text-lg justify-center p-2">
+      <div class="flex flex-row">
+        <div class="flex flex-col">
+          <div class="text-left border-b-1 py-2 pr-10">
+            <b>Name</b>
+          </div>
+
+          @for (gamer of gamers; track $index) {
+            <div class="py-2 pr-10">
+              {{ gamer.name }}
+            </div>
+          }
+        </div>
+
+        @for (title of roundTitles; track $index; let i = $index) {
+          <div class="flex flex-col">
+            <div class="px-6 py-2 text-center border-b-1">
+              <b>{{ title }}</b>
+            </div>
+            @for (gamer of gamers; track $index) {
+              <div
+                class="py-2 px-6 text-center"
+                [ngClass]="{
+                  'text-game-leader bg-brand-600 dark:bg-brand-800': gamer.rounds[i].leader
+                }"
+              >
+                {{ gamer.rounds[i].score }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-row justify-center">
+      <span class="text-game-leader bg-brand-600 dark:bg-brand-800">*</span>&nbsp;&nbsp;<span
+        >Round Leader</span
+      >
+    </div>
+  </div>
+</div>

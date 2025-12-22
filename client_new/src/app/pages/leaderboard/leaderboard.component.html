@@ -1,0 +1,69 @@
+<app-page-load-card [pageTitle]="game.name" [loader]="loader">
+  <div class="text-theme-light-text dark:text-theme-dark-text">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="flex flex-row justify-end pb-6">
+            <div class="text-sm">
+              <i>{{ lastUpdate }}</i>
+            </div>
+          </div>
+
+          <!-- large screen layout -->
+          <div class="hidden lg:block">
+            <div class="flex flex-row justify-between gap-4">
+              <app-course-overview
+                [currentRound]="currentRound"
+                [courseUrl]="courseUrl"
+                [courseInfo]="courseInfo"
+              ></app-course-overview>
+
+              <app-weather [weather]="weather"></app-weather>
+
+              <app-tournament-info [id]="game.event" />
+            </div>
+          </div>
+
+          <!-- small screen layout -->
+          <div class="lg:hidden">
+            <div class="flex flex-col">
+              <div class="flex flex-row justify-between gap-4">
+                <app-course-overview
+                  [currentRound]="currentRound"
+                  [courseUrl]="courseUrl"
+                  [courseInfo]="courseInfo"
+                ></app-course-overview>
+
+                <app-weather [weather]="weather"></app-weather>
+              </div>
+
+              <app-tournament-info [id]="game.event" />
+            </div>
+          </div>
+
+          <marquee
+            style="padding: 10px"
+            direction="left"
+            scrolldelay="200"
+            behavior="loop"
+            [innerHtml]="newsFeed"
+          ></marquee>
+
+          <app-score-board [roundTitles]="roundTitles" [gamers]="gamers"> </app-score-board>
+
+          <h4 class="py-6 font-semibold text-xl">Details</h4>
+          <div class="text-center" id="tablesection">
+            @for (gamer of gamers; track $index) {
+              <div class="py-6">
+                <app-user-score-board
+                  [gamer]="gamer"
+                  [roundTitles]="roundTitles"
+                  [tournamentLeaderUrl]="tournamentLeaderUrl + '/id/' + game.event"
+                />
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div></div
+></app-page-load-card>

@@ -1,0 +1,33 @@
+<app-page-load-card [pageTitle]="'Games'" [loader]="loader">
+  <div class="flex flex-row justify-end py-4">
+    <a [attr.href]="baseUrl"> <app-button size="md" variant="primary"> Add Game </app-button></a>
+  </div>
+
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="table-header">
+        <tr>
+          <th class="table-header-cell">Game</th>
+          <th class="table-header-cell"></th>
+          <th class="table-header-cell"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (game of games; track $index) {
+          <tr>
+            <td class="table-cell">
+              {{ game.name }}
+            </td>
+            <td class="table-cell">
+              <a class="link" [attr.href]="basePlayersUrl + '/id/' + game.id">View Players</a>
+            </td>
+
+            <td class="table-cell">
+              <a class="link" [attr.href]="baseUrl + '/id/' + game.id">Edit</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</app-page-load-card>
