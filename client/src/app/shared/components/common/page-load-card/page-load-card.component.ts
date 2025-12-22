@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { AlertComponent } from '../../ui/alert/alert.component';
 import { LoaderService } from '../../../services/loader.service';
 import { PageLoadComponent } from '../page-load/page-load.component';
 
@@ -11,7 +10,7 @@ import { PageLoadComponent } from '../page-load/page-load.component';
  */
 @Component({
   selector: 'app-page-load-card',
-  imports: [AlertComponent, PageLoadComponent],
+  imports: [PageLoadComponent],
   templateUrl: './page-load-card.component.html',
   styles: ``,
 })

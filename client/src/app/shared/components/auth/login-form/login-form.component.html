@@ -6,13 +6,13 @@
       >
         Log In
       </h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
+      <div class="text-sm text-theme-light-text dark:text-theme-dark-text">
         Enter your email and password to sign in!
-      </p>
+      </div>
     </div>
 
     <!-- Form -->
-    <form (ngSubmit)="onLogin()" class="space-y-6">
+    <form (ngSubmit)="onLogin()" class="space-y-6 text-theme-light-text dark:text-theme-dark-text">
       <div>
         <app-label>Email <span class="text-error-500">*</span></app-label>
         <app-input-field
