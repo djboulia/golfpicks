@@ -413,8 +413,9 @@
         <!-- end other section -->
       </div>
     </nav>
-    @if ((isExpanded$ | async) || (isHovered$ | async) || (isMobileOpen$ | async)) {
+    <!-- keep this here in case we want to add the widget later -->
+    <!-- @if ((isExpanded$ | async) || (isHovered$ | async) || (isMobileOpen$ | async)) {
       <app-sidebar-widget />
-    }
+    } -->
   </div>
 </aside>

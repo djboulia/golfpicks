@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Hole, Scores, getTotal, getParTotal, getParDifferential } from '../../../../utils/score';
+import { Hole, Scores, getTotal, getParTotal, getParDifferential } from '../../scores/score';
 
 @Component({
   selector: 'app-event-leader-detail',
