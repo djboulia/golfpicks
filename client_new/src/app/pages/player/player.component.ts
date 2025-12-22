@@ -12,6 +12,7 @@ import { ModalConfirmComponent } from '../../shared/components/common/modal-conf
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
 import { SwitchComponent } from '../../shared/components/form/input/switch.component';
+import { GAMEURLS } from '../../app.routes';
 
 @Component({
   selector: 'app-player',
@@ -28,8 +29,8 @@ export class PlayerComponent implements OnInit {
   id: any = null;
   user: Gamer | undefined;
 
-  parentUrl = '/component/users';
-  baseUrl = '/component/user';
+  parentUrl = GAMEURLS.players;
+  baseUrl = GAMEURLS.player;
 
   title = 'New Player';
   confirmButton = 'Confirm';

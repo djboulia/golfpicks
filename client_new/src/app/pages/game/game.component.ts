@@ -21,6 +21,7 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
 import { InputFieldComponent } from '../../shared/components/form/input/input-field.component';
 import { Option, SelectComponent } from '../../shared/components/form/select/select.component';
 import { DatePickerComponent } from '../../shared/components/form/date-picker/date-picker.component';
+import { GAMEURLS } from '../../app.routes';
 
 @Component({
   selector: 'app-game',
@@ -43,8 +44,7 @@ export class GameComponent implements OnInit {
   selectedTourStop: any = null;
   selectedCourse: any = null;
 
-  parentUrl = '/component/games';
-  baseUrl = '/component/';
+  parentUrl = GAMEURLS.games;
 
   title = '';
   deleteButton = false;
