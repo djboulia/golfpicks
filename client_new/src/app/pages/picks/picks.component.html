@@ -1,0 +1,73 @@
+<app-page-load
+  [pageTitle]="currentUser?.name ? 'Picks for ' + currentUser?.name : ''"
+  [loader]="loader"
+>
+  <div class="text-theme-light-text dark:text-theme-dark-text">
+    <h3 class="text-xl font-semibold text-gray-800 dark:text-white/90 py-4">{{ event?.name }}</h3>
+    <b>Game Rules:</b>
+    <ul>
+      <li>Select {{ NUM_SELECTIONS }} players from the list.</li>
+      <li>
+        Only {{ NUM_TOP_ALLOWED }} players from the
+        <span class="toppick">top {{ NUM_TOP_RANK }} ranked players</span>
+        in the field are allowed.
+      </li>
+    </ul>
+  </div>
+
+  <div class="sticky top-18 bg-white dark:bg-gray-900 z-10">
+    <div class="flex flex-row justify-center items-center py-4">
+      <div class="flex flex-col justify-center items-center gap-2">
+        <app-button (click)="onSubmit()" [disabled]="!canSubmit"> Save Picks </app-button>
+        <div
+          class="text-theme-light-text dark:text-theme-dark-text"
+          [innerHtml]="picksMessage"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-full overflow-x-auto overflow-y-scroll">
+    <table class="min-w-full">
+      <thead class="table-header">
+        <tr>
+          <th class="table-header-cell"></th>
+          <th class="table-header-cell">Player</th>
+          <th class="table-header-cell">Rank</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (golfer of golfers; track $index) {
+          <tr>
+            <td class="table-cell">
+              <app-checkbox
+                [checked]="golfer.selected"
+                [disabled]="!golfer.selectable"
+                (checkedChange)="onUpdatePlayer(golfer)"
+              />
+            </td>
+            <td
+              class="table-cell"
+              [ngClass]="{
+                toppick: golfer.index <= NUM_TOP_RANK,
+                'text-brand-200 dark:text-brand-600': !golfer.selectable
+              }"
+            >
+              {{ golfer.name }}
+            </td>
+
+            <td
+              class="table-cell"
+              [ngClass]="{
+                toppick: golfer.index <= NUM_TOP_RANK,
+                'text-brand-200 dark:text-brand-600': !golfer.selectable
+              }"
+            >
+              {{ golfer.rank }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</app-page-load>

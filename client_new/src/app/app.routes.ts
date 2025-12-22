@@ -32,6 +32,7 @@ import { GamersComponent } from './pages/gamers/gamers.component';
 import { TournamentsComponent } from './pages/tournaments/tournaments.component';
 import { PlayersComponent } from './pages/players/players.component';
 import { PlayerComponent } from './pages/player/player.component';
+import { PicksComponent } from './pages/picks/picks.component';
 
 export const GAMEURLS = {
   main: '/',
@@ -147,6 +148,11 @@ export const routes: Routes = [
         path: makeRelativeUrl(GAMEURLS.player + '/id/:id'),
         component: PlayerComponent,
         title: 'Player - GolfPicks',
+      },
+      {
+        path: makeRelativeUrl(GAMEURLS.picks + '/id/:id'),
+        component: PicksComponent,
+        title: 'Picks - GolfPicks',
       },
       {
         path: 'ecommerce',
