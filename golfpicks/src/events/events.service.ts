@@ -106,10 +106,12 @@ export class EventsService {
     });
 
     // call the scoring service
-    const result = await getLiveScores(event).catch((err) => {
-      console.error('Error!' + JSON.stringify(err));
-      throw err;
-    });
+    const result = await getLiveScores(this.configService, event).catch(
+      (err) => {
+        console.error('Error!' + JSON.stringify(err));
+        throw err;
+      },
+    );
 
     return result;
   }
@@ -475,7 +477,7 @@ export class EventsService {
 
   async tourSchedule(year: number) {
     console.log('found year ', year);
-    const tourData = new TourData(year);
+    const tourData = new TourData(this.configService, year);
     const result = await tourData.getSchedule();
 
     const schedule = result.schedule;

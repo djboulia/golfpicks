@@ -4,8 +4,7 @@
 // the PGA or golf channel sites
 //
 import { JsonRequest } from './jsonrequest.js';
-
-const url = process.env.TOURDATA_URL;
+import { ConfigService } from '@nestjs/config';
 
 export type Course = {
   name: string;
@@ -64,7 +63,9 @@ export type TourSchedule = {
   schedule: TourStop[];
 };
 
-const getBaseUrl = function () {
+const getBaseUrl = function (configService: ConfigService) {
+  const url = configService.get<string>('TOURDATA_URL');
+
   if (!url) {
     console.log('TOURDATA_URL environment variable not found!');
   }
@@ -75,18 +76,24 @@ const getBaseUrl = function () {
 export class TourData {
   year: number;
 
-  constructor(year: number) {
+  constructor(
+    private readonly configService: ConfigService,
+    year: number,
+  ) {
     this.year = year;
   }
 
   private getRankingsUrl() {
-    const url = getBaseUrl() + '/rankings/search?tour=pga&year=' + this.year;
+    const url =
+      getBaseUrl(this.configService) +
+      '/rankings/search?tour=pga&year=' +
+      this.year;
     return url;
   }
 
   private getEventUrl(id: string) {
     const url =
-      getBaseUrl() +
+      getBaseUrl(this.configService) +
       '/tournaments/' +
       this.year +
       '/tour/pga/event/' +
@@ -96,7 +103,10 @@ export class TourData {
   }
 
   private getScheduleUrl() {
-    const url = getBaseUrl() + '/tournaments/search?tour=pga&year=' + this.year;
+    const url =
+      getBaseUrl(this.configService) +
+      '/tournaments/search?tour=pga&year=' +
+      this.year;
     return url;
   }
 

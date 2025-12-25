@@ -10,10 +10,16 @@ import {
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { CoursesService } from 'src/courses/courses.service';
+import { GamersService } from 'src/gamers/gamers.service';
 
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly coursesService: CoursesService,
+    private readonly gamersService: GamersService,
+  ) {}
 
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
@@ -28,6 +34,48 @@ export class EventsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);
+  }
+
+  @Get(':id/scores')
+  scores(@Param('id') id: string) {
+    return this.eventsService.scores(this.coursesService, id);
+  }
+
+  @Get(':id/weather')
+  weather(@Param('id') id: string) {
+    return this.eventsService.weather(this.coursesService, id);
+  }
+
+  @Get(':id/deep')
+  deep(@Param('id') id: string) {
+    return this.eventsService.deepGet(
+      this.gamersService,
+      this.coursesService,
+      id,
+    );
+  }
+
+  @Get(':id/newsfeed')
+  newsfeed(@Param('id') id: string) {
+    return this.eventsService.newsfeed(
+      this.gamersService,
+      this.coursesService,
+      id,
+    );
+  }
+
+  @Get(':id/leaders')
+  leaders(@Param('id') id: string) {
+    return this.eventsService.leaders(
+      this.gamersService,
+      this.coursesService,
+      id,
+    );
+  }
+
+  @Get('tour/pga/:year')
+  pga(@Param('year') year: number) {
+    return this.eventsService.tourSchedule(year);
   }
 
   @Patch(':id')

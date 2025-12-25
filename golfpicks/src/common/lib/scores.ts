@@ -1,6 +1,7 @@
 import { Ranking, TourData, TourEvent } from './pgascores/tourdata.js';
 import * as NameUtils from './pgascores/nameutils.js';
 import { UpdateEventDto } from 'src/events/dto/update-event.dto.js';
+import { ConfigService } from '@nestjs/config/dist/index.js';
 
 const hasNickname = function (name: string | undefined, nicknames: string[]) {
   if (!name) return false;
@@ -201,7 +202,10 @@ const addPlayerRankings = function (eventdata: TourEvent, rankings: Ranking[]) {
   }
 };
 
-export const getLiveScores = async function (event: UpdateEventDto) {
+export const getLiveScores = async function (
+  configService: ConfigService,
+  event: UpdateEventDto,
+) {
   const theDate = new Date(event.start);
   const provider = event.provider;
 
@@ -230,7 +234,7 @@ export const getLiveScores = async function (event: UpdateEventDto) {
   }
 
   const tournament_id = event.tournament_id;
-  const tourData = new TourData(year);
+  const tourData = new TourData(configService, year);
   const rankings = await tourData.getRankings().catch((e) => {
     console.log('Error retrieving ranking data!');
     throw e;
