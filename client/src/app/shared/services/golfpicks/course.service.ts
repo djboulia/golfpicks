@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class CourseService {
-  private configUrl = environment.apiUrl + '/Courses';
+  private configUrl = environment.apiUrl + '/courses';
 
   constructor(private httpAuth: HttpAuthService) {}
 

@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class EventService {
-  private configUrl = environment.apiUrl + '/Events';
+  private configUrl = environment.apiUrl + '/events';
 
   constructor(private httpAuth: HttpAuthService) {}
 

@@ -15,7 +15,7 @@ import { GamersService } from 'src/gamers/gamers.service';
 import { CoursesService } from 'src/courses/courses.service';
 import { EventsService } from 'src/events/events.service';
 
-@Controller('games')
+@Controller('api/games')
 export class GamesController {
   constructor(
     private readonly gamesService: GamesService,

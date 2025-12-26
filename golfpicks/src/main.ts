@@ -26,6 +26,19 @@ async function bootstrap() {
     }),
   );
 
+  console.log('CORS settings applied,', process.env.CORS_CLIENT);
+  const allowedOrigins = process.env.CORS_CLIENT
+    ? process.env.CORS_CLIENT.split(',')
+    : [];
+
+  // Enable CORS for all origins with default settings
+  app.enableCors({
+    origin: allowedOrigins, // Specify allowed origins
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
+    allowedHeaders: 'Content-Type, Accept, Authorization', // Specify allowed headers
+    credentials: true, // Allow cookies and authentication headers
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

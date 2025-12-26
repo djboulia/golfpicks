@@ -11,7 +11,7 @@ import { LogsService } from './logs.service';
 import { CreateLogDto } from './dto/create-log.dto';
 import { UpdateLogDto } from './dto/update-log.dto';
 
-@Controller('logs')
+@Controller('api/logs')
 export class LogsController {
   constructor(private readonly logsService: LogsService) {}
 

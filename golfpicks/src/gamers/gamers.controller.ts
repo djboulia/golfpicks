@@ -14,7 +14,7 @@ import { CreateGamerDto } from './dto/create-gamer.dto';
 import { UpdateGamerDto } from './dto/update-gamer.dto';
 import { GamesService } from 'src/games/games.service';
 
-@Controller('gamers')
+@Controller('api/gamers')
 export class GamersController {
   constructor(
     private readonly gamersService: GamersService,

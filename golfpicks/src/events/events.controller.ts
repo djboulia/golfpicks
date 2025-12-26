@@ -13,7 +13,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { CoursesService } from 'src/courses/courses.service';
 import { GamersService } from 'src/gamers/gamers.service';
 
-@Controller('events')
+@Controller('api/events')
 export class EventsController {
   constructor(
     private readonly eventsService: EventsService,

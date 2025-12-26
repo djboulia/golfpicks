@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class GameService {
-  private configUrl = environment.apiUrl + '/Games';
+  private configUrl = environment.apiUrl + '/games';
 
   constructor(private httpAuth: HttpAuthService) {}
 
