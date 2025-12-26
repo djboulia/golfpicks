@@ -100,7 +100,7 @@ type Course = {
 //
 const getRoundNetTotals = function (
   courseInfo: Course[],
-  roundStartedData: any[],
+  roundStartedData: number[],
   pick: PickDto,
   isLiveScoring: boolean,
 ) {
@@ -258,7 +258,7 @@ const roundMax = function (gamers: GamePlayerDetailsDto[]) {
 
 export const getScores = function (
   courseInfo: Course[],
-  roundStartedData: any[],
+  roundStartedData: number[],
   players: GamePlayerDetailsDto[],
   scoreType,
 ) {
