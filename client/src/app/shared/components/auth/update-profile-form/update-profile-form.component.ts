@@ -23,16 +23,13 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class UpdateProfileFormComponent implements OnInit {
   user: Gamer;
 
-  errorMessage: any = null;
-  infoMessage: any = null;
+  errorMessage: string | null = null;
+  infoMessage: string | null = null;
 
   isLoaded = false;
   showPassword = false;
 
-  constructor(
-    private apiGamer: GamerService,
-    private auth: AuthService,
-  ) {
+  constructor(private apiGamer: GamerService, private auth: AuthService) {
     this.user = apiGamer.newModel(); // initialize with empty gamer until we load
   }
 

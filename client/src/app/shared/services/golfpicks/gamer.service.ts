@@ -12,10 +12,7 @@ import { environment } from '../../../../environments/environment';
 export class GamerService {
   private configUrl = environment.apiUrl + '/gamers';
 
-  constructor(
-    private http: HttpClient,
-    private httpAuth: HttpAuthService,
-  ) {}
+  constructor(private http: HttpClient, private httpAuth: HttpAuthService) {}
 
   newModel(): Gamer {
     return {

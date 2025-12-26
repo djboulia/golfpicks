@@ -4,13 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
-import { Course } from '../../shared/services/golfpicks/course.model';
+import { Course, Weather, Hole } from '../../shared/services/golfpicks/course.model';
 import { CourseService } from '../../shared/services/golfpicks/course.service';
 import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { WeatherComponent } from '../../shared/components/weather/weather.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { GAMEURLS } from '../../app.routes';
+
+type NineHoles = {
+  yardage: number;
+  par: number;
+  holes: Hole[];
+};
 
 @Component({
   selector: 'app-course-info',
@@ -20,9 +26,9 @@ import { GAMEURLS } from '../../app.routes';
 export class CourseInfoComponent implements OnInit {
   id: string | null = null;
   course: Course;
-  frontNine: any;
-  backNine: any;
-  weather: any;
+  frontNine: NineHoles | undefined = undefined;
+  backNine: NineHoles | undefined = undefined;
+  weather: Weather | undefined = undefined;
 
   parentUrl = GAMEURLS.courses;
   baseUrl = GAMEURLS.course;
@@ -46,7 +52,7 @@ export class CourseInfoComponent implements OnInit {
    * @param data
    * @returns
    */
-  private fixCourseData(data: any) {
+  private fixCourseData(data: Course) {
     if (!data.slope) {
       data.slope = 0;
     }
@@ -57,11 +63,11 @@ export class CourseInfoComponent implements OnInit {
     return data;
   }
 
-  private frontNineData(data: any) {
-    const frontNine = {
+  private frontNineData(data: Course) {
+    const frontNine: NineHoles = {
       yardage: 0,
       par: 0,
-      holes: <any>[],
+      holes: [],
     };
 
     const holes = data.holes;
@@ -78,11 +84,11 @@ export class CourseInfoComponent implements OnInit {
     return frontNine;
   }
 
-  private backNineData(data: any) {
-    const backNine = {
+  private backNineData(data: Course) {
+    const backNine: NineHoles = {
       yardage: 0,
       par: 0,
-      holes: <any>[],
+      holes: [],
     };
 
     const holes = data.holes;
@@ -99,7 +105,7 @@ export class CourseInfoComponent implements OnInit {
     return backNine;
   }
 
-  private formatWeatherData(data: any) {
+  private formatWeatherData(data: Weather) {
     data.temp = Math.round(data.temp);
     data.wind = Math.round(data.wind);
     data.metric.temp = Math.round(data.metric.temp);

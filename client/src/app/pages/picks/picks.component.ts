@@ -8,7 +8,7 @@ import { GameDayService } from '../../shared/services/game-day.service';
 import { GamerService } from '../../shared/services/golfpicks/gamer.service';
 
 import { GameDay } from '../../shared/services/golfpicks/game.model';
-import { Gamer } from '../../shared/services/golfpicks/gamer.model';
+import { Gamer, Pick } from '../../shared/services/golfpicks/gamer.model';
 import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
@@ -290,7 +290,7 @@ export class PicksComponent implements OnInit {
     // update this person's picks in the game data
     const selections = this.getSelections(this.golfers);
 
-    const picks: any[] = [];
+    const picks: Pick[] = [];
     selections.forEach(function (selection) {
       picks.push({
         id: selection.player_id,

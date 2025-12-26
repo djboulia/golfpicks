@@ -30,7 +30,7 @@ export class TournamentsComponent implements OnInit {
       next: (data) => {
         console.log('data ', data);
 
-        data.sort(function (a: any, b: any) {
+        data.sort(function (a: Event, b: Event) {
           if (a.start == b.start) {
             return 0;
           } else {

@@ -1,14 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
-export type Weather = {
-  temp?: number;
-  wind?: number;
-  icon: string;
-  metric: {
-    temp?: number;
-    wind?: number;
-  };
-};
+import { Weather } from '../../services/golfpicks/course.model';
 
 @Component({
   selector: 'app-weather',

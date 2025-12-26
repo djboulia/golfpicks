@@ -30,8 +30,11 @@ export class CourseService {
 
     // initialize 18 holes
     for (let i = 1; i < 19; i++) {
-      const hole: any = {
+      const hole = {
         number: i,
+        yardage: '',
+        par: '',
+        handicap: '',
       };
 
       course.holes.push(hole);

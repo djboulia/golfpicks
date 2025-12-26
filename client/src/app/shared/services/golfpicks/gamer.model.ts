@@ -1,5 +1,9 @@
 // interfaces for our backend
 
+export interface Pick {
+  id: string;
+}
+
 export interface Gamer {
   id: string;
   admin: boolean;

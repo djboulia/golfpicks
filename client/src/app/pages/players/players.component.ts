@@ -5,6 +5,7 @@ import { PageLoadCardComponent } from '../../shared/components/common/page-load-
 import { LoaderService } from '../../shared/services/loader.service';
 import { GAMEURLS } from '../../app.routes';
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { Gamer } from '../../shared/services/golfpicks/gamer.model';
 
 @Component({
   selector: 'app-players',
@@ -12,14 +13,11 @@ import { ButtonComponent } from '../../shared/components/ui/button/button.compon
   imports: [PageLoadCardComponent, ButtonComponent],
 })
 export class PlayersComponent implements OnInit {
-  users: any = null;
+  users: Gamer[] | null = null;
 
   baseUrl = GAMEURLS.player;
 
-  constructor(
-    private gamerApi: GamerService,
-    protected loader: LoaderService,
-  ) {}
+  constructor(private gamerApi: GamerService, protected loader: LoaderService) {}
 
   ngOnInit(): void {
     this.loader.setLoading(true);

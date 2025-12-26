@@ -9,12 +9,13 @@ import { GameDayService } from '../../shared/services/golfpicks/game-day.service
 import { DateHelperService } from '../../shared/services/date/date-helper.service';
 import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
-import { Weather, WeatherComponent } from '../../shared/components/weather/weather.component';
+import { WeatherComponent } from '../../shared/components/weather/weather.component';
 import { CourseOverviewComponent } from '../../shared/components/course/course-overview/course-overview.component';
 import { TournamentInfoComponent } from '../../shared/components/tournament/tournament-info/tournament-info.component';
 import { ScoreBoardComponent } from '../../shared/components/scores/score-board/score-board.component';
 import { GAMEURLS } from '../../app.routes';
 import { UserScoreBoardComponent } from '../../shared/components/scores/user-score-board/user-score-board.component';
+import { Weather } from '../../shared/services/golfpicks/course.model';
 
 @Component({
   selector: 'app-leaderboard',

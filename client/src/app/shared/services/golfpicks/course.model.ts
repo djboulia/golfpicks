@@ -1,10 +1,10 @@
 // interfaces for our backend
 
 export interface Hole {
-  yardage: number;
-  par: number;
+  yardage: string;
+  par: string;
   number: number;
-  handicap: number;
+  handicap: string;
 }
 
 export interface Coordinates {

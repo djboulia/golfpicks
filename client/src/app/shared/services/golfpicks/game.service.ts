@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Game, GameDay } from './game.model';
 import { environment } from '../../../../environments/environment';
+import { Pick } from './gamer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -111,7 +112,7 @@ export class GameService {
     return this.httpAuth.get(methodUrl, { withCredentials: true });
   }
 
-  savePicks(id: string, gamerid: string, picks: any[]): Observable<Game> {
+  savePicks(id: string, gamerid: string, picks: Pick[]): Observable<Game> {
     const methodUrl = this.configUrl + '/' + id + '/Gamers/' + gamerid + '/picks';
 
     return this.httpAuth.post(methodUrl, picks, { withCredentials: true });
