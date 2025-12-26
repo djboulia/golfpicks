@@ -1,28 +1,5 @@
 # GolfPicks
 
-To build this project for the first time, you will need npm, and angular cli (ng) installed. Once you have those, do this:
-
-To run the server in production mode:
-```
-npm start
-```
-
-To run the server in development mode:
-
-``` bash
-npm run dev
-```
-
-Note that the .env file will be pulled for production, .env.dev when running in dev mode.
-
-To run the client in development mode:
-To run the server in production mode:
-
-``` bash
-cd client
-npm start
-```
-
 For this project to run successfully, you will need to configure your AWS credentials in a .env or .env.dev (when running in dev mode) file with the following fields:
 
 AWS_ACCESSKEYID=xxx
@@ -32,6 +9,42 @@ TOURDATA_URL=https://tourdata.boulia-nc.net/api
 additionaly if you are running in dev mode, you will need to add the CORS key pointing to the port the client is running on:
 CORS_CLIENT=http://localhost:4201
 
+## Building and Running the App
+To build this project for the first time, you will need npm, and angular cli (ng) installed. Once you have those, do this:
+
+To build the production client side: 
+``` bash
+cd client
+npm install
+npm run build
+```
+
+This will place the built client side code under client/dist.
+
+To run the server in production mode:
+``` bash
+cd server
+npm install
+npm start
+```
+
+This will run the NestJS server for the backend, and will serve up the client side from client/dist
+
+To run the server in development mode:
+
+``` bash
+cd server
+npm run start:dev
+```
+
+Note that the .env file will be pulled for production, .env.dev when running in dev mode.
+
+To run the client in development mode:
+
+``` bash
+cd client
+npm run start:dev
+```
 
 ## What the app does
 
@@ -41,26 +54,29 @@ Each player will select 10 golfers.  Of those 10, you can only select 2 of the t
 
 ## Overall Design
 
-- There is a client side, Angular (https://angularjs.org) based app located under the /client directory.  /client/src/index.html is the main entry point
-- The server side is implemented in Node and uses the ApiServer project (https://github.com/djboulia/apiserver) to implement the rest services.  /server/server.js is the main entry point for the backend server.
-- You can browse the server side API at the URL http://localhost:3000/explorer
-- For the most part, the server side API provides access to the game data, which is stored in an Amazon DynamoDB database.  The one exception is scoring data, which comes from the various live scoring sites.
-
+- There is a client side, Angular (https://angularjs.org) based app located under the `/client` directory.  
+- The server side is implemented in NestJS and resides in the `/server` directory.
+- You can browse the server side API at the URL http://localhost:3000/api
+- For the most part, the server side API provides access to the game data, which is stored in an Amazon DynamoDB database.  The one exception is scoring data, which comes from the tourdata API (https://tourdata.boulia-nc.net/explorer)
 
 ## Change History:
+December 23, 2025:
+- Major overhaul to upgrade to Angular 20 and Tailwind styling based on TailAdmin template
+- Moved backend to NestJS 11
+
 November 17, 2022:
-Major overhaul to upgrade to Angular 14
+- Major overhaul to upgrade to Angular 14
 
 September 5, 2022:
-Major overhaul to remove loopback dependency 
-Switched backend data sources to Amazon DynamoDB (vs. IBM Cloudant)
+- Major overhaul to remove loopback dependency 
+- Switched backend data sources to Amazon DynamoDB (vs. IBM Cloudant)
 
 Aoril 9, 2019:
-Changes to accommodate Golf Channel site.
+- Changes to accommodate Golf Channel site.
 
 March 26, 2019:
-Moved from Bluemix to IBM Cloud labeling
-Moved to Cloudant Lite plan, added retry plugin to accommodate rate limiting
+- Moved from Bluemix to IBM Cloud labeling
+- Moved to Cloudant Lite plan, added retry plugin to accommodate rate limiting
 
 March 25, 2016: 
-Moved to Loopback and responsive RDash Angular UI
+- Moved to Loopback and responsive RDash Angular UI
