@@ -29,7 +29,7 @@
               </google-map>
             </div>
 
-            @if (frontNine.holes.length > 0) {
+            @if (frontNine && frontNine.holes.length > 0) {
               <div class="max-w-full overflow-x-auto py-4">
                 <table class="min-w-full">
                   <thead class="table-header">
@@ -45,7 +45,9 @@
                       <th class="table-header-cell">8</th>
                       <th class="table-header-cell">9</th>
                       <th class="table-header-cell">OUT</th>
-                      <th class="table-header-cell">&nbsp;</th>
+                      <th class="table-header-cell text-theme-light-card dark:text-theme-dark-card">
+                        TOTAL
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -91,7 +93,7 @@
               </div>
             }
 
-            @if (backNine.holes.length > 0) {
+            @if (backNine && backNine.holes.length > 0) {
               <div class="max-w-full overflow-x-auto py-4">
                 <table class="min-w-full">
                   <thead class="table-header">
@@ -123,14 +125,13 @@
                         {{ backNine.yardage }}
                       </td>
                       <td class="table-cell">
-                        >
                         {{ course.yardage }}
                       </td>
                     </tr>
 
                     <tr>
                       <td class="table-cell">Handicap</td>
-                      @for (hole of frontNine.holes; track $index) {
+                      @for (hole of backNine.holes; track $index) {
                         <td class="table-cell">
                           {{ hole.handicap }}
                         </td>
@@ -141,13 +142,13 @@
                     <tr>
                       <td class="table-cell">Par</td>
 
-                      @for (hole of frontNine.holes; track $index) {
+                      @for (hole of backNine.holes; track $index) {
                         <td class="table-cell">
                           {{ hole.par }}
                         </td>
                       }
                       <td class="table-cell">
-                        {{ frontNine.par }}
+                        {{ backNine.par }}
                       </td>
                       <td class="table-cell"></td>
                     </tr>

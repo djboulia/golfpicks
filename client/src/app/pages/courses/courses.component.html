@@ -19,7 +19,7 @@
         @for (course of courses; track $index) {
           <tr>
             <td class="table-cell">
-              <a [attr.href]="baseUrlInfo + '/id/' + course.id">{{ course.name }}</a>
+              <a class="link" [attr.href]="baseUrlInfo + '/id/' + course.id">{{ course.name }}</a>
             </td>
             <td class="table-cell">
               {{ course.par }}
