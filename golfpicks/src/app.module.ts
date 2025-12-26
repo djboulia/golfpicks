@@ -7,9 +7,14 @@ import { LogsModule } from './logs/logs.module';
 import { GamersModule } from './gamers/gamers.module';
 import { GamesModule } from './games/games.module';
 import { EventsModule } from './events/events.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'client', 'dist', 'browser'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true, // Makes ConfigService available everywhere without repeated imports
     }),

@@ -25,6 +25,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/serve-static": "^5.0.4",
     "@nestjs/swagger": "^11.2.3",
     "aws-sdk": "^2.1693.0",
     "class-transformer": "^0.5.1",
