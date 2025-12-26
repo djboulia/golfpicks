@@ -49,7 +49,7 @@ const findTodayScoreIndex = function (pick: PickDto, rounds: string[]) {
 
 const getCurrentScores = function (
   rounds: number,
-  top5: any[][],
+  top5: number[][],
   enforceCutLine: boolean,
 ) {
   const currentscores: string[] = [];
@@ -186,7 +186,7 @@ const getRoundNetTotals = function (
   return roundtotals;
 };
 
-const updateTop5 = function (roundTotalString: string, top5: string[]) {
+const updateTop5 = function (roundTotalString: string, top5: number[]) {
   let splicePos = top5.length;
   const roundtotal = parseInt(roundTotalString);
 
@@ -197,7 +197,7 @@ const updateTop5 = function (roundTotalString: string, top5: string[]) {
         break;
       }
     }
-    top5.splice(splicePos, 0, roundtotal.toString());
+    top5.splice(splicePos, 0, roundtotal);
   }
 
   return top5;
@@ -287,7 +287,7 @@ export const getScores = function (
     };
 
     const totals: string[] = [];
-    const top5: string[][] = [];
+    const top5: number[][] = [];
 
     for (let i = 0; i < roundStartedData.length; i++) {
       totals.push('-');
