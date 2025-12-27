@@ -10,7 +10,7 @@ import { EventService } from '../../shared/services/golfpicks/event.service';
 
 import { Game } from '../../shared/services/golfpicks/game.model';
 import { Course } from '../../shared/services/golfpicks/course.model';
-import { Event } from '../../shared/services/golfpicks/event.model';
+import { Event, Schedule } from '../../shared/services/golfpicks/event.model';
 
 import { DateHelperService } from '../../shared/services/date/date-helper.service';
 import { ModalService } from '../../shared/services/modal.service';
@@ -36,11 +36,11 @@ import { GAMEURLS } from '../../app.routes';
   ],
 })
 export class GameComponent implements OnInit {
-  id: any = null;
+  id: string | null = null;
   game: Game;
   event: any = null;
   courses: Course[] = [];
-  schedule: any = null;
+  schedule: Schedule[] = [];
   selectedTourStop: any = null;
   selectedCourse: any = null;
 
@@ -73,7 +73,7 @@ export class GameComponent implements OnInit {
       this.deleteButton = true;
       this.submitButton = 'Save';
 
-      this.loadExistingGame();
+      this.loadExistingGame(this.id);
     } else {
       this.title = 'New Game';
       this.deleteButton = false; // no delete button when creating a new game
@@ -83,12 +83,12 @@ export class GameComponent implements OnInit {
     }
   }
 
-  loadExistingGame() {
+  loadExistingGame(id: string) {
     this.loader.setLoading(true);
 
     // go get our game information from multiple sources
     this.gameApi
-      .get(this.id)
+      .get(id)
       .pipe(
         map((game) => (this.game = game)),
         // map((data) => { console.log('found game ', data); return data; }),
@@ -155,7 +155,7 @@ export class GameComponent implements OnInit {
       });
   }
 
-  findTourStop(event: any, schedule: any): any {
+  findTourStop(event: Event, schedule: Schedule[]) {
     let stop = undefined;
 
     const id = event.tournament_id;
@@ -176,7 +176,7 @@ export class GameComponent implements OnInit {
     return stop;
   }
 
-  findCourse(event: any, courses: any): any {
+  findCourse(event: any, courses: Course[]) {
     let course = undefined;
 
     const rounds = event.rounds;
@@ -202,7 +202,7 @@ export class GameComponent implements OnInit {
   }
 
   getTourStops(): Option[] {
-    return this.schedule?.map((s: any) => {
+    return this.schedule?.map((s) => {
       return { value: s.tournament_id, label: s.name };
     });
   }
@@ -216,7 +216,7 @@ export class GameComponent implements OnInit {
   onTourStopChanged(tournamentId: string) {
     console.log('tour stop changed to: ', tournamentId);
 
-    const tourstop = this.schedule.find((s: any) => s.tournament_id === tournamentId);
+    const tourstop = this.schedule.find((s) => s.tournament_id === tournamentId);
     if (!tourstop) return;
 
     // tourstop is stored in UTC time, adjust for local time
@@ -240,14 +240,14 @@ export class GameComponent implements OnInit {
   }
 
   getCourses(): Option[] {
-    return this.courses?.map((c: any) => {
+    return this.courses?.map((c) => {
       return { value: c.id, label: c.name };
     });
   }
 
   onCourseChanged(courseId: string) {
     console.log('course changed to: ', courseId);
-    this.selectedCourse = this.courses.find((c: any) => c.id === courseId);
+    this.selectedCourse = this.courses.find((c) => c.id === courseId);
     console.log('selected course: ', this.selectedCourse);
   }
 

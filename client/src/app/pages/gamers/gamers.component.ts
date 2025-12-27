@@ -5,6 +5,11 @@ import { GameService } from '../../shared/services/golfpicks/game.service';
 import { DateFormatterService } from '../../shared/services/date/date-formatter.service';
 import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadComponent } from '../../shared/components/common/page-load/page-load.component';
+import {
+  GamerDetail,
+  GamerDetailPicks,
+  GamerDetails,
+} from '../../shared/services/golfpicks/game.model';
 
 @Component({
   selector: 'app-gamers',
@@ -12,10 +17,10 @@ import { PageLoadComponent } from '../../shared/components/common/page-load/page
   imports: [PageLoadComponent],
 })
 export class GamersComponent implements OnInit {
-  id: any = null;
-  game: any = null;
-  picks: any = [];
-  nopicks: any = [];
+  id: string | null = null;
+  game: GamerDetails | null = null;
+  picks: GamerDetailPicks[] = [];
+  nopicks: GamerDetail[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -28,12 +33,16 @@ export class GamersComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     console.log(`id: ${this.id}`);
 
+    if (!this.id) {
+      this.loader.setErrorMessage('Invalid gamer ID!!');
+      return;
+    }
+
     this.loader.setLoading(true);
 
     this.gameApi.gamerDetails(this.id).subscribe({
       next: (data) => {
         console.log('game ', data);
-
         this.game = data;
 
         const gamers = data.gamers;
