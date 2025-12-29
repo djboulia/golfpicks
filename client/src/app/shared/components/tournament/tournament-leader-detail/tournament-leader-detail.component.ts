@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { LeaderboardGolfer } from '../../../services/golfpicks/game.model';
 
 const getTotal = (holes: any[]) => {
   let total = 0;
@@ -36,7 +37,7 @@ const getParDifferential = (roundValue: string, roundPar: string) => {
 })
 export class TournamentLeaderDetailComponent implements OnInit {
   @Input() golfer: any;
-  @Input() eventUrl: any;
+  @Input() eventUrl: string = '';
 
   scores: any = null;
   roundNumber: number | null = null;
@@ -46,7 +47,7 @@ export class TournamentLeaderDetailComponent implements OnInit {
   ngOnInit(): void {
     // console.log('golfer: ', this.golfer);
 
-    const roundDetails = { ...this.golfer.round_details };
+    const roundDetails = { ...this.golfer?.round_details };
     if (!roundDetails) {
       return;
     }

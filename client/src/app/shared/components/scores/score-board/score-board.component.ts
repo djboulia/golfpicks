@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
+import { LeaderboardGamer } from '../../../services/golfpicks/game.model';
 
 @Component({
   selector: 'app-score-board',
@@ -8,7 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ScoreBoardComponent implements OnInit {
   @Input() roundTitles: string[] = [];
-  @Input() gamers: any[] = [];
+  @Input() gamers: LeaderboardGamer[] = [];
 
   constructor() {}
 

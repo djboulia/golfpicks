@@ -1,5 +1,6 @@
 // interfaces for our backend
 
+import { Course, Hole } from './course.model';
 import { Gamer } from './gamer.model';
 
 export interface Game {
@@ -49,4 +50,55 @@ export interface GamerDetails {
   event: string;
   gamers: GamerDetailPicks[];
   notplaying: GamerDetail[];
+}
+
+export interface CourseInfo {
+  par: number;
+  yardage: number;
+  tee: string;
+  name: string;
+  rating: number;
+  location: {
+    lat: string;
+    lng: string;
+  };
+  slope: number;
+  holes: Hole[];
+  id: string;
+  date: string;
+}
+
+export interface LeaderboardGolfer {
+  player_id: string;
+  name: string;
+  rounds: string[];
+  today: string;
+  thru: number;
+}
+
+export interface LeaderboardRound {
+  score: string;
+  leader: boolean;
+}
+
+export interface LeaderboardGamer {
+  name: string;
+  objectId: string;
+  user: Gamer;
+  picks: LeaderboardGolfer[];
+  totals: string[];
+  scores: string[];
+  rounds: LeaderboardRound[];
+}
+
+export interface RoundInfo {
+  currentRound: number;
+  roundTitles: string[];
+}
+
+export interface Leaderboard {
+  name: string;
+  courseInfo: CourseInfo[];
+  roundInfo: RoundInfo;
+  gamers: LeaderboardGamer[];
 }

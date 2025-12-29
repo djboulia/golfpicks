@@ -6,7 +6,7 @@ export interface Pick {
 
 export interface Gamer {
   id: string;
-  admin: boolean;
+  admin?: boolean;
   username: string;
   password: string;
   name: string;

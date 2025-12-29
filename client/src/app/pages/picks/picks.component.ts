@@ -310,11 +310,11 @@ export class PicksComponent implements OnInit {
       });
   }
 
-  private loadingError(msg: string, err: any) {
+  private loadingError(msg: string, err: Error) {
     console.log(msg);
 
     this.loader.setErrorMessage(msg);
 
-    return throwError(() => new Error(err));
+    return throwError(() => err);
   }
 }

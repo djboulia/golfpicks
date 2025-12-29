@@ -14,17 +14,14 @@ export class AuthService {
   // we emit a change event when the auth data or status changes
   @Output() authChange = new EventEmitter<any>();
 
-  constructor(
-    private gamerApi: GamerService,
-    private authSession: AuthSessionService,
-  ) {}
+  constructor(private gamerApi: GamerService, private authSession: AuthSessionService) {}
 
   private updateData(data: Gamer) {
     const name = data.name;
     const username = data.username;
     const admin = data.admin;
 
-    this.authSession.init(name, username, admin);
+    this.authSession.init(name, username, admin ?? false);
 
     this.authChange.emit(data);
   }

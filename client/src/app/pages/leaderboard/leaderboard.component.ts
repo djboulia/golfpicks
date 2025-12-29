@@ -2,7 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError } from 'rxjs';
 
-import { GameDay } from '../../shared/services/golfpicks/game.model';
+import {
+  CourseInfo,
+  GameDay,
+  Leaderboard,
+  LeaderboardGamer,
+  LeaderboardRound,
+} from '../../shared/services/golfpicks/game.model';
 import { GameService } from '../../shared/services/golfpicks/game.service';
 import { EventService } from '../../shared/services/golfpicks/event.service';
 import { GameDayService } from '../../shared/services/golfpicks/game-day.service';
@@ -31,13 +37,13 @@ import { Weather } from '../../shared/services/golfpicks/course.model';
   styles: '',
 })
 export class LeaderboardComponent implements OnInit, OnDestroy {
-  id: any = null;
+  id: string | null = null;
   game: GameDay;
-  gameDay: any = null;
-  gamers: any = null;
-  leaderboard: any = null;
-  courseInfo: any = null;
-  currentRound: any = null;
+  gameDayService: GameDayService | null = null;
+  gamers: LeaderboardGamer[] | null = null;
+  leaderboard: Leaderboard | null = null;
+  courseInfo: CourseInfo | null = null;
+  currentRound: number | null = null;
   roundTitles: string[] = [];
 
   weather: Weather | undefined;
@@ -51,7 +57,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   courseUrl = GAMEURLS.courseInfo;
   tournamentLeaderUrl = GAMEURLS.tournamentLeaders;
 
-  reloadTimerId: any = null;
+  reloadTimerId: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -97,6 +103,11 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   private loadLeaderboard() {
     console.log('loading leaderboard data');
 
+    if (!this.id) {
+      this.loader.setErrorMessage('No valid game found!');
+      return;
+    }
+
     // go get our game information from multiple sources
     this.gameApi
       .gameDay(this.id)
@@ -104,7 +115,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         map((game) => (this.game = game)),
         // map((data) => { console.log('found game ', data); return data; }),
 
-        map((game) => (this.gameDay = new GameDayService(game))),
+        map((game) => (this.gameDayService = new GameDayService(game))),
 
         // get event that corresponds to this game
         mergeMap((gameDay) => this.gameApi.leaderboard(gameDay.getId())),
@@ -114,18 +125,23 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         catchError((err) => this.loadError('Error loading game!', err)),
       )
       .subscribe(() => {
-        if (this.hasNotStarted(this.gameDay)) {
-          this.tooEarlyMessage(this.gameDay);
+        if (!this.gameDayService) {
+          this.loader.setErrorMessage('No valid game found!');
           return;
         }
 
-        const courseInfo = this.leaderboard.courseInfo;
-        const roundInfo = this.leaderboard.roundInfo;
+        if (this.hasNotStarted(this.gameDayService)) {
+          this.tooEarlyMessage(this.gameDayService);
+          return;
+        }
 
-        this.gamers = this.leaderboard.gamers;
-        this.currentRound = roundInfo.currentRound;
-        this.roundTitles = roundInfo.roundTitles;
-        this.courseInfo = courseInfo[this.currentRound - 1];
+        const courseInfo = this.leaderboard?.courseInfo;
+        const roundInfo = this.leaderboard?.roundInfo;
+
+        this.gamers = this.leaderboard?.gamers ?? null;
+        this.currentRound = roundInfo?.currentRound ?? null;
+        this.roundTitles = roundInfo?.roundTitles ?? [];
+        this.courseInfo = this.currentRound ? courseInfo?.[this.currentRound - 1] ?? null : null;
 
         if (!this.gamers) {
           this.loader.setErrorMessage('No players for the current game.');
@@ -136,9 +152,9 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
         this.setLastUpdate();
 
-        this.loadWeather(this.gameDay.getEventId());
+        this.loadWeather(this.gameDayService.getEventId());
 
-        this.loadNewsFeed(this.gameDay.getEventId());
+        this.loadNewsFeed(this.gameDayService.getEventId());
 
         this.reloadTimer();
       });
@@ -205,7 +221,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       .subscribe(() => {});
   }
 
-  private formatNewsFeed(feedItems: any[]): string {
+  private formatNewsFeed(feedItems: string[]): string {
     // load each feed item into our ticker
     let feedString = '';
 
@@ -222,17 +238,17 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     return feedString;
   }
 
-  private formatWeatherData(data: any): Weather {
+  private formatWeatherData(data: Weather): Weather {
     data.temp = Math.round(data.temp);
     data.wind = Math.round(data.wind);
     data.metric.temp = Math.round(data.metric.temp);
 
-    return data as Weather;
+    return data;
   }
 
-  private loadError(msg: string, err: any) {
+  private loadError(msg: string, err: Error) {
     this.loader.setErrorMessage(msg);
 
-    return throwError(() => new Error(err));
+    return throwError(() => err);
   }
 }
