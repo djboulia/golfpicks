@@ -11,13 +11,18 @@ export interface Game {
   gamers: Gamer[];
 }
 
+export interface GameDayGamer {
+  user: string;
+  picks?: { id: string }[];
+}
+
 export interface GameDay {
   id: string;
   name: string;
   start: string;
   end: string;
   event: string;
-  gamers: Gamer[];
+  gamers: GameDayGamer[];
   gameDay: {
     inProgress: boolean;
     complete: boolean;

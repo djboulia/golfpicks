@@ -26,7 +26,7 @@ import { GAMEURLS } from '../../app.routes';
   ],
 })
 export class PlayerComponent implements OnInit {
-  id: any = null;
+  id: string | null = null;
   user: Gamer | undefined;
 
   parentUrl = GAMEURLS.players;
@@ -121,8 +121,12 @@ export class PlayerComponent implements OnInit {
   }
 
   private deleteUser() {
-    this.loader.setLoading(true);
+    if (!this.id) {
+      this.loader.setErrorMessage('Invalid player ID!!');
+      return;
+    }
 
+    this.loader.setLoading(true);
     this.gamerApi.delete(this.id).subscribe({
       next: (data) => {
         console.log('user deleted: ', data);

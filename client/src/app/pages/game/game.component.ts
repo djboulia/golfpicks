@@ -10,7 +10,12 @@ import { EventService } from '../../shared/services/golfpicks/event.service';
 
 import { Game } from '../../shared/services/golfpicks/game.model';
 import { Course } from '../../shared/services/golfpicks/course.model';
-import { Event, Schedule } from '../../shared/services/golfpicks/event.model';
+import {
+  Event,
+  EventBase,
+  EventWithDetails,
+  Schedule,
+} from '../../shared/services/golfpicks/event.model';
 
 import { DateHelperService } from '../../shared/services/date/date-helper.service';
 import { ModalService } from '../../shared/services/modal.service';
@@ -38,11 +43,11 @@ import { GAMEURLS } from '../../app.routes';
 export class GameComponent implements OnInit {
   id: string | null = null;
   game: Game;
-  event: any = null;
+  event: EventWithDetails | null = null;
   courses: Course[] = [];
   schedule: Schedule[] = [];
-  selectedTourStop: any = null;
-  selectedCourse: any = null;
+  selectedTourStop: Schedule | undefined | null = null;
+  selectedCourse: Course | undefined | null = null;
 
   parentUrl = GAMEURLS.games;
 
@@ -111,6 +116,11 @@ export class GameComponent implements OnInit {
         catchError((err) => this.loadingError('Error loading game!', err)),
       )
       .subscribe(() => {
+        if (this.event === null) {
+          this.loader.setErrorMessage('Error loading game event data!');
+          return;
+        }
+
         this.selectedCourse = this.findCourse(this.event, this.courses);
         this.selectedTourStop = this.findTourStop(this.event, this.schedule);
 
@@ -124,6 +134,7 @@ export class GameComponent implements OnInit {
     // create a new game
     this.game = this.gameApi.newModel();
     this.event = this.eventApi.newModel();
+    const season = this.event.season;
 
     // get the list of courses to choose from for this game
     this.courseApi
@@ -136,7 +147,7 @@ export class GameComponent implements OnInit {
         }),
 
         // get tour schedule for the appropriate season
-        mergeMap(() => this.eventApi.tourSchedule(this.event.season)),
+        mergeMap(() => this.eventApi.tourSchedule(season)),
         map((data) => (this.schedule = data)),
         map((data) => {
           console.log('found schedule ', data);
@@ -155,7 +166,7 @@ export class GameComponent implements OnInit {
       });
   }
 
-  findTourStop(event: Event, schedule: Schedule[]) {
+  findTourStop(event: EventWithDetails, schedule: Schedule[]) {
     let stop = undefined;
 
     const id = event.tournament_id;
@@ -176,7 +187,7 @@ export class GameComponent implements OnInit {
     return stop;
   }
 
-  findCourse(event: any, courses: Course[]) {
+  findCourse(event: EventWithDetails, courses: Course[]) {
     let course = undefined;
 
     const rounds = event.rounds;
@@ -251,15 +262,15 @@ export class GameComponent implements OnInit {
     console.log('selected course: ', this.selectedCourse);
   }
 
-  onStartDateChange(event: any) {
-    const selectedDate = new Date(event.dateStr);
+  onStartDateChange(dateChangeEvent: { dateStr: string }) {
+    const selectedDate = new Date(dateChangeEvent.dateStr);
     this.game.start = selectedDate.toUTCString();
     console.log('start date changed: ', this.game.start);
   }
 
-  onEndDateChange(event: any) {
-    console.log('end date changed: ', event);
-    const selectedDate = new Date(event.dateStr);
+  onEndDateChange(dateChangeEvent: { dateStr: string }) {
+    console.log('end date changed: ', dateChangeEvent);
+    const selectedDate = new Date(dateChangeEvent.dateStr);
     this.game.end = selectedDate.toUTCString();
   }
 
@@ -284,6 +295,10 @@ export class GameComponent implements OnInit {
 
   onSubmit() {
     console.log('submit pressed!');
+    if (!this.event) {
+      this.loader.setErrorMessage('Invalid event data!');
+      return;
+    }
 
     console.log('course selected: ', this.selectedCourse);
 
@@ -291,8 +306,9 @@ export class GameComponent implements OnInit {
       // existing gamer, update all fields
       this.updateGame(this.game, this.event);
     } else {
+      const eventData: Event = { ...this.event, rounds: [] };
       // new gamer
-      this.createGame(this.game, this.event);
+      this.createGame(this.game, eventData);
     }
   }
 
@@ -322,7 +338,7 @@ export class GameComponent implements OnInit {
       });
   }
 
-  private getRounds(d1: Date, d2: Date, courseid: string): any {
+  private getRounds(d1: Date, d2: Date, courseid: string) {
     const rounds = [];
 
     const start = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
@@ -351,10 +367,20 @@ export class GameComponent implements OnInit {
     return rounds;
   }
 
-  private updateEvent(newEvent: Event, game: Game, event: Event): any {
+  private updateEvent(newEvent: Event, game: Game, event: EventBase) {
     const start = game.start;
     const end = game.end;
-    const courseid = this.selectedCourse.id;
+    const courseid = this.selectedCourse?.id;
+
+    if (!courseid) {
+      this.loader.setErrorMessage('Invalid course selected!');
+      return;
+    }
+
+    if (!this.selectedTourStop?.tournament_id) {
+      this.loader.setErrorMessage('Invalid tour stop selected!');
+      return;
+    }
 
     newEvent.name = game.name;
     newEvent.start = start;
@@ -377,7 +403,7 @@ export class GameComponent implements OnInit {
    * @param gamer
    * @param event
    */
-  private updateGame(game: Game, event: Event) {
+  private updateGame(game: Game, event: EventWithDetails) {
     this.loader.setLoading(true);
 
     // get the event data, then update it
@@ -438,11 +464,11 @@ export class GameComponent implements OnInit {
       });
   }
 
-  loadingError(msg: string, err: any) {
+  loadingError(msg: string, err: Error) {
     console.log(msg, err);
 
     this.loader.setErrorMessage(msg);
 
-    return throwError(() => new Error(err));
+    return throwError(() => err);
   }
 }

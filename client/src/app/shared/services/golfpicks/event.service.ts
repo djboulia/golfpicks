@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpAuthService } from '../http-auth.service';
-import { Event, Schedule } from './event.model';
+import { Event, EventWithDetails, Schedule } from './event.model';
 import { Weather } from './course.model';
 import { environment } from '../../../../environments/environment';
 
@@ -27,7 +27,7 @@ export class EventService {
     return today.getFullYear().toString();
   }
 
-  newModel(): Event {
+  newModel(): EventWithDetails {
     return {
       id: '',
       name: '',
@@ -89,7 +89,7 @@ export class EventService {
     return this.httpAuth.get(methodUrl, { withCredentials: true });
   }
 
-  tourSchedule(year: number): Observable<Schedule[]> {
+  tourSchedule(year: string): Observable<Schedule[]> {
     const methodUrl = this.configUrl + '/tour/pga/' + year;
 
     return this.httpAuth.get(methodUrl, { withCredentials: true });

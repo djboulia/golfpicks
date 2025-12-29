@@ -52,9 +52,9 @@ export class MainComponent {
     });
   }
 
-  private loadingError(msg: string, err: any) {
+  private loadingError(msg: string, err: Error) {
     this.loader.setErrorMessage(msg);
 
-    return throwError(() => new Error(err));
+    return throwError(() => err);
   }
 }

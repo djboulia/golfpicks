@@ -14,6 +14,7 @@ import { PageLoadCardComponent } from '../../shared/components/common/page-load-
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { CheckboxComponent } from '../../shared/components/form/input/checkbox.component';
 import { CommonModule } from '@angular/common';
+import { EventBase } from '../../shared/services/golfpicks/event.model';
 
 @Component({
   selector: 'app-picks',
@@ -29,7 +30,7 @@ export class PicksComponent implements OnInit {
   currentUser: Gamer | null = null;
   game: GameDay | null = null;
   gameDay: GameDayService | null = null;
-  event: any = null;
+  event: EventBase | null = null;
   golfers: any = null;
   changed = false;
   canSubmit = true;
@@ -107,7 +108,7 @@ export class PicksComponent implements OnInit {
 
         if (gamers) {
           // might have previously stored picks
-          let picks = [];
+          let picks: Pick[] | undefined = [];
 
           for (let i = 0; i < gamers.length; i++) {
             const gamer = gamers[i];
