@@ -48,7 +48,7 @@ export class EventsController {
   }
 
   @Get(':id/deep')
-  deep(@Param('id') id: string, @Query('playerSort') playerSort: string) {
+  deep(@Param('id') id: string, @Query('playerSort') playerSort?: string) {
     return this.eventsService.deepGet(
       this.gamersService,
       this.coursesService,
