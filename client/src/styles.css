@@ -209,14 +209,14 @@ layer(base);
 }
 
 @utility user-score-header {
-  @apply text-theme-light-heading dark:text-theme-dark-heading bg-theme-light-highlight dark:bg-theme-dark-highlight py-2;
+  @apply text-theme-light-heading dark:text-theme-dark-heading bg-brand-300/15 dark:bg-theme-dark-highlight/50 py-2;
 }
 
 @utility user-score-top5 {
   @apply text-theme-light-text dark:text-theme-dark-text bg-theme-light-base dark:bg-theme-dark-base py-2;
 }
 @utility user-score-bottom5 {
-  @apply text-theme-light-text dark:text-theme-dark-text bg-theme-light-highlight dark:bg-theme-dark-highlight py-2;
+  @apply text-theme-light-text/50 dark:text-theme-dark-text/50 bg-brand-300/15 dark:bg-theme-dark-highlight/50 py-2;
 }
 
 @utility table-header {
@@ -619,9 +619,7 @@ span.flatpickr-weekday,
   @apply !bg-none;
 }
 .flatpickr-day.inRange {
-  box-shadow:
-    -5px 0 0 #f9fafb,
-    5px 0 0 #f9fafb !important;
+  box-shadow: -5px 0 0 #f9fafb, 5px 0 0 #f9fafb !important;
   @apply dark:!shadow-datepicker;
 }
 .flatpickr-day.inRange,
@@ -898,9 +896,7 @@ span.flatpickr-weekday,
 
 .task {
   border-radius: 0.75rem;
-  box-shadow:
-    0px 1px 3px 0px rgba(16, 24, 40, 0.1),
-    0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+  box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.1), 0px 1px 2px 0px rgba(16, 24, 40, 0.06);
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }

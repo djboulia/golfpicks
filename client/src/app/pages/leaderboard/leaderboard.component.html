@@ -53,15 +53,21 @@
 
           <h4 class="py-6 font-semibold text-xl">Details</h4>
           <div class="text-center" id="tablesection">
-            @for (gamer of gamers; track $index) {
-            <div class="py-6">
-              <app-user-score-board
-                [gamer]="gamer"
-                [roundTitles]="roundTitles"
-                [tournamentLeaderUrl]="tournamentLeaderUrl + '/id/' + game.event"
-              />
+            <div class="flex flex-row justify-center">
+              <div
+                class="overflow-hidden rounded-2xl w-full max-w-[1000px] border border-gray-200 bg-theme-light-card dark:bg-theme-dark-card py-4 dark:border-white/[0.05] text-theme-dark-text"
+              >
+                @for (gamer of gamers; track $index) {
+                <div class="py-6">
+                  <app-user-score-board
+                    [gamer]="gamer"
+                    [roundTitles]="roundTitles"
+                    [tournamentLeaderUrl]="tournamentLeaderUrl + '/id/' + game.event"
+                  />
+                </div>
+                }
+              </div>
             </div>
-            }
           </div>
         </div>
       </div>
