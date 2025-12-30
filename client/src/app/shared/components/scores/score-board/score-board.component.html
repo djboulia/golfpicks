@@ -11,34 +11,34 @@
           </div>
 
           @for (gamer of gamers; track $index) {
-            <div class="py-2 pr-10">
-              {{ gamer.name }}
-            </div>
+          <div class="py-2 pr-10">
+            {{ gamer.name }}
+          </div>
           }
         </div>
 
         @for (title of roundTitles; track $index; let i = $index) {
-          <div class="flex flex-col">
-            <div class="px-6 py-2 text-center border-b-1">
-              <b>{{ title }}</b>
-            </div>
-            @for (gamer of gamers; track $index) {
-              <div
-                class="py-2 px-6 text-center"
-                [ngClass]="{
-                  'text-game-leader bg-brand-600 dark:bg-brand-800': gamer.rounds[i].leader
-                }"
-              >
-                {{ gamer.rounds[i].score }}
-              </div>
-            }
+        <div class="flex flex-col">
+          <div class="px-6 py-2 text-center border-b-1">
+            <b>{{ title }}</b>
           </div>
+          @for (gamer of gamers; track $index) {
+          <div
+            class="py-2 px-6 text-center"
+            [ngClass]="{
+              'text-game-leader bg-brand-600 dark:bg-brand-800': gamer.rounds[i].leader
+            }"
+          >
+            {{ gamer.rounds[i].score }}
+          </div>
+          }
+        </div>
         }
       </div>
     </div>
 
     <div class="flex flex-row justify-center">
-      <span class="text-game-leader bg-brand-600 dark:bg-brand-800">*</span>&nbsp;&nbsp;<span
+      <span class="text-game-leader bg-brand-600 dark:bg-brand-800 px-2">*</span>&nbsp;&nbsp;<span
         >Round Leader</span
       >
     </div>
