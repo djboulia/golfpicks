@@ -3,33 +3,31 @@
 
   <div class="space-y-6">
     @if (loader?.isLoading()) {
-      <div
-        class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6"
-      >
-        <div class="flex justify-center">
-          <div
-            class="animate-spin rounded-full h-10 w-10 border-4 border-brand-500 border-t-transparent"
-          ></div>
-        </div>
+    <div
+      class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6"
+    >
+      <div class="flex justify-center">
+        <div
+          class="animate-spin rounded-full h-10 w-10 border-4 border-brand-500 border-t-transparent"
+        ></div>
       </div>
+    </div>
     } @else if (loader?.hasError()) {
-      <div
-        class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6"
-      >
-        <app-alert
-          variant="error"
-          title="Error Message"
-          [message]="loader?.getErrorMessage() ?? ''"
-          [showLink]="false"
-        />
-      </div>
+    <div
+      class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6"
+    >
+      <app-alert
+        variant="error"
+        title="Error Message"
+        [message]="loader?.getErrorMessage() ?? ''"
+        [showLink]="false"
+      />
+    </div>
     } @else {
-      <ng-content></ng-content>
-      <div
-        class="absolute text-sm text-center text-theme-light-text -translate-x-1/2 bottom-6 left-1/2 dark:text-theme-dark-text"
-      >
-        &copy; {{ currentYear }} - Boulia Productions
-      </div>
+    <ng-content></ng-content>
+    <div class="w-full text-sm text-center text-theme-light-text dark:text-theme-dark-text">
+      &copy; {{ currentYear }} - Boulia Productions
+    </div>
     }
   </div>
 </div>
