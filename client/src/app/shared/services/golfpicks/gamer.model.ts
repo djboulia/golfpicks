@@ -4,12 +4,15 @@ export interface Pick {
   id: string;
 }
 
-export interface Gamer {
-  id: string;
+export interface GamerBase {
   admin?: boolean;
   username: string;
   password: string;
   name: string;
+}
+
+export interface Gamer extends GamerBase {
+  id: string;
 }
 
 export interface GamerHistoryGame {

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { LeaderboardGolfer } from '../../../services/golfpicks/game.model';
+import { Hole } from '../../scores/score';
+import { GolferDetails, GolferLeaderDetails } from '../../../services/golfpicks/event.model';
 
-const getTotal = (holes: any[]) => {
+const getTotal = (holes: Hole[]) => {
   let total = 0;
   for (const hole of holes) {
     const score = parseInt(hole.score);
@@ -21,13 +22,22 @@ const getParTotal = (holes: number[]) => {
   return total;
 };
 
-const getParDifferential = (roundValue: string, roundPar: string) => {
+const getParDifferential = (roundValue: string, roundPar: number) => {
   const roundValueInt = parseInt(roundValue);
-  const roundParInt = parseInt(roundPar);
+  const roundParInt = roundPar;
   if (isNaN(roundValueInt) || isNaN(roundParInt)) {
     return null;
   }
   return roundValueInt - roundParInt;
+};
+
+type Scores = {
+  front9: Hole[];
+  front9Total: number | string;
+  front9Par: number;
+  back9: Hole[];
+  back9Total: number | string;
+  back9Par: number;
 };
 
 @Component({
@@ -36,10 +46,17 @@ const getParDifferential = (roundValue: string, roundPar: string) => {
   imports: [CommonModule],
 })
 export class TournamentLeaderDetailComponent implements OnInit {
-  @Input() golfer: any;
+  @Input() golfer: GolferLeaderDetails | null = null;
   @Input() eventUrl: string = '';
 
-  scores: any = null;
+  scores: Scores = {
+    front9: [],
+    front9Total: '-',
+    front9Par: 0,
+    back9: [],
+    back9Total: '-',
+    back9Par: 0,
+  };
   roundNumber: number | null = null;
 
   constructor() {}
@@ -48,9 +65,6 @@ export class TournamentLeaderDetailComponent implements OnInit {
     // console.log('golfer: ', this.golfer);
 
     const roundDetails = { ...this.golfer?.round_details };
-    if (!roundDetails) {
-      return;
-    }
 
     // sort round keys in descending order
     const rounds = Object.keys(roundDetails).sort((a: string, b: string) => {
@@ -68,13 +82,13 @@ export class TournamentLeaderDetailComponent implements OnInit {
     if (currentRound) {
       const roundValues = currentRound.round_values;
       const roundParValues = currentRound.par_values;
-      const front9 = [];
+      const front9: Hole[] = [];
       for (let i = 0; i < 9; i++) {
         const roundValue = roundValues[i];
         const roundPar = roundParValues[i];
         front9.push({ score: roundValue, fromPar: getParDifferential(roundValue, roundPar) });
       }
-      const back9 = [];
+      const back9: Hole[] = [];
       for (let i = 9; i < 18; i++) {
         const roundValue = roundValues[i];
         const roundPar = roundParValues[i];

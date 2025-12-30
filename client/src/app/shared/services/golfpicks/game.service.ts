@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpAuthService } from '../http-auth.service';
 import { Observable } from 'rxjs';
 
-import { Game, GameDay, GamerDetails } from './game.model';
+import { Game, GameDay, GamerDetails, Leaderboard } from './game.model';
 import { environment } from '../../../../environments/environment';
 import { Pick } from './gamer.model';
 
@@ -106,7 +106,7 @@ export class GameService {
     return this.httpAuth.get(methodUrl, { withCredentials: true });
   }
 
-  leaderboard(id: string): Observable<any> {
+  leaderboard(id: string): Observable<Leaderboard> {
     const methodUrl = this.configUrl + '/' + id + '/leaderboard';
 
     return this.httpAuth.get(methodUrl, { withCredentials: true });

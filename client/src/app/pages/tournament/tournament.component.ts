@@ -7,6 +7,8 @@ import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { GAMEURLS } from '../../app.routes';
+import { EventWithDetails } from '../../shared/services/golfpicks/event.model';
+import { Coordinates } from '../../shared/services/golfpicks/course.model';
 
 @Component({
   selector: 'app-tournament',
@@ -15,7 +17,7 @@ import { GAMEURLS } from '../../app.routes';
 })
 export class TournamentComponent implements OnInit {
   id: string | null = null;
-  event: any = null;
+  event: EventWithDetails | null = null;
 
   scoresUrl = GAMEURLS.tournamentLeaders;
 
@@ -68,10 +70,10 @@ export class TournamentComponent implements OnInit {
     }
   }
 
-  formatPosition(location: any) {
+  formatPosition(location: Coordinates) {
     return {
-      lat: Number.parseFloat(location.lat),
-      lng: Number.parseFloat(location.lng),
+      lat: location.lat,
+      lng: location.lng,
     };
   }
 }

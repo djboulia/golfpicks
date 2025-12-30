@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpAuthService } from '../http-auth.service';
-import { Event, EventWithDetails, Schedule } from './event.model';
+import { Event, EventLeaders, EventWithDetails, Schedule } from './event.model';
 import { Weather } from './course.model';
 import { environment } from '../../../../environments/environment';
 
@@ -38,6 +38,7 @@ export class EventService {
       scoreType: 'pga-live-scoring',
       tournament_id: '',
       rounds: [],
+      golfers: [],
     };
   }
 
@@ -70,14 +71,14 @@ export class EventService {
     return this.httpAuth.get(methodUrl, { withCredentials: true });
   }
 
-  deep(id: string, sortByRanking: boolean): Observable<any> {
+  deep(id: string, sortByRanking: boolean): Observable<EventWithDetails> {
     const queryParameters = sortByRanking ? '?playerSort=ranking' : '';
     const methodUrl = this.configUrl + '/' + id + '/deep' + queryParameters;
 
     return this.httpAuth.get(methodUrl, { withCredentials: true });
   }
 
-  leaders(id: string): Observable<any> {
+  leaders(id: string): Observable<EventLeaders> {
     const methodUrl = this.configUrl + '/' + id + '/leaders';
 
     return this.httpAuth.get(methodUrl, { withCredentials: true });
@@ -95,7 +96,7 @@ export class EventService {
     return this.httpAuth.get(methodUrl, { withCredentials: true });
   }
 
-  newsFeed(id: string): Observable<any> {
+  newsFeed(id: string): Observable<string[]> {
     const methodUrl = this.configUrl + '/' + id + '/newsfeed';
 
     return this.httpAuth.get(methodUrl, { withCredentials: true });

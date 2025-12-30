@@ -1,31 +1,30 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { EventLeaderDetailComponent } from '../../event/eventleader-detail/event-leader-detail.component';
 import { CommonModule } from '@angular/common';
+import { LeaderboardGamer, LeaderboardGolfer } from '../../../services/golfpicks/game.model';
 
 @Component({
   selector: 'app-user-score-board',
   templateUrl: './user-score-board.component.html',
-  imports: [CommonModule, EventLeaderDetailComponent],
+  imports: [CommonModule],
 })
 export class UserScoreBoardComponent implements OnInit {
-  @Input() gamer: any;
+  @Input() gamer: LeaderboardGamer | null = null;
   @Input() roundTitles: string[] = [];
   @Input() tournamentLeaderUrl: string = '';
-  @Input() showDetails = false;
 
-  top5: any = [];
-  bottom5: any = [];
-  scores: any = [];
+  top5: LeaderboardGolfer[] = [];
+  bottom5: LeaderboardGolfer[] = [];
+  scores: (string | number)[] = [];
 
   constructor() {}
 
   ngOnInit(): void {
-    this.scores = [...this.gamer.scores];
+    this.scores = [...(this.gamer?.scores || [])];
 
     const cutIndex = this.scores.indexOf('CUT');
     if (cutIndex > -1) {
       // remove all scores except the first CUT
-      this.scores = this.scores.map((_score: any, index: number) => {
+      this.scores = this.scores.map((_score: string | number, index: number) => {
         if (index === cutIndex) {
           return 'CUT';
         }
@@ -47,7 +46,7 @@ export class UserScoreBoardComponent implements OnInit {
       }
     }
 
-    this.top5 = this.gamer.picks.slice(0, 5);
-    this.bottom5 = this.gamer.picks.slice(-5);
+    this.top5 = this.gamer?.picks.slice(0, 5) || [];
+    this.bottom5 = this.gamer?.picks.slice(-5) || [];
   }
 }

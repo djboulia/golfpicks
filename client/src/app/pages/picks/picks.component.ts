@@ -14,7 +14,12 @@ import { PageLoadCardComponent } from '../../shared/components/common/page-load-
 import { ButtonComponent } from '../../shared/components/ui/button/button.component';
 import { CheckboxComponent } from '../../shared/components/form/input/checkbox.component';
 import { CommonModule } from '@angular/common';
-import { EventBase } from '../../shared/services/golfpicks/event.model';
+import { EventBase, GolferDetails } from '../../shared/services/golfpicks/event.model';
+
+type GolferDetailsWithSelection = GolferDetails & {
+  selected?: boolean;
+  selectable?: boolean;
+};
 
 @Component({
   selector: 'app-picks',
@@ -31,7 +36,7 @@ export class PicksComponent implements OnInit {
   game: GameDay | null = null;
   gameDay: GameDayService | null = null;
   event: EventBase | null = null;
-  golfers: any = null;
+  golfers: GolferDetailsWithSelection[] | null = null;
   changed = false;
   canSubmit = true;
 
@@ -124,11 +129,11 @@ export class PicksComponent implements OnInit {
       });
   }
 
-  private addPlayer(players: any[], ndx: number) {
+  private addPlayer(players: GolferDetailsWithSelection[], ndx: number) {
     players[ndx].selected = true;
   }
 
-  private findPlayerIndex(players: any[], id: string) {
+  private findPlayerIndex(players: GolferDetailsWithSelection[], id: string) {
     // use a player id to find the index for this player in the scores list
     for (let i = 0; i < players.length; i++) {
       if (players[i].player_id == id) {
@@ -139,30 +144,35 @@ export class PicksComponent implements OnInit {
     return -1;
   }
 
-  private updateSelections(selections: any[], players: any[]) {
+  private updateSelections(
+    selections: GolferDetailsWithSelection[],
+    players: GolferDetailsWithSelection[] | null,
+  ) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
 
     let numSelections = 0;
     let numTopPicks = 0;
 
-    selections.forEach(function (selection) {
+    selections.forEach((selection) => {
       numSelections++;
-      if (selection.index <= self.NUM_TOP_RANK) numTopPicks++;
+      if (Number(selection.rank) <= this.NUM_TOP_RANK) numTopPicks++;
     });
 
     // now disable based on this
 
-    players.forEach(function (player) {
+    players?.forEach((player) => {
       if (player.selected) {
         // always enable any currently selected scores
         player.selectable = true;
         //                    console.log("Selected : " + JSON.stringify(player));
       } else {
         // disable the rest based on current picks
-        if (numSelections >= self.NUM_SELECTIONS) {
+        if (numSelections >= this.NUM_SELECTIONS) {
           player.selectable = false;
-        } else if (numTopPicks >= self.NUM_TOP_ALLOWED && player.index <= self.NUM_TOP_RANK) {
+        } else if (
+          numTopPicks >= this.NUM_TOP_ALLOWED &&
+          Number(player.rank) <= this.NUM_TOP_RANK
+        ) {
           player.selectable = false;
         } else {
           player.selectable = true;
@@ -175,25 +185,33 @@ export class PicksComponent implements OnInit {
     return numSelections;
   }
 
-  private getSelections(players: any[]) {
-    const selections: any[] = [];
+  private getSelections(players: GolferDetailsWithSelection[] | null) {
+    const selections: GolferDetailsWithSelection[] = [];
 
-    players.forEach(function (player) {
+    players?.forEach((player) => {
       if (player.selected) selections.push(player);
     });
 
     return selections;
   }
 
-  private initPriorPicks(players: any[], picks: any) {
-    // for each pick we find, move it from scores to selections
-    for (let i = 0; i < picks.length; i++) {
-      const ndx = this.findPlayerIndex(players, picks[i].id);
+  private initPriorPicks(players: GolferDetailsWithSelection[] | null, picks?: Pick[]) {
+    if (!players) {
+      console.log('no golfers found!!');
+      return;
+    }
 
-      if (ndx < 0) {
-        console.error('invalid pick ' + picks[i].id + ' found!');
-      } else {
-        this.addPlayer(players, ndx);
+    if (picks) {
+      console.log('found prior picks: ' + JSON.stringify(picks));
+      // for each pick we find, move it from scores to selections
+      for (let i = 0; i < picks.length; i++) {
+        const ndx = this.findPlayerIndex(players, picks[i].id);
+
+        if (ndx < 0) {
+          console.error('invalid pick ' + picks[i].id + ' found!');
+        } else {
+          this.addPlayer(players, ndx);
+        }
       }
     }
 
@@ -255,7 +273,7 @@ export class PicksComponent implements OnInit {
     }
   }
 
-  onUpdatePlayer(golfer: any) {
+  onUpdatePlayer(golfer: GolferDetailsWithSelection) {
     //			console.log("item: " + JSON.stringify(item));
     console.log('clicked on item ' + golfer.name + ' state is ' + golfer.selected);
 

@@ -7,6 +7,7 @@ import { LoaderService } from '../../shared/services/loader.service';
 import { PageLoadCardComponent } from '../../shared/components/common/page-load-card/page-load-card.component';
 import { CommonModule } from '@angular/common';
 import { TournamentLeaderDetailComponent } from '../../shared/components/tournament/tournament-leader-detail/tournament-leader-detail.component';
+import { EventLeaders, GolferLeaderDetails } from '../../shared/services/golfpicks/event.model';
 
 @Component({
   selector: 'app-tournament-leaders',
@@ -15,7 +16,7 @@ import { TournamentLeaderDetailComponent } from '../../shared/components/tournam
 })
 export class TournamentLeadersComponent implements OnInit {
   id: string | null = null;
-  event: any = null;
+  event: EventLeaders | null = null;
   playerDetail: string | null = null;
 
   leadersUrl = GAMEURLS.tournamentLeaders;
@@ -70,6 +71,40 @@ export class TournamentLeadersComponent implements OnInit {
         this.loader.setErrorMessage('Error loading scores!');
       }
     });
+  }
+
+  getGolferScore(golfer: GolferLeaderDetails, roundNumber: string): string {
+    if (!golfer || !roundNumber || !this.event) {
+      return '-';
+    }
+
+    if (roundNumber !== '1' && roundNumber !== '2' && roundNumber !== '3' && roundNumber !== '4') {
+      return '-';
+    }
+
+    const score = golfer[roundNumber];
+    return score ? score : '-';
+  }
+
+  isLowScore(golfer: GolferLeaderDetails, roundNumber: string): boolean {
+    if (!golfer || !roundNumber || !this.event) {
+      return false;
+    }
+
+    const roundIndex = parseInt(roundNumber);
+    const lowRound = this.event.lowRounds[roundIndex];
+    const golferScore = this.getGolferScore(golfer, roundNumber);
+
+    return lowRound === golferScore;
+  }
+
+  isUnderPar(golfer: GolferLeaderDetails): boolean {
+    if (!golfer) {
+      return false;
+    }
+
+    const todayScore = parseInt(golfer.today);
+    return todayScore < 0;
   }
 
   onPlayerClick(playerId: string) {

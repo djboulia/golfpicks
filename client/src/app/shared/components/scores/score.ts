@@ -31,9 +31,9 @@ export const getParTotal = (holes: number[]): number => {
   return total;
 };
 
-export const getParDifferential = (roundValue: string, roundPar: string): number | null => {
+export const getParDifferential = (roundValue: string, roundPar: number): number | null => {
   const roundValueInt = parseInt(roundValue);
-  const roundParInt = parseInt(roundPar);
+  const roundParInt = roundPar;
   if (isNaN(roundValueInt) || isNaN(roundParInt)) {
     return null;
   }

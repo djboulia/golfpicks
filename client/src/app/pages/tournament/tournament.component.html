@@ -1,70 +1,70 @@
-<app-page-load-card [pageTitle]="event?.name" [loader]="loader">
+<app-page-load-card [pageTitle]="event?.name ?? ''" [loader]="loader">
   @if (event) {
-    <div>
-      <div class="text-theme-light-text dark:text-theme-dark-text">
-        {{ dateFormatter.formatDateRange(event.start, event.end) }}
-      </div>
-
-      <div class="text-center py-4 text-theme-light-text dark:text-theme-dark-text">
-        View <a class="link" [attr.href]="scoresUrl + '/id/' + id">scores</a> for this event
-      </div>
-
-      <div class="flex flex-row justify-center py-4">
-        <table class="w-full">
-          <thead class="table-header">
-            <th class="table-header-cell">Round</th>
-            <th class="table-header-cell">Course</th>
-            <th class="table-header-cell">Date</th>
-          </thead>
-          <tbody>
-            @for (round of event.rounds; track $index; let i = $index) {
-              <tr>
-                <td class="table-cell">
-                  {{ i + 1 }}
-                </td>
-                <td class="table-cell">
-                  {{ round.course.name }}
-                </td>
-                <td class="table-cell">
-                  {{ dateFormatter.formatDate(round.date) }}
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
-        @for (round of event.rounds; track $index) {
-          <map-marker
-            [position]="formatPosition(round.course.location)"
-            [label]="round.course.name"
-          ></map-marker>
-        }
-      </google-map>
-
-      <div class="text-center py-4 text-theme-xl">The Field</div>
-
-      <div class="max-w-full overflow-x-auto">
-        <table class="w-full">
-          <thead class="table-header">
-            <th class="table-header-cell">Player</th>
-            <th class="table-header-cell">Rank</th>
-          </thead>
-          <tbody>
-            @for (golfer of event.golfers; track $index) {
-              <tr>
-                <td class="table-cell">
-                  {{ golfer.name }}
-                </td>
-                <td class="table-cell">
-                  {{ golfer.rank }}
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+  <div>
+    <div class="text-theme-light-text dark:text-theme-dark-text">
+      {{ dateFormatter.formatDateRange(event.start, event.end) }}
     </div>
+
+    <div class="text-center py-4 text-theme-light-text dark:text-theme-dark-text">
+      View <a class="link" [attr.href]="scoresUrl + '/id/' + id">scores</a> for this event
+    </div>
+
+    <div class="flex flex-row justify-center py-4">
+      <table class="w-full">
+        <thead class="table-header">
+          <th class="table-header-cell">Round</th>
+          <th class="table-header-cell">Course</th>
+          <th class="table-header-cell">Date</th>
+        </thead>
+        <tbody>
+          @for (round of event.rounds; track $index; let i = $index) {
+          <tr>
+            <td class="table-cell">
+              {{ i + 1 }}
+            </td>
+            <td class="table-cell">
+              {{ round.course.name }}
+            </td>
+            <td class="table-cell">
+              {{ dateFormatter.formatDate(round.date) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <google-map height="400px" width="max" [center]="mapCenter" [zoom]="mapZoom">
+      @for (round of event.rounds; track $index) {
+      <map-marker
+        [position]="formatPosition(round.course.location)"
+        [label]="round.course.name"
+      ></map-marker>
+      }
+    </google-map>
+
+    <div class="text-center py-4 text-theme-xl">The Field</div>
+
+    <div class="max-w-full overflow-x-auto">
+      <table class="w-full">
+        <thead class="table-header">
+          <th class="table-header-cell">Player</th>
+          <th class="table-header-cell">Rank</th>
+        </thead>
+        <tbody>
+          @for (golfer of event.golfers; track $index) {
+          <tr>
+            <td class="table-cell">
+              {{ golfer.name }}
+            </td>
+            <td class="table-cell">
+              {{ golfer.rank }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
   }
 </app-page-load-card>

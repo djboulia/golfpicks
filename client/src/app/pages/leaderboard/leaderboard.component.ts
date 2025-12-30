@@ -7,7 +7,6 @@ import {
   GameDay,
   Leaderboard,
   LeaderboardGamer,
-  LeaderboardRound,
 } from '../../shared/services/golfpicks/game.model';
 import { GameService } from '../../shared/services/golfpicks/game.service';
 import { EventService } from '../../shared/services/golfpicks/event.service';

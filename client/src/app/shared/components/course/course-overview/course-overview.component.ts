@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CourseInfo } from '../../../services/golfpicks/game.model';
 
 @Component({
   selector: 'app-course-overview',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class CourseOverviewComponent implements OnInit {
   @Input() currentRound = 1;
   @Input() courseUrl = '';
-  @Input() courseInfo: any;
+  @Input() courseInfo: CourseInfo | null = null;
 
   constructor() {}
 

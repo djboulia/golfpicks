@@ -1,7 +1,7 @@
 // interfaces for our backend
 
-import { Course, Hole } from './course.model';
-import { Gamer } from './gamer.model';
+import { Hole } from './course.model';
+import { Gamer, GamerBase } from './gamer.model';
 
 export interface Game {
   id: string;
@@ -30,12 +30,9 @@ export interface GameDay {
   };
 }
 
-export interface GamerDetail {
+// TODO: should change the backend to make this consistent with Gamer interface
+export interface GamerDetail extends GamerBase {
   user: string;
-  admin: boolean;
-  username: string;
-  password: string;
-  name: string;
 }
 
 export interface GamerDetailPicks extends GamerDetail {

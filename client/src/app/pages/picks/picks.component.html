@@ -38,34 +38,32 @@
       </thead>
       <tbody>
         @for (golfer of golfers; track $index) {
-          <tr>
-            <td class="table-cell">
-              <app-checkbox
-                [checked]="golfer.selected"
-                [disabled]="!golfer.selectable"
-                (checkedChange)="onUpdatePlayer(golfer)"
-              />
-            </td>
-            <td
-              class="table-cell"
-              [ngClass]="{
-                toppick: golfer.index <= NUM_TOP_RANK,
-                'text-brand-200 dark:text-brand-600': !golfer.selectable
-              }"
-            >
-              {{ golfer.name }}
-            </td>
+        <tr>
+          <td class="table-cell">
+            <app-checkbox
+              [checked]="golfer.selected === true"
+              [disabled]="!golfer.selectable"
+              (checkedChange)="onUpdatePlayer(golfer)"
+            />
+          </td>
+          <td
+            class="table-cell"
+            [ngClass]="{
+              'text-brand-200 dark:text-brand-600': !golfer.selectable
+            }"
+          >
+            {{ golfer.name }}
+          </td>
 
-            <td
-              class="table-cell"
-              [ngClass]="{
-                toppick: golfer.index <= NUM_TOP_RANK,
-                'text-brand-200 dark:text-brand-600': !golfer.selectable
-              }"
-            >
-              {{ golfer.rank }}
-            </td>
-          </tr>
+          <td
+            class="table-cell"
+            [ngClass]="{
+              'text-brand-200 dark:text-brand-600': !golfer.selectable
+            }"
+          >
+            {{ golfer.rank }}
+          </td>
+        </tr>
         }
       </tbody>
     </table>
