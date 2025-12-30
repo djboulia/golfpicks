@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -47,11 +48,12 @@ export class EventsController {
   }
 
   @Get(':id/deep')
-  deep(@Param('id') id: string) {
+  deep(@Param('id') id: string, @Query('playerSort') playerSort: string) {
     return this.eventsService.deepGet(
       this.gamersService,
       this.coursesService,
       id,
+      playerSort,
     );
   }
 
