@@ -54,11 +54,11 @@ export class HttpAuthService {
     });
   }
 
-  put(url: string, obj: any, options: any): Observable<any> {
+  patch(url: string, obj: any, options: any): Observable<any> {
     const self = this;
 
     return new Observable((observer) => {
-      this.http.put<any>(url, obj, options).subscribe({
+      this.http.patch<any>(url, obj, options).subscribe({
         next(data) {
           // for successful calls, pass on to the observer
           observer.next(data);

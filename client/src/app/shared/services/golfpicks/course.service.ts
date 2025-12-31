@@ -56,9 +56,9 @@ export class CourseService {
   }
 
   put(obj: Course): Observable<Course> {
-    const methodUrl = this.configUrl;
+    const methodUrl = this.configUrl + '/' + obj.id;
 
-    return this.httpAuth.put(methodUrl, obj, { withCredentials: true });
+    return this.httpAuth.patch(methodUrl, obj, { withCredentials: true });
   }
 
   post(obj: Course): Observable<Course> {

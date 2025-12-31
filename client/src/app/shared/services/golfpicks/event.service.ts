@@ -49,9 +49,9 @@ export class EventService {
   }
 
   put(obj: Event): Observable<Event> {
-    const methodUrl = this.configUrl;
+    const methodUrl = this.configUrl + '/' + obj.id;
 
-    return this.httpAuth.put(methodUrl, obj, { withCredentials: true });
+    return this.httpAuth.patch(methodUrl, obj, { withCredentials: true });
   }
 
   post(obj: Event): Observable<Event> {
