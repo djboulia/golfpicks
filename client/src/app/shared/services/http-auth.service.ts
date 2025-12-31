@@ -23,8 +23,7 @@ export class HttpAuthService {
   ) {}
 
   private handleError(observer: Subscriber<any>, res: HttpErrorResponse) {
-    const err = res.error;
-    if (err.code === 401) {
+    if (res.status === 401) {
       // backend login expired/not authorized
       // kill the current session and redirect
       console.log('backend auth failed, destroying session and redirecting to login');

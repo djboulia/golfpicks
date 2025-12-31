@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { register as registerSwiperElements } from 'swiper/element/bundle';
+import { environment } from './environments/environment';
 
 // Save original method
 // const originalAddEventListener = EventTarget.prototype.addEventListener;
@@ -26,7 +27,8 @@ import { register as registerSwiperElements } from 'swiper/element/bundle';
 //   return originalAddEventListener.call(this, type, listener, options);
 // };
 
+console.log('Environment:', environment.production ? 'Production' : 'Development');
+
 registerSwiperElements();
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));

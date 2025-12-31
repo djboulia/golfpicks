@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateGamerDto } from './dto/create-gamer.dto';
 import { UpdateGamerDto } from './dto/update-gamer.dto';
 import { GolfPicksDb } from 'src/common/db/golf-picks-db';
@@ -122,7 +122,7 @@ export class GamersService {
       return gamer;
     } else {
       // not logged in, send back a 401
-      throw new Error('Authorization failed!');
+      throw new UnauthorizedException('Authorization failed!');
     }
   }
 
