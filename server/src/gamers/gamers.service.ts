@@ -1,10 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateGamerDto } from './dto/create-gamer.dto';
 import { UpdateGamerDto } from './dto/update-gamer.dto';
-import { GolfPicksDb } from 'src/common/db/golf-picks-db';
+import { GolfPicksAttributes, GolfPicksDb } from 'src/common/db/golf-picks-db';
 import { ConfigService } from '@nestjs/config';
 import { LoginDto } from './dto/login.dto';
-import { AttributeMap } from 'aws-sdk/clients/dynamodb';
 import { GamesService } from 'src/games/games.service';
 import {
   getGameDetails,
@@ -87,7 +86,7 @@ export class GamersService {
       throw new Error('Invalid login');
     }
 
-    let match: AttributeMap | undefined = undefined;
+    let match: GolfPicksAttributes | undefined = undefined;
 
     for (let i = 0; i < gamers.length; i++) {
       const gamer = gamers[i];

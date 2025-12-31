@@ -8,7 +8,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 // import the aws sdk to use the dynamodb
 // libraries in the app
-import AWS from 'aws-sdk';
+
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  GetCommand,
+  ScanCommand,
+  DeleteCommand,
+  NativeAttributeValue,
+} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 export type AWSCredentials = {
   region?: string;
@@ -19,25 +28,36 @@ export type AWSCredentials = {
 export type DynamoDBObject = {
   id: string;
   className: string;
-  attributes: AWS.DynamoDB.DocumentClient.AttributeMap;
+  attributes: Record<string, NativeAttributeValue>;
 };
 
 export class DynamoDb {
-  private client: AWS.DynamoDB.DocumentClient;
+  private client: DynamoDBDocumentClient;
 
   constructor(
     private credentials: AWSCredentials,
     private tableName: string,
   ) {
-    AWS.config.update({
-      region: this.credentials.region || 'us-east-1',
-      accessKeyId: this.credentials.accessKeyId,
-      secretAccessKey: this.credentials.secretAccessKey,
-    });
+    // JS SDK v3 does not support global configuration.
+    // Codemod has attempted to pass values to each service client in this file.
+    // You may need to update clients outside of this file, if they use global config.
+    // AWS.config.update({
+    //   region: this.credentials.region || 'us-east-1',
+    //   accessKeyId: this.credentials.accessKeyId,
+    //   secretAccessKey: this.credentials.secretAccessKey,
+    // });
 
     // create a new dynamodb client
     // which provides connectivity between the app and the db instance
-    this.client = new AWS.DynamoDB.DocumentClient();
+    const dbClient = new DynamoDBClient({
+      region: this.credentials.region || 'us-east-1',
+      credentials: {
+        accessKeyId: this.credentials.accessKeyId,
+        secretAccessKey: this.credentials.secretAccessKey,
+      },
+    });
+
+    this.client = DynamoDBDocumentClient.from(dbClient);
   }
 
   /**
@@ -50,34 +70,29 @@ export class DynamoDb {
    * @param {Object} attributes the data for this object
    * @returns the object created
    */
-  create(
+  async create(
     className: string,
-    attributes: AWS.DynamoDB.DocumentClient.AttributeMap,
+    attributes: Record<string, NativeAttributeValue>,
   ): Promise<DynamoDBObject> {
-    return new Promise((resolve, reject) => {
-      const obj = {
-        id: uuidv4(),
-        className: className,
-        attributes: attributes,
-      };
+    const obj = {
+      id: uuidv4(),
+      className: className,
+      attributes: attributes,
+    };
 
-      const params = {
-        TableName: this.tableName,
-        Item: obj,
-      };
-
-      this.client.put(params, (err /*, data */) => {
-        if (err) {
-          console.error(
-            'Unable to add item. Error JSON:',
-            JSON.stringify(err, null, 2),
-          );
-          reject(err);
-        } else {
-          resolve(obj);
-        }
-      });
+    const command = new PutCommand({
+      TableName: this.tableName,
+      Item: obj,
     });
+
+    await this.client.send(command).catch((err) => {
+      console.error(
+        'Unable to add item. Error JSON:',
+        JSON.stringify(err, null, 2),
+      );
+      return undefined;
+    });
+    return obj;
   }
 
   /**
@@ -87,36 +102,28 @@ export class DynamoDb {
    * @param {Object} obj
    * @returns the object updated
    */
-  put(className: string, obj: DynamoDBObject): Promise<DynamoDBObject> {
-    return new Promise((resolve, reject) => {
-      // validate that we have the necessary parameters
-      if (!obj || !obj.id || !obj.className || !obj.attributes) {
-        reject(new Error('put: invalid object: ' + JSON.stringify(obj)));
-        return;
-      }
+  async put(className: string, obj: DynamoDBObject): Promise<DynamoDBObject> {
+    // validate that we have the necessary parameters
+    if (!obj || !obj.id || !obj.className || !obj.attributes) {
+      throw new Error('put: invalid object: ' + JSON.stringify(obj));
+    }
 
-      if (obj.className != className) {
-        reject(new Error('put: invalid class name: ' + obj.className));
-        return;
-      }
+    if (obj.className != className) {
+      throw new Error('put: invalid class name: ' + obj.className);
+    }
 
-      const params = {
+    try {
+      const command = new PutCommand({
         TableName: this.tableName,
         Item: obj,
-      };
-
-      this.client.put(params, (err /*, data */) => {
-        if (err) {
-          console.error(
-            'Unable to add item. Error JSON:',
-            JSON.stringify(err, null, 2),
-          );
-          reject(err);
-        } else {
-          resolve(obj);
-        }
       });
-    });
+
+      await this.client.send(command);
+      return obj;
+    } catch (error) {
+      console.error('Error in put: ', error);
+      throw error;
+    }
   }
 
   /**
@@ -126,35 +133,31 @@ export class DynamoDb {
    * @param {Array} ids the list of ids to search for
    * @returns an array of objects
    */
-  findByIds(className: string, ids: string[]): Promise<DynamoDBObject[]> {
-    return new Promise((resolve, reject) => {
-      const idObject = { ':className': className };
-      let index = 0;
-      ids.forEach(function (value) {
-        index++;
-        const idKey = ':idvalue' + index;
-        idObject[idKey.toString()] = value;
-      });
+  async findByIds(className: string, ids: string[]): Promise<DynamoDBObject[]> {
+    const idObject = { ':className': className };
+    let index = 0;
+    ids.forEach(function (value) {
+      index++;
+      const idKey = ':idvalue' + index;
+      idObject[idKey.toString()] = value;
+    });
 
-      const params = {
+    try {
+      const command = new ScanCommand({
         TableName: this.tableName,
         FilterExpression:
           'className = :className AND id IN (' +
           Object.keys(idObject).toString() +
           ')',
         ExpressionAttributeValues: idObject,
-      };
-
-      this.client.scan(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          const items = data.Items ? [...data.Items] : [];
-          resolve(items as DynamoDBObject[]);
-        }
       });
-    });
+
+      const data = await this.client.send(command);
+      return data.Items ? (data.Items as DynamoDBObject[]) : [];
+    } catch (error) {
+      console.error('Error in findByIds: ', error);
+      throw error;
+    }
   }
 
   /**
@@ -164,36 +167,33 @@ export class DynamoDb {
    * @param {String} key the id to search for
    * @returns an object
    */
-  findById(
+  async findById(
     className: string,
     key: string,
   ): Promise<DynamoDBObject | undefined> {
-    return new Promise((resolve, reject) => {
-      console.log('findById key: ', key);
+    console.log('findById key: ', key);
 
-      const params = {
+    try {
+      const command = new GetCommand({
         TableName: this.tableName,
         Key: {
           id: key,
         },
-      };
-
-      this.client.get(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          // console.log('findById data: ', data);
-
-          if (data.Item?.className !== className) {
-            const msg = `findByid: classNames don't match! expected ${className}, got ${data.Item?.className}`;
-            console.error(msg);
-            reject(new Error(msg));
-          }
-          resolve(data.Item as DynamoDBObject | undefined);
-        }
       });
-    });
+
+      const data = await this.client.send(command);
+
+      if (data.Item?.className !== className) {
+        const msg = `findByid: classNames don't match! expected ${className}, got ${data.Item?.className}`;
+        console.error(msg);
+        throw new Error(msg);
+      }
+
+      return data.Item as DynamoDBObject | undefined;
+    } catch (error) {
+      console.error('Error in findById: ', error);
+      throw error;
+    }
   }
 
   /**
@@ -202,24 +202,21 @@ export class DynamoDb {
    * @param {String} className the className to filter by
    * @returns an array of objects
    */
-  findAll(className: string): Promise<DynamoDBObject[]> {
-    return new Promise((resolve, reject) => {
-      const params = {
+  async findAll(className: string): Promise<DynamoDBObject[]> {
+    try {
+      const command = new ScanCommand({
         TableName: this.tableName,
         FilterExpression: 'className = :className',
         ExpressionAttributeValues: { ':className': className },
-      };
-
-      this.client.scan(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          const items = data.Items ? [...data.Items] : [];
-          resolve(items as DynamoDBObject[]);
-        }
       });
-    });
+
+      const data = await this.client.send(command);
+      const items = data.Items ? [...data.Items] : [];
+      return items as DynamoDBObject[];
+    } catch (error) {
+      console.error('Error in findAll: ', error);
+      throw error;
+    }
   }
 
   /**
@@ -233,40 +230,38 @@ export class DynamoDb {
    * @param {Object} fields object properties will be the fields to match object value
    * @returns an array of objects that match
    */
-  findByFields(
+  async findByFields(
     className: string,
     fields: Record<string, string | number | boolean>,
   ): Promise<DynamoDBObject[]> {
     let filterExpression = 'className = :className';
     const expressionAttributeValues = { ':className': className };
 
-    return new Promise((resolve, reject) => {
-      for (const [key, value] of Object.entries(fields)) {
-        const filterName = `:${key}`;
+    for (const [key, value] of Object.entries(fields)) {
+      const filterName = `:${key}`;
 
-        filterExpression += ` AND attributes.${key} = ${filterName}`;
-        expressionAttributeValues[filterName] = value;
-      }
+      filterExpression += ` AND attributes.${key} = ${filterName}`;
+      expressionAttributeValues[filterName] = value;
+    }
 
-      // console.log('filter :', filterExpression);
-      // console.log('expresssion: ', expressionAttributeValues);
+    // console.log('filter :', filterExpression);
+    // console.log('expresssion: ', expressionAttributeValues);
 
-      const params = {
+    try {
+      const command = new ScanCommand({
         TableName: this.tableName,
         FilterExpression: filterExpression,
         ExpressionAttributeValues: expressionAttributeValues,
-      };
-
-      this.client.scan(params, (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          const items = data.Items ? [...data.Items] : [];
-          resolve(items as DynamoDBObject[]);
-        }
       });
-    });
+
+      const data = await this.client.send(command);
+
+      const items = data.Items ? [...data.Items] : [];
+      return items as DynamoDBObject[];
+    } catch (error) {
+      console.error('Error in findByFields: ', error);
+      throw error;
+    }
   }
   /**
    * Deletes an object in the database matching the id
@@ -275,23 +270,20 @@ export class DynamoDb {
    * @param {String} key the id of the object
    * @returns true if successful, false otherwise
    */
-  deleteById(_: string, key: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const params = {
+  async deleteById(_: string, key: string): Promise<boolean> {
+    try {
+      const command = new DeleteCommand({
         TableName: this.tableName,
         Key: {
           id: key,
         },
-      };
-
-      this.client.delete(params, (err /*, data */) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          resolve(true);
-        }
       });
-    });
+
+      await this.client.send(command);
+      return true;
+    } catch (error) {
+      console.error('Error in deleteById: ', error);
+      return false;
+    }
   }
 }

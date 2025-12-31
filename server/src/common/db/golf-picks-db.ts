@@ -5,13 +5,16 @@
  *
  */
 
+import { NativeAttributeValue } from '@aws-sdk/lib-dynamodb';
 import { ConfigService } from '@nestjs/config';
 import { DynamoDb } from 'src/common/db/dynamo-db';
+
+export type GolfPicksAttributes = Record<string, NativeAttributeValue>;
 
 type GolfPicksDbObject = {
   id: string;
   className: string;
-  attributes: AWS.DynamoDB.DocumentClient.AttributeMap;
+  attributes: GolfPicksAttributes;
 };
 
 export class GolfPicksDb {
@@ -87,7 +90,7 @@ export class GolfPicksDb {
       return [];
     }
 
-    const result: AWS.DynamoDB.DocumentClient.AttributeMap[] = [];
+    const result: GolfPicksAttributes[] = [];
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
@@ -113,7 +116,7 @@ export class GolfPicksDb {
    */
   private restoreModel(
     className: string,
-    obj: AWS.DynamoDB.DocumentClient.AttributeMap,
+    obj: GolfPicksAttributes,
   ): GolfPicksDbObject {
     const id = obj.id as string;
 
@@ -131,17 +134,14 @@ export class GolfPicksDb {
     return dbObj;
   }
 
-  async create(
-    className: string,
-    data: AWS.DynamoDB.DocumentClient.AttributeMap,
-  ) {
+  async create(className: string, data: GolfPicksAttributes) {
     const obj = this.restoreModel(className, data);
 
     const result = await this.db.create(className, obj.attributes);
     return this.flattenModel(result);
   }
 
-  async put(className: string, data: AWS.DynamoDB.DocumentClient.AttributeMap) {
+  async put(className: string, data: GolfPicksAttributes) {
     const obj = this.restoreModel(className, data);
     console.log('put object: ', obj);
 
