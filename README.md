@@ -2,8 +2,8 @@
 
 For this project to run successfully, you will need to configure your AWS credentials in a .env or .env.dev (when running in dev mode) file with the following fields:
 
-AWS_ACCESSKEYID=xxx
-AWS_SECRETACCESSKEY=xxx
+AWS_ACCESS_KEY_ID=xxx
+AWS_SECRET_ACCESS_KEY=xxx
 TOURDATA_URL=https://tourdata.boulia-nc.net/api
 
 additionaly if you are running in dev mode, you will need to add the CORS key pointing to the port the client is running on:
@@ -12,6 +12,7 @@ CORS_CLIENT=http://localhost:4201
 ## Building and Running the App
 To build this project for the first time, you will need npm, and angular cli (ng) installed. Once you have those, do this:
 
+### Production
 To build the production client side: 
 ``` bash
 cd client
@@ -30,6 +31,7 @@ npm start
 
 This will run the NestJS server for the backend, and will serve up the client side from client/dist
 
+### Development mode
 To run the server in development mode:
 
 ``` bash
@@ -56,13 +58,14 @@ Each player will select 10 golfers.  Of those 10, you can only select 2 of the t
 
 - There is a client side, Angular (https://angularjs.org) based app located under the `/client` directory.  
 - The server side is implemented in NestJS and resides in the `/server` directory.
-- You can browse the server side API at the URL http://localhost:3000/api
-- For the most part, the server side API provides access to the game data, which is stored in an Amazon DynamoDB database.  The one exception is scoring data, which comes from the tourdata API (https://tourdata.boulia-nc.net/explorer)
+- You can browse the server side API via Swagger at the URL http://localhost:3000/api
+- For the most part, the server side API provides access to the game data, which is stored in an Amazon DynamoDB database.  The one exception is PGA tournamnet scoring data, which comes from the tourdata API (https://tourdata.boulia-nc.net/explorer)
 
 ## Change History:
 December 23, 2025:
 - Major overhaul to upgrade to Angular 20 and Tailwind styling based on TailAdmin template
-- Moved backend to NestJS 11
+- Migrated backend to NestJS 11
+- Migrated to AWS SDK v3
 
 November 17, 2022:
 - Major overhaul to upgrade to Angular 14
