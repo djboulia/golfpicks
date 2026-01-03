@@ -1,6 +1,5 @@
 import { DateHelperService } from './date/date-helper.service';
-import { GameDay, GameDayGamer } from './golfpicks/game.model';
-import { Gamer } from './golfpicks/gamer.model';
+import { GameDay, GamerDetailPicks } from './golfpicks/game.model';
 
 export class GameDayService {
   private start: DateHelperService;
@@ -34,7 +33,7 @@ export class GameDayService {
     return this.game.event;
   }
 
-  getGamers(): GameDayGamer[] {
+  getGamers(): GamerDetailPicks[] {
     return this.game.gamers;
   }
 

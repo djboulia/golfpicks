@@ -12,8 +12,11 @@ export interface Game {
   gamers: Gamer[];
 }
 
-export interface GameDayGamer {
+export interface GamerDetail extends GamerBase {
   user: string;
+}
+
+export interface GamerDetailPicks extends GamerDetail {
   picks?: { id: string }[];
 }
 
@@ -23,20 +26,11 @@ export interface GameDay {
   start: string;
   end: string;
   event: string;
-  gamers: GameDayGamer[];
+  gamers: GamerDetailPicks[];
   gameDay: {
     inProgress: boolean;
     complete: boolean;
   };
-}
-
-// TODO: should change the backend to make this consistent with Gamer interface
-export interface GamerDetail extends GamerBase {
-  user: string;
-}
-
-export interface GamerDetailPicks extends GamerDetail {
-  picks?: { id: string }[];
 }
 
 export interface GamerDetails {
