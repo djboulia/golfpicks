@@ -14,7 +14,7 @@
     "@amcharts/amcharts5-geodata": "^5.1.4",
     "@angular/cdk": "^20.0.6",
     "@angular/common": "^20.0.6",
-    "@angular/compiler": "^20.0.6",
+    "@angular/compiler": "^20.3.16",
     "@angular/core": "^20.0.6",
     "@angular/forms": "^20.0.6",
     "@angular/google-maps": "^20.2.14",
