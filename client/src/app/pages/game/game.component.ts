@@ -121,10 +121,18 @@ export class GameComponent implements OnInit {
           return;
         }
 
-        this.selectedCourse = this.findCourse(this.event, this.courses);
-        this.selectedTourStop = this.findTourStop(this.event, this.schedule);
-
-        this.loader.setLoading(false);
+        // there is a timing issue where the course data hasn't been refreshed by
+        // the app-select component when we try to set the selected course
+        // adding a timeout ensures the data is there before we try to set
+        // the selected course and tour stop
+        // Technically, this should NOT be needed, but I don't have time to chase the root cause
+        setTimeout(() => {
+          if (this.event) {
+            this.selectedCourse = this.findCourse(this.event, this.courses);
+            this.selectedTourStop = this.findTourStop(this.event, this.schedule);
+          }
+          this.loader.setLoading(false);
+        }, 1);
       });
   }
 
@@ -191,7 +199,7 @@ export class GameComponent implements OnInit {
     let course = undefined;
 
     const rounds = event.rounds;
-    console.log('rounds ', rounds);
+    // console.log('rounds ', rounds);
 
     if (rounds.length > 0) {
       const courseid = rounds[0].course.id;
@@ -213,9 +221,11 @@ export class GameComponent implements OnInit {
   }
 
   getTourStops(): Option[] {
-    return this.schedule?.map((s) => {
+    const options = this.schedule?.map((s) => {
       return { value: s.tournament_id, label: s.name };
     });
+    // console.log('tour stop options: ', options);
+    return options;
   }
 
   /**
@@ -245,15 +255,18 @@ export class GameComponent implements OnInit {
     console.log('tourstop start: ' + tourstop.start + ' , ' + start.dateTimeString());
     console.log('tourstop end: ' + tourstop.end + ' , ' + end.dateTimeString());
 
+    this.selectedTourStop = tourstop;
     this.game.start = new Date(start.get()).toUTCString();
     this.game.end = new Date(end.get()).toUTCString();
     console.log('game start: ', this.game.start, ' , game end: ', this.game.end);
   }
 
   getCourses(): Option[] {
-    return this.courses?.map((c) => {
+    const options = this.courses?.map((c) => {
       return { value: c.id, label: c.name };
     });
+    // console.log('course options: ', options, ' selected course: ', this.selectedCourse);
+    return options;
   }
 
   onCourseChanged(courseId: string) {
