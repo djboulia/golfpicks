@@ -16,7 +16,9 @@
           <b>{{ games?.active?.event }}</b>
         </div>
         @if (games?.active?.inProgress) {
-          <a [attr.href]="leaderboardUrl + '/id/' + games?.active?.eventid">Leaderboard</a>
+          <a class="link" [attr.href]="leaderboardUrl + '/id/' + games?.active?.eventid"
+            >Leaderboard</a
+          >
         }
       </div>
     }

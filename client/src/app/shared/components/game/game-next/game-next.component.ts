@@ -29,9 +29,9 @@ export class GameNextComponent {
       const picksUrl = this.picksUrl + '/id/' + this.games.active.eventid;
 
       if (this.games.active.joined) {
-        return `The game has not yet started.  You can still update your <a href="${picksUrl}">picks</a>`;
+        return `The game has not yet started.  You can still update your <a class="link" href="${picksUrl}">picks</a>`;
       } else {
-        return `You have not yet joined this game. Make your <a href="${picksUrl}">picks</a>`;
+        return `You have not yet joined this game. Make your <a class="link" href="${picksUrl}">picks</a>`;
       }
     }
 
