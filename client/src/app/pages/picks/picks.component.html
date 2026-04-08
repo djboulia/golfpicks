@@ -52,7 +52,9 @@
                 'text-brand-300/75 dark:text-brand-500': !golfer.selectable,
               }"
             >
-              {{ golfer.name }}
+              <div class="w-[160px] md:w-auto text-ellipsis overflow-hidden whitespace-nowrap">
+                {{ golfer.name }}
+              </div>
             </td>
 
             <td
