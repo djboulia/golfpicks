@@ -211,7 +211,7 @@ layer(base);
 }
 
 @utility user-score-header {
-  @apply text-theme-light-heading dark:text-theme-dark-heading bg-brand-300/15 dark:bg-theme-dark-highlight/50 py-2;
+  @apply text-theme-dark-heading dark:text-theme-dark-heading bg-brand-500 dark:bg-theme-dark-highlight/50 py-2;
 }
 
 @utility user-score-top5 {
