@@ -218,7 +218,7 @@ layer(base);
   @apply text-theme-light-text dark:text-theme-dark-text bg-theme-light-base dark:bg-theme-dark-base py-2;
 }
 @utility user-score-bottom5 {
-  @apply text-theme-light-text/50 dark:text-theme-dark-text/50 bg-brand-300/15 dark:bg-theme-dark-highlight/50 py-2;
+  @apply text-theme-light-text/50 dark:text-theme-dark-text/50 bg-brand-300/5 dark:bg-theme-dark-highlight/20 py-2;
 }
 
 @utility table-header {

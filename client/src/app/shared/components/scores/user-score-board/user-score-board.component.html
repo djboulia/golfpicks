@@ -30,7 +30,7 @@
           <b>{{ title }}</b>
         </div>
         @for (pick of top5; track $index) {
-          <div class="w-[40px] user-score-top5">
+          <div class="w-[40px] user-score-top5 text-right pr-4">
             {{ pick.rounds[i] }}
           </div>
         }
@@ -52,7 +52,7 @@
     <!-- player score columns -->
     <div class="flex flex-row">
       @for (title of roundTitles; track $index; let i = $index) {
-        <div class="font-bold w-[40px] text-sm md:text-base">
+        <div class="font-bold w-[40px] text-sm md:text-base text-right pr-4">
           {{ scores[i] ? scores[i] : '&nbsp;' }}
         </div>
       }
@@ -60,7 +60,9 @@
   </div>
 
   <!-- Bottom 5 players -->
-  <div class="flex flex-row">
+  <div
+    class="flex flex-row rounded-b-2xl border-l border-r border-b border-brand-300/20 dark:border-white/10"
+  >
     <!-- player name column -->
     <div class="flex flex-col text-left">
       @for (pick of bottom5; track $index) {
@@ -78,7 +80,7 @@
     @for (title of roundTitles; track $index; let i = $index) {
       <div class="flex flex-col text-center">
         @for (pick of bottom5; track $index) {
-          <div class="w-[40px] text-sm md:text-base user-score-bottom5">
+          <div class="w-[40px] text-sm md:text-base user-score-bottom5 text-right pr-4">
             {{ pick.rounds[i] }}
           </div>
         }
