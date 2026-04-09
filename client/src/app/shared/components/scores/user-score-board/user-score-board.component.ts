@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LeaderboardGamer, LeaderboardGolfer } from '../../../services/golfpicks/game.model';
 
@@ -7,7 +7,7 @@ import { LeaderboardGamer, LeaderboardGolfer } from '../../../services/golfpicks
   templateUrl: './user-score-board.component.html',
   imports: [CommonModule],
 })
-export class UserScoreBoardComponent implements OnInit {
+export class UserScoreBoardComponent implements OnChanges {
   @Input() gamer: LeaderboardGamer | null = null;
   @Input() roundTitles: string[] = [];
   @Input() tournamentLeaderUrl: string = '';
@@ -18,7 +18,7 @@ export class UserScoreBoardComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.scores = [...(this.gamer?.scores || [])];
 
     const cutIndex = this.scores.indexOf('CUT');

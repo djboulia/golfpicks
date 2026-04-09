@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { mergeMap, map, catchError, throwError } from 'rxjs';
 
@@ -140,7 +140,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         this.gamers = this.leaderboard?.gamers ?? null;
         this.currentRound = roundInfo?.currentRound ?? null;
         this.roundTitles = roundInfo?.roundTitles ?? [];
-        this.courseInfo = this.currentRound ? courseInfo?.[this.currentRound - 1] ?? null : null;
+        this.courseInfo = this.currentRound ? (courseInfo?.[this.currentRound - 1] ?? null) : null;
 
         if (!this.gamers) {
           this.loader.setErrorMessage('No players for the current game.');
