@@ -241,9 +241,8 @@ layer(base);
   @apply bg-brand-500 text-theme-dark-text dark:bg-brand-700 font-semibold;
 }
 
-.golf-round-leader {
-  color: #000088;
-  font-weight: bold;
+@utility golf-round-leader {
+  @apply text-[#000088]! dark:text-[#4444ff]!;
 }
 
 .golf-round-under-par {
