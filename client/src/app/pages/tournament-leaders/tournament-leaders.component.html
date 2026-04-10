@@ -1,6 +1,6 @@
 <app-page-load-card [pageTitle]="event?.name ?? ''" [loader]="loader">
   @if (event) {
-    <div class="flex flex-col">
+    <div class="min-w-[850px]">
       <div class="flex flex-row table-header">
         <div class="w-[60px] table-header-cell">Pos</div>
 
@@ -12,7 +12,8 @@
 
         <div class="w-[75px] table-header-cell text-right">Today</div>
 
-        <div class="w-[20px] table-header-cell">&nbsp;</div>
+        <div class="w-[20px]">&nbsp;</div>
+
         @for (roundNumber of event.roundNumbers; track $index) {
           <div class="w-[50px] table-header-cell">R{{ roundNumber }}</div>
         }
@@ -25,7 +26,11 @@
               {{ golfer.pos }}
             </a>
           </div>
-          <div class="w-[200px] table-cell cursor-pointer">{{ golfer.name }}</div>
+          <div
+            class="w-[200px] table-cell cursor-pointer text-ellipsis overflow-hidden whitespace-nowrap"
+          >
+            {{ golfer.name }}
+          </div>
           <div
             class="w-[75px] table-cell text-right"
             [ngClass]="{
@@ -46,7 +51,7 @@
             {{ golfer.today ? golfer.today : '-' }}
           </div>
 
-          <div class="w-[20px] table-cell">&nbsp;</div>
+          <div class="w-[20px]">&nbsp;</div>
 
           @for (roundNumber of event.roundNumbers; track $index) {
             <div class="w-[50px] table-cell">
