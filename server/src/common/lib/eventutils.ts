@@ -35,12 +35,16 @@ export const getCourses = function (event: UpdateEventDto) {
 
     round.course.date = round.date;
 
-    // console.log(round);
+    // console.log('getCourses: round ', round);
 
-    list.push(round.course);
+    // djb [04/12/2026] fixes a bug introduced during refactor to Nestjs.
+    // Each day's course info was not being copied which resulted in all
+    // four rounds showing as the same date.
+    const course = { ...round.course } as Course;
+    list.push(course);
   }
 
-  // console.debug("eventUtils.courses:" + JSON.stringify(list));
+  console.debug('eventUtils.getCourses:', list);
 
   return list;
 };

@@ -275,6 +275,7 @@ export class GamesService {
     const roundInfo = event.roundInfo;
 
     // console.log('loadLeaderboard: ', courseInfo);
+    // console.log('roundInfo: ', roundInfo);
 
     const gamers = game.gamers;
     const leaderboard: Leaderboard = {
@@ -322,7 +323,7 @@ export class GamesService {
         });
       });
 
-      console.debug('validgamers: ' + JSON.stringify(validgamers));
+      // console.debug('validgamers: ' + JSON.stringify(validgamers));
 
       let expandedGamers = getScores(
         courseInfo,

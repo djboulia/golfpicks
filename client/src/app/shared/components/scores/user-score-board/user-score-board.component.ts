@@ -45,6 +45,7 @@ export class UserScoreBoardComponent implements OnChanges {
         }
       }
     }
+    // console.log(`game picks ${this.gamer?.name}` + JSON.stringify(this.gamer?.picks));
 
     this.top5 = this.gamer?.picks.slice(0, 5) || [];
     this.bottom5 = this.gamer?.picks.slice(-5) || [];

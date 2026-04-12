@@ -117,22 +117,22 @@ const fuzzyMatch = function (name1: string, name2: string) {
     }
   }
 
-  if (result > 0) {
-    const matchTypes = [
-      'exact',
-      'last name',
-      'last name/first name initial',
-      'last name and first name',
-    ];
-    console.log(
-      "found fuzzy match at name1:'" +
-        name1 +
-        "' name2:'" +
-        name2 +
-        "' - matched: " +
-        matchTypes[result],
-    );
-  }
+  // if (result > 0) {
+  //   const matchTypes = [
+  //     'exact',
+  //     'last name',
+  //     'last name/first name initial',
+  //     'last name and first name',
+  //   ];
+  //   console.log(
+  //     "found fuzzy match at name1:'" +
+  //       name1 +
+  //       "' name2:'" +
+  //       name2 +
+  //       "' - matched: " +
+  //       matchTypes[result],
+  //   );
+  // }
 
   return result > 0 ? result : -1;
 };
@@ -195,7 +195,7 @@ const addPlayerRankings = function (eventdata: TourEvent, rankings: Ranking[]) {
       score.rank = data.rank;
       score.player_id = data.player_id;
     } else {
-      console.log("Couldn't find player " + name);
+      // console.log("Couldn't find player " + name);
       score.rank = '-';
       score.player_id = NameUtils.normalize(name);
     }

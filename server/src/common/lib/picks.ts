@@ -374,7 +374,7 @@ export const expandPicks = function (picks: PickDto[], scores: Score[]) {
     }
   }
 
-  console.debug('expandPicks: ' + JSON.stringify(pickscores));
+  // console.debug('expandPicks: ' + JSON.stringify(pickscores));
 
   return pickscores;
 };

@@ -35,6 +35,8 @@ export const getCurrentRound = function (courseInfo: Course[]) {
   for (let i = 1; i < courseInfo.length; i++) {
     const course = courseInfo[i];
 
+    // console.log('course ' + JSON.stringify(course) + ' date ' + course.date);
+
     const delta1 = Date.parse(currentCourse.date) - now;
     const delta2 = Date.parse(course.date) - now;
 
