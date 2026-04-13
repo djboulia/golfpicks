@@ -253,19 +253,24 @@ layer(base);
 .score-other-bogey {
   color: #000000;
   font-weight: 600;
-  width: 25px;
-  height: 25px;
-  border: 3px solid black;
-  margin: 0 auto;
+  width: 30px;
+  height: 30px;
+  border: 4px double black;
+  background-color: #ececec;
+  text-align: center;
+  align-items: center;
+  margin: -4px auto;
 }
 
 .score-double-bogey {
   color: #000000;
   font-weight: 600;
-  width: 25px;
-  height: 25px;
-  border: 2px double black;
-  margin: 0 auto;
+  width: 30px;
+  height: 30px;
+  border: 4px double black;
+  text-align: center;
+  align-items: center;
+  margin: -4px auto;
 }
 
 .score-bogey {
